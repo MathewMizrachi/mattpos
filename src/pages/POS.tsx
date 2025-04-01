@@ -142,16 +142,7 @@ const POS = () => {
         />
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-16`}>
-        {isMobile && (
-          <CartPanel 
-            cart={cart}
-            onUpdateQuantity={updateCartItem}
-            onRemove={removeFromCart}
-            isMobile={true}
-          />
-        )}
-        
+      <div className={`flex-1 ${isMobile ? 'flex flex-col' : 'flex'} overflow-hidden relative mt-16`}>
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
@@ -162,7 +153,17 @@ const POS = () => {
           </div>
         </div>
         
-        {!isMobile && (
+        {isMobile ? (
+          <div className="mt-4 px-3 pb-36">
+            <h2 className="font-bold text-lg mb-2">Shopping Cart</h2>
+            <CartPanel 
+              cart={cart}
+              onUpdateQuantity={updateCartItem}
+              onRemove={removeFromCart}
+              isMobile={true}
+            />
+          </div>
+        ) : (
           <CartPanel 
             cart={cart}
             onUpdateQuantity={updateCartItem}
