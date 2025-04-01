@@ -134,7 +134,7 @@ const POS = () => {
         onLogout={logout}
       />
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex pr-96'} overflow-hidden relative`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
