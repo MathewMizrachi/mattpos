@@ -4,6 +4,7 @@ import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Product {
   id: number;
@@ -25,6 +26,7 @@ const CartItem: React.FC<CartItemProps> = ({
   onUpdateQuantity, 
   onRemove 
 }) => {
+  const isMobile = useIsMobile();
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(quantity.toString());
   
@@ -76,7 +78,9 @@ const CartItem: React.FC<CartItemProps> = ({
     <div className="flex items-center py-2 border-b pl-4">
       <div className="flex-1">
         <p className="font-medium">{product.name}</p>
-        <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>
+        {!isMobile && (
+          <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>
+        )}
       </div>
       
       <div className="flex items-center space-x-2">
@@ -138,3 +142,4 @@ const CartItem: React.FC<CartItemProps> = ({
 };
 
 export default CartItem;
+
