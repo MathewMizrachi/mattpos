@@ -31,7 +31,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
           <div className="max-w-[200px] mx-auto">
             <img 
               src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
@@ -46,9 +46,10 @@ const Login = () => {
           onSubmit={handleLogin}
           title="Login"
           subtitle="Enter your PIN to continue"
+          titleClassName="text-white"
         />
         
-        <div className="mt-8 text-center text-sm" style={{ color: '#FAA225' }}>
+        <div className="mt-4 text-center text-sm" style={{ color: '#FAA225' }}>
           <p>Demo PINs:</p>
           <p>Manager: 1234</p>
           <p>Staff: 5678</p>
