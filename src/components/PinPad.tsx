@@ -11,7 +11,7 @@ interface PinPadProps {
 
 const PinPad: React.FC<PinPadProps> = ({ 
   onSubmit, 
-  title = "Enter PIN", 
+  title, 
   subtitle, 
   titleClassName = "" 
 }) => {
@@ -40,7 +40,7 @@ const PinPad: React.FC<PinPadProps> = ({
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-6">
-        <h2 className={`text-2xl font-bold ${titleClassName}`}>{title}</h2>
+        {title && <h2 className={`text-2xl font-bold ${titleClassName}`}>{title}</h2>}
         {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
       </div>
       
