@@ -49,29 +49,31 @@ const CartPanel: React.FC<CartPanelProps> = ({
           </div>
         </ScrollArea>
       ) : (
-        <div className="flex-1 overflow-y-auto p-0">
-          {cart.length === 0 ? (
-            <div className="text-center py-6">
-              <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-              <p className="text-muted-foreground">No items in cart</p>
-              <p className="text-sm text-muted-foreground">
-                Add products to begin a sale
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-1 px-2 pt-0">
-              {cart.map(item => (
-                <CartItem 
-                  key={item.product.id}
-                  product={item.product}
-                  quantity={item.quantity}
-                  onUpdateQuantity={onUpdateQuantity}
-                  onRemove={onRemove}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        <ScrollArea className="h-full">
+          <div className="p-0">
+            {cart.length === 0 ? (
+              <div className="text-center py-6">
+                <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
+                <p className="text-muted-foreground">No items in cart</p>
+                <p className="text-sm text-muted-foreground">
+                  Add products to begin a sale
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-1 px-2 pt-0">
+                {cart.map(item => (
+                  <CartItem 
+                    key={item.product.id}
+                    product={item.product}
+                    quantity={item.quantity}
+                    onUpdateQuantity={onUpdateQuantity}
+                    onRemove={onRemove}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       )}
     </div>
   );
