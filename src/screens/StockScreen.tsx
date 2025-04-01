@@ -12,11 +12,13 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../contexts/AppContext';
 import { useToast } from '../contexts/ToastContext';
 import { formatCurrency } from '../lib/utils';
 import ProductForm from '../components/ProductForm';
 
+// Define the product interface
 interface Product {
   id: number;
   name: string;
@@ -24,13 +26,23 @@ interface Product {
   stock?: number;
 }
 
+// Define the navigation type
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  POS: undefined;
+  Stock: undefined;
+};
+
+type StockScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Stock'>;
+
 const StockScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   
   const { products, addProduct, updateProduct, deleteProduct } = useApp();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StockScreenNavigationProp>();
   const { showToast } = useToast();
 
   const filteredProducts = products.filter(product => 

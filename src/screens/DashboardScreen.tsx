@@ -10,15 +10,26 @@ import {
   StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../contexts/AppContext';
 import { useToast } from '../contexts/ToastContext';
 import FloatForm from '../components/FloatForm';
 import ShiftSummary from '../components/ShiftSummary';
 import { formatCurrency } from '../lib/utils';
 
+// Define the navigation type
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  POS: undefined;
+  Stock: undefined;
+};
+
+type DashboardScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Dashboard'>;
+
 const DashboardScreen = () => {
   const { currentUser, currentShift, startShift, endShift } = useApp();
-  const navigation = useNavigation();
+  const navigation = useNavigation<DashboardScreenNavigationProp>();
   const { showToast } = useToast();
   const [showFloatForm, setShowFloatForm] = useState(false);
   const [showShiftSummary, setShowShiftSummary] = useState(false);

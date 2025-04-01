@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../contexts/AppContext';
 import { useToast } from '../contexts/ToastContext';
 import { formatCurrency } from '../lib/utils';
@@ -17,10 +18,20 @@ import ProductCard from '../components/ProductCard';
 import CartItem from '../components/CartItem';
 import PaymentForm from '../components/PaymentForm';
 
+// Define the navigation type
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  POS: undefined;
+  Stock: undefined;
+};
+
+type POSScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'POS'>;
+
 const POSScreen = () => {
   const [showPayment, setShowPayment] = useState(false);
   const { currentUser, currentShift, products, cart, addToCart, updateCartItem, removeFromCart, clearCart, processPayment } = useApp();
-  const navigation = useNavigation();
+  const navigation = useNavigation<POSScreenNavigationProp>();
   const { showToast } = useToast();
 
   const calculateTotal = () => {

@@ -10,13 +10,24 @@ import {
   Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../contexts/AppContext';
 import { useToast } from '../contexts/ToastContext';
 import PinPad from '../components/PinPad';
 
+// Define the navigation type
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  POS: undefined;
+  Stock: undefined;
+};
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+
 const LoginScreen = () => {
   const { login } = useApp();
-  const navigation = useNavigation();
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   const { showToast } = useToast();
   
   const handleLogin = (pin: string) => {

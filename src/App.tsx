@@ -12,7 +12,15 @@ import DashboardScreen from './screens/DashboardScreen';
 import POSScreen from './screens/POSScreen';
 import StockScreen from './screens/StockScreen';
 
-const Stack = createNativeStackNavigator();
+// Define the stack navigator type
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  POS: undefined;
+  Stock: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
 
 const App = () => {
