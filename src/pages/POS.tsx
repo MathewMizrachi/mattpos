@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -134,14 +135,14 @@ const POS = () => {
         onLogout={logout}
       />
       
-      <div className="fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50">
+      <div className="fixed top-20 left-0 right-0 py-2 px-3 z-10 bg-gray-50">
         <ProductSearch 
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-8`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-6`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
