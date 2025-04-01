@@ -1,0 +1,224 @@
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import db from '@/lib/db';
+
+interface User {
+  id: number;
+  name: string;
+  pin: string;
+  role: 'manager' | 'staff';
+}
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  stock?: number;
+}
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+interface Shift {
+  id: number;
+  userId: number;
+  startTime: Date;
+  endTime?: Date;
+  startFloat: number;
+  salesTotal?: number;
+  transactionCount?: number;
+}
+
+interface AppContextType {
+  currentUser: User | null;
+  currentShift: Shift | null;
+  cart: CartItem[];
+  products: Product[];
+  
+  login: (pin: string) => boolean;
+  logout: () => void;
+  
+  startShift: (userId: number, startFloat: number) => void;
+  endShift: () => Shift | null;
+  
+  addToCart: (product: Product, quantity?: number) => void;
+  updateCartItem: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: number) => void;
+  clearCart: () => void;
+  
+  processPayment: (cashReceived: number) => {
+    success: boolean;
+    change: number;
+  };
+  
+  addProduct: (product: Omit<Product, 'id'>) => Product;
+  updateProduct: (id: number, updates: Partial<Omit<Product, 'id'>>) => Product | null;
+  deleteProduct: (id: number) => boolean;
+  refreshProducts: () => void;
+}
+
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
+export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentShift, setCurrentShift] = useState<Shift | null>(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [products, setProducts] = useState<Product[]>(db.getAllProducts());
+
+  const login = (pin: string): boolean => {
+    const user = db.authenticateUser(pin);
+    if (user) {
+      setCurrentUser(user);
+      // Check if there's an active shift
+      const activeShift = db.getCurrentShift();
+      if (activeShift) {
+        setCurrentShift(activeShift);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    setCurrentShift(null);
+    clearCart();
+  };
+
+  const startShift = (userId: number, startFloat: number) => {
+    const shift = db.startShift(userId, startFloat);
+    setCurrentShift(shift);
+  };
+
+  const endShift = () => {
+    if (!currentShift) return null;
+    
+    const completedShift = db.endShift(currentShift.id);
+    setCurrentShift(null);
+    return completedShift;
+  };
+
+  const addToCart = (product: Product, quantity = 1) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.product.id === product.id);
+      
+      if (existingItem) {
+        return prevCart.map(item => 
+          item.product.id === product.id 
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        return [...prevCart, { product, quantity }];
+      }
+    });
+  };
+
+  const updateCartItem = (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    
+    setCart(prevCart => 
+      prevCart.map(item => 
+        item.product.id === productId 
+          ? { ...item, quantity }
+          : item
+      )
+    );
+  };
+
+  const removeFromCart = (productId: number) => {
+    setCart(prevCart => prevCart.filter(item => item.product.id !== productId));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const processPayment = (cashReceived: number) => {
+    if (!currentShift || cart.length === 0) {
+      return { success: false, change: 0 };
+    }
+    
+    const items = cart.map(item => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+      unitPrice: item.product.price
+    }));
+    
+    const transaction = db.createTransaction(currentShift.id, items, cashReceived);
+    
+    // Update current shift with latest data
+    const updatedShift = db.getCurrentShift();
+    if (updatedShift) {
+      setCurrentShift(updatedShift);
+    }
+    
+    // Refresh products to reflect updated stock
+    refreshProducts();
+    
+    // Clear the cart
+    clearCart();
+    
+    return { 
+      success: true, 
+      change: transaction.change
+    };
+  };
+
+  const addProduct = (product: Omit<Product, 'id'>) => {
+    const newProduct = db.addProduct(product);
+    refreshProducts();
+    return newProduct;
+  };
+
+  const updateProduct = (id: number, updates: Partial<Omit<Product, 'id'>>) => {
+    const updated = db.updateProduct(id, updates);
+    refreshProducts();
+    return updated;
+  };
+
+  const deleteProduct = (id: number) => {
+    const result = db.deleteProduct(id);
+    refreshProducts();
+    return result;
+  };
+
+  const refreshProducts = () => {
+    setProducts(db.getAllProducts());
+  };
+
+  const value: AppContextType = {
+    currentUser,
+    currentShift,
+    cart,
+    products,
+    login,
+    logout,
+    startShift,
+    endShift,
+    addToCart,
+    updateCartItem,
+    removeFromCart,
+    clearCart,
+    processPayment,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    refreshProducts,
+  };
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
+
+export const useApp = () => {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+};
