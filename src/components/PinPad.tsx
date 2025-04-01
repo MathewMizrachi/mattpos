@@ -58,7 +58,7 @@ const PinPad: React.FC<PinPadProps> = ({ onSubmit, title = "Enter PIN", subtitle
           <Button 
             key={num} 
             variant="outline"
-            className="py-6 text-xl font-medium"
+            className="py-6 text-xl font-medium bg-white text-black hover:bg-white/90"
             onClick={() => handleNumberClick(num)}
           >
             {num}
@@ -67,7 +67,7 @@ const PinPad: React.FC<PinPadProps> = ({ onSubmit, title = "Enter PIN", subtitle
         
         <Button 
           variant="outline" 
-          className="py-6 text-xl font-medium"
+          className="py-6 text-xl font-medium bg-white text-black hover:bg-white/90"
           onClick={handleClear}
         >
           Clear
@@ -75,7 +75,7 @@ const PinPad: React.FC<PinPadProps> = ({ onSubmit, title = "Enter PIN", subtitle
         
         <Button 
           variant="outline" 
-          className="py-6 text-xl font-medium"
+          className="py-6 text-xl font-medium bg-white text-black hover:bg-white/90"
           onClick={() => handleNumberClick(0)}
         >
           0
@@ -83,14 +83,14 @@ const PinPad: React.FC<PinPadProps> = ({ onSubmit, title = "Enter PIN", subtitle
         
         <Button 
           variant="outline" 
-          className="py-6 text-xl font-medium"
+          className="py-6 text-xl font-medium bg-white text-black hover:bg-white/90"
           onClick={handleDelete}
         >
           ←
         </Button>
         
         <Button 
-          className="col-span-3 py-6 text-xl font-medium mt-4"
+          className="col-span-3 py-6 text-xl font-medium mt-4 bg-white text-black hover:bg-white/90"
           onClick={handleSubmit}
           disabled={pin.length === 0}
         >
