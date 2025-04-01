@@ -20,9 +20,9 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
 }) => {
   return (
     <div className={`${isMobile 
-      ? 'fixed bottom-0 left-0 right-0 p-4' 
-      : 'fixed bottom-0 right-0 w-96 p-4'} 
-      border-t shadow-lg z-20`} 
+      ? 'fixed bottom-0 right-0 w-2/3' 
+      : 'fixed bottom-0 right-0 w-96'} 
+      p-4 border-t shadow-lg z-20`} 
       style={{ backgroundColor: '#FAA225' }}>
       <div className="flex justify-between mb-4">
         <span className="text-xl font-semibold">Total</span>
