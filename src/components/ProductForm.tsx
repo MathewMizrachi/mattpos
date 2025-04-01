@@ -66,7 +66,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
                 <FormItem>
                   <FormLabel>Product Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter product name" />
+                    <Input className="bg-white" {...field} placeholder="Enter product name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -81,6 +81,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
                   <FormLabel>Price (R)</FormLabel>
                   <FormControl>
                     <Input 
+                      className="bg-white"
                       type="number" 
                       step="0.01" 
                       min="0" 
@@ -101,6 +102,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
                   <FormLabel>Stock Quantity (optional)</FormLabel>
                   <FormControl>
                     <Input 
+                      className="bg-white"
                       type="number" 
                       step="1" 
                       min="0" 
