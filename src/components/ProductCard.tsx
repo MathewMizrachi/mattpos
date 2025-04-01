@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           className="w-full mt-4"
           disabled={product.stock !== undefined && product.stock <= 0}
         >
-          Add to Cart
+          Add
         </Button>
       </CardContent>
     </Card>
