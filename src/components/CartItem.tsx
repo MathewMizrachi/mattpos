@@ -73,7 +73,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const subtotal = product.price * quantity;
   
   return (
-    <div className="flex items-center py-2 border-b">
+    <div className="flex items-center py-2 border-b pl-4">
       <div className="flex-1">
         <p className="font-medium">{product.name}</p>
         <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>
