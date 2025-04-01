@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { ShoppingCartIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CartItem from '@/components/CartItem';
-import { CartItem as CartItemType, Product } from '@/types';
+import { CartItem as CartItemType } from '@/types';
 
 interface CartPanelProps {
   cart: CartItemType[];
@@ -21,15 +20,6 @@ const CartPanel: React.FC<CartPanelProps> = ({
 }) => {
   return (
     <div className={`${isMobile ? '' : 'w-96'} bg-white shadow-lg flex flex-col overflow-hidden relative`}>
-      <div className="p-3 border-b">
-        <div className="flex justify-between items-center mb-1">
-          <h2 className="text-lg font-semibold">Current Sale</h2>
-          <Badge variant="outline" className="font-normal">
-            {cart.length} items
-          </Badge>
-        </div>
-      </div>
-      
       {isMobile ? (
         <ScrollArea className="flex-1 h-32">
           <div className="p-2">
