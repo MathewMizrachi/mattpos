@@ -219,9 +219,9 @@ const POS = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="p-4">
             <div className="relative mb-4">
-              <SearchIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon className="h-6 w-6 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
-                className="pl-9"
+                className="pl-11 bg-white text-lg font-medium h-12 border-2 border-secondary/20 focus:ring-2 focus:ring-secondary"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
