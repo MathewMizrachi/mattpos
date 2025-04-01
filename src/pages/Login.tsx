@@ -37,7 +37,7 @@ const Login = () => {
               alt="MiniPos Logo" 
               className="h-auto w-full object-contain mx-auto mb-4"
             />
-            <h1 className="text-5xl font-bold text-center" style={{ color: '#FAA225' }}>MiniPos</h1>
+            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>MiniPos</h1>
           </div>
         </div>
         
