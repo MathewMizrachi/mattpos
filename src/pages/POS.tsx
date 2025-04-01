@@ -184,52 +184,8 @@ const POS = () => {
                 )}
               </div>
             </ScrollArea>
-            
-            <div className="h-32"></div>
           </div>
         )}
-        
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-4 z-10">
-            <div className="relative mb-4">
-              <SearchIcon className="h-8 w-8 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-              <Input
-                className="pl-14 bg-white text-xl font-medium h-14 border-2 border-secondary/20 focus:ring-2 focus:ring-secondary"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-10 w-10"
-                  onClick={() => setSearchTerm('')}
-                >
-                  <XIcon className="h-6 w-6" />
-                </Button>
-              )}
-            </div>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 pb-36">
-            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-4`}>
-              {filteredProducts.map(product => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
-                  onAddToCart={addToCart}
-                />
-              ))}
-              
-              {filteredProducts.length === 0 && (
-                <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground">No products found</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
         
         {!isMobile && (
           <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden relative">
@@ -242,9 +198,9 @@ const POS = () => {
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-4 pb-36">
+            <div className="flex-1 overflow-y-auto p-4">
               {cart.length === 0 ? (
-                <div className="text-center py-12">
+                <div className="text-center py-6">
                   <ShoppingCartIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
                   <p className="text-muted-foreground">No items in cart</p>
                   <p className="text-sm text-muted-foreground">
