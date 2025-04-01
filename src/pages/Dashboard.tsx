@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -70,11 +71,13 @@ const Dashboard = () => {
   if (showStaffPinPad) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <div className="w-full max-w-md p-8 bg-[#0A2645] text-white rounded-lg shadow-lg">
           <PinPad 
             onSubmit={handleStaffPinSubmit}
             title="Staff Authentication"
             subtitle="Enter staff PIN to start shift"
+            titleClassName="text-white"
+            subtitleClassName="text-white/70"
           />
           
           <div className="mt-6 flex justify-center">
