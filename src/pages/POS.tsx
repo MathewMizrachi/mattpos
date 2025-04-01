@@ -202,7 +202,8 @@ const POS = () => {
                       color: 'black', 
                       fontSize: '1.25rem', 
                       fontWeight: 'bold',
-                      border: '2px solid #FAA225'
+                      border: '2px solid #FAA225',
+                      height: '4rem'
                     }}
                   >
                     <XIcon className="h-4 w-4 mr-2" />
@@ -321,7 +322,8 @@ const POS = () => {
                       color: 'black', 
                       fontSize: '1.25rem', 
                       fontWeight: 'bold',
-                      border: '2px solid #FAA225'
+                      border: '2px solid #FAA225',
+                      height: '4rem'
                     }}
                   >
                     <XIcon className="h-4 w-4 mr-2" />
