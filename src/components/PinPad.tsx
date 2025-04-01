@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -7,13 +6,15 @@ interface PinPadProps {
   title?: string;
   subtitle?: string;
   titleClassName?: string;
+  subtitleClassName?: string;
 }
 
 const PinPad: React.FC<PinPadProps> = ({ 
   onSubmit, 
   title, 
   subtitle, 
-  titleClassName = "" 
+  titleClassName = "",
+  subtitleClassName = ""
 }) => {
   const [pin, setPin] = useState<string>('');
   
@@ -41,7 +42,7 @@ const PinPad: React.FC<PinPadProps> = ({
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-6">
         {title && <h2 className={`text-2xl font-bold ${titleClassName}`}>{title}</h2>}
-        {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
+        {subtitle && <p className={`text-muted-foreground mt-1 ${subtitleClassName}`}>{subtitle}</p>}
       </div>
       
       <div className="mb-6">

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -44,6 +45,7 @@ const Login = () => {
         <PinPad 
           onSubmit={handleLogin}
           subtitle="Enter your PIN to continue"
+          subtitleClassName="mt-8" // Added margin to move subtitle down
           titleClassName="text-white"
         />
         
