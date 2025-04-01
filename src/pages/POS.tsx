@@ -134,14 +134,14 @@ const POS = () => {
         onLogout={logout}
       />
       
-      <div className="fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50">
+      <div className={`${isMobile ? 'fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50' : 'px-3 pt-3 pb-2'}`}>
         <ProductSearch 
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-8`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col mt-16' : 'flex'} overflow-hidden relative pb-2`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
