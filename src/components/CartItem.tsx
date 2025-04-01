@@ -74,7 +74,7 @@ const CartItem: React.FC<CartItemProps> = ({
   
   if (isMobile) {
     return (
-      <div className="py-1 border-b pl-2">
+      <div className="py-1 border-b pl-1">
         <div className="flex justify-between mb-1">
           <p className="font-medium text-sm truncate max-w-[200px]">{product.name}</p>
           <p className="font-medium text-sm">{formatCurrency(subtotal)}</p>

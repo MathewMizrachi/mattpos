@@ -21,11 +21,11 @@ const CartPanel: React.FC<CartPanelProps> = ({
   isMobile
 }) => {
   if (isMobile) {
-    // For mobile displays, show cart panel fixed on the right side
+    // For mobile displays, show cart panel fixed on the right side with minimal padding
     return (
       <div className="fixed top-20 bottom-0 right-0 w-2/3 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
         <ScrollArea className="flex-1">
-          <div className="p-4">
+          <div className="p-2">
             {cart.length === 0 ? (
               <div className="text-center py-6">
                 <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
