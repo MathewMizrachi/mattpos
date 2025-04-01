@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -160,19 +161,6 @@ const POS = () => {
                   {cart.length} items
                 </Badge>
               </div>
-              
-              {cart.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full"
-                  onClick={clearCart}
-                  style={{ backgroundColor: '#FAA225', color: 'black' }}
-                >
-                  <XIcon className="h-4 w-4 mr-2" />
-                  Clear Cart
-                </Button>
-              )}
             </div>
             
             <ScrollArea className="flex-1 h-40">
@@ -204,19 +192,32 @@ const POS = () => {
                 <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
               </div>
               
-              <Button 
-                className="w-full" 
-                size="lg"
-                disabled={cart.length === 0}
-                onClick={() => setShowPaymentForm(true)}
-                style={{ 
-                  height: '4rem',  // Increased height
-                  fontSize: '1.5rem',  // Even larger font size
-                  fontWeight: 'bold'  // Make text bold
-                }}
-              >
-                Pay Now
-              </Button>
+              <div className="flex space-x-2">
+                {cart.length > 0 && (
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={clearCart}
+                    style={{ backgroundColor: '#FAA225', color: 'black' }}
+                  >
+                    <XIcon className="h-4 w-4 mr-2" />
+                    Clear Cart
+                  </Button>
+                )}
+                <Button 
+                  className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
+                  size="lg"
+                  disabled={cart.length === 0}
+                  onClick={() => setShowPaymentForm(true)}
+                  style={{ 
+                    height: '4rem',  // Increased height
+                    fontSize: '1.5rem',  // Even larger font size
+                    fontWeight: 'bold'  // Make text bold
+                  }}
+                >
+                  Pay Now
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -272,19 +273,6 @@ const POS = () => {
                   {cart.length} items
                 </Badge>
               </div>
-              
-              {cart.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full"
-                  onClick={clearCart}
-                  style={{ backgroundColor: '#FAA225', color: 'black' }}
-                >
-                  <XIcon className="h-4 w-4 mr-2" />
-                  Clear Cart
-                </Button>
-              )}
             </div>
             
             <div className="flex-1 overflow-y-auto p-4">
@@ -317,19 +305,32 @@ const POS = () => {
                 <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
               </div>
               
-              <Button 
-                className="w-full" 
-                size="lg"
-                disabled={cart.length === 0}
-                onClick={() => setShowPaymentForm(true)}
-                style={{ 
-                  height: '4rem',  // Increased height
-                  fontSize: '1.5rem',  // Even larger font size
-                  fontWeight: 'bold'  // Make text bold
-                }}
-              >
-                Pay Now
-              </Button>
+              <div className="flex space-x-2">
+                {cart.length > 0 && (
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={clearCart}
+                    style={{ backgroundColor: '#FAA225', color: 'black' }}
+                  >
+                    <XIcon className="h-4 w-4 mr-2" />
+                    Clear Cart
+                  </Button>
+                )}
+                <Button 
+                  className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
+                  size="lg"
+                  disabled={cart.length === 0}
+                  onClick={() => setShowPaymentForm(true)}
+                  style={{ 
+                    height: '4rem',  // Increased height
+                    fontSize: '1.5rem',  // Even larger font size
+                    fontWeight: 'bold'  // Make text bold
+                  }}
+                >
+                  Pay Now
+                </Button>
+              </div>
             </div>
           </div>
         )}
