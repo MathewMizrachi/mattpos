@@ -187,8 +187,8 @@ const POS = () => {
             
             <div className="p-4 border-t bg-secondary">
               <div className="flex justify-between mb-4">
-                <span className="font-semibold">Total</span>
-                <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
+                <span className="text-xl font-semibold">Total</span>
+                <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
               </div>
               
               <div className="flex space-x-2">
@@ -306,8 +306,8 @@ const POS = () => {
             
             <div className="p-4 border-t bg-secondary">
               <div className="flex justify-between mb-4">
-                <span className="font-semibold">Total</span>
-                <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
+                <span className="text-xl font-semibold">Total</span>
+                <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
               </div>
               
               <div className="flex space-x-2">
