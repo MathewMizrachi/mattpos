@@ -1,5 +1,5 @@
 
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 export default {
   darkMode: ["class"],
@@ -20,19 +20,19 @@ export default {
     },
     extend: {
       colors: {
+        primary: {
+          DEFAULT: "#0A2645",
+          foreground: "#FFFFFF",
+        },
+        secondary: {
+          DEFAULT: "#FAA225",
+          foreground: "#000000",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "#1EAEDB",
-          foreground: "#FFFFFF",
-        },
-        secondary: {
-          DEFAULT: "#F8F8F8",
-          foreground: "#333333",
-        },
         destructive: {
           DEFAULT: "#ea384c",
           foreground: "#FFFFFF",
