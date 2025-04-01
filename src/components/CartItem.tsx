@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,7 +43,6 @@ const CartItem: React.FC<CartItemProps> = ({
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Only allow numbers
     if (/^\d*$/.test(value)) {
       setInputValue(value);
     }
@@ -53,7 +51,6 @@ const CartItem: React.FC<CartItemProps> = ({
   const handleInputBlur = () => {
     let newQuantity = parseInt(inputValue, 10);
     
-    // Handle invalid or empty input
     if (isNaN(newQuantity) || newQuantity < 1) {
       newQuantity = 1;
     }
@@ -142,4 +139,3 @@ const CartItem: React.FC<CartItemProps> = ({
 };
 
 export default CartItem;
-
