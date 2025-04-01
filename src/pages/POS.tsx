@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -134,7 +135,14 @@ const POS = () => {
         onLogout={logout}
       />
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative`}>
+      <div className="fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50">
+        <ProductSearch 
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+        />
+      </div>
+      
+      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-16`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
@@ -145,13 +153,6 @@ const POS = () => {
         )}
         
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-3 z-10">
-            <ProductSearch 
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-            />
-          </div>
-          
           <div className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
               products={filteredProducts}
