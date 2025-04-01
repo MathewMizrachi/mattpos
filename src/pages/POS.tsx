@@ -127,7 +127,7 @@ const POS = () => {
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="fixed top-0 left-0 right-0 bg-white p-4 shadow-sm z-50 flex justify-between items-center">
+      <header className="bg-white p-4 shadow-sm z-50 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
@@ -150,11 +150,11 @@ const POS = () => {
         </div>
       </header>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative mt-[72px]`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative`}>
         {isMobile && (
           <div className="bg-white shadow-lg flex flex-col">
-            <div className="p-4 border-b">
-              <div className="flex justify-between items-center mb-2">
+            <div className="p-3 border-b">
+              <div className="flex justify-between items-center mb-1">
                 <h2 className="text-lg font-semibold">Current Sale</h2>
                 <Badge variant="outline" className="font-normal">
                   {cart.length} items
@@ -162,11 +162,11 @@ const POS = () => {
               </div>
             </div>
             
-            <ScrollArea className="flex-1 h-40">
-              <div className="p-4">
+            <ScrollArea className="flex-1 h-32">
+              <div className="p-2">
                 {cart.length === 0 ? (
-                  <div className="text-center py-4">
-                    <ShoppingCartIcon className="h-8 w-8 mx-auto text-muted-foreground opacity-50 mb-2" />
+                  <div className="text-center py-2">
+                    <ShoppingCartIcon className="h-6 w-6 mx-auto text-muted-foreground opacity-50 mb-1" />
                     <p className="text-muted-foreground text-sm">No items in cart</p>
                   </div>
                 ) : (
@@ -184,17 +184,15 @@ const POS = () => {
                 )}
               </div>
             </ScrollArea>
-            
-            <div className="h-32"></div>
           </div>
         )}
         
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-4 z-10">
-            <div className="relative mb-4">
-              <SearchIcon className="h-8 w-8 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <div className="p-3 z-10">
+            <div className="relative mb-2">
+              <SearchIcon className="h-6 w-6 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
-                className="pl-14 bg-white text-xl font-medium h-14 border-2 border-secondary/20 focus:ring-2 focus:ring-secondary"
+                className="pl-12 bg-white text-lg font-medium h-12 border-2 border-secondary/20 focus:ring-2 focus:ring-secondary"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -203,17 +201,17 @@ const POS = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-10 w-10"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
                   onClick={() => setSearchTerm('')}
                 >
-                  <XIcon className="h-6 w-6" />
+                  <XIcon className="h-5 w-5" />
                 </Button>
               )}
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 pb-36">
-            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-4`}>
+          <div className="flex-1 overflow-y-auto p-3 pb-36">
+            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-3`}>
               {filteredProducts.map(product => (
                 <ProductCard 
                   key={product.id} 
@@ -223,7 +221,7 @@ const POS = () => {
               ))}
               
               {filteredProducts.length === 0 && (
-                <div className="col-span-full text-center py-12">
+                <div className="col-span-full text-center py-8">
                   <p className="text-muted-foreground">No products found</p>
                 </div>
               )}
@@ -233,8 +231,8 @@ const POS = () => {
         
         {!isMobile && (
           <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden relative">
-            <div className="p-4 border-b">
-              <div className="flex justify-between items-center mb-2">
+            <div className="p-3 border-b">
+              <div className="flex justify-between items-center mb-1">
                 <h2 className="text-lg font-semibold">Current Sale</h2>
                 <Badge variant="outline" className="font-normal">
                   {cart.length} items
@@ -242,10 +240,10 @@ const POS = () => {
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-4 pb-36">
+            <div className="flex-1 overflow-y-auto p-3 pb-36">
               {cart.length === 0 ? (
-                <div className="text-center py-12">
-                  <ShoppingCartIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
+                <div className="text-center py-6">
+                  <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
                   <p className="text-muted-foreground">No items in cart</p>
                   <p className="text-sm text-muted-foreground">
                     Add products to begin a sale
