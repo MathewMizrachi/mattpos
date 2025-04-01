@@ -1,10 +1,7 @@
-
 import React from 'react';
-import { ShoppingCartIcon, X } from 'lucide-react';
+import { ShoppingCartIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CartItem from '@/components/CartItem';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
 import { CartItem as CartItemType } from '@/types';
 
 interface CartPanelProps {
@@ -21,9 +18,8 @@ const CartPanel: React.FC<CartPanelProps> = ({
   isMobile
 }) => {
   if (isMobile) {
-    // For mobile displays, show cart panel fixed on the right side with minimal padding
     return (
-      <div className="fixed top-20 bottom-0 right-0 w-2/3 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
+      <div className="fixed top-20 bottom-0 right-0 w-1/2 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
         <ScrollArea className="flex-1">
           <div className="p-2">
             {cart.length === 0 ? (
@@ -50,7 +46,6 @@ const CartPanel: React.FC<CartPanelProps> = ({
     );
   }
 
-  // For desktop, position the cart on the right side with the same width as payment footer
   return (
     <div className="w-96 fixed top-20 right-0 bottom-0 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
       <ScrollArea className="flex-1">
