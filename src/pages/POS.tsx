@@ -186,54 +186,13 @@ const POS = () => {
               </div>
             </ScrollArea>
             
-            {/* Mobile view - Total area now fixed at bottom */}
-            <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-secondary shadow-lg" style={{ backgroundColor: '#FAA225' }}>
-              <div className="flex justify-between mb-4">
-                <span className="text-xl font-semibold">Total</span>
-                <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
-              </div>
-              
-              <div className="flex space-x-2">
-                {cart.length > 0 && (
-                  <Button 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={clearCart}
-                    style={{ 
-                      backgroundColor: 'white', 
-                      color: 'black', 
-                      fontSize: '1.5rem', 
-                      fontWeight: 'bold',
-                      border: '2px solid #FAA225',
-                      height: '4rem'
-                    }}
-                  >
-                    Clear Cart
-                  </Button>
-                )}
-                <Button 
-                  className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
-                  size="lg"
-                  disabled={cart.length === 0}
-                  onClick={() => setShowPaymentForm(true)}
-                  style={{ 
-                    height: '4rem',
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Pay Now
-                </Button>
-              </div>
-            </div>
-            
             {/* Add padding at the bottom to prevent content from being hidden behind the fixed total area */}
             <div className="h-32"></div>
           </div>
         )}
         
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-4">
+          <div className="p-4 z-10">
             <div className="relative mb-4">
               <SearchIcon className="h-8 w-8 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -308,46 +267,91 @@ const POS = () => {
                 </div>
               )}
             </div>
+          </div>
+        )}
+        
+        {/* Mobile view - Total area now fixed at bottom with higher z-index */}
+        {isMobile && (
+          <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-secondary shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
+            <div className="flex justify-between mb-4">
+              <span className="text-xl font-semibold">Total</span>
+              <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
+            </div>
             
-            {/* Desktop view - Total area now fixed at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg" style={{ backgroundColor: '#FAA225' }}>
-              <div className="flex justify-between mb-4">
-                <span className="text-xl font-semibold">Total</span>
-                <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
-              </div>
-              
-              <div className="flex space-x-2">
-                {cart.length > 0 && (
-                  <Button 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={clearCart}
-                    style={{ 
-                      backgroundColor: 'white', 
-                      color: 'black', 
-                      fontSize: '1.5rem', 
-                      fontWeight: 'bold',
-                      border: '2px solid #FAA225',
-                      height: '4rem'
-                    }}
-                  >
-                    Clear Cart
-                  </Button>
-                )}
+            <div className="flex space-x-2">
+              {cart.length > 0 && (
                 <Button 
-                  className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
-                  size="lg"
-                  disabled={cart.length === 0}
-                  onClick={() => setShowPaymentForm(true)}
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={clearCart}
                   style={{ 
-                    height: '4rem',
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold'
+                    backgroundColor: 'white', 
+                    color: 'black', 
+                    fontSize: '1.5rem', 
+                    fontWeight: 'bold',
+                    border: '2px solid #FAA225',
+                    height: '4rem'
                   }}
                 >
-                  Pay Now
+                  Clear Cart
                 </Button>
-              </div>
+              )}
+              <Button 
+                className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
+                size="lg"
+                disabled={cart.length === 0}
+                onClick={() => setShowPaymentForm(true)}
+                style={{ 
+                  height: '4rem',
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                Pay Now
+              </Button>
+            </div>
+          </div>
+        )}
+        
+        {/* Desktop view - Total area now fixed at bottom with higher z-index */}
+        {!isMobile && (
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
+            <div className="flex justify-between mb-4">
+              <span className="text-xl font-semibold">Total</span>
+              <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
+            </div>
+            
+            <div className="flex space-x-2">
+              {cart.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={clearCart}
+                  style={{ 
+                    backgroundColor: 'white', 
+                    color: 'black', 
+                    fontSize: '1.5rem', 
+                    fontWeight: 'bold',
+                    border: '2px solid #FAA225',
+                    height: '4rem'
+                  }}
+                >
+                  Clear Cart
+                </Button>
+              )}
+              <Button 
+                className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
+                size="lg"
+                disabled={cart.length === 0}
+                onClick={() => setShowPaymentForm(true)}
+                style={{ 
+                  height: '4rem',
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                Pay Now
+              </Button>
             </div>
           </div>
         )}
