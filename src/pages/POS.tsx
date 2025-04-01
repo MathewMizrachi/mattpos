@@ -127,7 +127,7 @@ const POS = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pt-20">  {/* Added pt-20 to push content below fixed header */}
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">  {/* Added pt-20 to push content below fixed header and pb-32 to prevent content from being hidden by fixed footer */}
       <POSHeader 
         currentUser={currentUser}
         currentShift={currentShift}
