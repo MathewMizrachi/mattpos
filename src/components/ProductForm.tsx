@@ -121,10 +121,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
             />
             
             <div className="flex justify-end space-x-4">
-              <Button type="button" variant="outline" onClick={onClose}>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onClose} 
+                className="text-white"
+              >
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button 
+                type="submit" 
+                className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
+              >
                 Save
               </Button>
             </div>
