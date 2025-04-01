@@ -20,7 +20,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
 }) => {
   return (
     <div className={`
-      ${isMobile ? '' : 'w-96 fixed top-20 right-0 bottom-32 z-10'} 
+      ${isMobile ? '' : 'w-96 fixed top-0 right-0 bottom-32 z-10'} 
       bg-white shadow-lg flex flex-col overflow-hidden relative
     `}>
       {isMobile ? (
