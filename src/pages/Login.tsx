@@ -32,6 +32,11 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <div className="text-center mb-8">
+          <img 
+            src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
+            alt="MiniPos Logo" 
+            className="h-24 mx-auto mb-4"
+          />
           <h1 className="text-3xl font-bold text-primary">MiniPos</h1>
         </div>
         

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -111,9 +110,16 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-4xl mx-auto">
         <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
-            <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
+              alt="MiniPos Logo" 
+              className="h-10 mr-3"
+            />
+            <div>
+              <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
+              <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
+            </div>
           </div>
           <Button variant="ghost" size="icon" onClick={handleLogout}>
             <LogOutIcon className="h-5 w-5" />
@@ -156,5 +162,34 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+// Helper function implementations
+const handleStaffPinSubmit = (pin: string) => {
+  // In a real app, you would validate the staff PIN against the database
+  // For this demo, we'll just check against our known PINs
+  if (pin === '5678') {
+    setSelectedStaffId(2); // Staff ID
+    setShowStaffPinPad(false);
+    setShowFloatForm(true);
+  } else if (pin === '1234') {
+    setSelectedStaffId(1); // Manager ID
+    setShowStaffPinPad(false);
+    setShowFloatForm(true);
+  } else {
+    toast({
+      title: "Invalid PIN",
+      description: "Please enter a valid staff PIN",
+      variant: "destructive"
+    });
+  }
+};
 
+const handleManageStock = () => {
+  navigate('/stock');
+};
+
+const handleLogout = () => {
+  logout();
+  navigate('/');
+};
+
+export default Dashboard;
