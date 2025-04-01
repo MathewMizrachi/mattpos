@@ -50,6 +50,7 @@ const CartItem: React.FC<CartItemProps> = ({
           variant="outline"
           size="icon"
           className="h-8 w-8"
+          style={{ backgroundColor: '#FAA225', color: 'black' }}
           onClick={handleDecrease}
         >
           <MinusIcon className="h-4 w-4" />
@@ -61,6 +62,7 @@ const CartItem: React.FC<CartItemProps> = ({
           variant="outline"
           size="icon"
           className="h-8 w-8"
+          style={{ backgroundColor: '#FAA225', color: 'black' }}
           onClick={handleIncrease}
         >
           <PlusIcon className="h-4 w-4" />
