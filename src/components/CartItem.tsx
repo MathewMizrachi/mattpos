@@ -76,7 +76,7 @@ const CartItem: React.FC<CartItemProps> = ({
     <div className="flex items-center py-2 border-b pl-4">
       <div className="flex-1">
         <p className="font-medium">{product.name}</p>
-        <p className="text-sm text-muted-foreground hidden md:block">{formatCurrency(product.price)} each</p>
+        <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>
       </div>
       
       <div className="flex items-center space-x-2">
