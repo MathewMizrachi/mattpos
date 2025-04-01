@@ -112,14 +112,16 @@ const Dashboard = () => {
       <div className="max-w-4xl mx-auto">
         <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
           <div className="flex items-center">
-            <img 
-              src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
-              alt="MiniPos Logo" 
-              className="h-12 w-12 object-contain mr-3"
-            />
-            <div>
-              <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
-              <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png" 
+                alt="Shop2Shop Logo" 
+                className="h-16 w-auto object-contain mr-3"
+              />
+              <div>
+                <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
+                <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
+              </div>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={handleLogout}>
