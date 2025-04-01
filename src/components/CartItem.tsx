@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -73,22 +74,22 @@ const CartItem: React.FC<CartItemProps> = ({
   
   if (isMobile) {
     return (
-      <div className="py-2 border-b pl-4">
-        <div className="flex justify-between mb-2">
-          <p className="font-medium">{product.name}</p>
-          <p className="font-medium">{formatCurrency(subtotal)}</p>
+      <div className="py-1 border-b pl-2">
+        <div className="flex justify-between mb-1">
+          <p className="font-medium text-sm truncate max-w-[200px]">{product.name}</p>
+          <p className="font-medium text-sm">{formatCurrency(subtotal)}</p>
         </div>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <Button 
               variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="h-7 w-7"
               style={{ backgroundColor: '#FAA225', color: 'black' }}
               onClick={handleDecrease}
             >
-              <MinusIcon className="h-4 w-4" />
+              <MinusIcon className="h-3 w-3" />
             </Button>
             
             {isEditing ? (
@@ -98,13 +99,13 @@ const CartItem: React.FC<CartItemProps> = ({
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onKeyDown={handleKeyDown}
-                className="w-12 h-8 text-center px-1"
+                className="w-10 h-7 text-center px-1 text-sm"
                 style={{ backgroundColor: '#FAA225', color: '#0A2645' }}
                 autoFocus
               />
             ) : (
               <span 
-                className="w-8 text-center cursor-pointer" 
+                className="w-7 text-center text-sm cursor-pointer" 
                 onClick={() => setIsEditing(true)}
               >
                 {quantity}
@@ -114,21 +115,21 @@ const CartItem: React.FC<CartItemProps> = ({
             <Button 
               variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="h-7 w-7"
               style={{ backgroundColor: '#FAA225', color: 'black' }}
               onClick={handleIncrease}
             >
-              <PlusIcon className="h-4 w-4" />
+              <PlusIcon className="h-3 w-3" />
             </Button>
           </div>
           
           <Button 
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-7 w-7"
             onClick={() => onRemove(product.id)}
           >
-            <XIcon className="h-4 w-4" />
+            <XIcon className="h-3 w-3" />
           </Button>
         </div>
       </div>
