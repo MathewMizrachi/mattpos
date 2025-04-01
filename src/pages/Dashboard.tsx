@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -35,8 +34,6 @@ const Dashboard = () => {
   };
   
   const handleStaffPinSubmit = (pin: string) => {
-    // In a real app, you would validate the staff PIN against the database
-    // For this demo, we'll just check against our known PINs
     if (pin === '5678') {
       setSelectedStaffId(2); // Staff ID
       setShowStaffPinPad(false);
@@ -116,7 +113,7 @@ const Dashboard = () => {
               <img 
                 src="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png" 
                 alt="Shop2Shop Logo" 
-                className="h-16 w-auto object-contain mr-3"
+                className="h-12 w-auto object-contain mr-3"
               />
               <div>
                 <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
