@@ -200,13 +200,12 @@ const POS = () => {
                     style={{ 
                       backgroundColor: 'white', 
                       color: 'black', 
-                      fontSize: '1.25rem', 
+                      fontSize: '1.5rem', 
                       fontWeight: 'bold',
                       border: '2px solid #FAA225',
                       height: '4rem'
                     }}
                   >
-                    <XIcon className="h-4 w-4 mr-2" />
                     Clear Cart
                   </Button>
                 )}
@@ -320,13 +319,12 @@ const POS = () => {
                     style={{ 
                       backgroundColor: 'white', 
                       color: 'black', 
-                      fontSize: '1.25rem', 
+                      fontSize: '1.5rem', 
                       fontWeight: 'bold',
                       border: '2px solid #FAA225',
                       height: '4rem'
                     }}
                   >
-                    <XIcon className="h-4 w-4 mr-2" />
                     Clear Cart
                   </Button>
                 )}
