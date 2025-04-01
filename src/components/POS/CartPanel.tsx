@@ -10,18 +10,20 @@ interface CartPanelProps {
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
   isMobile: boolean;
+  className?: string;
 }
 
 const CartPanel: React.FC<CartPanelProps> = ({
   cart,
   onUpdateQuantity,
   onRemove,
-  isMobile
+  isMobile,
+  className
 }) => {
   return (
     <div className={`
-      ${isMobile ? '' : 'w-96 fixed top-20 right-0 bottom-0 z-10'} 
-      bg-white shadow-lg flex flex-col overflow-hidden relative
+      ${isMobile ? '' : 'bg-white shadow-lg flex flex-col overflow-hidden'} 
+      ${className || ''}
     `}>
       {isMobile ? (
         <ScrollArea className="flex-1 h-32">
