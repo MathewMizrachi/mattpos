@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -44,7 +43,6 @@ const Login = () => {
         
         <PinPad 
           onSubmit={handleLogin}
-          title="Login"
           subtitle="Enter your PIN to continue"
           titleClassName="text-white"
         />
