@@ -45,7 +45,7 @@ const Login = () => {
         <PinPad 
           onSubmit={handleLogin}
           subtitle="Enter your PIN to continue"
-          subtitleClassName="mt-8" // Added margin to move subtitle down
+          subtitleClassName="mt-12" // Increased margin to move subtitle further down
           titleClassName="text-white"
         />
         
@@ -60,3 +60,4 @@ const Login = () => {
 };
 
 export default Login;
+
