@@ -94,12 +94,10 @@ const Dashboard = () => {
   if (showFloatForm) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-          <FloatForm 
-            onSubmit={handleFloatSubmit}
-            onCancel={() => setShowFloatForm(false)}
-          />
-        </div>
+        <FloatForm 
+          onSubmit={handleFloatSubmit}
+          onCancel={() => setShowFloatForm(false)}
+        />
       </div>
     );
   }
