@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -127,7 +126,7 @@ const POS = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">  {/* Added pt-20 to push content below fixed header and pb-32 to prevent content from being hidden by fixed footer */}
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">
       <POSHeader 
         currentUser={currentUser}
         currentShift={currentShift}
@@ -135,7 +134,7 @@ const POS = () => {
         onLogout={logout}
       />
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex pr-96'} overflow-hidden relative`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
@@ -170,27 +169,15 @@ const POS = () => {
             isMobile={false}
           />
         )}
-        
-        {isMobile && (
-          <PaymentFooter 
-            total={calculateTotal()}
-            cartLength={cart.length}
-            onClearCart={clearCart}
-            onShowPaymentForm={() => setShowPaymentForm(true)}
-            isMobile={true}
-          />
-        )}
-        
-        {!isMobile && (
-          <PaymentFooter 
-            total={calculateTotal()}
-            cartLength={cart.length}
-            onClearCart={clearCart}
-            onShowPaymentForm={() => setShowPaymentForm(true)}
-            isMobile={false}
-          />
-        )}
       </div>
+      
+      <PaymentFooter 
+        total={calculateTotal()}
+        cartLength={cart.length}
+        onClearCart={clearCart}
+        onShowPaymentForm={() => setShowPaymentForm(true)}
+        isMobile={isMobile}
+      />
     </div>
   );
 };
