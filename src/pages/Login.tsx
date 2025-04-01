@@ -33,7 +33,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
         <div className="text-center mb-8">
           <img 
-            src="/lovable-uploads/0f3bbad6-4fe7-4711-86f3-94adb2235986.png" 
+            src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
             alt="MiniPos Logo" 
             className="h-auto w-full max-w-xs object-contain mx-auto mb-4"
           />
