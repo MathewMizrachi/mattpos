@@ -98,6 +98,7 @@ const CartItem: React.FC<CartItemProps> = ({
             onBlur={handleInputBlur}
             onKeyDown={handleKeyDown}
             className="w-12 h-8 text-center px-1"
+            style={{ backgroundColor: '#FAA225', color: '#0A2645' }}
             autoFocus
           />
         ) : (
