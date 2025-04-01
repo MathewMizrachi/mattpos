@@ -1,18 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { LogOutIcon, SearchIcon, ShoppingCartIcon, XIcon } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
 import { useIsMobile } from '@/hooks/use-mobile';
-import ProductCard from '@/components/ProductCard';
-import CartItem from '@/components/CartItem';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
+// Import our new components
+import POSHeader from '@/components/POS/POSHeader';
+import ProductSearch from '@/components/POS/ProductSearch';
+import ProductGrid from '@/components/POS/ProductGrid';
+import CartPanel from '@/components/POS/CartPanel';
+import PaymentFooter from '@/components/POS/PaymentFooter';
 
 const POS = () => {
   const { 
@@ -127,227 +128,67 @@ const POS = () => {
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white p-4 shadow-sm z-50 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <span>{currentUser?.name}</span>
-            <span>•</span>
-            <span>Shift Active</span>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={handleEndShift}
-            style={{ backgroundColor: '#FAA225', color: 'black' }}
-          >
-            End Shift
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => { logout(); navigate('/'); }}>
-            <LogOutIcon className="h-5 w-5" />
-          </Button>
-        </div>
-      </header>
+      <POSHeader 
+        currentUser={currentUser}
+        currentShift={currentShift}
+        onEndShift={handleEndShift}
+        onLogout={logout}
+      />
       
       <div className={`flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative`}>
         {isMobile && (
-          <div className="bg-white shadow-lg flex flex-col">
-            <div className="p-3 border-b">
-              <div className="flex justify-between items-center mb-1">
-                <h2 className="text-lg font-semibold">Current Sale</h2>
-                <Badge variant="outline" className="font-normal">
-                  {cart.length} items
-                </Badge>
-              </div>
-            </div>
-            
-            <ScrollArea className="flex-1 h-32">
-              <div className="p-2">
-                {cart.length === 0 ? (
-                  <div className="text-center py-2">
-                    <ShoppingCartIcon className="h-6 w-6 mx-auto text-muted-foreground opacity-50 mb-1" />
-                    <p className="text-muted-foreground text-sm">No items in cart</p>
-                  </div>
-                ) : (
-                  <div className="space-y-1">
-                    {cart.map(item => (
-                      <CartItem 
-                        key={item.product.id}
-                        product={item.product}
-                        quantity={item.quantity}
-                        onUpdateQuantity={updateCartItem}
-                        onRemove={removeFromCart}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-          </div>
+          <CartPanel 
+            cart={cart}
+            onUpdateQuantity={updateCartItem}
+            onRemove={removeFromCart}
+            isMobile={true}
+          />
         )}
         
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="p-3 z-10">
-            <div className="relative mb-2">
-              <SearchIcon className="h-6 w-6 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-              <Input
-                className="pl-12 bg-white text-lg font-medium h-12 border-2 border-secondary/20 focus:ring-2 focus:ring-secondary"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
-                  onClick={() => setSearchTerm('')}
-                >
-                  <XIcon className="h-5 w-5" />
-                </Button>
-              )}
-            </div>
+            <ProductSearch 
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+            />
           </div>
           
           <div className="flex-1 overflow-y-auto px-3 pb-36">
-            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-3`}>
-              {filteredProducts.map(product => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
-                  onAddToCart={addToCart}
-                />
-              ))}
-              
-              {filteredProducts.length === 0 && (
-                <div className="col-span-full text-center py-8">
-                  <p className="text-muted-foreground">No products found</p>
-                </div>
-              )}
-            </div>
+            <ProductGrid 
+              products={filteredProducts}
+              isMobile={isMobile}
+              onAddToCart={addToCart}
+            />
           </div>
         </div>
         
         {!isMobile && (
-          <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden relative">
-            <div className="p-3 border-b">
-              <div className="flex justify-between items-center mb-1">
-                <h2 className="text-lg font-semibold">Current Sale</h2>
-                <Badge variant="outline" className="font-normal">
-                  {cart.length} items
-                </Badge>
-              </div>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-3 pb-36">
-              {cart.length === 0 ? (
-                <div className="text-center py-6">
-                  <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-                  <p className="text-muted-foreground">No items in cart</p>
-                  <p className="text-sm text-muted-foreground">
-                    Add products to begin a sale
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-1">
-                  {cart.map(item => (
-                    <CartItem 
-                      key={item.product.id}
-                      product={item.product}
-                      quantity={item.quantity}
-                      onUpdateQuantity={updateCartItem}
-                      onRemove={removeFromCart}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <CartPanel 
+            cart={cart}
+            onUpdateQuantity={updateCartItem}
+            onRemove={removeFromCart}
+            isMobile={false}
+          />
         )}
         
         {isMobile && (
-          <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-secondary shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
-            <div className="flex justify-between mb-4">
-              <span className="text-xl font-semibold">Total</span>
-              <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
-            </div>
-            
-            <div className="flex space-x-2">
-              {cart.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={clearCart}
-                  style={{ 
-                    backgroundColor: 'white', 
-                    color: 'black', 
-                    fontSize: '1.5rem', 
-                    fontWeight: 'bold',
-                    border: '2px solid #FAA225',
-                    height: '4rem'
-                  }}
-                >
-                  Clear Cart
-                </Button>
-              )}
-              <Button 
-                className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
-                size="lg"
-                disabled={cart.length === 0}
-                onClick={() => setShowPaymentForm(true)}
-                style={{ 
-                  height: '4rem',
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold'
-                }}
-              >
-                Pay Now
-              </Button>
-            </div>
-          </div>
+          <PaymentFooter 
+            total={calculateTotal()}
+            cartLength={cart.length}
+            onClearCart={clearCart}
+            onShowPaymentForm={() => setShowPaymentForm(true)}
+            isMobile={true}
+          />
         )}
         
         {!isMobile && (
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
-            <div className="flex justify-between mb-4">
-              <span className="text-xl font-semibold">Total</span>
-              <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
-            </div>
-            
-            <div className="flex space-x-2">
-              {cart.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={clearCart}
-                  style={{ 
-                    backgroundColor: 'white', 
-                    color: 'black', 
-                    fontSize: '1.5rem', 
-                    fontWeight: 'bold',
-                    border: '2px solid #FAA225',
-                    height: '4rem'
-                  }}
-                >
-                  Clear Cart
-                </Button>
-              )}
-              <Button 
-                className={`${cart.length > 0 ? 'flex-1' : 'w-full'}`}
-                size="lg"
-                disabled={cart.length === 0}
-                onClick={() => setShowPaymentForm(true)}
-                style={{ 
-                  height: '4rem',
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold'
-                }}
-              >
-                Pay Now
-              </Button>
-            </div>
-          </div>
+          <PaymentFooter 
+            total={calculateTotal()}
+            cartLength={cart.length}
+            onClearCart={clearCart}
+            onShowPaymentForm={() => setShowPaymentForm(true)}
+            isMobile={false}
+          />
         )}
       </div>
     </div>
