@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
 
 interface Product {
@@ -24,6 +25,9 @@ const CartItem: React.FC<CartItemProps> = ({
   onUpdateQuantity, 
   onRemove 
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(quantity.toString());
+  
   const handleIncrease = () => {
     onUpdateQuantity(product.id, quantity + 1);
   };
@@ -33,6 +37,36 @@ const CartItem: React.FC<CartItemProps> = ({
       onUpdateQuantity(product.id, quantity - 1);
     } else {
       onRemove(product.id);
+    }
+  };
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers
+    if (/^\d*$/.test(value)) {
+      setInputValue(value);
+    }
+  };
+  
+  const handleInputBlur = () => {
+    let newQuantity = parseInt(inputValue, 10);
+    
+    // Handle invalid or empty input
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      newQuantity = 1;
+    }
+    
+    onUpdateQuantity(product.id, newQuantity);
+    setInputValue(newQuantity.toString());
+    setIsEditing(false);
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputBlur();
+    } else if (e.key === 'Escape') {
+      setInputValue(quantity.toString());
+      setIsEditing(false);
     }
   };
   
@@ -56,7 +90,24 @@ const CartItem: React.FC<CartItemProps> = ({
           <MinusIcon className="h-4 w-4" />
         </Button>
         
-        <span className="w-8 text-center">{quantity}</span>
+        {isEditing ? (
+          <Input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyDown={handleKeyDown}
+            className="w-12 h-8 text-center px-1"
+            autoFocus
+          />
+        ) : (
+          <span 
+            className="w-8 text-center cursor-pointer" 
+            onClick={() => setIsEditing(true)}
+          >
+            {quantity}
+          </span>
+        )}
         
         <Button 
           variant="outline"
