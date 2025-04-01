@@ -32,12 +32,14 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
         <div className="text-center mb-8">
-          <img 
-            src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
-            alt="MiniPos Logo" 
-            className="h-auto w-full max-w-xs object-contain mx-auto mb-4"
-          />
-          <h1 className="text-6xl font-bold" style={{ color: '#FAA225' }}>MiniPos</h1>
+          <div className="max-w-[200px] mx-auto">
+            <img 
+              src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
+              alt="MiniPos Logo" 
+              className="h-auto w-full object-contain mx-auto mb-4"
+            />
+            <h1 className="text-4xl font-bold" style={{ color: '#FAA225' }}>MiniPos</h1>
+          </div>
         </div>
         
         <PinPad 
