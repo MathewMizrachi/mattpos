@@ -210,7 +210,7 @@ const POS = () => {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-3 pb-36">
+          <div className="flex-1 overflow-y-auto px-3 pb-36">
             <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-3`}>
               {filteredProducts.map(product => (
                 <ProductCard 
