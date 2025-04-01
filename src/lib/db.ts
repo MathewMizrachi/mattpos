@@ -1,6 +1,6 @@
 
 // Simple in-memory database for demonstration purposes
-// In a real application, this would use IndexedDB or SQLite
+// In a real application, this would use SQLite or another mobile database
 
 interface User {
   id: number;

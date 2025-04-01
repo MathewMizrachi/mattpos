@@ -1,36 +1,44 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AppProvider } from "@/contexts/AppContext";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import POS from "./pages/POS";
-import Stock from "./pages/Stock";
-import NotFound from "./pages/NotFound";
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppProvider } from './contexts/AppContext';
+import { ToastProvider } from './contexts/ToastContext';
 
+import LoginScreen from './screens/LoginScreen';
+import DashboardScreen from './screens/DashboardScreen';
+import POSScreen from './screens/POSScreen';
+import StockScreen from './screens/StockScreen';
+
+const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AppProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/pos" element={<POS />} />
-            <Route path="/stock" element={<Stock />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </AppProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <AppProvider>
+          <ToastProvider>
+            <NavigationContainer>
+              <Stack.Navigator 
+                initialRouteName="Login"
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Dashboard" component={DashboardScreen} />
+                <Stack.Screen name="POS" component={POSScreen} />
+                <Stack.Screen name="Stock" component={StockScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </ToastProvider>
+        </AppProvider>
+      </SafeAreaProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { formatCurrency } from '@/lib/utils';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { formatCurrency } from '../lib/utils';
 
 interface Product {
   id: number;
@@ -22,31 +21,96 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   };
   
   return (
-    <Card className="h-full flex flex-col">
-      <CardContent className="pt-4 flex-1 flex flex-col">
-        <div className="flex-1">
-          <h3 className="font-medium text-lg mb-1">{product.name}</h3>
-          <p className="text-2xl font-bold text-primary mb-2">
+    <View style={styles.card}>
+      <View style={styles.cardContent}>
+        <View style={styles.info}>
+          <Text style={styles.name}>{product.name}</Text>
+          <Text style={styles.price}>
             {formatCurrency(product.price)}
-          </p>
+          </Text>
           
           {product.stock !== undefined && (
-            <p className={`text-sm ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+            <Text 
+              style={[
+                styles.stock, 
+                product.stock <= 5 ? styles.lowStock : {}
+              ]}
+            >
               Stock: {product.stock}
-            </p>
+            </Text>
           )}
-        </div>
+        </View>
         
-        <Button 
-          onClick={handleAddToCart}
-          className="w-full mt-4"
+        <TouchableOpacity 
+          style={[
+            styles.addButton,
+            (product.stock !== undefined && product.stock <= 0) 
+              ? styles.disabledButton 
+              : {}
+          ]}
+          onPress={handleAddToCart}
           disabled={product.stock !== undefined && product.stock <= 0}
         >
-          Add to Cart
-        </Button>
-      </CardContent>
-    </Card>
+          <Text style={styles.buttonText}>
+            Add to Cart
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    height: 160,
+  },
+  cardContent: {
+    padding: 12,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  info: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  price: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3b82f6',
+    marginBottom: 4,
+  },
+  stock: {
+    fontSize: 12,
+    color: '#6b7280',
+  },
+  lowStock: {
+    color: '#ef4444',
+  },
+  addButton: {
+    backgroundColor: '#3b82f6',
+    paddingVertical: 8,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#e5e7eb',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: '500',
+  },
+});
 
 export default ProductCard;
