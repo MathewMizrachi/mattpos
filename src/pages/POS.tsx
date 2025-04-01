@@ -8,12 +8,13 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
 
-// Import our new components
+// Import our components
 import POSHeader from '@/components/POS/POSHeader';
 import ProductSearch from '@/components/POS/ProductSearch';
 import ProductGrid from '@/components/POS/ProductGrid';
 import CartPanel from '@/components/POS/CartPanel';
 import PaymentFooter from '@/components/POS/PaymentFooter';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const POS = () => {
   const { 
@@ -153,13 +154,13 @@ const POS = () => {
         )}
         
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto px-3 pb-36">
+          <ScrollArea className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
               products={filteredProducts}
               isMobile={isMobile}
               onAddToCart={addToCart}
             />
-          </div>
+          </ScrollArea>
         </div>
         
         {!isMobile && (
