@@ -211,7 +211,7 @@ const POS = () => {
                 onClick={() => setShowPaymentForm(true)}
                 style={{ 
                   height: '4rem',  // Increased height
-                  fontSize: '1.25rem',  // Larger font size
+                  fontSize: '1.5rem',  // Even larger font size
                   fontWeight: 'bold'  // Make text bold
                 }}
               >
@@ -324,7 +324,7 @@ const POS = () => {
                 onClick={() => setShowPaymentForm(true)}
                 style={{ 
                   height: '4rem',  // Increased height
-                  fontSize: '1.25rem',  // Larger font size
+                  fontSize: '1.5rem',  // Even larger font size
                   fontWeight: 'bold'  // Make text bold
                 }}
               >
