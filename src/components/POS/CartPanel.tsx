@@ -20,7 +20,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
 }) => {
   return (
     <div className={`
-      ${isMobile ? '' : 'w-96 fixed top-0 right-0 bottom-32 z-10 pt-3'} 
+      ${isMobile ? '' : 'w-96 fixed top-0 right-0 bottom-0 z-10 pt-3'} 
       bg-white shadow-lg flex flex-col overflow-hidden relative
     `}>
       {isMobile ? (
@@ -47,7 +47,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
           </div>
         </ScrollArea>
       ) : (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pb-32">
           {cart.length === 0 ? (
             <div className="text-center py-6">
               <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
