@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -75,7 +76,7 @@ const Dashboard = () => {
   
   if (showStaffPinPad) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
           <PinPad 
             onSubmit={handleStaffPinSubmit}
@@ -95,7 +96,7 @@ const Dashboard = () => {
   
   if (showFloatForm) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
           <FloatForm 
             onSubmit={handleFloatSubmit}
@@ -107,7 +108,7 @@ const Dashboard = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-4xl mx-auto">
         <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
           <div className="flex items-center">
@@ -160,36 +161,6 @@ const Dashboard = () => {
       </div>
     </div>
   );
-};
-
-// Helper function implementations
-const handleStaffPinSubmit = (pin: string) => {
-  // In a real app, you would validate the staff PIN against the database
-  // For this demo, we'll just check against our known PINs
-  if (pin === '5678') {
-    setSelectedStaffId(2); // Staff ID
-    setShowStaffPinPad(false);
-    setShowFloatForm(true);
-  } else if (pin === '1234') {
-    setSelectedStaffId(1); // Manager ID
-    setShowStaffPinPad(false);
-    setShowFloatForm(true);
-  } else {
-    toast({
-      title: "Invalid PIN",
-      description: "Please enter a valid staff PIN",
-      variant: "destructive"
-    });
-  }
-};
-
-const handleManageStock = () => {
-  navigate('/stock');
-};
-
-const handleLogout = () => {
-  logout();
-  navigate('/');
 };
 
 export default Dashboard;
