@@ -30,14 +30,14 @@ const Login = () => {
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
         <div className="text-center mb-8">
           <img 
             src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
             alt="MiniPos Logo" 
             className="h-24 w-24 object-contain mx-auto mb-4 rounded-lg"
           />
-          <h1 className="text-3xl font-bold text-primary">MiniPos</h1>
+          <h1 className="text-3xl font-bold" style={{ color: '#FAA225' }}>MiniPos</h1>
         </div>
         
         <PinPad 
@@ -46,7 +46,7 @@ const Login = () => {
           subtitle="Enter your PIN to continue"
         />
         
-        <div className="mt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-8 text-center text-sm" style={{ color: '#FAA225' }}>
           <p>Demo PINs:</p>
           <p>Manager: 1234</p>
           <p>Staff: 5678</p>
