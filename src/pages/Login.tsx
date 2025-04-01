@@ -13,10 +13,6 @@ const Login = () => {
     const success = login(pin);
     
     if (success) {
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      });
       navigate('/dashboard');
     } else {
       toast({
