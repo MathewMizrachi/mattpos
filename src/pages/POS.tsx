@@ -209,6 +209,11 @@ const POS = () => {
                 size="lg"
                 disabled={cart.length === 0}
                 onClick={() => setShowPaymentForm(true)}
+                style={{ 
+                  height: '4rem',  // Increased height
+                  fontSize: '1.25rem',  // Larger font size
+                  fontWeight: 'bold'  // Make text bold
+                }}
               >
                 Pay Now
               </Button>
@@ -317,6 +322,11 @@ const POS = () => {
                 size="lg"
                 disabled={cart.length === 0}
                 onClick={() => setShowPaymentForm(true)}
+                style={{ 
+                  height: '4rem',  // Increased height
+                  fontSize: '1.25rem',  // Larger font size
+                  fontWeight: 'bold'  // Make text bold
+                }}
               >
                 Pay Now
               </Button>
