@@ -47,7 +47,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
           </div>
         </ScrollArea>
       ) : (
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto px-0">
           {cart.length === 0 ? (
             <div className="text-center py-6">
               <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
