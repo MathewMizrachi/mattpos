@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -153,7 +152,7 @@ const POS = () => {
           />
         )}
         
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className={`flex-1 flex flex-col overflow-hidden ${!isMobile ? 'pr-96' : ''}`}>
           <ScrollArea className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
               products={filteredProducts}
