@@ -113,12 +113,12 @@ const Dashboard = () => {
         <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
           <div className="flex items-center">
             <img 
-              src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
+              src="/lovable-uploads/0f3bbad6-4fe7-4711-86f3-94adb2235986.png" 
               alt="MiniPos Logo" 
-              className="h-10 w-10 object-contain mr-3 rounded-lg"
+              className="h-12 w-12 object-contain mr-3"
             />
             <div>
-              <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
+              <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
               <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
             </div>
           </div>
