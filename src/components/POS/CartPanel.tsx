@@ -71,7 +71,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
   }
 
   return (
-    <div className="w-96 fixed top-20 right-0 bottom-0 z-10 bg-white shadow-lg flex flex-col overflow-hidden relative">
+    <div className="w-96 fixed top-20 right-0 bottom-24 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
         <h2 className="font-bold text-lg">Shopping Cart</h2>
         <span className="text-sm text-muted-foreground">{cart.length} items</span>
