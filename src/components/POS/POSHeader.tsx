@@ -27,12 +27,19 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   
   return (
     <header className="bg-white p-4 shadow-sm z-50 flex justify-between items-center fixed top-0 left-0 right-0">
-      <div>
-        <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <span>{currentUser?.name}</span>
-          <span>•</span>
-          <span>Shift Active</span>
+      <div className="flex items-center">
+        <img 
+          src="/lovable-uploads/21ec9284-d40a-4bca-a789-7478910aa1fd.png" 
+          alt="Shop2Shop Logo" 
+          className="h-10 mr-2" 
+        />
+        <div>
+          <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <span>{currentUser?.name}</span>
+            <span>•</span>
+            <span>Shift Active</span>
+          </div>
         </div>
       </div>
       <div className="flex items-center space-x-2">
