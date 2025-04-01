@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -128,7 +127,7 @@ const POS = () => {
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white p-4 shadow-sm z-10 flex justify-between items-center">
+      <header className="fixed top-0 left-0 right-0 bg-white p-4 shadow-sm z-50 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
@@ -151,7 +150,7 @@ const POS = () => {
         </div>
       </header>
       
-      <div className={`flex flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative mt-[72px]`}>
         {isMobile && (
           <div className="bg-white shadow-lg flex flex-col">
             <div className="p-4 border-b">
@@ -186,7 +185,6 @@ const POS = () => {
               </div>
             </ScrollArea>
             
-            {/* Add padding at the bottom to prevent content from being hidden behind the fixed total area */}
             <div className="h-32"></div>
           </div>
         )}
@@ -270,7 +268,6 @@ const POS = () => {
           </div>
         )}
         
-        {/* Mobile view - Total area now fixed at bottom with higher z-index */}
         {isMobile && (
           <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-secondary shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
             <div className="flex justify-between mb-4">
@@ -313,7 +310,6 @@ const POS = () => {
           </div>
         )}
         
-        {/* Desktop view - Total area now fixed at bottom with higher z-index */}
         {!isMobile && (
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg z-20" style={{ backgroundColor: '#FAA225' }}>
             <div className="flex justify-between mb-4">
