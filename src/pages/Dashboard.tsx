@@ -54,10 +54,6 @@ const Dashboard = () => {
   const handleFloatSubmit = (amount: number) => {
     if (selectedStaffId) {
       startShift(selectedStaffId, amount);
-      toast({
-        title: "Shift Started",
-        description: `Starting float: R${amount.toFixed(2)}`,
-      });
       navigate('/pos');
     }
   };
