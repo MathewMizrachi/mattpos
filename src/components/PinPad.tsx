@@ -1,183 +1,104 @@
 
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import { Button } from '@/components/ui/button';
 
 interface PinPadProps {
   onSubmit: (pin: string) => void;
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
 }
 
-const PinPad: React.FC<PinPadProps> = ({ onSubmit, title, subtitle }) => {
-  const [pin, setPin] = useState('');
-  const maxLength = 4;
-
-  const handlePress = (number: string) => {
-    if (pin.length < maxLength) {
-      setPin(prevPin => prevPin + number);
+const PinPad: React.FC<PinPadProps> = ({ onSubmit, title = "Enter PIN", subtitle }) => {
+  const [pin, setPin] = useState<string>('');
+  
+  const handleNumberClick = (number: number) => {
+    if (pin.length < 4) {
+      setPin(prev => prev + number);
     }
   };
-
-  const handleDelete = () => {
-    setPin(prevPin => prevPin.slice(0, -1));
-  };
-
+  
   const handleClear = () => {
     setPin('');
   };
-
+  
+  const handleDelete = () => {
+    setPin(prev => prev.slice(0, -1));
+  };
+  
   const handleSubmit = () => {
-    if (pin.length === maxLength) {
+    if (pin.length > 0) {
       onSubmit(pin);
     }
   };
-
-  const renderDots = () => {
-    const dots = [];
-    for (let i = 0; i < maxLength; i++) {
-      dots.push(
-        <View
-          key={i}
-          style={[
-            styles.dot,
-            pin.length > i ? styles.dotFilled : styles.dotEmpty,
-          ]}
-        />
-      );
-    }
-    return dots;
-  };
-
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
-
-      <View style={styles.dotsContainer}>{renderDots()}</View>
-
-      <View style={styles.keypadContainer}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(number => (
-          <TouchableOpacity
-            key={number}
-            style={styles.keypadButton}
-            onPress={() => handlePress(number.toString())}
+    <div className="w-full max-w-md mx-auto">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold">{title}</h2>
+        {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
+      </div>
+      
+      <div className="mb-6">
+        <div className="flex justify-center space-x-4">
+          {[1, 2, 3, 4].map((_, i) => (
+            <div 
+              key={i} 
+              className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
+                i < pin.length ? 'bg-primary border-primary' : 'border-gray-300'
+              }`}
+            >
+              {i < pin.length && '•'}
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-3 gap-4">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+          <Button 
+            key={num} 
+            variant="outline"
+            className="py-6 text-xl font-medium"
+            onClick={() => handleNumberClick(num)}
           >
-            <Text style={styles.keypadButtonText}>{number}</Text>
-          </TouchableOpacity>
+            {num}
+          </Button>
         ))}
-
-        <TouchableOpacity style={styles.keypadButton} onPress={handleClear}>
-          <Text style={styles.keypadButtonText}>C</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.keypadButton}
-          onPress={() => handlePress('0')}
+        
+        <Button 
+          variant="outline" 
+          className="py-6 text-xl font-medium"
+          onClick={handleClear}
         >
-          <Text style={styles.keypadButtonText}>0</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.keypadButton} onPress={handleDelete}>
-          <Text style={styles.keypadButtonText}>⌫</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={[
-          styles.submitButton,
-          pin.length !== maxLength && styles.submitButtonDisabled,
-        ]}
-        onPress={handleSubmit}
-        disabled={pin.length !== maxLength}
-      >
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
+          Clear
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          className="py-6 text-xl font-medium"
+          onClick={() => handleNumberClick(0)}
+        >
+          0
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          className="py-6 text-xl font-medium"
+          onClick={handleDelete}
+        >
+          ←
+        </Button>
+        
+        <Button 
+          className="col-span-3 py-6 text-xl font-medium mt-4"
+          onClick={handleSubmit}
+          disabled={pin.length === 0}
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 };
-
-const width = Dimensions.get('window').width;
-const buttonSize = (width - 80) / 3;
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#6b7280',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  dotsContainer: {
-    flexDirection: 'row',
-    marginBottom: 32,
-  },
-  dot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    marginHorizontal: 8,
-  },
-  dotEmpty: {
-    backgroundColor: '#e5e7eb',
-  },
-  dotFilled: {
-    backgroundColor: '#3b82f6',
-  },
-  keypadContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  keypadButton: {
-    width: buttonSize,
-    height: buttonSize,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  keypadButtonText: {
-    fontSize: 24,
-    fontWeight: '500',
-  },
-  submitButton: {
-    width: '100%',
-    backgroundColor: '#3b82f6',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  submitButtonDisabled: {
-    backgroundColor: '#93c5fd',
-  },
-  submitButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-});
 
 export default PinPad;

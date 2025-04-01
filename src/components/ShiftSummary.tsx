@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { formatCurrency } from '../lib/utils';
+import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/lib/utils';
 
 interface Shift {
   id: number;
@@ -19,163 +19,77 @@ interface ShiftSummaryProps {
 }
 
 const ShiftSummary: React.FC<ShiftSummaryProps> = ({ shift, onClose }) => {
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleString();
   };
-
-  const formatDuration = () => {
-    if (!shift.endTime) return 'N/A';
+  
+  const calculateShiftDuration = () => {
+    const start = new Date(shift.startTime);
+    const end = shift.endTime ? new Date(shift.endTime) : new Date();
     
-    const start = new Date(shift.startTime).getTime();
-    const end = new Date(shift.endTime).getTime();
-    const durationMs = end - start;
-    
+    const durationMs = end.getTime() - start.getTime();
     const hours = Math.floor(durationMs / (1000 * 60 * 60));
     const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
     
     return `${hours}h ${minutes}m`;
   };
-
-  const calculateExpectedCash = () => {
-    return shift.startFloat + (shift.salesTotal || 0);
-  };
-
+  
+  const expectedCash = (shift.startFloat || 0) + (shift.salesTotal || 0);
+  
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Shift Summary</Text>
+    <div className="w-full max-w-md mx-auto">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold">Shift Summary</h2>
+      </div>
+      
+      <div className="bg-secondary p-4 rounded-md mb-6 space-y-2">
+        <div className="flex justify-between">
+          <span>Start Time:</span>
+          <span>{formatDate(shift.startTime)}</span>
+        </div>
         
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Shift Details</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Started:</Text>
-            <Text style={styles.value}>{formatTime(shift.startTime)}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Ended:</Text>
-            <Text style={styles.value}>
-              {shift.endTime ? formatTime(shift.endTime) : 'N/A'}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Duration:</Text>
-            <Text style={styles.value}>{formatDuration()}</Text>
-          </View>
-        </View>
+        <div className="flex justify-between">
+          <span>End Time:</span>
+          <span>{shift.endTime ? formatDate(shift.endTime) : 'Active'}</span>
+        </div>
         
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Financial Summary</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Starting Float:</Text>
-            <Text style={styles.value}>{formatCurrency(shift.startFloat)}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Total Sales:</Text>
-            <Text style={styles.value}>{formatCurrency(shift.salesTotal || 0)}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Transaction Count:</Text>
-            <Text style={styles.value}>{shift.transactionCount || 0}</Text>
-          </View>
-          <View style={[styles.row, styles.totalRow]}>
-            <Text style={styles.totalLabel}>Expected Cash:</Text>
-            <Text style={styles.totalValue}>{formatCurrency(calculateExpectedCash())}</Text>
-          </View>
-        </View>
+        <div className="flex justify-between">
+          <span>Duration:</span>
+          <span>{calculateShiftDuration()}</span>
+        </div>
         
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Text style={styles.closeButtonText}>Close</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        <div className="border-t border-border pt-2 mt-2">
+          <div className="flex justify-between">
+            <span>Starting Float:</span>
+            <span>{formatCurrency(shift.startFloat)}</span>
+          </div>
+          
+          <div className="flex justify-between">
+            <span>Total Sales:</span>
+            <span>{formatCurrency(shift.salesTotal || 0)}</span>
+          </div>
+          
+          <div className="flex justify-between font-bold">
+            <span>Expected Cash in Drawer:</span>
+            <span>{formatCurrency(expectedCash)}</span>
+          </div>
+        </div>
+        
+        <div className="border-t border-border pt-2 mt-2">
+          <div className="flex justify-between">
+            <span>Transaction Count:</span>
+            <span>{shift.transactionCount || 0}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="flex justify-center">
+        <Button onClick={onClose}>
+          Close
+        </Button>
+      </div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-  },
-  content: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 24,
-    width: '100%',
-    maxWidth: 500,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    padding: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
-    color: '#3b82f6',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
-  },
-  totalRow: {
-    borderBottomWidth: 0,
-    marginTop: 8,
-    paddingTop: 16,
-    borderTopWidth: 2,
-    borderTopColor: '#e5e7eb',
-  },
-  label: {
-    fontSize: 16,
-    color: '#6b7280',
-  },
-  value: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  totalLabel: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-  },
-  totalValue: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#10b981',
-  },
-  closeButton: {
-    backgroundColor: '#3b82f6',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-});
 
 export default ShiftSummary;

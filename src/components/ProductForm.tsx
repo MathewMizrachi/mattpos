@@ -1,16 +1,19 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Switch,
-} from 'react-native';
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface Product {
   id: number;
@@ -19,255 +22,115 @@ interface Product {
   stock?: number;
 }
 
+const productSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  price: z.coerce.number().positive({ message: 'Price must be greater than 0' }),
+  stock: z.coerce.number().int().nonnegative().optional(),
+});
+
+type ProductFormValues = z.infer<typeof productSchema>;
+
 interface ProductFormProps {
-  product: Product | null;
-  onSave: (productData: Omit<Product, 'id'>) => void;
-  onCancel: () => void;
+  product?: Product;
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (data: ProductFormValues) => void;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ product, onSave, onCancel }) => {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [trackStock, setTrackStock] = useState(false);
-  const [stock, setStock] = useState('');
-  const [errors, setErrors] = useState({
-    name: '',
-    price: '',
-    stock: '',
+const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onSubmit }) => {
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
+    defaultValues: product 
+      ? { name: product.name, price: product.price, stock: product.stock } 
+      : { name: '', price: 0, stock: undefined },
   });
 
-  useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setPrice(product.price.toString());
-      setTrackStock(product.stock !== undefined);
-      setStock(product.stock !== undefined ? product.stock.toString() : '');
-    }
-  }, [product]);
-
-  const validate = () => {
-    const newErrors = {
-      name: '',
-      price: '',
-      stock: '',
-    };
-    let isValid = true;
-
-    if (!name.trim()) {
-      newErrors.name = 'Product name is required';
-      isValid = false;
-    }
-
-    const priceValue = parseFloat(price);
-    if (isNaN(priceValue) || priceValue <= 0) {
-      newErrors.price = 'Price must be a positive number';
-      isValid = false;
-    }
-
-    if (trackStock) {
-      const stockValue = parseInt(stock, 10);
-      if (isNaN(stockValue) || stockValue < 0) {
-        newErrors.stock = 'Stock must be a non-negative number';
-        isValid = false;
-      }
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSave = () => {
-    if (validate()) {
-      const productData: Omit<Product, 'id'> = {
-        name: name.trim(),
-        price: parseFloat(price),
-      };
-
-      if (trackStock) {
-        productData.stock = parseInt(stock, 10);
-      }
-
-      onSave(productData);
-    }
+  const handleSubmit = (data: ProductFormValues) => {
+    onSubmit(data);
+    onClose();
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {product ? 'Edit Product' : 'Add New Product'}
-          </Text>
-
-          <View style={styles.form}>
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Product Name</Text>
-              <TextInput
-                style={[styles.input, errors.name ? styles.inputError : {}]}
-                value={name}
-                onChangeText={(text) => {
-                  setName(text);
-                  if (errors.name) setErrors({ ...errors, name: '' });
-                }}
-                placeholder="Enter product name"
-              />
-              {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Price (R)</Text>
-              <TextInput
-                style={[styles.input, errors.price ? styles.inputError : {}]}
-                value={price}
-                onChangeText={(text) => {
-                  setPrice(text);
-                  if (errors.price) setErrors({ ...errors, price: '' });
-                }}
-                keyboardType="decimal-pad"
-                placeholder="0.00"
-              />
-              {errors.price ? <Text style={styles.errorText}>{errors.price}</Text> : null}
-            </View>
-
-            <View style={styles.formGroup}>
-              <View style={styles.switchContainer}>
-                <Text style={styles.label}>Track Stock</Text>
-                <Switch
-                  value={trackStock}
-                  onValueChange={setTrackStock}
-                  trackColor={{ false: '#d1d5db', true: '#bfdbfe' }}
-                  thumbColor={trackStock ? '#3b82f6' : '#f3f4f6'}
-                />
-              </View>
-            </View>
-
-            {trackStock && (
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Stock Quantity</Text>
-                <TextInput
-                  style={[styles.input, errors.stock ? styles.inputError : {}]}
-                  value={stock}
-                  onChangeText={(text) => {
-                    setStock(text);
-                    if (errors.stock) setErrors({ ...errors, stock: '' });
-                  }}
-                  keyboardType="number-pad"
-                  placeholder="0"
-                />
-                {errors.stock ? <Text style={styles.errorText}>{errors.stock}</Text> : null}
-              </View>
-            )}
-
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                <Text style={styles.saveButtonText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{product ? 'Edit Product' : 'Add Product'}</DialogTitle>
+        </DialogHeader>
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Enter product name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price (R)</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      step="0.01" 
+                      min="0" 
+                      placeholder="0.00"
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="stock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stock Quantity (optional)</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      step="1" 
+                      min="0" 
+                      placeholder="Leave empty for unlimited"
+                      {...field}
+                      value={field.value === undefined ? '' : field.value}
+                      onChange={(e) => {
+                        const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                        field.onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <div className="flex justify-end space-x-4">
+              <Button type="button" variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                Save
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  content: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  form: {
-    width: '100%',
-  },
-  formGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    padding: 16,
-    fontSize: 16,
-  },
-  inputError: {
-    borderColor: '#ef4444',
-  },
-  errorText: {
-    color: '#ef4444',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#f3f4f6',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#4b5563',
-  },
-  saveButton: {
-    flex: 2,
-    backgroundColor: '#3b82f6',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginLeft: 8,
-  },
-  saveButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-});
 
 export default ProductForm;

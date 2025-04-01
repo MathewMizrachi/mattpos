@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { formatCurrency } from '../lib/utils';
+import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/lib/utils';
 
 interface Product {
   id: number;
@@ -38,106 +39,48 @@ const CartItem: React.FC<CartItemProps> = ({
   const subtotal = product.price * quantity;
   
   return (
-    <View style={styles.container}>
-      <View style={styles.info}>
-        <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.price}>{formatCurrency(product.price)} each</Text>
-      </View>
+    <div className="flex items-center py-2 border-b">
+      <div className="flex-1">
+        <p className="font-medium">{product.name}</p>
+        <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>
+      </div>
       
-      <View style={styles.controls}>
-        <TouchableOpacity 
-          style={styles.controlButton}
-          onPress={handleDecrease}
+      <div className="flex items-center space-x-2">
+        <Button 
+          variant="outline"
+          size="icon"
+          className="h-8 w-8"
+          onClick={handleDecrease}
         >
-          <Text style={styles.controlButtonText}>-</Text>
-        </TouchableOpacity>
+          <MinusIcon className="h-4 w-4" />
+        </Button>
         
-        <Text style={styles.quantity}>{quantity}</Text>
+        <span className="w-8 text-center">{quantity}</span>
         
-        <TouchableOpacity 
-          style={styles.controlButton}
-          onPress={handleIncrease}
+        <Button 
+          variant="outline"
+          size="icon"
+          className="h-8 w-8"
+          onClick={handleIncrease}
         >
-          <Text style={styles.controlButtonText}>+</Text>
-        </TouchableOpacity>
-      </View>
+          <PlusIcon className="h-4 w-4" />
+        </Button>
+      </div>
       
-      <View style={styles.subtotalContainer}>
-        <Text style={styles.subtotal}>{formatCurrency(subtotal)}</Text>
-      </View>
+      <div className="w-24 text-right">
+        <p className="font-medium">{formatCurrency(subtotal)}</p>
+      </div>
       
-      <TouchableOpacity 
-        style={styles.removeButton}
-        onPress={() => onRemove(product.id)}
+      <Button 
+        variant="ghost"
+        size="icon"
+        className="ml-2 h-8 w-8"
+        onClick={() => onRemove(product.id)}
       >
-        <Text style={styles.removeButtonText}>✕</Text>
-      </TouchableOpacity>
-    </View>
+        <XIcon className="h-4 w-4" />
+      </Button>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-  },
-  info: {
-    flex: 1,
-  },
-  name: {
-    fontWeight: '500',
-    fontSize: 16,
-  },
-  price: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-  controls: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  controlButton: {
-    width: 28,
-    height: 28,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f9fafb',
-  },
-  controlButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  quantity: {
-    width: 30,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  subtotalContainer: {
-    width: 80,
-    alignItems: 'flex-end',
-  },
-  subtotal: {
-    fontWeight: '500',
-    fontSize: 16,
-  },
-  removeButton: {
-    width: 28,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 4,
-  },
-  removeButtonText: {
-    fontSize: 16,
-    color: '#6b7280',
-  },
-});
 
 export default CartItem;

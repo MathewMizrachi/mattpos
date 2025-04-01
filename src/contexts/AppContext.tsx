@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import db from '../lib/db';
+import db from '@/lib/db';
 
 interface User {
   id: number;
@@ -70,6 +71,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const user = db.authenticateUser(pin);
     if (user) {
       setCurrentUser(user);
+      // Check if there's an active shift
       const activeShift = db.getCurrentShift();
       if (activeShift) {
         setCurrentShift(activeShift);
@@ -150,13 +152,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     
     const transaction = db.createTransaction(currentShift.id, items, cashReceived);
     
+    // Update current shift with latest data
     const updatedShift = db.getCurrentShift();
     if (updatedShift) {
       setCurrentShift(updatedShift);
     }
     
+    // Refresh products to reflect updated stock
     refreshProducts();
     
+    // Clear the cart
     clearCart();
     
     return { 
