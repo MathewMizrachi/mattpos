@@ -8,10 +8,12 @@ import { LogOutIcon, SearchIcon, ShoppingCartIcon, XIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 import ProductCard from '@/components/ProductCard';
 import CartItem from '@/components/CartItem';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const POS = () => {
   const { 
@@ -30,6 +32,7 @@ const POS = () => {
   
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [showPaymentForm, setShowPaymentForm] = useState(false);
@@ -123,6 +126,7 @@ const POS = () => {
     );
   }
   
+  // Render the POS layout based on screen size
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white p-4 shadow-sm z-10 flex justify-between items-center">
@@ -148,7 +152,72 @@ const POS = () => {
         </div>
       </header>
       
-      <div className="flex flex-1 overflow-hidden">
+      <div className={`flex flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden`}>
+        {/* Cart section - For mobile, render it at the top */}
+        {isMobile && (
+          <div className="bg-white shadow-lg flex flex-col">
+            <div className="p-4 border-b">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-semibold">Current Sale</h2>
+                <Badge variant="outline" className="font-normal">
+                  {cart.length} items
+                </Badge>
+              </div>
+              
+              {cart.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={clearCart}
+                >
+                  <XIcon className="h-4 w-4 mr-2" />
+                  Clear Cart
+                </Button>
+              )}
+            </div>
+            
+            <ScrollArea className="flex-1 h-40">
+              <div className="p-4">
+                {cart.length === 0 ? (
+                  <div className="text-center py-4">
+                    <ShoppingCartIcon className="h-8 w-8 mx-auto text-muted-foreground opacity-50 mb-2" />
+                    <p className="text-muted-foreground text-sm">No items in cart</p>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    {cart.map(item => (
+                      <CartItem 
+                        key={item.product.id}
+                        product={item.product}
+                        quantity={item.quantity}
+                        onUpdateQuantity={updateCartItem}
+                        onRemove={removeFromCart}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+            
+            <div className="p-4 border-t bg-secondary">
+              <div className="flex justify-between mb-4">
+                <span className="font-semibold">Total</span>
+                <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
+              </div>
+              
+              <Button 
+                className="w-full" 
+                size="lg"
+                disabled={cart.length === 0}
+                onClick={() => setShowPaymentForm(true)}
+              >
+                Pay Now
+              </Button>
+            </div>
+          </div>
+        )}
+        
         {/* Products section */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="p-4">
@@ -174,7 +243,7 @@ const POS = () => {
           </div>
           
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-4`}>
               {filteredProducts.map(product => (
                 <ProductCard 
                   key={product.id} 
@@ -192,69 +261,71 @@ const POS = () => {
           </div>
         </div>
         
-        {/* Cart section */}
-        <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden">
-          <div className="p-4 border-b">
-            <div className="flex justify-between items-center mb-2">
-              <h2 className="text-lg font-semibold">Current Sale</h2>
-              <Badge variant="outline" className="font-normal">
-                {cart.length} items
-              </Badge>
+        {/* Cart section - For desktop, render it at the right side */}
+        {!isMobile && (
+          <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden">
+            <div className="p-4 border-b">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-semibold">Current Sale</h2>
+                <Badge variant="outline" className="font-normal">
+                  {cart.length} items
+                </Badge>
+              </div>
+              
+              {cart.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={clearCart}
+                >
+                  <XIcon className="h-4 w-4 mr-2" />
+                  Clear Cart
+                </Button>
+              )}
             </div>
             
-            {cart.length > 0 && (
+            <div className="flex-1 overflow-y-auto p-4">
+              {cart.length === 0 ? (
+                <div className="text-center py-12">
+                  <ShoppingCartIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
+                  <p className="text-muted-foreground">No items in cart</p>
+                  <p className="text-sm text-muted-foreground">
+                    Add products to begin a sale
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {cart.map(item => (
+                    <CartItem 
+                      key={item.product.id}
+                      product={item.product}
+                      quantity={item.quantity}
+                      onUpdateQuantity={updateCartItem}
+                      onRemove={removeFromCart}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 border-t bg-secondary">
+              <div className="flex justify-between mb-4">
+                <span className="font-semibold">Total</span>
+                <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
+              </div>
+              
               <Button 
-                variant="outline" 
-                size="sm" 
-                className="w-full"
-                onClick={clearCart}
+                className="w-full" 
+                size="lg"
+                disabled={cart.length === 0}
+                onClick={() => setShowPaymentForm(true)}
               >
-                <XIcon className="h-4 w-4 mr-2" />
-                Clear Cart
+                Pay Now
               </Button>
-            )}
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4">
-            {cart.length === 0 ? (
-              <div className="text-center py-12">
-                <ShoppingCartIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
-                <p className="text-muted-foreground">No items in cart</p>
-                <p className="text-sm text-muted-foreground">
-                  Add products to begin a sale
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {cart.map(item => (
-                  <CartItem 
-                    key={item.product.id}
-                    product={item.product}
-                    quantity={item.quantity}
-                    onUpdateQuantity={updateCartItem}
-                    onRemove={removeFromCart}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          
-          <div className="p-4 border-t bg-secondary">
-            <div className="flex justify-between mb-4">
-              <span className="font-semibold">Total</span>
-              <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
             </div>
-            
-            <Button 
-              className="w-full" 
-              size="lg"
-              disabled={cart.length === 0}
-              onClick={() => setShowPaymentForm(true)}
-            >
-              Pay Now
-            </Button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
