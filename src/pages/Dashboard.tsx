@@ -112,7 +112,7 @@ const Dashboard = () => {
       <div className="max-w-4xl mx-auto">
         <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Market POS</h1>
+            <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
             <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
           </div>
           <Button variant="ghost" size="icon" onClick={handleLogout}>
@@ -157,3 +157,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

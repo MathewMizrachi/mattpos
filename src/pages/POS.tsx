@@ -127,7 +127,7 @@ const POS = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white p-4 shadow-sm z-10 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-primary">Market POS</h1>
+          <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <span>{currentUser?.name}</span>
             <span>•</span>
@@ -257,3 +257,4 @@ const POS = () => {
 };
 
 export default POS;
+
