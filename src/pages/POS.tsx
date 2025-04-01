@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -150,7 +151,7 @@ const POS = () => {
         </div>
       </header>
       
-      <div className={`flex flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden`}>
+      <div className={`flex flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden relative`}>
         {isMobile && (
           <div className="bg-white shadow-lg flex flex-col">
             <div className="p-4 border-b">
@@ -185,7 +186,8 @@ const POS = () => {
               </div>
             </ScrollArea>
             
-            <div className="p-4 border-t bg-secondary">
+            {/* Mobile view - Total area now fixed at bottom */}
+            <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-secondary shadow-lg" style={{ backgroundColor: '#FAA225' }}>
               <div className="flex justify-between mb-4">
                 <span className="text-xl font-semibold">Total</span>
                 <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
@@ -224,6 +226,9 @@ const POS = () => {
                 </Button>
               </div>
             </div>
+            
+            {/* Add padding at the bottom to prevent content from being hidden behind the fixed total area */}
+            <div className="h-32"></div>
           </div>
         )}
         
@@ -250,7 +255,7 @@ const POS = () => {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 pb-36">
             <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-4`}>
               {filteredProducts.map(product => (
                 <ProductCard 
@@ -270,7 +275,7 @@ const POS = () => {
         </div>
         
         {!isMobile && (
-          <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden">
+          <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden relative">
             <div className="p-4 border-b">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-semibold">Current Sale</h2>
@@ -280,7 +285,7 @@ const POS = () => {
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 pb-36">
               {cart.length === 0 ? (
                 <div className="text-center py-12">
                   <ShoppingCartIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
@@ -304,7 +309,8 @@ const POS = () => {
               )}
             </div>
             
-            <div className="p-4 border-t bg-secondary">
+            {/* Desktop view - Total area now fixed at bottom */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg" style={{ backgroundColor: '#FAA225' }}>
               <div className="flex justify-between mb-4">
                 <span className="text-xl font-semibold">Total</span>
                 <span className="text-3xl font-bold">{formatCurrency(calculateTotal())}</span>
