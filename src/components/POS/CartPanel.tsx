@@ -21,52 +21,36 @@ const CartPanel: React.FC<CartPanelProps> = ({
   isMobile
 }) => {
   if (isMobile) {
+    // For mobile displays, show cart panel fixed on the right side
     return (
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button 
-            className="fixed bottom-24 right-4 h-12 w-12 rounded-full shadow-lg z-30"
-            style={{ backgroundColor: '#FAA225' }}
-          >
-            <ShoppingCartIcon className="h-6 w-6" />
-            {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-                {cart.length}
-              </span>
-            )}
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="p-0 w-full sm:max-w-md">
-          <div className="flex flex-col h-full">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="font-bold text-lg">Shopping Cart</h2>
-              <span className="text-sm text-muted-foreground">{cart.length} items</span>
-            </div>
-            <ScrollArea className="flex-1">
-              <div className="p-4">
-                {cart.length === 0 ? (
-                  <div className="text-center py-6">
-                    <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-                    <p className="text-muted-foreground">No items in cart</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {cart.map(item => (
-                      <CartItem 
-                        key={item.product.id}
-                        product={item.product}
-                        quantity={item.quantity}
-                        onUpdateQuantity={onUpdateQuantity}
-                        onRemove={onRemove}
-                      />
-                    ))}
-                  </div>
-                )}
+      <div className="fixed top-20 bottom-0 right-0 w-2/3 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h2 className="font-bold text-lg">Shopping Cart</h2>
+          <span className="text-sm text-muted-foreground">{cart.length} items</span>
+        </div>
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            {cart.length === 0 ? (
+              <div className="text-center py-6">
+                <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
+                <p className="text-muted-foreground">No items in cart</p>
               </div>
-            </ScrollArea>
+            ) : (
+              <div className="space-y-2">
+                {cart.map(item => (
+                  <CartItem 
+                    key={item.product.id}
+                    product={item.product}
+                    quantity={item.quantity}
+                    onUpdateQuantity={onUpdateQuantity}
+                    onRemove={onRemove}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        </SheetContent>
-      </Sheet>
+        </ScrollArea>
+      </div>
     );
   }
 
