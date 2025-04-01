@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -198,7 +197,13 @@ const POS = () => {
                     variant="outline" 
                     className="flex-1"
                     onClick={clearCart}
-                    style={{ backgroundColor: '#FAA225', color: 'black' }}
+                    style={{ 
+                      backgroundColor: 'white', 
+                      color: 'black', 
+                      fontSize: '1.25rem', 
+                      fontWeight: 'bold',
+                      border: '2px solid #FAA225'
+                    }}
                   >
                     <XIcon className="h-4 w-4 mr-2" />
                     Clear Cart
@@ -210,9 +215,9 @@ const POS = () => {
                   disabled={cart.length === 0}
                   onClick={() => setShowPaymentForm(true)}
                   style={{ 
-                    height: '4rem',  // Increased height
-                    fontSize: '1.5rem',  // Even larger font size
-                    fontWeight: 'bold'  // Make text bold
+                    height: '4rem',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold'
                   }}
                 >
                   Pay Now
@@ -311,7 +316,13 @@ const POS = () => {
                     variant="outline" 
                     className="flex-1"
                     onClick={clearCart}
-                    style={{ backgroundColor: '#FAA225', color: 'black' }}
+                    style={{ 
+                      backgroundColor: 'white', 
+                      color: 'black', 
+                      fontSize: '1.25rem', 
+                      fontWeight: 'bold',
+                      border: '2px solid #FAA225'
+                    }}
                   >
                     <XIcon className="h-4 w-4 mr-2" />
                     Clear Cart
@@ -323,9 +334,9 @@ const POS = () => {
                   disabled={cart.length === 0}
                   onClick={() => setShowPaymentForm(true)}
                   style={{ 
-                    height: '4rem',  // Increased height
-                    fontSize: '1.5rem',  // Even larger font size
-                    fontWeight: 'bold'  // Make text bold
+                    height: '4rem',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold'
                   }}
                 >
                   Pay Now
