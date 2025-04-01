@@ -24,10 +24,6 @@ const CartPanel: React.FC<CartPanelProps> = ({
     // For mobile displays, show cart panel fixed on the right side
     return (
       <div className="fixed top-20 bottom-0 right-0 w-2/3 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
-        <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="font-bold text-lg">Shopping Cart</h2>
-          <span className="text-sm text-muted-foreground">{cart.length} items</span>
-        </div>
         <ScrollArea className="flex-1">
           <div className="p-4">
             {cart.length === 0 ? (
@@ -57,10 +53,6 @@ const CartPanel: React.FC<CartPanelProps> = ({
   // For desktop, position the cart on the right side with the same width as payment footer
   return (
     <div className="w-96 fixed top-20 right-0 bottom-0 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="font-bold text-lg">Shopping Cart</h2>
-        <span className="text-sm text-muted-foreground">{cart.length} items</span>
-      </div>
       <ScrollArea className="flex-1">
         <div className="p-4">
           {cart.length === 0 ? (
