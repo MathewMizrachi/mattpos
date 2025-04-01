@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -126,7 +125,6 @@ const POS = () => {
     );
   }
   
-  // Render the POS layout based on screen size
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white p-4 shadow-sm z-10 flex justify-between items-center">
@@ -153,7 +151,6 @@ const POS = () => {
       </header>
       
       <div className={`flex flex-1 ${isMobile ? 'flex-col' : ''} overflow-hidden`}>
-        {/* Cart section - For mobile, render it at the top */}
         {isMobile && (
           <div className="bg-white shadow-lg flex flex-col">
             <div className="p-4 border-b">
@@ -170,6 +167,7 @@ const POS = () => {
                   size="sm" 
                   className="w-full"
                   onClick={clearCart}
+                  style={{ backgroundColor: '#FAA225', color: 'black' }}
                 >
                   <XIcon className="h-4 w-4 mr-2" />
                   Clear Cart
@@ -218,7 +216,6 @@ const POS = () => {
           </div>
         )}
         
-        {/* Products section */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="p-4">
             <div className="relative mb-4">
@@ -261,7 +258,6 @@ const POS = () => {
           </div>
         </div>
         
-        {/* Cart section - For desktop, render it at the right side */}
         {!isMobile && (
           <div className="w-96 bg-white shadow-lg flex flex-col overflow-hidden">
             <div className="p-4 border-b">
@@ -278,6 +274,7 @@ const POS = () => {
                   size="sm" 
                   className="w-full"
                   onClick={clearCart}
+                  style={{ backgroundColor: '#FAA225', color: 'black' }}
                 >
                   <XIcon className="h-4 w-4 mr-2" />
                   Clear Cart
