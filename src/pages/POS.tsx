@@ -14,7 +14,7 @@ import ProductSearch from '@/components/POS/ProductSearch';
 import ProductGrid from '@/components/POS/ProductGrid';
 import CartPanel from '@/components/POS/CartPanel';
 import PaymentFooter from '@/components/POS/PaymentFooter';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 
 const POS = () => {
   const { 
@@ -143,33 +143,48 @@ const POS = () => {
         />
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-16`}>
-        {isMobile && (
-          <CartPanel 
-            cart={cart}
-            onUpdateQuantity={updateCartItem}
-            onRemove={removeFromCart}
-            isMobile={true}
-          />
-        )}
-        
-        <div className={`flex-1 flex flex-col overflow-hidden ${!isMobile ? 'pr-96' : ''}`}>
-          <ScrollArea className="flex-1 overflow-y-auto px-3 pb-36">
-            <ProductGrid 
-              products={filteredProducts}
-              isMobile={isMobile}
-              onAddToCart={addToCart}
+      <div className="flex-1 overflow-hidden relative mt-16">
+        {isMobile ? (
+          <div className="flex flex-col">
+            <CartPanel 
+              cart={cart}
+              onUpdateQuantity={updateCartItem}
+              onRemove={removeFromCart}
+              isMobile={true}
             />
-          </ScrollArea>
-        </div>
-        
-        {!isMobile && (
-          <CartPanel 
-            cart={cart}
-            onUpdateQuantity={updateCartItem}
-            onRemove={removeFromCart}
-            isMobile={false}
-          />
+            
+            <div className="flex-1 overflow-y-auto px-3 pb-36">
+              <ProductGrid 
+                products={filteredProducts}
+                isMobile={isMobile}
+                onAddToCart={addToCart}
+              />
+            </div>
+          </div>
+        ) : (
+          <ResizablePanelGroup direction="horizontal" className="h-[calc(100vh-180px)]">
+            <ResizablePanel defaultSize={70} minSize={30}>
+              <div className="h-full overflow-y-auto px-3 pb-36">
+                <ProductGrid 
+                  products={filteredProducts}
+                  isMobile={isMobile}
+                  onAddToCart={addToCart}
+                />
+              </div>
+            </ResizablePanel>
+            
+            <ResizableHandle withHandle />
+            
+            <ResizablePanel defaultSize={30} minSize={20}>
+              <CartPanel 
+                cart={cart}
+                onUpdateQuantity={updateCartItem}
+                onRemove={removeFromCart}
+                isMobile={false}
+                className="h-full"
+              />
+            </ResizablePanel>
+          </ResizablePanelGroup>
         )}
       </div>
       
