@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -118,7 +117,11 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
+          <Button 
+            variant="secondary" 
+            size="icon" 
+            onClick={handleLogout}
+          >
             <LogOutIcon className="h-5 w-5" />
           </Button>
         </header>
@@ -132,7 +135,11 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Start a new shift to begin processing sales.
               </p>
-              <Button className="w-full" onClick={handleStartShift}>
+              <Button 
+                className="w-full" 
+                onClick={handleStartShift}
+                style={{ backgroundColor: '#FAA225', color: 'black' }}
+              >
                 <ShoppingCartIcon className="h-4 w-4 mr-2" />
                 Start Shift
               </Button>
