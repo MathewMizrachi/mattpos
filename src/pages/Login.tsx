@@ -33,7 +33,6 @@ const Login = () => {
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary">MiniPos</h1>
-          <p className="text-muted-foreground mt-2">South African Informal Market</p>
         </div>
         
         <PinPad 
@@ -53,4 +52,3 @@ const Login = () => {
 };
 
 export default Login;
-
