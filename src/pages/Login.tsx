@@ -35,7 +35,7 @@ const Login = () => {
           <img 
             src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
             alt="MiniPos Logo" 
-            className="h-24 mx-auto mb-4"
+            className="h-24 w-24 object-contain mx-auto mb-4 rounded-lg"
           />
           <h1 className="text-3xl font-bold text-primary">MiniPos</h1>
         </div>

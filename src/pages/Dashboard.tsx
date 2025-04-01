@@ -114,7 +114,7 @@ const Dashboard = () => {
             <img 
               src="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png" 
               alt="MiniPos Logo" 
-              className="h-10 mr-3"
+              className="h-10 w-10 object-contain mr-3 rounded-lg"
             />
             <div>
               <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
