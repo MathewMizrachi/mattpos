@@ -135,7 +135,11 @@ const POS = () => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={handleEndShift}>
+          <Button 
+            variant="outline" 
+            onClick={handleEndShift}
+            style={{ backgroundColor: '#FAA225', color: 'black' }}
+          >
             End Shift
           </Button>
           <Button variant="ghost" size="icon" onClick={() => { logout(); navigate('/'); }}>
@@ -257,4 +261,3 @@ const POS = () => {
 };
 
 export default POS;
-
