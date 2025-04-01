@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -32,13 +31,13 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
         <div className="text-center mb-4">
-          <div className="max-w-[150px] mx-auto">  {/* Reduced max-width from 200px to 150px */}
+          <div className="max-w-[150px] mx-auto">
             <img 
               src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
               alt="MiniPos Logo" 
               className="h-auto w-full object-contain mx-auto mb-4"
             />
-            <h1 className="text-5xl font-bold" style={{ color: '#FAA225' }}>MiniPos</h1>  {/* Increased text size from text-4xl to text-5xl */}
+            <h1 className="text-5xl font-bold text-center" style={{ color: '#FAA225' }}>MiniPos</h1>
           </div>
         </div>
         
@@ -60,4 +59,3 @@ const Login = () => {
 };
 
 export default Login;
-
