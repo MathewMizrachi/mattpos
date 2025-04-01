@@ -142,7 +142,7 @@ const POS = () => {
         />
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-16`}>
+      <div className={`flex-1 ${isMobile ? 'flex-col' : 'flex'} overflow-hidden relative mt-12`}>
         {isMobile && (
           <CartPanel 
             cart={cart}
