@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
 interface Shop2ShopScreenProps {
@@ -20,7 +19,11 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
       <div className="w-full max-w-md mx-auto text-white">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <ShoppingBag className="h-16 w-16" />
+            <img 
+              src="/lovable-uploads/4531f963-ec96-471b-b1d6-1adba2dbf7cb.png" 
+              alt="Shop2Shop Logo" 
+              className="h-24 w-24 object-contain"
+            />
           </div>
           <h2 className="text-3xl font-bold">Shop2Shop Payment</h2>
           <p className="text-xl mt-2">{formatCurrency(total)}</p>
@@ -28,7 +31,6 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
         
         <div className="bg-[#0A2645] border-2 border-gray-700 rounded-lg p-6 mb-6">
           <div className="flex justify-center mb-4">
-            {/* QR Code - using a placeholder for now */}
             <div className="bg-white p-2 rounded">
               <svg
                 width="200"
@@ -56,17 +58,10 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
           <p>Scan the QR code or use the shop code to complete your payment</p>
         </div>
         
-        <div className="flex justify-between space-x-4">
-          <Button 
-            variant="outline" 
-            onClick={onCancel} 
-            className="flex-1 text-white border-white hover:bg-gray-700"
-          >
-            Cancel
-          </Button>
+        <div className="flex justify-center space-x-4">
           <Button 
             onClick={onProcessPayment} 
-            className="flex-1 bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
+            className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
           >
             Complete
           </Button>
