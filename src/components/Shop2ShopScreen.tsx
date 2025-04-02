@@ -29,7 +29,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-2">
       <div className="w-full max-w-md mx-auto text-white">
         <div className="text-center mb-4">
           <div className="flex justify-center mb-2">
