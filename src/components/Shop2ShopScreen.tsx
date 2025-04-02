@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 
 interface Shop2ShopScreenProps {
   total: number;
@@ -14,6 +15,19 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   onProcessPayment,
   onCancel
 }) => {
+  const handlePayment = () => {
+    // First show the custom toast
+    toast({
+      title: "Payment Successful",
+      description: "",
+      className: "bg-[#0A2645] text-white text-2xl font-bold text-center p-6",
+      duration: 3000, // 3 seconds
+    });
+    
+    // Then call the original process payment function
+    onProcessPayment();
+  };
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
       <div className="w-full max-w-md mx-auto text-white">
@@ -26,7 +40,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
             />
           </div>
           <h2 className="text-3xl font-bold">Total to Pay</h2>
-          <p className="text-4xl mt-2 font-extrabold">{formatCurrency(total)}</p>
+          <p className="text-5xl mt-2 font-extrabold">{formatCurrency(total)}</p>
         </div>
         
         <div className="mb-6">
@@ -46,7 +60,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
         
         <div className="flex justify-center space-x-4">
           <Button 
-            onClick={onProcessPayment} 
+            onClick={handlePayment} 
             className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
           >
             Complete
