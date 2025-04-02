@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
         
         <Button 
           onClick={handleAddToCart}
-          className={`w-full mt-1 ${isMobile ? 'h-7 py-0 text-xs' : ''}`}
+          className={`${isMobile ? 'w-1/3 h-7 py-0 text-xs' : 'w-full'} mt-1`}
           disabled={product.stock !== undefined && product.stock <= 0}
           size={isMobile ? "sm" : "default"}
         >
