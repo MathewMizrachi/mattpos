@@ -33,7 +33,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
           <div className="flex justify-center mb-4">
             <div className="bg-white p-2 rounded">
               <img 
-                src="/lovable-uploads/994da451-404b-44cf-a00d-5d8a3840a069.png" 
+                src="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png" 
                 alt="QR Code" 
                 className="w-[200px] h-[200px] object-contain"
               />
@@ -42,7 +42,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
           
           <div className="text-center">
             <p className="text-gray-400 mb-2">Shop Code</p>
-            <p className="text-3xl font-bold tracking-widest">RALXF</p>
+            <p className="text-3xl font-bold tracking-widest">RALXLF</p>
           </div>
         </div>
         
