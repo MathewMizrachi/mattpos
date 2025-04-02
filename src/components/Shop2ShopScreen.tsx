@@ -29,15 +29,13 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
           <p className="text-4xl mt-2 font-extrabold">{formatCurrency(total)}</p>
         </div>
         
-        <div className="bg-[#0A2645] border-2 border-gray-700 rounded-lg p-6 mb-6">
+        <div className="mb-6">
           <div className="flex justify-center mb-4">
-            <div className="bg-white p-2 rounded">
-              <img 
-                src="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png" 
-                alt="QR Code" 
-                className="w-[150px] h-[150px] object-contain"
-              />
-            </div>
+            <img 
+              src="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png" 
+              alt="QR Code" 
+              className="w-[150px] h-[150px] object-contain"
+            />
           </div>
           
           <div className="text-center">
