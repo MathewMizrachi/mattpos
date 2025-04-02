@@ -24,7 +24,7 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
       : 'fixed bottom-0 right-0 w-96 px-6 py-4'} 
       border-t shadow-lg z-20`} 
       style={{ backgroundColor: '#FAA225' }}>
-      <div className="flex justify-between w-full mb-4">
+      <div className="flex justify-between w-full mb-2">
         <span className="text-xl font-semibold">Total</span>
         <span className="text-3xl font-bold">{formatCurrency(total)}</span>
       </div>
@@ -66,3 +66,4 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
 };
 
 export default PaymentFooter;
+
