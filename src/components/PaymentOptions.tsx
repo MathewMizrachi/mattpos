@@ -16,9 +16,8 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
 }) => {
   const [selectedMethod, setSelectedMethod] = React.useState<'shop2shop' | 'cash' | 'card'>('shop2shop');
 
-  const handlePaymentSelect = (method: 'shop2shop' | 'cash' | 'card') => {
-    setSelectedMethod(method);
-    onSelectPaymentMethod(method);
+  const handlePaymentSelect = () => {
+    onSelectPaymentMethod(selectedMethod);
   };
 
   return (
@@ -33,8 +32,8 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
         className="space-y-6 mb-8"
       >
         <div 
-          className="flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white"
-          onClick={() => handlePaymentSelect('shop2shop')}
+          className={`flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white ${selectedMethod === 'shop2shop' ? 'border-[#FAA225]' : 'border-gray-700'}`}
+          onClick={() => setSelectedMethod('shop2shop')}
         >
           <RadioGroupItem value="shop2shop" id="shop2shop" className="text-white scale-125" />
           <Label htmlFor="shop2shop" className="flex items-center space-x-4 cursor-pointer w-full">
@@ -44,8 +43,8 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
         </div>
         
         <div 
-          className="flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white"
-          onClick={() => handlePaymentSelect('cash')}
+          className={`flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white ${selectedMethod === 'cash' ? 'border-[#FAA225]' : 'border-gray-700'}`}
+          onClick={() => setSelectedMethod('cash')}
         >
           <RadioGroupItem value="cash" id="cash" className="text-white scale-125" />
           <Label htmlFor="cash" className="flex items-center space-x-4 cursor-pointer w-full">
@@ -55,8 +54,8 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
         </div>
         
         <div 
-          className="flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white"
-          onClick={() => handlePaymentSelect('card')}
+          className={`flex items-center space-x-4 border-2 p-6 rounded-lg hover:bg-gray-700 cursor-pointer bg-gray-800 text-white ${selectedMethod === 'card' ? 'border-[#FAA225]' : 'border-gray-700'}`}
+          onClick={() => setSelectedMethod('card')}
         >
           <RadioGroupItem value="card" id="card" className="text-white scale-125" />
           <Label htmlFor="card" className="flex items-center space-x-4 cursor-pointer w-full">
@@ -66,9 +65,15 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
         </div>
       </RadioGroup>
       
-      <div className="flex justify-end space-x-4 pt-4">
+      <div className="flex justify-between space-x-4 pt-4">
         <Button type="button" variant="outline" onClick={onCancel} className="text-white border-white hover:bg-gray-700">
           Cancel
+        </Button>
+        <Button 
+          onClick={handlePaymentSelect}
+          className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
+        >
+          Continue
         </Button>
       </div>
     </div>

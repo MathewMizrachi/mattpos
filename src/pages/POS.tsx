@@ -8,6 +8,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
 import PaymentOptions from '@/components/PaymentOptions';
+import CardPaymentScreen from '@/components/CardPaymentScreen';
+import Shop2ShopScreen from '@/components/Shop2ShopScreen';
 import { Product } from '@/types';
 
 import POSHeader from '@/components/POS/POSHeader';
@@ -38,6 +40,8 @@ const POS = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showCardPayment, setShowCardPayment] = useState(false);
+  const [showShop2Shop, setShowShop2Shop] = useState(false);
   const [showShiftSummary, setShowShiftSummary] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop'>('cash');
@@ -75,28 +79,39 @@ const POS = () => {
     }
   };
   
-  const handleSelectPaymentMethod = (method: 'cash' | 'card' | 'shop2shop') => {
+  const handleSelectPaymentMethod = (method: 'shop2shop' | 'cash' | 'card') => {
     setPaymentMethod(method);
+    setShowPaymentOptions(false);
     
-    if (method === 'cash') {
-      setShowPaymentOptions(false);
-      setShowPaymentForm(true);
+    switch (method) {
+      case 'cash':
+        setShowPaymentForm(true);
+        break;
+      case 'card':
+        setShowCardPayment(true);
+        break;
+      case 'shop2shop':
+        setShowShop2Shop(true);
+        break;
+    }
+  };
+  
+  const handleNonCashPayment = () => {
+    const result = processPayment(calculateTotal(), paymentMethod);
+    
+    if (result.success) {
+      toast({
+        title: `${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)} payment successful`,
+        description: '',
+      });
+      setShowCardPayment(false);
+      setShowShop2Shop(false);
     } else {
-      const result = processPayment(calculateTotal(), method);
-      
-      if (result.success) {
-        toast({
-          title: `${method.charAt(0).toUpperCase() + method.slice(1)} payment successful`,
-          description: '',
-        });
-        setShowPaymentOptions(false);
-      } else {
-        toast({
-          title: "Payment failed",
-          description: "There was an error processing the payment",
-          variant: "destructive"
-        });
-      }
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
     }
   };
   
@@ -139,6 +154,7 @@ const POS = () => {
     }
   };
   
+  // Render different payment screens based on state
   if (showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -149,6 +165,26 @@ const POS = () => {
           />
         </div>
       </div>
+    );
+  }
+  
+  if (showCardPayment) {
+    return (
+      <CardPaymentScreen
+        total={calculateTotal()}
+        onProcessPayment={handleNonCashPayment}
+        onCancel={() => setShowCardPayment(false)}
+      />
+    );
+  }
+  
+  if (showShop2Shop) {
+    return (
+      <Shop2ShopScreen
+        total={calculateTotal()}
+        onProcessPayment={handleNonCashPayment}
+        onCancel={() => setShowShop2Shop(false)}
+      />
     );
   }
   
@@ -179,6 +215,7 @@ const POS = () => {
     );
   }
   
+  // Main POS screen
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">
       <POSHeader 
