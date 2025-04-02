@@ -8,7 +8,6 @@ import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
 import PaymentOptions from '@/components/PaymentOptions';
 
-// Import our new components
 import POSHeader from '@/components/POS/POSHeader';
 import ProductSearch from '@/components/POS/ProductSearch';
 import ProductGrid from '@/components/POS/ProductGrid';
@@ -128,8 +127,8 @@ const POS = () => {
   
   if (showPaymentOptions) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+        <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg border border-gray-700">
           <PaymentOptions 
             onSelectPaymentMethod={handleSelectPaymentMethod}
             onCancel={() => setShowPaymentOptions(false)}

@@ -1,4 +1,3 @@
-
 // Simple in-memory database for demonstration purposes
 // In a real application, this would use IndexedDB or SQLite
 
@@ -34,6 +33,7 @@ interface Transaction {
   items: TransactionItem[];
   cashReceived: number;
   change: number;
+  paymentMethod: 'cash' | 'card' | 'shop2shop';
 }
 
 interface TransactionItem {
@@ -146,9 +146,9 @@ class Database {
   }
 
   // Transaction methods
-  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number): Transaction {
+  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' = 'cash'): Transaction {
     const total = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
-    const change = cashReceived - total;
+    const change = paymentMethod === 'cash' ? cashReceived - total : 0;
     
     const newTransaction = {
       id: this.currentId.transaction++,
@@ -158,6 +158,7 @@ class Database {
       items,
       cashReceived,
       change,
+      paymentMethod
     };
     
     this.transactions.push(newTransaction);
