@@ -20,16 +20,16 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
 }) => {
   return (
     <div className={`${isMobile 
-      ? 'fixed bottom-0 right-0 w-2/3' 
+      ? 'fixed bottom-0 right-0 w-full px-4 py-2 flex flex-col items-center justify-center' 
       : 'fixed bottom-0 right-0 w-96'} 
-      p-4 border-t shadow-lg z-20`} 
+      border-t shadow-lg z-20`} 
       style={{ backgroundColor: '#FAA225' }}>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between w-full mb-2">
         <span className="text-xl font-semibold">Total</span>
         <span className="text-3xl font-bold">{formatCurrency(total)}</span>
       </div>
       
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 w-full">
         {cartLength > 0 && (
           <Button 
             variant="outline" 
@@ -38,10 +38,10 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
             style={{ 
               backgroundColor: 'white', 
               color: 'black', 
-              fontSize: '1.5rem', 
+              fontSize: '1rem', 
               fontWeight: 'bold',
               border: '2px solid #FAA225',
-              height: '4rem'
+              height: isMobile ? '3rem' : '4rem'
             }}
           >
             Clear Cart
@@ -53,8 +53,8 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
           disabled={cartLength === 0}
           onClick={onShowPaymentForm}
           style={{ 
-            height: '4rem',
-            fontSize: '1.5rem',
+            height: isMobile ? '3rem' : '4rem',
+            fontSize: isMobile ? '1rem' : '1.5rem',
             fontWeight: 'bold'
           }}
         >
