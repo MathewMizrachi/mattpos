@@ -32,8 +32,8 @@ const CardPaymentScreen: React.FC<CardPaymentScreenProps> = ({
       <Card className="w-full max-w-md bg-[#0A2645] border-gray-700 text-white">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Card Payment</CardTitle>
-          <CardDescription className="text-center text-gray-300">
-            Total: {formatCurrency(total)}
+          <CardDescription className="text-center text-4xl font-bold text-white">
+            {formatCurrency(total)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -44,7 +44,7 @@ const CardPaymentScreen: React.FC<CardPaymentScreenProps> = ({
                 id="name" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)} 
-                className="bg-gray-800 border-gray-700 text-white" 
+                className="bg-white text-[#0A2645] border-gray-300" 
                 placeholder="John Smith"
               />
             </div>
@@ -55,7 +55,7 @@ const CardPaymentScreen: React.FC<CardPaymentScreenProps> = ({
                 id="cardNumber" 
                 value={cardNumber} 
                 onChange={(e) => setCardNumber(e.target.value)} 
-                className="bg-gray-800 border-gray-700 text-white" 
+                className="bg-white text-[#0A2645] border-gray-300" 
                 placeholder="1234 5678 9012 3456"
               />
             </div>
@@ -67,7 +67,7 @@ const CardPaymentScreen: React.FC<CardPaymentScreenProps> = ({
                   id="expiry" 
                   value={expiry} 
                   onChange={(e) => setExpiry(e.target.value)} 
-                  className="bg-gray-800 border-gray-700 text-white" 
+                  className="bg-white text-[#0A2645] border-gray-300" 
                   placeholder="MM/YY"
                 />
               </div>
@@ -77,7 +77,7 @@ const CardPaymentScreen: React.FC<CardPaymentScreenProps> = ({
                   id="cvc" 
                   value={cvc} 
                   onChange={(e) => setCvc(e.target.value)} 
-                  className="bg-gray-800 border-gray-700 text-white" 
+                  className="bg-white text-[#0A2645] border-gray-300" 
                   placeholder="123"
                   type="password"
                 />
