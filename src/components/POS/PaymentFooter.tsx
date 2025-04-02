@@ -66,4 +66,3 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
 };
 
 export default PaymentFooter;
-

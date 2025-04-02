@@ -6,6 +6,7 @@ import { useApp } from '@/contexts/AppContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
+import PaymentOptions from '@/components/PaymentOptions';
 
 // Import our new components
 import POSHeader from '@/components/POS/POSHeader';
@@ -34,9 +35,11 @@ const POS = () => {
   const isMobile = useIsMobile();
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showShiftSummary, setShowShiftSummary] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop'>('cash');
   
   useEffect(() => {
     if (!currentUser) {
@@ -71,8 +74,33 @@ const POS = () => {
     }
   };
   
+  const handleSelectPaymentMethod = (method: 'cash' | 'card' | 'shop2shop') => {
+    setPaymentMethod(method);
+    
+    if (method === 'cash') {
+      setShowPaymentOptions(false);
+      setShowPaymentForm(true);
+    } else {
+      const result = processPayment(calculateTotal(), method);
+      
+      if (result.success) {
+        toast({
+          title: `${method.charAt(0).toUpperCase() + method.slice(1)} payment successful`,
+          description: method === 'cash' ? `Change: ${formatCurrency(result.change)}` : '',
+        });
+        setShowPaymentOptions(false);
+      } else {
+        toast({
+          title: "Payment failed",
+          description: "There was an error processing the payment",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
   const handlePaymentComplete = (cashReceived: number) => {
-    const result = processPayment(cashReceived);
+    const result = processPayment(cashReceived, 'cash');
     
     if (result.success) {
       toast({
@@ -97,6 +125,19 @@ const POS = () => {
   const calculateTotal = () => {
     return cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   };
+  
+  if (showPaymentOptions) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+          <PaymentOptions 
+            onSelectPaymentMethod={handleSelectPaymentMethod}
+            onCancel={() => setShowPaymentOptions(false)}
+          />
+        </div>
+      </div>
+    );
+  }
   
   if (showPaymentForm) {
     return (
@@ -164,7 +205,7 @@ const POS = () => {
         total={calculateTotal()}
         cartLength={cart.length}
         onClearCart={clearCart}
-        onShowPaymentForm={() => setShowPaymentForm(true)}
+        onShowPaymentForm={() => setShowPaymentOptions(true)}
         isMobile={isMobile}
       />
     </div>

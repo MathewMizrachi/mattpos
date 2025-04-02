@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import db from '@/lib/db';
 
@@ -48,7 +47,7 @@ interface AppContextType {
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
   
-  processPayment: (cashReceived: number) => {
+  processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop') => {
     success: boolean;
     change: number;
   };
@@ -71,7 +70,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const user = db.authenticateUser(pin);
     if (user) {
       setCurrentUser(user);
-      // Check if there's an active shift
       const activeShift = db.getCurrentShift();
       if (activeShift) {
         setCurrentShift(activeShift);
@@ -139,7 +137,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCart([]);
   };
 
-  const processPayment = (cashReceived: number) => {
+  const processPayment = (cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' = 'cash') => {
     if (!currentShift || cart.length === 0) {
       return { success: false, change: 0 };
     }
@@ -150,18 +148,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       unitPrice: item.product.price
     }));
     
-    const transaction = db.createTransaction(currentShift.id, items, cashReceived);
+    const transaction = db.createTransaction(currentShift.id, items, cashReceived, paymentMethod);
     
-    // Update current shift with latest data
     const updatedShift = db.getCurrentShift();
     if (updatedShift) {
       setCurrentShift(updatedShift);
     }
     
-    // Refresh products to reflect updated stock
     refreshProducts();
     
-    // Clear the cart
     clearCart();
     
     return { 
