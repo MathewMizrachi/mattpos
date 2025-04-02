@@ -38,10 +38,10 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
             style={{ 
               backgroundColor: 'white', 
               color: 'black', 
-              fontSize: '1rem', 
+              fontSize: isMobile ? '1rem' : '1rem', 
               fontWeight: 'bold',
               border: '2px solid #FAA225',
-              height: isMobile ? '3rem' : '4rem'
+              height: isMobile ? '3rem' : '3rem'
             }}
           >
             Clear Cart
@@ -53,8 +53,8 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
           disabled={cartLength === 0}
           onClick={onShowPaymentForm}
           style={{ 
-            height: isMobile ? '3rem' : '4rem',
-            fontSize: isMobile ? '1rem' : '1.5rem',
+            height: isMobile ? '3rem' : '3rem',
+            fontSize: isMobile ? '1rem' : '1rem',
             fontWeight: 'bold'
           }}
         >
