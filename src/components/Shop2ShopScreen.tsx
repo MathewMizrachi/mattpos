@@ -31,12 +31,12 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
       <div className="w-full max-w-md mx-auto text-white">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
+        <div className="text-center mb-4">
+          <div className="flex justify-center mb-2">
             <img 
               src="/lovable-uploads/4531f963-ec96-471b-b1d6-1adba2dbf7cb.png" 
               alt="Shop2Shop Logo" 
-              className="h-24 w-24 object-contain"
+              className="h-36 w-36 object-contain"
             />
           </div>
           <h2 className="text-3xl font-bold">Total to Pay</h2>
