@@ -24,15 +24,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
   
   return (
     <Card className="h-full flex flex-col">
-      <CardContent className={`${isMobile ? 'pt-2 px-2' : 'pt-4'} flex-1 flex flex-col`}>
+      <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
-          <h3 className={`font-medium ${isMobile ? 'text-sm' : 'text-base md:text-lg'} mb-1 truncate`}>{product.name}</h3>
-          <p className={`${isMobile ? 'text-lg' : 'text-xl md:text-2xl'} font-bold text-primary mb-2`}>
+          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-base md:text-lg'} mb-1 truncate`}>{product.name}</h3>
+          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold text-primary mb-1`}>
             {formatCurrency(product.price)}
           </p>
           
           {product.stock !== undefined && (
-            <p className={`text-xs ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+            <p className={`${isMobile ? 'text-xs' : 'text-xs'} ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
               Stock: {product.stock}
             </p>
           )}
@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
         
         <Button 
           onClick={handleAddToCart}
-          className={`w-full mt-2 ${isMobile ? 'h-8 py-1 text-sm' : ''}`}
+          className={`w-full mt-1 ${isMobile ? 'h-7 py-0 text-xs' : ''}`}
           disabled={product.stock !== undefined && product.stock <= 0}
           size={isMobile ? "sm" : "default"}
         >
