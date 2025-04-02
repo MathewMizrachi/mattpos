@@ -15,7 +15,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   onAddToCart
 }) => {
   return (
-    <div className={`grid ${isMobile ? 'grid-cols-1 w-full px-0' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 pr-96'} gap-3`}>
+    <div className={`grid ${isMobile ? 'grid-cols-1 w-full px-0' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 pr-96'} gap-3 pt-4`}>
       {products.map(product => (
         <ProductCard 
           key={product.id} 

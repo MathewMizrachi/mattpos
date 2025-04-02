@@ -85,7 +85,7 @@ const POS = () => {
       if (result.success) {
         toast({
           title: `${method.charAt(0).toUpperCase() + method.slice(1)} payment successful`,
-          description: method === 'cash' ? `Change: ${formatCurrency(result.change)}` : '',
+          description: '',
         });
         setShowPaymentOptions(false);
       } else {
