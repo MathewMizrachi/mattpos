@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -7,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
 import PaymentOptions from '@/components/PaymentOptions';
+import { Product } from '@/types';
 
 import POSHeader from '@/components/POS/POSHeader';
 import ProductSearch from '@/components/POS/ProductSearch';

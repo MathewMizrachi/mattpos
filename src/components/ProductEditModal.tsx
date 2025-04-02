@@ -74,7 +74,7 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
                 disabled={quantity <= 1}
                 className="rounded-full"
               >
-                <Minus className="h-4 w-4" />
+                <Minus className="h-4 w-4 text-white" />
               </Button>
               
               <Input 
@@ -92,7 +92,7 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
                 onClick={incrementQuantity}
                 className="rounded-full"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-4 w-4 text-white" />
               </Button>
             </div>
           </div>
