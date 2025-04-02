@@ -20,7 +20,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
 }) => {
   if (isMobile) {
     return (
-      <div className="fixed top-20 bottom-0 right-0 w-2/3 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
+      <div className="fixed top-20 bottom-0 right-0 w-3/5 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
         <ScrollArea className="flex-1">
           <div className="p-2">
             {cart.length === 0 ? (
