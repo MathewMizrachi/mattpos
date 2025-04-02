@@ -125,6 +125,18 @@ const POS = () => {
     return cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   };
   
+  const handleAddToCart = (product: Product, quantity: number, customPrice?: number) => {
+    if (customPrice !== undefined && customPrice !== product.price) {
+      const modifiedProduct = {
+        ...product,
+        price: customPrice
+      };
+      addToCart(modifiedProduct, quantity);
+    } else {
+      addToCart(product, quantity);
+    }
+  };
+  
   if (showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -187,7 +199,7 @@ const POS = () => {
             <ProductGrid 
               products={filteredProducts}
               isMobile={isMobile}
-              onAddToCart={addToCart}
+              onAddToCart={handleAddToCart}
             />
           </div>
         </div>

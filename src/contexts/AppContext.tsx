@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import db from '@/lib/db';
 
@@ -100,11 +101,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const addToCart = (product: Product, quantity = 1) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.product.id === product.id);
+      const existingItem = prevCart.find(item => 
+        // For custom-priced products, we need to consider both id and price
+        item.product.id === product.id && item.product.price === product.price
+      );
       
       if (existingItem) {
         return prevCart.map(item => 
-          item.product.id === product.id 
+          (item.product.id === product.id && item.product.price === product.price)
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
