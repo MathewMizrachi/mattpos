@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOutIcon, ShoppingCartIcon, PackageIcon, UsersIcon } from 'lucide-react';
+import { LogOutIcon, ShoppingCartIcon, PackageIcon, UsersIcon, ChartBarIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import PinPad from '@/components/PinPad';
@@ -65,6 +65,10 @@ const Dashboard = () => {
 
   const handleManageCustomers = () => {
     navigate('/customers');
+  };
+  
+  const handleViewReports = () => {
+    navigate('/reports');
   };
   
   const handleLogout = () => {
@@ -131,7 +135,7 @@ const Dashboard = () => {
           </Button>
         </header>
         
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle>Start Shift</CardTitle>
@@ -177,6 +181,21 @@ const Dashboard = () => {
               <Button className="w-full" onClick={handleManageCustomers}>
                 <UsersIcon className="h-4 w-4 mr-2" />
                 Manage Customers
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle>Reports</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                View sales, inventory, and financial reports.
+              </p>
+              <Button className="w-full" onClick={handleViewReports}>
+                <ChartBarIcon className="h-4 w-4 mr-2" />
+                View Reports
               </Button>
             </CardContent>
           </Card>
