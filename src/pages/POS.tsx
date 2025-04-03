@@ -40,6 +40,7 @@ const POS = () => {
   const [showPaymentOptions, setShowPaymentOptions] = React.useState(false);
   const [showRefundScreen, setShowRefundScreen] = React.useState(false);
   const [showProfitPlusScreen, setShowProfitPlusScreen] = React.useState(false);
+  const [showWithdrawalScreen, setShowWithdrawalScreen] = React.useState(false);
   
   useEffect(() => {
     if (!currentUser) {
@@ -62,7 +63,7 @@ const POS = () => {
   };
 
   const handleEndShift = () => {
-    if (showPaymentOptions || showRefundScreen || showProfitPlusScreen) {
+    if (showPaymentOptions || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
       return;
     }
     
@@ -77,7 +78,7 @@ const POS = () => {
     navigate('/dashboard');
   };
   
-  if (showPaymentOptions || showRefundScreen || showProfitPlusScreen) {
+  if (showPaymentOptions || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
     return (
       <div id="pos-screen-manager">
         <POSScreenManager
@@ -118,6 +119,7 @@ const POS = () => {
         onShowPaymentOptions={() => setShowPaymentOptions(true)}
         onShowRefundScreen={() => setShowRefundScreen(true)}
         onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
+        onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
       />
     </>
   );

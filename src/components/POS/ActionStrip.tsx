@@ -1,15 +1,16 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { RefreshCcw } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ActionStripProps {
   onRefund: () => void;
   onProfitPlus: () => void;
+  onWithdrawal?: () => void;
 }
 
-const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => {
+const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus, onWithdrawal = () => {} }) => {
   const isMobile = useIsMobile();
   
   return (
@@ -21,11 +22,17 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
       }}
     >
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-black h-full w-full rounded-none text-xs md:text-sm flex items-center justify-center"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-full rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
         onClick={onRefund}
       >
-        <RefreshCcw className="h-4 w-4 md:h-5 md:w-5 mr-1.5 md:mr-2" />
-        Refunds
+        REFUNDS
+      </Button>
+      
+      <Button 
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        onClick={onWithdrawal}
+      >
+        WITHDRAWAL
       </Button>
       
       <Button 
