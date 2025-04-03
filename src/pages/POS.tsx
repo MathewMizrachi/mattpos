@@ -15,6 +15,7 @@ import SplitPaymentScreen from '@/components/SplitPaymentScreen';
 import RefundScreen from '@/components/RefundScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
+import ProfitPlusScreen from '@/components/ProfitPlusScreen';
 import { Product, SplitPaymentDetails } from '@/types';
 
 import POSHeader from '@/components/POS/POSHeader';
@@ -22,6 +23,7 @@ import ProductSearch from '@/components/POS/ProductSearch';
 import ProductGrid from '@/components/POS/ProductGrid';
 import CartPanel from '@/components/POS/CartPanel';
 import PaymentFooter from '@/components/POS/PaymentFooter';
+import ActionStrip from '@/components/POS/ActionStrip';
 
 const POS = () => {
   const { 
@@ -57,6 +59,7 @@ const POS = () => {
   const [showRefundScreen, setShowRefundScreen] = useState(false);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
+  const [showProfitPlusScreen, setShowProfitPlusScreen] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
@@ -278,11 +281,6 @@ const POS = () => {
     }
   };
 
-  // POSHeader options
-  const headerOptions = [
-    { label: 'Refund', action: () => setShowRefundScreen(true) }
-  ];
-  
   if (showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -391,6 +389,14 @@ const POS = () => {
     );
   }
   
+  if (showProfitPlusScreen) {
+    return (
+      <ProfitPlusScreen 
+        onCancel={() => setShowProfitPlusScreen(false)}
+      />
+    );
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">
       <POSHeader 
@@ -398,7 +404,7 @@ const POS = () => {
         currentShift={currentShift}
         onEndShift={handleEndShift}
         onLogout={logout}
-        options={headerOptions}
+        options={[]}
       />
       
       <div className="fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50">
@@ -429,6 +435,11 @@ const POS = () => {
           toggleCartExpand={toggleCartExpand}
         />
       </div>
+      
+      <ActionStrip 
+        onRefund={() => setShowRefundScreen(true)}
+        onProfitPlus={() => setShowProfitPlusScreen(true)}
+      />
       
       <PaymentFooter 
         total={calculateTotal()}
