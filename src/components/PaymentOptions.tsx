@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
-import { ShoppingBag, CreditCard, Users, Split } from 'lucide-react';
+import { ShoppingBag, CreditCard, Users, Split, Banknote } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from '@/hooks/use-toast';
 
@@ -14,7 +14,7 @@ interface CustomerInfo {
 }
 
 interface PaymentOptionsProps {
-  onSelectPaymentMethod: (method: 'shop2shop' | 'card' | 'account' | 'split', customerInfo?: CustomerInfo) => void;
+  onSelectPaymentMethod: (method: 'shop2shop' | 'card' | 'account' | 'split' | 'cash', customerInfo?: CustomerInfo) => void;
   onCancel: () => void;
 }
 
@@ -78,6 +78,14 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
       </div>
       
       <div className="space-y-4">
+        <Button 
+          onClick={() => onSelectPaymentMethod('cash')}
+          className="w-full h-20 bg-gray-800 border-2 border-gray-700 hover:bg-gray-700 hover:border-[#FAA225] text-white text-xl"
+        >
+          <Banknote className="h-8 w-8 mr-4" />
+          Cash
+        </Button>
+        
         <Button 
           onClick={() => onSelectPaymentMethod('shop2shop')}
           className="w-full h-20 bg-gray-800 border-2 border-gray-700 hover:bg-gray-700 hover:border-[#FAA225] text-white text-xl"

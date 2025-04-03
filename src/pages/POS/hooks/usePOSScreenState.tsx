@@ -20,10 +20,11 @@ export const usePOSScreenState = ({
   const [showShop2Shop, setShowShop2Shop] = useState(false);
   const [showAccountPayment, setShowAccountPayment] = useState(false);
   const [showSplitPayment, setShowSplitPayment] = useState(false);
+  const [showCashPayment, setShowCashPayment] = useState(false);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'shop2shop' | 'account' | 'split'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'shop2shop' | 'account' | 'split' | 'cash'>('card');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
@@ -53,6 +54,8 @@ export const usePOSScreenState = ({
     setShowAccountPayment,
     showSplitPayment,
     setShowSplitPayment,
+    showCashPayment,
+    setShowCashPayment,
     showEndShiftForm,
     setShowEndShiftForm,
     showReconciliationReport,

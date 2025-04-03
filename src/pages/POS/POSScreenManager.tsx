@@ -14,7 +14,7 @@ interface POSScreenManagerProps {
   cart: any[];
   currentShift: any;
   calculateTotal: () => number;
-  processPayment: (amount: number, method: 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => any;
+  processPayment: (amount: number, method: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => any;
   processRefund: (product: Product, quantity: number, refundMethod: 'shop2shop') => boolean;
   endShift: (cashAmount: number) => any;
   getShiftPaymentBreakdown: (shiftId: number) => any;
@@ -69,6 +69,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     setShowShop2Shop: screenState.setShowShop2Shop,
     setShowAccountPayment: screenState.setShowAccountPayment,
     setShowSplitPayment: screenState.setShowSplitPayment,
+    setShowCashPayment: screenState.setShowCashPayment,
     setShowRefundScreen,
     setShowPaymentOptions,
     paymentMethod: screenState.paymentMethod,
@@ -122,22 +123,26 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   
   // Render payment screens
   if (screenState.showCardPayment || screenState.showShop2Shop || 
-      screenState.showAccountPayment || screenState.showSplitPayment) {
+      screenState.showAccountPayment || screenState.showSplitPayment || 
+      screenState.showCashPayment) {
     return (
       <PaymentScreens
         showCardPayment={screenState.showCardPayment}
         showShop2Shop={screenState.showShop2Shop}
         showAccountPayment={screenState.showAccountPayment}
         showSplitPayment={screenState.showSplitPayment}
+        showCashPayment={screenState.showCashPayment}
         calculateTotal={calculateTotal}
         customerInfo={screenState.customerInfo}
         handleNonCashPayment={paymentHandlers.handleNonCashPayment}
+        handleCashPayment={paymentHandlers.handleCashPayment}
         handleAccountPayment={paymentHandlers.handleAccountPayment}
         handleSplitPayment={paymentHandlers.handleSplitPayment}
         setShowCardPayment={screenState.setShowCardPayment}
         setShowShop2Shop={screenState.setShowShop2Shop}
         setShowAccountPayment={screenState.setShowAccountPayment}
         setShowSplitPayment={screenState.setShowSplitPayment}
+        setShowCashPayment={screenState.setShowCashPayment}
       />
     );
   }

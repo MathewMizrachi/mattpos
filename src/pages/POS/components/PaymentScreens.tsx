@@ -4,6 +4,7 @@ import CardPaymentScreen from '@/components/CardPaymentScreen';
 import Shop2ShopScreen from '@/components/Shop2ShopScreen';
 import AccountPaymentScreen from '@/components/AccountPaymentScreen';
 import SplitPaymentScreen from '@/components/SplitPaymentScreen';
+import CashPaymentScreen from '@/components/CashPaymentScreen';
 import { SplitPaymentDetails } from '@/types';
 
 interface PaymentScreensProps {
@@ -11,15 +12,18 @@ interface PaymentScreensProps {
   showShop2Shop: boolean;
   showAccountPayment: boolean;
   showSplitPayment: boolean;
+  showCashPayment: boolean;
   calculateTotal: () => number;
   customerInfo?: { name: string; phone: string };
   handleNonCashPayment: () => void;
+  handleCashPayment: (cashReceived: number) => void;
   handleAccountPayment: (customerName: string, customerPhone: string) => void;
   handleSplitPayment: (splitPayments: SplitPaymentDetails[]) => void;
   setShowCardPayment: (show: boolean) => void;
   setShowShop2Shop: (show: boolean) => void;
   setShowAccountPayment: (show: boolean) => void;
   setShowSplitPayment: (show: boolean) => void;
+  setShowCashPayment: (show: boolean) => void;
 }
 
 export const PaymentScreens: React.FC<PaymentScreensProps> = ({
@@ -27,16 +31,29 @@ export const PaymentScreens: React.FC<PaymentScreensProps> = ({
   showShop2Shop,
   showAccountPayment,
   showSplitPayment,
+  showCashPayment,
   calculateTotal,
   customerInfo,
   handleNonCashPayment,
+  handleCashPayment,
   handleAccountPayment,
   handleSplitPayment,
   setShowCardPayment,
   setShowShop2Shop,
   setShowAccountPayment,
-  setShowSplitPayment
+  setShowSplitPayment,
+  setShowCashPayment
 }) => {
+  if (showCashPayment) {
+    return (
+      <CashPaymentScreen
+        total={calculateTotal()}
+        onProcessPayment={handleCashPayment}
+        onCancel={() => setShowCashPayment(false)}
+      />
+    );
+  }
+  
   if (showCardPayment) {
     return (
       <CardPaymentScreen
