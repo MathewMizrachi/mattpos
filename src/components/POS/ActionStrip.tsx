@@ -21,7 +21,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({
       className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex flex-wrap items-center`}
       style={{ 
         backgroundColor: '#dddddd',
-        height: isMobile ? 'auto' : '5rem'
+        height: '4.5rem' // Match height with PaymentFooter
       }}
     >
       <Button 
@@ -45,8 +45,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-24 w-24 md:h-30 md:w-30 object-contain"
-          style={{ transform: 'scale(1.125)' }} 
+          className="h-12 w-12 md:h-16 md:w-16 object-contain" 
         />
       </Button>
     </div>
