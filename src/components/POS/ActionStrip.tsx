@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Wallet } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ActionStripProps {
@@ -22,28 +21,28 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus, onWit
       }}
     >
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-full rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
         onClick={onRefund}
       >
         REFUNDS
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
         onClick={onWithdrawal}
       >
         WITHDRAWAL
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] h-full rounded-none flex items-center justify-center"
-        style={{ width: isMobile ? '40%' : '180px' }}
+        className="bg-[#dddddd] hover:bg-[#cccccc] h-full w-1/3 rounded-none flex items-center justify-center"
         onClick={onProfitPlus}
       >
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-20 w-20 md:h-24 md:w-24 object-contain"
+          className="h-30 w-30 md:h-36 md:w-36 object-contain"
+          style={{ transform: 'scale(1.5)' }}
         />
       </Button>
     </div>
