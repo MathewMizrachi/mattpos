@@ -1,9 +1,9 @@
-
 import React from 'react';
-import { ShoppingCartIcon } from 'lucide-react';
+import { ShoppingCartIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CartItem from '@/components/CartItem';
 import { CartItem as CartItemType } from '@/types';
+import { Button } from '@/components/ui/button';
 
 interface CartPanelProps {
   cart: CartItemType[];
@@ -35,6 +35,20 @@ const CartPanel: React.FC<CartPanelProps> = ({
         className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
         onClick={handleBackgroundClick}
       >
+        <div className="absolute top-2 left-2 z-20">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleCartExpand();
+            }}
+            className="bg-white hover:bg-gray-100"
+          >
+            {cartExpanded ? <ChevronsRightIcon className="h-4 w-4" /> : <ChevronsLeftIcon className="h-4 w-4" />}
+          </Button>
+        </div>
+
         <ScrollArea className="flex-1">
           <div className="p-2" onClick={handleBackgroundClick}>
             {cart.length === 0 ? (
