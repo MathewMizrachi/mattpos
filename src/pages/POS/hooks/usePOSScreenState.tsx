@@ -16,7 +16,6 @@ export const usePOSScreenState = ({
 }: UsePOSScreenStateProps) => {
   const { toast } = useToast();
   
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showCardPayment, setShowCardPayment] = useState(false);
   const [showShop2Shop, setShowShop2Shop] = useState(false);
   const [showAccountPayment, setShowAccountPayment] = useState(false);
@@ -24,7 +23,7 @@ export const usePOSScreenState = ({
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'shop2shop' | 'account' | 'split'>('card');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
@@ -46,8 +45,6 @@ export const usePOSScreenState = ({
   };
 
   return {
-    showPaymentForm,
-    setShowPaymentForm,
     showCardPayment,
     setShowCardPayment,
     showShop2Shop,

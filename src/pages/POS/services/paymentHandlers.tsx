@@ -5,18 +5,17 @@ import { formatCurrency } from "@/lib/utils";
 
 interface PaymentHandlersProps {
   calculateTotal: () => number;
-  processPayment: (amount: number, method: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => any;
-  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
-  setShowPaymentForm: (show: boolean) => void;
+  processPayment: (amount: number, method: 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => any;
+  processRefund: (product: Product, quantity: number, refundMethod: 'shop2shop') => boolean;
   setShowCardPayment: (show: boolean) => void;
   setShowShop2Shop: (show: boolean) => void;
   setShowAccountPayment: (show: boolean) => void;
   setShowSplitPayment: (show: boolean) => void;
   setShowRefundScreen: (show: boolean) => void;
   setShowPaymentOptions: (show: boolean) => void;
-  paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split';
+  paymentMethod: 'card' | 'shop2shop' | 'account' | 'split';
   customerInfo?: { name: string; phone: string };
-  setPaymentMethod: (method: 'cash' | 'card' | 'shop2shop' | 'account' | 'split') => void;
+  setPaymentMethod: (method: 'card' | 'shop2shop' | 'account' | 'split') => void;
   setCustomerInfo: (info?: { name: string; phone: string }) => void;
 }
 
@@ -24,7 +23,6 @@ export const usePaymentHandlers = ({
   calculateTotal,
   processPayment,
   processRefund,
-  setShowPaymentForm,
   setShowCardPayment,
   setShowShop2Shop,
   setShowAccountPayment,
@@ -39,7 +37,7 @@ export const usePaymentHandlers = ({
   const { toast } = useToast();
   
   const handleSelectPaymentMethod = (
-    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
+    method: 'shop2shop' | 'card' | 'account' | 'split',
     customerInfo?: { name: string; phone: string }
   ) => {
     setPaymentMethod(method);
@@ -47,9 +45,6 @@ export const usePaymentHandlers = ({
     setCustomerInfo(customerInfo);
     
     switch (method) {
-      case 'cash':
-        setShowPaymentForm(true);
-        break;
       case 'card':
         setShowCardPayment(true);
         break;
@@ -142,32 +137,14 @@ export const usePaymentHandlers = ({
       });
     }
   };
-  
-  const handlePaymentComplete = (cashReceived: number) => {
-    const result = processPayment(cashReceived, 'cash');
-    
-    if (result.success) {
-      toast({
-        title: "Payment successful",
-        description: `Change: ${formatCurrency(result.change)}`,
-      });
-      setShowPaymentForm(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
 
-  const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => {
+  const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'shop2shop') => {
     const success = processRefund(product, quantity, refundMethod);
     
     if (success) {
       toast({
         title: "Refund processed successfully",
-        description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'cash' ? 'cash' : 'Shop2Shop'}`,
+        description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'shop2shop' ? 'Shop2Shop' : 'Shop2Shop'}`,
       });
       setShowRefundScreen(false);
     } else {
@@ -184,7 +161,6 @@ export const usePaymentHandlers = ({
     handleNonCashPayment,
     handleAccountPayment,
     handleSplitPayment,
-    handlePaymentComplete,
     handleProcessRefund
   };
 };
