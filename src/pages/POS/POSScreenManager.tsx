@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -27,6 +26,14 @@ interface POSScreenManagerProps {
   getLowStockProducts: (limit: number) => any[];
   calculateExpectedCashInDrawer: (shiftId: number) => number;
   navigateToDashboard: () => void;
+  showPaymentOptions: boolean;
+  showRefundScreen: boolean;
+  showProfitPlusScreen: boolean;
+  showWithdrawalScreen: boolean;
+  setShowPaymentOptions: (show: boolean) => void;
+  setShowRefundScreen: (show: boolean) => void;
+  setShowProfitPlusScreen: (show: boolean) => void;
+  setShowWithdrawalScreen: (show: boolean) => void;
 }
 
 const POSScreenManager: React.FC<POSScreenManagerProps> = ({
@@ -41,19 +48,24 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   getLowStockProducts,
   calculateExpectedCashInDrawer,
   navigateToDashboard,
+  showPaymentOptions,
+  showRefundScreen,
+  showProfitPlusScreen,
+  showWithdrawalScreen,
+  setShowPaymentOptions,
+  setShowRefundScreen,
+  setShowProfitPlusScreen,
+  setShowWithdrawalScreen,
 }) => {
   const { toast } = useToast();
   
-  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showCardPayment, setShowCardPayment] = useState(false);
   const [showShop2Shop, setShowShop2Shop] = useState(false);
   const [showAccountPayment, setShowAccountPayment] = useState(false);
   const [showSplitPayment, setShowSplitPayment] = useState(false);
-  const [showRefundScreen, setShowRefundScreen] = useState(false);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
-  const [showProfitPlusScreen, setShowProfitPlusScreen] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
@@ -236,7 +248,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     navigateToDashboard();
   };
 
-  // Show different screens based on state
   if (showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -353,7 +364,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     );
   }
   
-  // Return null for the main POS view since it's handled in the parent component
   return null;
 };
 

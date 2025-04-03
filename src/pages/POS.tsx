@@ -78,8 +78,8 @@ const POS = () => {
     navigate('/dashboard');
   };
   
-  if (showPaymentOptions || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
-    return (
+  return (
+    <>
       <div id="pos-screen-manager">
         <POSScreenManager
           cart={cart}
@@ -93,34 +93,40 @@ const POS = () => {
           getLowStockProducts={getLowStockProducts}
           calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
           navigateToDashboard={navigateToDashboard}
+          showPaymentOptions={showPaymentOptions}
+          showRefundScreen={showRefundScreen}
+          showProfitPlusScreen={showProfitPlusScreen}
+          showWithdrawalScreen={showWithdrawalScreen}
+          setShowPaymentOptions={setShowPaymentOptions}
+          setShowRefundScreen={setShowRefundScreen}
+          setShowProfitPlusScreen={setShowProfitPlusScreen}
+          setShowWithdrawalScreen={setShowWithdrawalScreen}
         />
       </div>
-    );
-  }
-  
-  return (
-    <>
-      <POSMain
-        currentUser={currentUser}
-        currentShift={currentShift}
-        products={products}
-        cart={cart}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onAddToCart={handleAddToCart}
-        onUpdateCartItem={updateCartItem}
-        onRemoveFromCart={removeFromCart}
-        onClearCart={clearCart}
-        cartExpanded={cartExpanded}
-        toggleCartExpand={toggleCartExpand}
-        calculateTotal={calculateTotal}
-        onEndShift={handleEndShift}
-        onLogout={logout}
-        onShowPaymentOptions={() => setShowPaymentOptions(true)}
-        onShowRefundScreen={() => setShowRefundScreen(true)}
-        onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
-        onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
-      />
+      
+      {!showPaymentOptions && !showRefundScreen && !showProfitPlusScreen && !showWithdrawalScreen && (
+        <POSMain
+          currentUser={currentUser}
+          currentShift={currentShift}
+          products={products}
+          cart={cart}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          onAddToCart={handleAddToCart}
+          onUpdateCartItem={updateCartItem}
+          onRemoveFromCart={removeFromCart}
+          onClearCart={clearCart}
+          cartExpanded={cartExpanded}
+          toggleCartExpand={toggleCartExpand}
+          calculateTotal={calculateTotal}
+          onEndShift={handleEndShift}
+          onLogout={logout}
+          onShowPaymentOptions={() => setShowPaymentOptions(true)}
+          onShowRefundScreen={() => setShowRefundScreen(true)}
+          onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
+          onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
+        />
+      )}
     </>
   );
 };
