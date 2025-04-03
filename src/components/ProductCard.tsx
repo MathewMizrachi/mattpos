@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
@@ -69,10 +70,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           if (!isNaN(newPrice) && newPrice > 0) {
             setCustomPrice(newPrice);
             onAddToCart(product, newPrice);
+            onSelect(-1); // Deselect after adding to cart with custom price
           }
         } else {
           // If no price was entered, just add with original price
           onAddToCart(product);
+          onSelect(-1); // Deselect after adding to cart
         }
       } else if (/^\d$/.test(e.key) || e.key === '.' || e.key === ',') {
         // Only allow numbers and decimal point for price input

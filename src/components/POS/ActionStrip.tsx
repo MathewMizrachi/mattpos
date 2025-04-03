@@ -36,7 +36,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-10 w-10 md:h-12 md:w-12 object-contain"
+          className="h-20 w-20 md:h-24 md:w-24 object-contain"
         />
       </Button>
     </div>
