@@ -20,7 +20,7 @@ interface POSMainProps {
   calculateTotal: () => number;
   onEndShift: () => void;
   onLogout: () => void;
-  onShowPaymentOptions: () => void;
+  onShowPaymentForm: () => void;
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
   onShowWithdrawalScreen: () => void;
@@ -45,7 +45,7 @@ const POSMain: React.FC<POSMainProps> = ({
   calculateTotal,
   onEndShift,
   onLogout,
-  onShowPaymentOptions,
+  onShowPaymentForm,
   onShowRefundScreen,
   onShowProfitPlusScreen,
   onShowWithdrawalScreen,
@@ -62,7 +62,7 @@ const POSMain: React.FC<POSMainProps> = ({
       cart={cart}
       total={calculateTotal()}
       onClearCart={onClearCart}
-      onShowPaymentForm={onShowPaymentOptions}
+      onShowPaymentForm={onShowPaymentForm}
       onShowRefundScreen={onShowRefundScreen}
       onShowProfitPlusScreen={onShowProfitPlusScreen}
       onShowWithdrawalScreen={onShowWithdrawalScreen}

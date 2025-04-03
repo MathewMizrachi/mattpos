@@ -37,7 +37,6 @@ const POS = () => {
     calculateTotal,
   } = usePOSState({ cart });
 
-  const [showPaymentOptions, setShowPaymentOptions] = React.useState(false);
   const [showPaymentForm, setShowPaymentForm] = React.useState(false);
   const [showCardPayment, setShowCardPayment] = React.useState(false);
   const [showShop2ShopScreen, setShowShop2ShopScreen] = React.useState(false);
@@ -66,7 +65,7 @@ const POS = () => {
   };
 
   const handleEndShift = () => {
-    if (showPaymentOptions || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
+    if (showPaymentForm || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
       return;
     }
     
@@ -91,6 +90,10 @@ const POS = () => {
   
   const handleShop2ShopPayment = () => {
     setShowShop2ShopScreen(true);
+  };
+
+  const handleShowPaymentForm = () => {
+    setShowPaymentForm(true);
   };
   
   if (showPaymentForm || showCardPayment || showShop2ShopScreen || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
@@ -141,7 +144,7 @@ const POS = () => {
         calculateTotal={calculateTotal}
         onEndShift={handleEndShift}
         onLogout={logout}
-        onShowPaymentOptions={() => setShowPaymentOptions(true)}
+        onShowPaymentForm={handleShowPaymentForm}
         onShowRefundScreen={() => setShowRefundScreen(true)}
         onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
         onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}

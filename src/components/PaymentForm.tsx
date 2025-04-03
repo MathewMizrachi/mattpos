@@ -32,7 +32,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   };
   
   const generateQuickAmounts = () => {
-    const amounts = [50, 100, 200, 500];
+    const amounts = [100, 200, 500];
     return amounts.filter(amount => amount >= total);
   };
   
