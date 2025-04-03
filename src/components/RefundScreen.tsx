@@ -56,7 +56,7 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search for product..."
-            className="mb-2"
+            className="mb-2 bg-white text-[#0A2645] font-medium"
           />
           
           <div className="max-h-60 overflow-y-auto border rounded-md">
@@ -129,7 +129,7 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
         )}
         
         <div className="flex justify-end space-x-4">
-          <Button variant="outline" onClick={onCancel}>
+          <Button variant="outline" onClick={onCancel} className="text-white bg-[#0A2645] hover:bg-[#1c3a5d] border-[#0A2645]">
             Cancel
           </Button>
           <Button
