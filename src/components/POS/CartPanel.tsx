@@ -35,20 +35,6 @@ const CartPanel: React.FC<CartPanelProps> = ({
         className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
         onClick={handleBackgroundClick}
       >
-        <div className="absolute top-2 left-2 z-20">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleCartExpand();
-            }}
-            className="bg-white hover:bg-gray-100"
-          >
-            {cartExpanded ? <ChevronsRightIcon className="h-4 w-4" /> : <ChevronsLeftIcon className="h-4 w-4" />}
-          </Button>
-        </div>
-
         <ScrollArea className="flex-1">
           <div className="p-2" onClick={handleBackgroundClick}>
             {cart.length === 0 ? (
@@ -77,6 +63,22 @@ const CartPanel: React.FC<CartPanelProps> = ({
             )}
           </div>
         </ScrollArea>
+        
+        {cartExpanded && (
+          <div className="p-2 border-t flex justify-center">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCartExpand();
+              }}
+              className="bg-white hover:bg-gray-100"
+            >
+              <ChevronsRightIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
