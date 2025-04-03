@@ -1,11 +1,10 @@
 
-import dataStore from './DataStore';
+import userStore from '../stores/UserStore';
 import { User } from '../types';
 
 class AuthService {
   authenticateUser(pin: string): User | null {
-    const users = dataStore.getUsers();
-    return users.find(user => user.pin === pin) || null;
+    return userStore.findByPin(pin);
   }
 }
 

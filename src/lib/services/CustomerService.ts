@@ -1,18 +1,18 @@
 
-import dataStore from './DataStore';
+import customerStore from '../stores/CustomerStore';
 import { Customer } from '../types';
 
 class CustomerService {
   getAllCustomers(): Customer[] {
-    return dataStore.getCustomers();
+    return customerStore.getAll();
   }
 
   getCustomer(id: number): Customer | undefined {
-    return this.getAllCustomers().find(customer => customer.id === id);
+    return customerStore.findById(id);
   }
 
   getCustomerByPhone(phone: string): Customer | undefined {
-    return this.getAllCustomers().find(customer => customer.phone === phone);
+    return customerStore.findByPhone(phone);
   }
 
   addCustomer(name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer {
@@ -28,7 +28,7 @@ class CustomerService {
         updatedAt: new Date()
       };
       
-      dataStore.updateCustomer(existingCustomer.id, updatedCustomer);
+      customerStore.update(existingCustomer.id, updatedCustomer);
       return updatedCustomer;
     }
 
@@ -43,14 +43,14 @@ class CustomerService {
       isPaid: false
     };
     
-    return dataStore.addCustomer(newCustomer);
+    return customerStore.add(newCustomer);
   }
 
   markCustomerAsPaid(customerId: number): boolean {
     const customer = this.getCustomer(customerId);
     if (!customer) return false;
     
-    const updated = dataStore.updateCustomer(customerId, {
+    const updated = customerStore.update(customerId, {
       isPaid: true,
       updatedAt: new Date()
     });

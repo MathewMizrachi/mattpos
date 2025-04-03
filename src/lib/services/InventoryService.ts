@@ -1,34 +1,30 @@
 
-import dataStore from './DataStore';
+import productStore from '../stores/ProductStore';
 import { Product } from '../types';
 
 class InventoryService {
   getAllProducts(): Product[] {
-    return dataStore.getProducts();
+    return productStore.getAll();
   }
 
   getProduct(id: number): Product | undefined {
-    return this.getAllProducts().find(product => product.id === id);
+    return productStore.findById(id);
   }
 
   addProduct(product: Omit<Product, 'id'>): Product {
-    return dataStore.addProduct(product);
+    return productStore.add(product);
   }
 
   updateProduct(id: number, updates: Partial<Omit<Product, 'id'>>): Product | null {
-    return dataStore.updateProduct(id, updates);
+    return productStore.update(id, updates);
   }
 
   deleteProduct(id: number): boolean {
-    return dataStore.deleteProduct(id);
+    return productStore.delete(id);
   }
 
   getLowStockProducts(threshold: number = 5): Product[] {
-    return this.getAllProducts().filter(p => 
-      p.stock !== undefined && 
-      p.stock <= threshold && 
-      p.stock > 0
-    );
+    return productStore.getLowStock(threshold);
   }
 }
 

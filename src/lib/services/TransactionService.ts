@@ -1,5 +1,6 @@
 
-import dataStore from './DataStore';
+import transactionStore from '../stores/TransactionStore';
+import refundStore from '../stores/RefundStore';
 import { 
   Transaction, 
   Refund, 
@@ -10,11 +11,11 @@ import inventoryService from './InventoryService';
 
 class TransactionService {
   getShiftTransactions(shiftId: number): Transaction[] {
-    return dataStore.getTransactions().filter(t => t.shiftId === shiftId);
+    return transactionStore.findByShiftId(shiftId);
   }
 
   getShiftRefunds(shiftId: number): Refund[] {
-    return dataStore.getRefunds().filter(r => r.shiftId === shiftId);
+    return refundStore.findByShiftId(shiftId);
   }
 
   createTransaction(
@@ -42,7 +43,7 @@ class TransactionService {
       isRefund
     };
     
-    const transaction = dataStore.addTransaction(newTransaction);
+    const transaction = transactionStore.add(newTransaction);
     
     // Update product stock
     items.forEach(item => {
@@ -74,7 +75,7 @@ class TransactionService {
       method
     };
     
-    const refund = dataStore.addRefund(newRefund);
+    const refund = refundStore.add(newRefund);
     
     // Create a transaction for this refund
     const product = inventoryService.getProduct(productId);

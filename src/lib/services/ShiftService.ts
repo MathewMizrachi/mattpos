@@ -1,5 +1,7 @@
-
-import dataStore from './DataStore';
+import shiftStore from '../stores/ShiftStore';
+import transactionStore from '../stores/TransactionStore';
+import refundStore from '../stores/RefundStore';
+import productStore from '../stores/ProductStore';
 import { Shift, Transaction, Refund } from '../types';
 import transactionService from './TransactionService';
 import inventoryService from './InventoryService';
@@ -14,24 +16,15 @@ class ShiftService {
       transactionCount: 0,
     };
     
-    return dataStore.addShift(newShift);
+    return shiftStore.add(newShift);
   }
 
   getCurrentShift(): Shift | null {
-    const shifts = dataStore.getShifts();
-    return shifts.find(shift => !shift.endTime) || null;
+    return shiftStore.findActive() || null;
   }
 
   getLastShift(): Shift | null {
-    const shifts = dataStore.getShifts();
-    if (shifts.length <= 1) return null;
-    
-    const completedShifts = shifts.filter(shift => shift.endTime);
-    if (completedShifts.length === 0) return null;
-    
-    return completedShifts.sort((a, b) => 
-      new Date(b.endTime!).getTime() - new Date(a.endTime!).getTime()
-    )[0];
+    return shiftStore.findLastCompleted() || null;
   }
 
   getLastShiftEndFloat(): number | null {
@@ -40,7 +33,7 @@ class ShiftService {
   }
 
   endShift(shiftId: number, endFloat: number): Shift | null {
-    const shift = dataStore.getShifts().find(s => s.id === shiftId);
+    const shift = shiftStore.findById(shiftId);
     if (!shift) return null;
     
     // Calculate shift totals
@@ -59,7 +52,7 @@ class ShiftService {
       transactionCount,
     };
     
-    return dataStore.updateShift(shiftId, updatedShift);
+    return shiftStore.update(shiftId, updatedShift);
   }
 
   getShiftPaymentBreakdown(shiftId: number) {
@@ -100,10 +93,10 @@ class ShiftService {
   }
 
   getShiftRefundBreakdown(shiftId: number) {
-    const refunds = transactionService.getShiftRefunds(shiftId);
+    const refunds = refundStore.findByShiftId(shiftId);
     
     const items = refunds.map(refund => {
-      const product = inventoryService.getProduct(refund.productId);
+      const product = productStore.findById(refund.productId);
       return {
         productId: refund.productId,
         productName: product ? product.name : `Product #${refund.productId}`,
@@ -118,13 +111,13 @@ class ShiftService {
   }
 
   calculateExpectedCashInDrawer(shiftId: number): number {
-    const shift = dataStore.getShifts().find(s => s.id === shiftId);
+    const shift = shiftStore.findById(shiftId);
     if (!shift) return 0;
     
     const paymentBreakdown = this.getShiftPaymentBreakdown(shiftId);
     
     // Cash in drawer should be: starting float + cash payments - cash refunds - change given
-    const cashTransactions = transactionService.getShiftTransactions(shiftId).filter(
+    const cashTransactions = transactionStore.findByShiftId(shiftId).filter(
       t => t.shiftId === shiftId && (t.paymentMethod === 'cash' || (t.paymentMethod === 'split' && t.splitPayments?.some(sp => sp.method === 'cash')))
     );
     
