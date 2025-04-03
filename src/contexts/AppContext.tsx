@@ -1,45 +1,23 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import db from '@/lib/db';
-import { SplitPaymentDetails } from '@/types';
+import { SplitPaymentDetails, Shift, Product, CartItem, User, Customer } from '@/types';
 
-interface User {
-  id: number;
-  name: string;
-  pin: string;
-  role: 'manager' | 'staff';
+interface PaymentBreakdown {
+  cash: number;
+  card: number;
+  shop2shop: number;
+  account: number;
 }
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  stock?: number;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-interface Shift {
-  id: number;
-  userId: number;
-  startTime: Date;
-  endTime?: Date;
-  startFloat: number;
-  salesTotal?: number;
-  transactionCount?: number;
-}
-
-interface Customer {
-  id: number;
-  name: string;
-  phone: string;
-  idNumber?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  paymentTermDays?: number;
-  isPaid?: boolean;
+interface RefundBreakdown {
+  total: number;
+  items: {
+    productId: number;
+    productName: string;
+    quantity: number;
+    amount: number;
+  }[];
 }
 
 interface AppContextType {
@@ -53,9 +31,10 @@ interface AppContextType {
   logout: () => void;
   
   startShift: (userId: number, startFloat: number) => void;
-  endShift: () => Shift | null;
+  endShift: (endFloat: number) => Shift | null;
+  getLastShiftEndFloat: () => number | null;
   
-  addToCart: (product: Product, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number, customPrice?: number) => void;
   updateCartItem: (productId: number, quantity: number, price?: number) => void;
   removeFromCart: (productId: number, price?: number) => void;
   clearCart: () => void;
@@ -64,6 +43,13 @@ interface AppContextType {
     success: boolean;
     change: number;
   };
+  
+  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
+  
+  getShiftPaymentBreakdown: (shiftId: number) => PaymentBreakdown;
+  getShiftRefundBreakdown: (shiftId: number) => RefundBreakdown;
+  getLowStockProducts: (threshold?: number) => Product[];
+  calculateExpectedCashInDrawer: (shiftId: number) => number;
   
   addCustomer: (name: string, phone: string, idNumber?: string, paymentTermDays?: number) => Customer;
   getCustomers: () => Customer[];
@@ -108,35 +94,55 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCurrentShift(shift);
   };
 
-  const endShift = () => {
+  const endShift = (endFloat: number) => {
     if (!currentShift) return null;
     
-    const completedShift = db.endShift(currentShift.id);
+    const completedShift = db.endShift(currentShift.id, endFloat);
     setCurrentShift(null);
     return completedShift;
   };
 
-  const addToCart = (product: Product, quantity = 1) => {
+  const getLastShiftEndFloat = (): number | null => {
+    return db.getLastShiftEndFloat();
+  };
+
+  const addToCart = (product: Product, quantity = 1, customPrice?: number) => {
+    // If a custom price is provided, use it instead of the product's default price
+    const productToAdd = customPrice !== undefined ? { ...product, price: customPrice } : product;
+    
     setCart(prevCart => {
-      const existingProductItems = prevCart.filter(item => item.product.id === product.id);
+      // Check if this product (with same price) is already in the cart
+      const existingItemIndex = prevCart.findIndex(item => 
+        item.product.id === productToAdd.id && 
+        item.product.price === productToAdd.price
+      );
       
-      if (existingProductItems.length > 0) {
-        if (existingProductItems.some(item => item.product.price !== product.price)) {
-          const totalQuantity = existingProductItems.reduce((sum, item) => sum + item.quantity, 0);
-          const cartWithoutProduct = prevCart.filter(item => item.product.id !== product.id);
-          return [...cartWithoutProduct, { 
-            product, 
-            quantity: totalQuantity + quantity 
-          }];
-        } else {
-          return prevCart.map(item => 
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + quantity }
-              : item
-          );
-        }
+      if (existingItemIndex >= 0) {
+        // Update quantity of existing item
+        return prevCart.map((item, index) => 
+          index === existingItemIndex
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
       } else {
-        return [...prevCart, { product, quantity }];
+        // Check if this product (with different price) is in the cart
+        const sameProductDifferentPrice = prevCart.findIndex(item => 
+          item.product.id === productToAdd.id && 
+          item.product.price !== productToAdd.price
+        );
+        
+        if (sameProductDifferentPrice >= 0) {
+          // Remove all instances of this product and add with the new price and combined quantity
+          const totalQuantity = prevCart.reduce((sum, item) => 
+            item.product.id === productToAdd.id ? sum + item.quantity : sum, 0
+          );
+          
+          const cartWithoutProduct = prevCart.filter(item => item.product.id !== productToAdd.id);
+          return [...cartWithoutProduct, { product: productToAdd, quantity: totalQuantity + quantity }];
+        } else {
+          // Add new item to cart
+          return [...prevCart, { product: productToAdd, quantity }];
+        }
       }
     });
   };
@@ -227,6 +233,45 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
   };
 
+  const processRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop'): boolean => {
+    if (!currentShift) return false;
+    
+    const amount = product.price * quantity;
+    
+    db.createRefund(
+      currentShift.id,
+      product.id,
+      quantity,
+      amount,
+      refundMethod
+    );
+    
+    const updatedShift = db.getCurrentShift();
+    if (updatedShift) {
+      setCurrentShift(updatedShift);
+    }
+    
+    refreshProducts();
+    
+    return true;
+  };
+
+  const getShiftPaymentBreakdown = (shiftId: number): PaymentBreakdown => {
+    return db.getShiftPaymentBreakdown(shiftId);
+  };
+
+  const getShiftRefundBreakdown = (shiftId: number): RefundBreakdown => {
+    return db.getShiftRefundBreakdown(shiftId);
+  };
+
+  const getLowStockProducts = (threshold?: number): Product[] => {
+    return db.getLowStockProducts(threshold);
+  };
+
+  const calculateExpectedCashInDrawer = (shiftId: number): number => {
+    return db.calculateExpectedCashInDrawer(shiftId);
+  };
+
   const addCustomer = (name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer => {
     const customer = db.addCustomer(name, phone, idNumber, paymentTermDays);
     refreshCustomers();
@@ -281,11 +326,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     logout,
     startShift,
     endShift,
+    getLastShiftEndFloat,
     addToCart,
     updateCartItem,
     removeFromCart,
     clearCart,
     processPayment,
+    processRefund,
+    getShiftPaymentBreakdown,
+    getShiftRefundBreakdown,
+    getLowStockProducts,
+    calculateExpectedCashInDrawer,
     addCustomer,
     getCustomers,
     markCustomerAsPaid,

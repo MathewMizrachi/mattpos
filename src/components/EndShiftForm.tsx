@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,68 +13,53 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useApp } from '@/contexts/AppContext';
 
-const floatSchema = z.object({
-  amount: z.coerce.number().nonnegative({ message: 'Float amount must be 0 or greater' }),
+const endShiftSchema = z.object({
+  cashAmount: z.coerce.number().nonnegative({ message: 'Cash amount must be 0 or greater' }),
 });
 
-type FloatFormValues = z.infer<typeof floatSchema>;
+type EndShiftFormValues = z.infer<typeof endShiftSchema>;
 
-interface FloatFormProps {
-  onSubmit: (amount: number) => void;
+interface EndShiftFormProps {
+  onSubmit: (cashAmount: number) => void;
   onCancel: () => void;
+  expectedAmount: number;
 }
 
-const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
-  const { getLastShiftEndFloat } = useApp();
-  const [previousFloat, setPreviousFloat] = useState<number | null>(null);
-  
-  useEffect(() => {
-    const lastFloat = getLastShiftEndFloat();
-    setPreviousFloat(lastFloat);
-  }, [getLastShiftEndFloat]);
-
-  const form = useForm<FloatFormValues>({
-    resolver: zodResolver(floatSchema),
-    defaultValues: { 
-      amount: previousFloat || 0 
-    },
+const EndShiftForm: React.FC<EndShiftFormProps> = ({ 
+  onSubmit, 
+  onCancel,
+  expectedAmount 
+}) => {
+  const form = useForm<EndShiftFormValues>({
+    resolver: zodResolver(endShiftSchema),
+    defaultValues: { cashAmount: expectedAmount },
   });
 
-  // Update form values when previousFloat changes
-  useEffect(() => {
-    if (previousFloat !== null) {
-      form.setValue('amount', previousFloat);
-    }
-  }, [previousFloat, form]);
-
-  const handleSubmit = (data: FloatFormValues) => {
-    onSubmit(data.amount);
+  const handleSubmit = (data: EndShiftFormValues) => {
+    onSubmit(data.cashAmount);
   };
 
   return (
     <div className="w-full max-w-md mx-auto bg-[#0A2645] text-white p-6 rounded-lg">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Enter Starting Float</h2>
+        <h2 className="text-2xl font-bold">End Shift</h2>
         <p className="text-gray-300 mt-1">
-          Please enter the amount of cash in the drawer at the start of this shift.
+          Please count and enter the actual amount of cash in the drawer.
         </p>
-        {previousFloat !== null && (
-          <p className="text-gray-300 mt-2">
-            Previous shift ended with R{previousFloat.toFixed(2)} in the drawer.
-          </p>
-        )}
+        <p className="text-gray-300 mt-2">
+          Expected amount: R{expectedAmount.toFixed(2)}
+        </p>
       </div>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="amount"
+            name="cashAmount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Cash Amount (R)</FormLabel>
+                <FormLabel className="text-white">Actual Cash Amount (R)</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -95,7 +80,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
               Cancel
             </Button>
             <Button type="submit" className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
-              Start Shift
+              Complete Shift
             </Button>
           </div>
         </form>
@@ -104,4 +89,4 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   );
 };
 
-export default FloatForm;
+export default EndShiftForm;

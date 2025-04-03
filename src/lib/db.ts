@@ -22,6 +22,7 @@ interface Shift {
   startTime: Date;
   endTime?: Date;
   startFloat: number;
+  endFloat?: number;
   salesTotal?: number;
   transactionCount?: number;
 }
@@ -37,6 +38,7 @@ interface Transaction {
   paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split';
   customerId?: number;
   splitPayments?: SplitPaymentDetail[];
+  isRefund?: boolean;
 }
 
 interface SplitPaymentDetail {
@@ -48,6 +50,16 @@ interface TransactionItem {
   productId: number;
   quantity: number;
   unitPrice: number;
+}
+
+interface Refund {
+  id: number;
+  shiftId: number;
+  timestamp: Date;
+  productId: number;
+  quantity: number;
+  amount: number;
+  method: 'cash' | 'shop2shop';
 }
 
 interface Customer {
@@ -85,11 +97,13 @@ class Database {
   private customers: Customer[] = [];
   private shifts: Shift[] = [];
   private transactions: Transaction[] = [];
+  private refunds: Refund[] = [];
   private currentId = {
     shift: 1,
     transaction: 1,
     product: 13,
     customer: 1,
+    refund: 1,
   };
 
   // User methods
@@ -201,18 +215,37 @@ class Database {
     return this.shifts.find(shift => !shift.endTime) || null;
   }
 
-  endShift(shiftId: number): Shift | null {
+  getLastShift(): Shift | null {
+    if (this.shifts.length <= 1) return null;
+    
+    const completedShifts = this.shifts.filter(shift => shift.endTime);
+    if (completedShifts.length === 0) return null;
+    
+    return completedShifts.sort((a, b) => 
+      new Date(b.endTime!).getTime() - new Date(a.endTime!).getTime()
+    )[0];
+  }
+
+  getLastShiftEndFloat(): number | null {
+    const lastShift = this.getLastShift();
+    return lastShift?.endFloat !== undefined ? lastShift.endFloat : null;
+  }
+
+  endShift(shiftId: number, endFloat: number): Shift | null {
     const index = this.shifts.findIndex(shift => shift.id === shiftId);
     if (index === -1) return null;
     
     // Calculate shift totals
     const shiftTransactions = this.transactions.filter(t => t.shiftId === shiftId);
-    const salesTotal = shiftTransactions.reduce((sum, t) => sum + t.total, 0);
+    const sales = shiftTransactions.filter(t => !t.isRefund).reduce((sum, t) => sum + t.total, 0);
+    const refundsTotal = shiftTransactions.filter(t => t.isRefund).reduce((sum, t) => sum + t.total, 0);
+    const salesTotal = sales - refundsTotal;
     const transactionCount = shiftTransactions.length;
     
     this.shifts[index] = { 
       ...this.shifts[index], 
       endTime: new Date(),
+      endFloat,
       salesTotal,
       transactionCount,
     };
@@ -221,7 +254,7 @@ class Database {
   }
 
   // Transaction methods
-  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash', customerId?: number, splitPayments?: SplitPaymentDetail[]): Transaction {
+  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash', customerId?: number, splitPayments?: SplitPaymentDetail[], isRefund: boolean = false): Transaction {
     const total = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
     const change = paymentMethod === 'cash' ? cashReceived - total : 0;
     
@@ -235,7 +268,8 @@ class Database {
       change,
       paymentMethod,
       customerId,
-      splitPayments
+      splitPayments,
+      isRefund
     };
     
     this.transactions.push(newTransaction);
@@ -248,7 +282,7 @@ class Database {
       
       this.shifts[shiftIndex] = {
         ...this.shifts[shiftIndex],
-        salesTotal: currentTotal + total,
+        salesTotal: isRefund ? currentTotal - total : currentTotal + total,
         transactionCount: currentCount + 1,
       };
     }
@@ -259,7 +293,7 @@ class Database {
       if (productIndex !== -1 && this.products[productIndex].stock !== undefined) {
         this.products[productIndex] = {
           ...this.products[productIndex],
-          stock: (this.products[productIndex].stock || 0) - item.quantity,
+          stock: (this.products[productIndex].stock || 0) + (isRefund ? item.quantity : -item.quantity),
         };
       }
     });
@@ -267,8 +301,123 @@ class Database {
     return newTransaction;
   }
 
+  createRefund(shiftId: number, productId: number, quantity: number, amount: number, method: 'cash' | 'shop2shop'): Refund {
+    const newRefund = {
+      id: this.currentId.refund++,
+      shiftId,
+      timestamp: new Date(),
+      productId,
+      quantity,
+      amount,
+      method
+    };
+    
+    this.refunds.push(newRefund);
+    
+    // Create a transaction for this refund
+    const product = this.getProduct(productId);
+    if (product) {
+      this.createTransaction(
+        shiftId,
+        [{ productId, quantity, unitPrice: product.price }],
+        amount,
+        method,
+        undefined,
+        undefined,
+        true
+      );
+    }
+    
+    return newRefund;
+  }
+
   getShiftTransactions(shiftId: number): Transaction[] {
     return this.transactions.filter(t => t.shiftId === shiftId);
+  }
+
+  getShiftRefunds(shiftId: number): Refund[] {
+    return this.refunds.filter(r => r.shiftId === shiftId);
+  }
+
+  getShiftPaymentBreakdown(shiftId: number) {
+    const transactions = this.getShiftTransactions(shiftId);
+    
+    const breakdown = {
+      cash: 0,
+      card: 0,
+      shop2shop: 0,
+      account: 0
+    };
+    
+    transactions.forEach(t => {
+      if (t.isRefund) {
+        // For refunds, subtract from the appropriate payment method
+        if (t.paymentMethod === 'cash') breakdown.cash -= t.total;
+        if (t.paymentMethod === 'card') breakdown.card -= t.total;
+        if (t.paymentMethod === 'shop2shop') breakdown.shop2shop -= t.total;
+        if (t.paymentMethod === 'account') breakdown.account -= t.total;
+      } else if (t.paymentMethod === 'split' && t.splitPayments) {
+        // For split payments, add to each method
+        t.splitPayments.forEach(sp => {
+          if (sp.method === 'cash') breakdown.cash += sp.amount;
+          if (sp.method === 'card') breakdown.card += sp.amount;
+          if (sp.method === 'shop2shop') breakdown.shop2shop += sp.amount;
+          if (sp.method === 'account') breakdown.account += sp.amount;
+        });
+      } else {
+        // For regular payments
+        if (t.paymentMethod === 'cash') breakdown.cash += t.total;
+        if (t.paymentMethod === 'card') breakdown.card += t.total;
+        if (t.paymentMethod === 'shop2shop') breakdown.shop2shop += t.total;
+        if (t.paymentMethod === 'account') breakdown.account += t.total;
+      }
+    });
+    
+    return breakdown;
+  }
+
+  getShiftRefundBreakdown(shiftId: number) {
+    const refunds = this.getShiftRefunds(shiftId);
+    
+    const items = refunds.map(refund => {
+      const product = this.getProduct(refund.productId);
+      return {
+        productId: refund.productId,
+        productName: product ? product.name : `Product #${refund.productId}`,
+        quantity: refund.quantity,
+        amount: refund.amount
+      };
+    });
+    
+    const total = items.reduce((sum, item) => sum + item.amount, 0);
+    
+    return { total, items };
+  }
+
+  getLowStockProducts(threshold: number = 5): Product[] {
+    return this.products.filter(p => 
+      p.stock !== undefined && 
+      p.stock <= threshold && 
+      p.stock > 0
+    );
+  }
+
+  calculateExpectedCashInDrawer(shiftId: number): number {
+    const shift = this.shifts.find(s => s.id === shiftId);
+    if (!shift) return 0;
+    
+    const paymentBreakdown = this.getShiftPaymentBreakdown(shiftId);
+    
+    // Cash in drawer should be: starting float + cash payments - cash refunds - change given
+    const cashTransactions = this.transactions.filter(
+      t => t.shiftId === shiftId && (t.paymentMethod === 'cash' || (t.paymentMethod === 'split' && t.splitPayments?.some(sp => sp.method === 'cash')))
+    );
+    
+    const changeGiven = cashTransactions
+      .filter(t => !t.isRefund)
+      .reduce((sum, t) => sum + t.change, 0);
+    
+    return shift.startFloat + paymentBreakdown.cash - changeGiven;
   }
 }
 

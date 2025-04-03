@@ -24,6 +24,7 @@ export interface Shift {
   startTime: Date;
   endTime?: Date;
   startFloat: number;
+  endFloat?: number;
   salesTotal?: number;
   transactionCount?: number;
 }
@@ -46,4 +47,31 @@ export interface SplitPaymentDetails {
   customerPhone?: string;
   customerIdNumber?: string;
   paymentTermDays?: number;
+}
+
+export interface Refund {
+  id: number;
+  shiftId: number;
+  timestamp: Date;
+  productId: number;
+  quantity: number;
+  amount: number;
+  method: 'cash' | 'shop2shop';
+}
+
+export interface PaymentBreakdown {
+  cash: number;
+  card: number;
+  shop2shop: number;
+  account: number;
+}
+
+export interface RefundBreakdown {
+  total: number;
+  items: {
+    productId: number;
+    productName: string;
+    quantity: number;
+    amount: number;
+  }[];
 }

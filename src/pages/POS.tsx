@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -11,6 +12,9 @@ import CardPaymentScreen from '@/components/CardPaymentScreen';
 import Shop2ShopScreen from '@/components/Shop2ShopScreen';
 import AccountPaymentScreen from '@/components/AccountPaymentScreen';
 import SplitPaymentScreen from '@/components/SplitPaymentScreen';
+import RefundScreen from '@/components/RefundScreen';
+import EndShiftForm from '@/components/EndShiftForm';
+import ReconciliationReport from '@/components/ReconciliationReport';
 import { Product, SplitPaymentDetails } from '@/types';
 
 import POSHeader from '@/components/POS/POSHeader';
@@ -30,8 +34,13 @@ const POS = () => {
     removeFromCart,
     clearCart,
     processPayment,
+    processRefund,
     endShift,
-    logout
+    logout,
+    getShiftPaymentBreakdown,
+    getShiftRefundBreakdown,
+    getLowStockProducts,
+    calculateExpectedCashInDrawer
   } = useApp();
   
   const navigate = useNavigate();
@@ -45,11 +54,14 @@ const POS = () => {
   const [showShop2Shop, setShowShop2Shop] = useState(false);
   const [showAccountPayment, setShowAccountPayment] = useState(false);
   const [showSplitPayment, setShowSplitPayment] = useState(false);
-  const [showShiftSummary, setShowShiftSummary] = useState(false);
+  const [showRefundScreen, setShowRefundScreen] = useState(false);
+  const [showEndShiftForm, setShowEndShiftForm] = useState(false);
+  const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   const [cartExpanded, setCartExpanded] = useState(false);
+  const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
   useEffect(() => {
     if (!currentUser) {
@@ -81,10 +93,30 @@ const POS = () => {
       return;
     }
     
-    const shift = endShift();
+    if (!currentShift) return;
+    
+    const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
+    setEndShiftCashAmount(expectedCash);
+    setShowEndShiftForm(true);
+  };
+
+  const handleSubmitEndShift = (cashAmount: number) => {
+    if (!currentShift) return;
+    
+    const shift = endShift(cashAmount);
     if (shift) {
       setCompletedShift(shift);
-      setShowShiftSummary(true);
+      setShowEndShiftForm(false);
+      
+      // Prepare report data
+      const paymentBreakdown = getShiftPaymentBreakdown(shift.id);
+      const refundBreakdown = getShiftRefundBreakdown(shift.id);
+      const lowStockProducts = getLowStockProducts(5);
+      const expectedCash = calculateExpectedCashInDrawer(shift.id);
+      
+      // Show reconciliation report
+      setEndShiftCashAmount(cashAmount);
+      setShowReconciliationReport(true);
     }
   };
   
@@ -210,9 +242,27 @@ const POS = () => {
       });
     }
   };
+
+  const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => {
+    const success = processRefund(product, quantity, refundMethod);
+    
+    if (success) {
+      toast({
+        title: "Refund processed successfully",
+        description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'cash' ? 'cash' : 'Shop2Shop'}`,
+      });
+      setShowRefundScreen(false);
+    } else {
+      toast({
+        title: "Refund failed",
+        description: "There was an error processing the refund",
+        variant: "destructive"
+      });
+    }
+  };
   
-  const handleCloseSummary = () => {
-    setShowShiftSummary(false);
+  const handleCloseReconciliation = () => {
+    setShowReconciliationReport(false);
     navigate('/dashboard');
   };
   
@@ -221,8 +271,17 @@ const POS = () => {
   };
   
   const handleAddToCart = (product: Product, quantity: number, customPrice?: number) => {
-    addToCart(product, quantity);
+    if (customPrice !== undefined && customPrice !== product.price) {
+      addToCart(product, quantity, customPrice);
+    } else {
+      addToCart(product, quantity);
+    }
   };
+
+  // POSHeader options
+  const headerOptions = [
+    { label: 'Refund', action: () => setShowRefundScreen(true) }
+  ];
   
   if (showPaymentOptions) {
     return (
@@ -278,6 +337,15 @@ const POS = () => {
       />
     );
   }
+
+  if (showRefundScreen) {
+    return (
+      <RefundScreen
+        onProcessRefund={handleProcessRefund}
+        onCancel={() => setShowRefundScreen(false)}
+      />
+    );
+  }
   
   if (showPaymentForm) {
     return (
@@ -292,16 +360,33 @@ const POS = () => {
       </div>
     );
   }
-  
-  if (showShiftSummary && completedShift) {
+
+  if (showEndShiftForm) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-          <ShiftSummary 
-            shift={completedShift}
-            onClose={handleCloseSummary}
-          />
-        </div>
+        <EndShiftForm
+          onSubmit={handleSubmitEndShift}
+          onCancel={() => setShowEndShiftForm(false)}
+          expectedAmount={endShiftCashAmount}
+        />
+      </div>
+    );
+  }
+  
+  if (showReconciliationReport && completedShift) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <ReconciliationReport 
+          shift={completedShift}
+          totalSales={completedShift.salesTotal || 0}
+          grossProfit={completedShift.salesTotal ? completedShift.salesTotal * 0.25 : 0} // Assuming 25% profit margin
+          paymentBreakdown={getShiftPaymentBreakdown(completedShift.id)}
+          lowStockProducts={getLowStockProducts(5)}
+          refundBreakdown={getShiftRefundBreakdown(completedShift.id)}
+          cashExpected={calculateExpectedCashInDrawer(completedShift.id)}
+          cashActual={endShiftCashAmount}
+          onClose={handleCloseReconciliation}
+        />
       </div>
     );
   }
@@ -313,6 +398,7 @@ const POS = () => {
         currentShift={currentShift}
         onEndShift={handleEndShift}
         onLogout={logout}
+        options={headerOptions}
       />
       
       <div className="fixed top-20 left-0 right-0 p-3 z-10 bg-gray-50">

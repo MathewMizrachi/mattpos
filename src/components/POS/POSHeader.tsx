@@ -2,21 +2,36 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOutIcon } from 'lucide-react';
+import { LogOutIcon, MoreVerticalIcon } from 'lucide-react';
 import { User, Shift } from '@/types';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+interface HeaderOption {
+  label: string;
+  action: () => void;
+}
 
 interface POSHeaderProps {
   currentUser: User | null;
   currentShift: Shift | null;
   onEndShift: () => void;
   onLogout: () => void;
+  options?: HeaderOption[];
 }
 
 const POSHeader: React.FC<POSHeaderProps> = ({
   currentUser,
   currentShift,
   onEndShift,
-  onLogout
+  onLogout,
+  options = []
 }) => {
   const navigate = useNavigate();
   
@@ -43,6 +58,28 @@ const POSHeader: React.FC<POSHeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center space-x-2">
+        {options.length > 0 && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <MoreVerticalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {options.map((option, index) => (
+                <DropdownMenuItem 
+                  key={index}
+                  onClick={option.action}
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        
         <Button 
           variant="outline" 
           onClick={onEndShift}
