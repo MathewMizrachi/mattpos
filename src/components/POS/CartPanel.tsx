@@ -10,27 +10,34 @@ interface CartPanelProps {
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
   isMobile: boolean;
+  cartExpanded: boolean;
+  toggleCartExpand: () => void;
 }
 
 const CartPanel: React.FC<CartPanelProps> = ({
   cart,
   onUpdateQuantity,
   onRemove,
-  isMobile
+  isMobile,
+  cartExpanded,
+  toggleCartExpand
 }) => {
   if (isMobile) {
     return (
-      <div className="fixed top-20 bottom-0 right-0 w-3/5 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
+      <div 
+        className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/5'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
+        onClick={cartExpanded ? undefined : toggleCartExpand}
+      >
         <ScrollArea className="flex-1">
           <div className="p-2">
             {cart.length === 0 ? (
               <div className="text-center py-6">
                 <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-                <p className="text-muted-foreground">No items in cart</p>
+                <p className={`${cartExpanded ? 'block' : 'hidden'} text-muted-foreground`}>No items in cart</p>
               </div>
             ) : (
               <div className="space-y-2">
-                {cart.map(item => (
+                {cartExpanded && cart.map(item => (
                   <CartItem 
                     key={item.product.id}
                     product={item.product}
@@ -39,6 +46,12 @@ const CartPanel: React.FC<CartPanelProps> = ({
                     onRemove={onRemove}
                   />
                 ))}
+                {!cartExpanded && (
+                  <div className="text-center py-2">
+                    <ShoppingCartIcon className="h-8 w-8 mx-auto" />
+                    <span className="text-sm font-bold">{cart.length}</span>
+                  </div>
+                )}
               </div>
             )}
           </div>

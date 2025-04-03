@@ -49,6 +49,7 @@ const POS = () => {
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
+  const [cartExpanded, setCartExpanded] = useState(false);
   
   useEffect(() => {
     if (!currentUser) {
@@ -61,6 +62,10 @@ const POS = () => {
       navigate('/dashboard');
     }
   }, [currentShift, navigate]);
+  
+  const toggleCartExpand = () => {
+    setCartExpanded(prev => !prev);
+  };
   
   const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -216,15 +221,7 @@ const POS = () => {
   };
   
   const handleAddToCart = (product: Product, quantity: number, customPrice?: number) => {
-    if (customPrice !== undefined && customPrice !== product.price) {
-      const modifiedProduct = {
-        ...product,
-        price: customPrice
-      };
-      addToCart(modifiedProduct, quantity);
-    } else {
-      addToCart(product, quantity);
-    }
+    addToCart(product, quantity);
   };
   
   if (showPaymentOptions) {
@@ -332,6 +329,7 @@ const POS = () => {
               products={filteredProducts}
               isMobile={isMobile}
               onAddToCart={handleAddToCart}
+              cartExpanded={cartExpanded}
             />
           </div>
         </div>
@@ -341,6 +339,8 @@ const POS = () => {
           onUpdateQuantity={updateCartItem}
           onRemove={removeFromCart}
           isMobile={isMobile}
+          cartExpanded={cartExpanded}
+          toggleCartExpand={toggleCartExpand}
         />
       </div>
       
