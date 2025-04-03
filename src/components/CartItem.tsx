@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,16 +29,23 @@ const CartItem: React.FC<CartItemProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(quantity.toString());
   
-  const handleIncrease = () => {
+  const handleIncrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
     onUpdateQuantity(product.id, quantity + 1);
   };
   
-  const handleDecrease = () => {
+  const handleDecrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (quantity > 1) {
       onUpdateQuantity(product.id, quantity - 1);
     } else {
       onRemove(product.id);
     }
+  };
+  
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onRemove(product.id);
   };
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +80,7 @@ const CartItem: React.FC<CartItemProps> = ({
   
   if (isMobile) {
     return (
-      <div className="py-1 border-b pl-1">
+      <div className="py-1 border-b pl-1" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between mb-1">
           <p className="font-medium text-sm truncate max-w-[200px]">{product.name}</p>
           <p className="font-medium text-sm">{formatCurrency(subtotal)}</p>
@@ -127,7 +133,7 @@ const CartItem: React.FC<CartItemProps> = ({
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            onClick={() => onRemove(product.id)}
+            onClick={handleRemove}
           >
             <XIcon className="h-3 w-3" />
           </Button>
@@ -137,7 +143,7 @@ const CartItem: React.FC<CartItemProps> = ({
   }
   
   return (
-    <div className="flex items-center py-2 border-b pl-4">
+    <div className="flex items-center py-2 border-b pl-4" onClick={(e) => e.stopPropagation()}>
       <div className="flex-1">
         <p className="font-medium">{product.name}</p>
         <p className="text-sm text-muted-foreground">{formatCurrency(product.price)} each</p>

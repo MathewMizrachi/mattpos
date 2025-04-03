@@ -22,14 +22,21 @@ const CartPanel: React.FC<CartPanelProps> = ({
   cartExpanded,
   toggleCartExpand
 }) => {
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only toggle if clicking the background or container, not the buttons or inputs
+    if (e.target === e.currentTarget) {
+      toggleCartExpand();
+    }
+  };
+
   if (isMobile) {
     return (
       <div 
         className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
-        onClick={toggleCartExpand}
+        onClick={handleBackgroundClick}
       >
         <ScrollArea className="flex-1">
-          <div className="p-2">
+          <div className="p-2" onClick={handleBackgroundClick}>
             {cart.length === 0 ? (
               <div className="text-center py-6">
                 <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
