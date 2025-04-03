@@ -1,0 +1,73 @@
+
+import { useState } from 'react';
+import { Product, SplitPaymentDetails } from '@/types';
+import { useToast } from '@/hooks/use-toast';
+
+interface UsePOSScreenStateProps {
+  cart: any[];
+  currentShift: any;
+  calculateExpectedCashInDrawer: (shiftId: number) => number;
+}
+
+export const usePOSScreenState = ({ 
+  cart, 
+  currentShift,
+  calculateExpectedCashInDrawer 
+}: UsePOSScreenStateProps) => {
+  const { toast } = useToast();
+  
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showCardPayment, setShowCardPayment] = useState(false);
+  const [showShop2Shop, setShowShop2Shop] = useState(false);
+  const [showAccountPayment, setShowAccountPayment] = useState(false);
+  const [showSplitPayment, setShowSplitPayment] = useState(false);
+  const [showEndShiftForm, setShowEndShiftForm] = useState(false);
+  const [showReconciliationReport, setShowReconciliationReport] = useState(false);
+  const [completedShift, setCompletedShift] = useState<any>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
+  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
+  const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
+  
+  const handleEndShift = () => {
+    if (cart.length > 0) {
+      toast({
+        title: "Cannot end shift",
+        description: "Please complete or clear the current transaction",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!currentShift) return;
+    
+    const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
+    setEndShiftCashAmount(expectedCash);
+    setShowEndShiftForm(true);
+  };
+
+  return {
+    showPaymentForm,
+    setShowPaymentForm,
+    showCardPayment,
+    setShowCardPayment,
+    showShop2Shop,
+    setShowShop2Shop,
+    showAccountPayment,
+    setShowAccountPayment,
+    showSplitPayment,
+    setShowSplitPayment,
+    showEndShiftForm,
+    setShowEndShiftForm,
+    showReconciliationReport,
+    setShowReconciliationReport,
+    completedShift,
+    setCompletedShift,
+    paymentMethod,
+    setPaymentMethod,
+    customerInfo,
+    setCustomerInfo,
+    endShiftCashAmount,
+    setEndShiftCashAmount,
+    handleEndShift
+  };
+};

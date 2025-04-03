@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { formatCurrency } from '@/lib/utils';
 import { Product, SplitPaymentDetails } from '@/types';
-import PaymentForm from '@/components/PaymentForm';
-import ShiftSummary from '@/components/ShiftSummary';
-import PaymentOptions from '@/components/PaymentOptions';
-import CardPaymentScreen from '@/components/CardPaymentScreen';
-import Shop2ShopScreen from '@/components/Shop2ShopScreen';
-import AccountPaymentScreen from '@/components/AccountPaymentScreen';
-import SplitPaymentScreen from '@/components/SplitPaymentScreen';
-import RefundScreen from '@/components/RefundScreen';
-import EndShiftForm from '@/components/EndShiftForm';
-import ReconciliationReport from '@/components/ReconciliationReport';
-import ProfitPlusScreen from '@/components/ProfitPlusScreen';
+import { usePOSScreenState } from './hooks/usePOSScreenState';
+import { usePaymentHandlers } from './services/paymentHandlers';
+import { useShiftHandlers } from './services/shiftHandlers';
+import { PaymentScreens } from './components/PaymentScreens';
+import { EndShiftScreens } from './components/EndShiftScreens';
+import { SpecialScreens } from './components/SpecialScreens';
 
 interface POSScreenManagerProps {
   cart: any[];
@@ -57,313 +52,148 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   setShowProfitPlusScreen,
   setShowWithdrawalScreen,
 }) => {
-  const { toast } = useToast();
-  
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showCardPayment, setShowCardPayment] = useState(false);
-  const [showShop2Shop, setShowShop2Shop] = useState(false);
-  const [showAccountPayment, setShowAccountPayment] = useState(false);
-  const [showSplitPayment, setShowSplitPayment] = useState(false);
-  const [showEndShiftForm, setShowEndShiftForm] = useState(false);
-  const [showReconciliationReport, setShowReconciliationReport] = useState(false);
-  const [completedShift, setCompletedShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
-  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
-  const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
-  
-  const handleEndShift = () => {
-    if (cart.length > 0) {
-      toast({
-        title: "Cannot end shift",
-        description: "Please complete or clear the current transaction",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    if (!currentShift) return;
-    
-    const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
-    setEndShiftCashAmount(expectedCash);
-    setShowEndShiftForm(true);
-  };
+  // Use screen state hook
+  const {
+    showPaymentForm,
+    setShowPaymentForm,
+    showCardPayment,
+    setShowCardPayment,
+    showShop2Shop,
+    setShowShop2Shop,
+    showAccountPayment,
+    setShowAccountPayment,
+    showSplitPayment,
+    setShowSplitPayment,
+    showEndShiftForm,
+    setShowEndShiftForm,
+    showReconciliationReport,
+    setShowReconciliationReport,
+    completedShift,
+    setCompletedShift,
+    paymentMethod,
+    setPaymentMethod,
+    customerInfo,
+    setCustomerInfo,
+    endShiftCashAmount,
+    setEndShiftCashAmount,
+    handleEndShift
+  } = usePOSScreenState({ 
+    cart, 
+    currentShift, 
+    calculateExpectedCashInDrawer 
+  });
 
-  const handleSubmitEndShift = (cashAmount: number) => {
-    if (!currentShift) return;
-    
-    const shift = endShift(cashAmount);
-    if (shift) {
-      setCompletedShift(shift);
-      setShowEndShiftForm(false);
-      
-      // Prepare report data
-      setEndShiftCashAmount(cashAmount);
-      setShowReconciliationReport(true);
-    }
-  };
-  
-  const handleSelectPaymentMethod = (
-    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
-    customerInfo?: { name: string; phone: string }
-  ) => {
-    setPaymentMethod(method);
-    setShowPaymentOptions(false);
-    setCustomerInfo(customerInfo);
-    
-    switch (method) {
-      case 'cash':
-        setShowPaymentForm(true);
-        break;
-      case 'card':
-        setShowCardPayment(true);
-        break;
-      case 'shop2shop':
-        setShowShop2Shop(true);
-        break;
-      case 'account':
-        setShowAccountPayment(true);
-        break;
-      case 'split':
-        setShowSplitPayment(true);
-        break;
-    }
-  };
-  
-  const handleNonCashPayment = () => {
-    const result = processPayment(
-      calculateTotal(), 
-      paymentMethod,
-      customerInfo?.name,
-      customerInfo?.phone
-    );
-    
-    if (result.success) {
-      toast({
-        title: `${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)} payment successful`,
-        description: '',
-      });
-      setShowCardPayment(false);
-      setShowShop2Shop(false);
-      setShowAccountPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleAccountPayment = (customerName: string, customerPhone: string) => {
-    const result = processPayment(
-      calculateTotal(), 
-      'account',
-      customerName,
-      customerPhone
-    );
-    
-    if (result.success) {
-      toast({
-        title: "Account payment successful",
-        description: '',
-      });
-      setShowAccountPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleSplitPayment = (splitPayments: SplitPaymentDetails[]) => {
-    const totalAmount = splitPayments.reduce((sum, payment) => sum + payment.amount, 0);
-    
-    const accountPayment = splitPayments.find(p => p.method === 'account');
-    const customerName = accountPayment?.customerName || customerInfo?.name;
-    const customerPhone = accountPayment?.customerPhone || customerInfo?.phone;
-    
-    const result = processPayment(
-      totalAmount, 
-      'split',
-      customerName,
-      customerPhone,
-      splitPayments
-    );
-    
-    if (result.success) {
-      toast({
-        title: "Split payment successful",
-        description: '',
-      });
-      setShowSplitPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handlePaymentComplete = (cashReceived: number) => {
-    const result = processPayment(cashReceived, 'cash');
-    
-    if (result.success) {
-      toast({
-        title: "Payment successful",
-        description: `Change: ${formatCurrency(result.change)}`,
-      });
-      setShowPaymentForm(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
+  // Use payment handlers
+  const {
+    handleSelectPaymentMethod,
+    handleNonCashPayment,
+    handleAccountPayment,
+    handleSplitPayment,
+    handlePaymentComplete,
+    handleProcessRefund
+  } = usePaymentHandlers({
+    calculateTotal,
+    processPayment,
+    processRefund,
+    setShowPaymentForm,
+    setShowCardPayment,
+    setShowShop2Shop,
+    setShowAccountPayment,
+    setShowSplitPayment,
+    setShowRefundScreen,
+    setShowPaymentOptions,
+    paymentMethod,
+    customerInfo,
+    setPaymentMethod,
+    setCustomerInfo
+  });
 
-  const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => {
-    const success = processRefund(product, quantity, refundMethod);
-    
-    if (success) {
-      toast({
-        title: "Refund processed successfully",
-        description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'cash' ? 'cash' : 'Shop2Shop'}`,
-      });
-      setShowRefundScreen(false);
-    } else {
-      toast({
-        title: "Refund failed",
-        description: "There was an error processing the refund",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleCloseReconciliation = () => {
-    setShowReconciliationReport(false);
-    navigateToDashboard();
-  };
+  // Use shift handlers
+  const {
+    handleSubmitEndShift,
+    handleCloseReconciliation
+  } = useShiftHandlers({
+    currentShift,
+    endShift,
+    endShiftCashAmount,
+    setCompletedShift,
+    setShowEndShiftForm,
+    setShowReconciliationReport,
+    setEndShiftCashAmount,
+    navigateToDashboard
+  });
 
-  if (showPaymentOptions) {
+  // Mount event listener for end shift
+  React.useEffect(() => {
+    const screenManager = document.getElementById('pos-screen-manager');
+    if (screenManager) {
+      const onEndShift = () => handleEndShift();
+      screenManager.addEventListener('endshift', onEndShift);
+      return () => screenManager.removeEventListener('endshift', onEndShift);
+    }
+  }, [cart, currentShift]);
+
+  // Render special screens (payment options, refund, profit plus)
+  if (showPaymentOptions || showRefundScreen || showProfitPlusScreen) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg border border-gray-700">
-          <PaymentOptions 
-            onSelectPaymentMethod={handleSelectPaymentMethod}
-            onCancel={() => setShowPaymentOptions(false)}
-          />
-        </div>
-      </div>
-    );
-  }
-  
-  if (showCardPayment) {
-    return (
-      <CardPaymentScreen
-        total={calculateTotal()}
-        onProcessPayment={handleNonCashPayment}
-        onCancel={() => setShowCardPayment(false)}
+      <SpecialScreens
+        showPaymentOptions={showPaymentOptions}
+        showRefundScreen={showRefundScreen}
+        showProfitPlusScreen={showProfitPlusScreen}
+        handleSelectPaymentMethod={handleSelectPaymentMethod}
+        handleProcessRefund={handleProcessRefund}
+        setShowPaymentOptions={setShowPaymentOptions}
+        setShowRefundScreen={setShowRefundScreen}
+        setShowProfitPlusScreen={setShowProfitPlusScreen}
       />
     );
   }
   
-  if (showShop2Shop) {
+  // Render payment screens
+  if (showPaymentForm || showCardPayment || showShop2Shop || 
+      showAccountPayment || showSplitPayment) {
     return (
-      <Shop2ShopScreen
-        total={calculateTotal()}
-        onProcessPayment={handleNonCashPayment}
-        onCancel={() => setShowShop2Shop(false)}
-      />
-    );
-  }
-
-  if (showAccountPayment) {
-    return (
-      <AccountPaymentScreen
-        total={calculateTotal()}
-        onProcessPayment={handleAccountPayment}
-        onCancel={() => setShowAccountPayment(false)}
+      <PaymentScreens
+        showPaymentForm={showPaymentForm}
+        showCardPayment={showCardPayment}
+        showShop2Shop={showShop2Shop}
+        showAccountPayment={showAccountPayment}
+        showSplitPayment={showSplitPayment}
+        calculateTotal={calculateTotal}
         customerInfo={customerInfo}
-      />
-    );
-  }
-
-  if (showSplitPayment) {
-    return (
-      <SplitPaymentScreen
-        total={calculateTotal()}
-        onProcessSplitPayment={handleSplitPayment}
-        onCancel={() => setShowSplitPayment(false)}
-        customerInfo={customerInfo}
-      />
-    );
-  }
-
-  if (showRefundScreen) {
-    return (
-      <RefundScreen
-        onProcessRefund={handleProcessRefund}
-        onCancel={() => setShowRefundScreen(false)}
+        handlePaymentComplete={handlePaymentComplete}
+        handleNonCashPayment={handleNonCashPayment}
+        handleAccountPayment={handleAccountPayment}
+        handleSplitPayment={handleSplitPayment}
+        setShowPaymentForm={setShowPaymentForm}
+        setShowCardPayment={setShowCardPayment}
+        setShowShop2Shop={setShowShop2Shop}
+        setShowAccountPayment={setShowAccountPayment}
+        setShowSplitPayment={setShowSplitPayment}
       />
     );
   }
   
-  if (showPaymentForm) {
+  // Render end shift screens
+  if (showEndShiftForm || (showReconciliationReport && completedShift)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-          <PaymentForm 
-            total={calculateTotal()}
-            onProcessPayment={handlePaymentComplete}
-            onCancel={() => setShowPaymentForm(false)}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (showEndShiftForm) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <EndShiftForm
-          onSubmit={handleSubmitEndShift}
-          onCancel={() => setShowEndShiftForm(false)}
-          expectedAmount={endShiftCashAmount}
-        />
-      </div>
-    );
-  }
-  
-  if (showReconciliationReport && completedShift) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <ReconciliationReport 
-          shift={completedShift}
-          totalSales={completedShift.salesTotal || 0}
-          grossProfit={completedShift.salesTotal ? completedShift.salesTotal * 0.25 : 0} // Assuming 25% profit margin
-          paymentBreakdown={getShiftPaymentBreakdown(completedShift.id)}
-          lowStockProducts={getLowStockProducts(5)}
-          refundBreakdown={getShiftRefundBreakdown(completedShift.id)}
-          cashExpected={calculateExpectedCashInDrawer(completedShift.id)}
-          cashActual={endShiftCashAmount}
-          onClose={handleCloseReconciliation}
-        />
-      </div>
-    );
-  }
-  
-  if (showProfitPlusScreen) {
-    return (
-      <ProfitPlusScreen 
-        onCancel={() => setShowProfitPlusScreen(false)}
+      <EndShiftScreens
+        showEndShiftForm={showEndShiftForm}
+        showReconciliationReport={showReconciliationReport}
+        completedShift={completedShift}
+        endShiftCashAmount={endShiftCashAmount}
+        handleSubmitEndShift={handleSubmitEndShift}
+        setShowEndShiftForm={setShowEndShiftForm}
+        getShiftPaymentBreakdown={getShiftPaymentBreakdown}
+        getShiftRefundBreakdown={getShiftRefundBreakdown}
+        getLowStockProducts={getLowStockProducts}
+        calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
+        handleCloseReconciliation={handleCloseReconciliation}
       />
     );
   }
   
+  // No screens to show
   return null;
 };
 
