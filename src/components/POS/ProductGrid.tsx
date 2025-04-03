@@ -16,8 +16,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   onAddToCart,
   cartExpanded
 }) => {
-  const handleProductClick = (product: Product) => {
-    onAddToCart(product, 1, product.price);
+  const handleProductClick = (product: Product, customPrice?: number) => {
+    // Pass the custom price if provided, otherwise use the product's default price
+    onAddToCart(product, 1, customPrice);
   };
 
   return (

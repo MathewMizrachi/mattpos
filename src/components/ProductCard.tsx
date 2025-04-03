@@ -12,7 +12,7 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: Product, customPrice?: number) => void;
   isMobile?: boolean;
 }
 
@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
         ...product,
         price: customPrice !== null ? customPrice : product.price
       };
-      onAddToCart(productToAdd);
+      onAddToCart(productToAdd, customPrice !== null ? customPrice : undefined);
     } else {
       // Start listening for price input
       setIsListeningForPrice(true);
@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
           if (!isNaN(newPrice) && newPrice > 0) {
             const productToAdd = { ...product, price: newPrice };
             setCustomPrice(newPrice);
-            onAddToCart(productToAdd);
+            onAddToCart(productToAdd, newPrice);
             setIsListeningForPrice(false);
           }
         } else {

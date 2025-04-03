@@ -37,13 +37,13 @@ const CartPanel: React.FC<CartPanelProps> = ({
               </div>
             ) : (
               <div className="space-y-2">
-                {cartExpanded && cart.map((item, index) => (
+                {cartExpanded && cart.map((item) => (
                   <CartItem 
-                    key={`${item.product.id}-${item.product.price}-${index}`}
+                    key={`${item.product.id}-${item.product.price}`}
                     product={item.product}
                     quantity={item.quantity}
-                    onUpdateQuantity={(id, qty) => onUpdateQuantity(id, qty, item.product.price)}
-                    onRemove={(id) => onRemove(id, item.product.price)}
+                    onUpdateQuantity={onUpdateQuantity}
+                    onRemove={onRemove}
                   />
                 ))}
                 {!cartExpanded && (
@@ -74,13 +74,13 @@ const CartPanel: React.FC<CartPanelProps> = ({
             </div>
           ) : (
             <div className="space-y-2">
-              {cart.map((item, index) => (
+              {cart.map((item) => (
                 <CartItem 
-                  key={`${item.product.id}-${item.product.price}-${index}`}
+                  key={`${item.product.id}-${item.product.price}`}
                   product={item.product}
                   quantity={item.quantity}
-                  onUpdateQuantity={(id, qty) => onUpdateQuantity(id, qty, item.product.price)}
-                  onRemove={(id) => onRemove(id, item.product.price)}
+                  onUpdateQuantity={onUpdateQuantity}
+                  onRemove={onRemove}
                 />
               ))}
             </div>

@@ -56,8 +56,8 @@ interface AppContextType {
   endShift: () => Shift | null;
   
   addToCart: (product: Product, quantity?: number) => void;
-  updateCartItem: (productId: number, quantity: number) => void;
-  removeFromCart: (productId: number) => void;
+  updateCartItem: (productId: number, quantity: number, price?: number) => void;
+  removeFromCart: (productId: number, price?: number) => void;
   clearCart: () => void;
   
   processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => {
@@ -118,39 +118,52 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const addToCart = (product: Product, quantity = 1) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(item => 
-        item.product.id === product.id && item.product.price === product.price
-      );
+      const existingProductItems = prevCart.filter(item => item.product.id === product.id);
       
-      if (existingItem) {
-        return prevCart.map(item => 
-          (item.product.id === product.id && item.product.price === product.price)
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+      if (existingProductItems.length > 0) {
+        if (existingProductItems.some(item => item.product.price !== product.price)) {
+          const totalQuantity = existingProductItems.reduce((sum, item) => sum + item.quantity, 0);
+          const cartWithoutProduct = prevCart.filter(item => item.product.id !== product.id);
+          return [...cartWithoutProduct, { 
+            product, 
+            quantity: totalQuantity + quantity 
+          }];
+        } else {
+          return prevCart.map(item => 
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+        }
       } else {
         return [...prevCart, { product, quantity }];
       }
     });
   };
 
-  const updateCartItem = (productId: number, quantity: number) => {
+  const updateCartItem = (productId: number, quantity: number, price?: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, price);
       return;
     }
     
     setCart(prevCart => 
       prevCart.map(item => 
-        item.product.id === productId 
+        (item.product.id === productId && 
+        (price === undefined || item.product.price === price))
           ? { ...item, quantity }
           : item
       )
     );
   };
 
-  const removeFromCart = (productId: number) => {
-    setCart(prevCart => prevCart.filter(item => item.product.id !== productId));
+  const removeFromCart = (productId: number, price?: number) => {
+    setCart(prevCart => 
+      prevCart.filter(item => 
+        !(item.product.id === productId &&
+        (price === undefined || item.product.price === price))
+      )
+    );
   };
 
   const clearCart = () => {
