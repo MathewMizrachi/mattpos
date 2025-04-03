@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { formatCurrency } from '@/lib/utils';
+import { ArrowLeft, Check } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { Users } from 'lucide-react';
 
 interface AccountPaymentScreenProps {
   total: number;
-  onProcessPayment: (customerName: string, customerPhone: string, customerIdNumber: string, paymentTermDays: number) => void;
+  onProcessPayment: (customerName: string, customerPhone: string, idNumber?: string, paymentTermDays?: number) => void;
   onCancel: () => void;
-  customerInfo?: { name: string; phone: string; idNumber?: string };
+  customerInfo?: { name: string; phone: string };
 }
 
 const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
@@ -22,32 +22,45 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
 }) => {
   const [customerName, setCustomerName] = useState(customerInfo?.name || '');
   const [customerPhone, setCustomerPhone] = useState(customerInfo?.phone || '');
-  const [customerIdNumber, setCustomerIdNumber] = useState(customerInfo?.idNumber || '');
-  const [paymentTermDays, setPaymentTermDays] = useState(30); // Default to 30 days
-
-  const handlePayment = () => {
-    if (!customerName.trim() || !customerPhone.trim() || !customerIdNumber.trim()) {
+  const [idNumber, setIdNumber] = useState('');
+  const [paymentTermDays, setPaymentTermDays] = useState('30');
+  
+  const handleProcessPayment = () => {
+    if (!customerName) {
       toast({
-        title: "Missing information",
-        description: "Customer name, phone number, and ID/Passport number are required",
+        title: "Customer name required",
+        description: "Please enter customer name",
         variant: "destructive"
       });
       return;
     }
-
-    // Process account payment
-    onProcessPayment(customerName, customerPhone, customerIdNumber, paymentTermDays);
+    
+    if (!customerPhone) {
+      toast({
+        title: "Phone number required",
+        description: "Please enter customer phone number",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Call parent's onProcessPayment with customer details
+    onProcessPayment(
+      customerName, 
+      customerPhone,
+      idNumber || undefined,
+      parseInt(paymentTermDays) || 30
+    );
   };
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-2">
       <div className="w-full max-w-md mx-auto text-white">
         <div className="text-center mb-6">
-          <div className="flex justify-center mb-4">
-            <Users className="h-20 w-20 text-[#FAA225]" />
-          </div>
           <h2 className="text-3xl font-bold">Account Payment</h2>
-          <p className="text-5xl mt-2 font-extrabold">{formatCurrency(total)}</p>
+          <p className="text-xl mt-2">
+            Total: <span className="font-bold">{formatCurrency(total)}</span>
+          </p>
         </div>
         
         <div className="space-y-4 mb-6">
@@ -72,45 +85,48 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
-
+          
           <div>
-            <Label htmlFor="customerIdNumber" className="text-white mb-1 block">ID/Passport Number</Label>
+            <Label htmlFor="idNumber" className="text-white mb-1 block">ID/Passport Number</Label>
             <Input 
-              id="customerIdNumber" 
-              value={customerIdNumber} 
-              onChange={(e) => setCustomerIdNumber(e.target.value)} 
-              placeholder="Enter ID or passport number"
+              id="idNumber" 
+              value={idNumber} 
+              onChange={(e) => setIdNumber(e.target.value)} 
+              placeholder="Enter ID or passport number (optional)"
               className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
           
           <div>
-            <Label htmlFor="paymentTermDays" className="text-white mb-1 block">Payment Term (Days)</Label>
+            <Label htmlFor="paymentTerm" className="text-white mb-1 block">Payment Term (days)</Label>
             <Input 
-              id="paymentTermDays" 
+              id="paymentTerm" 
               type="number"
+              min="1"
+              max="365"
               value={paymentTermDays} 
-              onChange={(e) => setPaymentTermDays(parseInt(e.target.value))} 
-              placeholder="Number of days"
-              min={1}
+              onChange={(e) => setPaymentTermDays(e.target.value)} 
               className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
         </div>
         
-        <div className="flex justify-center space-x-4">
+        <div className="flex justify-between space-x-4">
           <Button 
             onClick={onCancel} 
             variant="outline"
-            className="bg-transparent text-white border-gray-600 hover:bg-gray-700"
+            className="flex-1 bg-transparent text-white border-gray-600 hover:bg-gray-700"
           >
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Cancel
           </Button>
+          
           <Button 
-            onClick={handlePayment} 
-            className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
+            onClick={handleProcessPayment} 
+            className="flex-1 bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
           >
-            Complete
+            <Check className="h-4 w-4 mr-2" />
+            Confirm
           </Button>
         </div>
       </div>
