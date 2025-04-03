@@ -14,7 +14,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
   
   return (
     <div 
-      className="fixed bottom-32 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
+      className="fixed bottom-24 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
       style={{ 
         backgroundColor: '#0A2645',
         height: isMobile ? '3rem' : '3.5rem'
@@ -32,7 +32,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
           <img 
             src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
             alt="ProfitPlus" 
-            className="h-full w-full object-contain"
+            className="h-8 w-8 md:h-10 md:w-10 object-contain"
           />
         }
         variant="icon"
@@ -79,4 +79,3 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 };
 
 export default ActionStrip;
-
