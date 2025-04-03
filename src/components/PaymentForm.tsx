@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 
 interface PaymentFormProps {
   total: number;
@@ -104,6 +105,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               className="text-white border-white hover:bg-white/20" 
               onClick={onCancel}
             >
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Cancel
             </Button>
             <Button 
