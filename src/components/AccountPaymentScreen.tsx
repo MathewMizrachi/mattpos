@@ -71,7 +71,7 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               value={customerName} 
               onChange={(e) => setCustomerName(e.target.value)} 
               placeholder="Enter customer name"
-              className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
           
@@ -82,7 +82,7 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               value={customerPhone} 
               onChange={(e) => setCustomerPhone(e.target.value)} 
               placeholder="Enter phone number"
-              className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
           
@@ -93,7 +93,7 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               value={idNumber} 
               onChange={(e) => setIdNumber(e.target.value)} 
               placeholder="Enter ID or passport number (optional)"
-              className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
           
@@ -106,7 +106,7 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               max="365"
               value={paymentTermDays} 
               onChange={(e) => setPaymentTermDays(e.target.value)} 
-              className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
         </div>

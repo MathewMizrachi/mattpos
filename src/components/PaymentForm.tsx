@@ -1,22 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import PaymentSummary from './PaymentForm/PaymentSummary';
-import QuickAmountButtons from './PaymentForm/QuickAmountButtons';
-import PaymentActions from './PaymentForm/PaymentActions';
+import { formatCurrency } from '@/lib/utils';
 
 interface PaymentFormProps {
   total: number;
   onProcessPayment: (cashReceived: number) => void;
   onCancel: () => void;
-  fullScreen?: boolean;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ 
   total, 
   onProcessPayment, 
-  onCancel,
-  fullScreen = false
+  onCancel 
 }) => {
   const [cashReceived, setCashReceived] = useState<string>('');
   const [change, setChange] = useState<number>(0);
@@ -34,6 +31,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     }
   };
   
+  const generateQuickAmounts = () => {
+    const amounts = [50, 100, 200, 500];
+    return amounts.filter(amount => amount >= total);
+  };
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
@@ -41,7 +43,19 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           <h2 className="text-2xl font-bold text-white">Payment</h2>
         </div>
         
-        <PaymentSummary total={total} change={change} />
+        <div className="bg-white/10 p-4 rounded-md mb-6 text-white">
+          <div className="flex justify-between mb-2">
+            <span>Total Amount:</span>
+            <span className="font-bold text-lg">{formatCurrency(total)}</span>
+          </div>
+          
+          <div className="flex justify-between">
+            <span>Change:</span>
+            <span className={`font-bold text-lg ${change > 0 ? 'text-green-400' : 'text-white'}`}>
+              {formatCurrency(change)}
+            </span>
+          </div>
+        </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -61,15 +75,45 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             />
           </div>
           
-          <QuickAmountButtons 
-            total={total} 
-            onSelectAmount={(amount) => setCashReceived(amount)} 
-          />
+          <div className="grid grid-cols-2 gap-2">
+            {generateQuickAmounts().map((amount) => (
+              <Button
+                key={amount}
+                type="button"
+                variant="outline"
+                className="text-white border-white hover:bg-white/20"
+                onClick={() => setCashReceived(amount.toString())}
+              >
+                {formatCurrency(amount)}
+              </Button>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="col-span-2 text-white border-white hover:bg-white/20"
+              onClick={() => setCashReceived(total.toString())}
+            >
+              Exact Amount ({formatCurrency(total)})
+            </Button>
+          </div>
           
-          <PaymentActions 
-            onCancel={onCancel} 
-            isSubmitDisabled={parseFloat(cashReceived) < total} 
-          />
+          <div className="flex justify-end space-x-4 pt-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="text-white border-white hover:bg-white/20" 
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
+              disabled={parseFloat(cashReceived) < total}
+            >
+              Complete Sale
+            </Button>
+          </div>
         </form>
       </div>
     </div>
