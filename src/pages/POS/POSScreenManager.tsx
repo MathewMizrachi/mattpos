@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -300,8 +299,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     return (
       <AccountPaymentScreen
         total={calculateTotal()}
-        customerName={customerInfo.name}
-        customerPhone={customerInfo.phone}
         onProcessPayment={handleProcessAccountPayment}
         onCancel={onCloseAccountPayment}
       />

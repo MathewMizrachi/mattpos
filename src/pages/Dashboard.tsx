@@ -16,6 +16,7 @@ import {
 const Dashboard = () => {
   const { currentUser, currentShift, getLastShiftEndFloat, startShift } = useApp();
   const [showFloatForm, setShowFloatForm] = useState(false);
+  const [lastShift, setLastShift] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,18 @@ const Dashboard = () => {
     if (currentShift) {
       navigate('/pos');
     }
+    
+    // Mock last shift data for display
+    setLastShift({
+      id: 123,
+      userId: currentUser?.id || 1,
+      startTime: new Date(new Date().setDate(new Date().getDate() - 1)),
+      endTime: new Date(),
+      startFloat: 500,
+      endFloat: 1200,
+      salesTotal: 2500,
+      transactionCount: 35
+    });
   }, [currentUser, currentShift, navigate]);
 
   const handleStartPOS = () => {
@@ -48,7 +61,6 @@ const Dashboard = () => {
         <FloatForm
           onSubmit={handleFloatSubmit}
           onCancel={() => setShowFloatForm(false)}
-          lastEndFloat={getLastShiftEndFloat()}
         />
       </div>
     );
@@ -147,7 +159,12 @@ const Dashboard = () => {
 
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-semibold mb-4">Last Shift Summary</h2>
-          <ShiftSummary />
+          {lastShift && (
+            <ShiftSummary 
+              shift={lastShift}
+              onClose={() => {}}
+            />
+          )}
         </div>
       </main>
     </div>
