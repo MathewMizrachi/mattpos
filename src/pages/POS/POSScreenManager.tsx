@@ -1,13 +1,14 @@
 
 import React from 'react';
-import { useToast } from '@/hooks/use-toast';
 import { Product, SplitPaymentDetails } from '@/types';
 import { usePOSScreenState } from './hooks/usePOSScreenState';
 import { usePaymentHandlers } from './services/paymentHandlers';
 import { useShiftHandlers } from './services/shiftHandlers';
+import { useScreenEvents } from './hooks/useScreenEvents';
 import { PaymentScreens } from './components/PaymentScreens';
 import { EndShiftScreens } from './components/EndShiftScreens';
 import { SpecialScreens } from './components/SpecialScreens';
+import WithdrawalScreen from './components/WithdrawalScreen';
 
 interface POSScreenManagerProps {
   cart: any[];
@@ -53,85 +54,56 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   setShowWithdrawalScreen,
 }) => {
   // Use screen state hook
-  const {
-    showPaymentForm,
-    setShowPaymentForm,
-    showCardPayment,
-    setShowCardPayment,
-    showShop2Shop,
-    setShowShop2Shop,
-    showAccountPayment,
-    setShowAccountPayment,
-    showSplitPayment,
-    setShowSplitPayment,
-    showEndShiftForm,
-    setShowEndShiftForm,
-    showReconciliationReport,
-    setShowReconciliationReport,
-    completedShift,
-    setCompletedShift,
-    paymentMethod,
-    setPaymentMethod,
-    customerInfo,
-    setCustomerInfo,
-    endShiftCashAmount,
-    setEndShiftCashAmount,
-    handleEndShift
-  } = usePOSScreenState({ 
+  const screenState = usePOSScreenState({ 
     cart, 
     currentShift, 
     calculateExpectedCashInDrawer 
   });
-
+  
   // Use payment handlers
-  const {
-    handleSelectPaymentMethod,
-    handleNonCashPayment,
-    handleAccountPayment,
-    handleSplitPayment,
-    handlePaymentComplete,
-    handleProcessRefund
-  } = usePaymentHandlers({
+  const paymentHandlers = usePaymentHandlers({
     calculateTotal,
     processPayment,
     processRefund,
-    setShowPaymentForm,
-    setShowCardPayment,
-    setShowShop2Shop,
-    setShowAccountPayment,
-    setShowSplitPayment,
+    setShowPaymentForm: screenState.setShowPaymentForm,
+    setShowCardPayment: screenState.setShowCardPayment,
+    setShowShop2Shop: screenState.setShowShop2Shop,
+    setShowAccountPayment: screenState.setShowAccountPayment,
+    setShowSplitPayment: screenState.setShowSplitPayment,
     setShowRefundScreen,
     setShowPaymentOptions,
-    paymentMethod,
-    customerInfo,
-    setPaymentMethod,
-    setCustomerInfo
+    paymentMethod: screenState.paymentMethod,
+    customerInfo: screenState.customerInfo,
+    setPaymentMethod: screenState.setPaymentMethod,
+    setCustomerInfo: screenState.setCustomerInfo
   });
 
   // Use shift handlers
-  const {
-    handleSubmitEndShift,
-    handleCloseReconciliation
-  } = useShiftHandlers({
+  const shiftHandlers = useShiftHandlers({
     currentShift,
     endShift,
-    endShiftCashAmount,
-    setCompletedShift,
-    setShowEndShiftForm,
-    setShowReconciliationReport,
-    setEndShiftCashAmount,
+    endShiftCashAmount: screenState.endShiftCashAmount,
+    setCompletedShift: screenState.setCompletedShift,
+    setShowEndShiftForm: screenState.setShowEndShiftForm,
+    setShowReconciliationReport: screenState.setShowReconciliationReport,
+    setEndShiftCashAmount: screenState.setEndShiftCashAmount,
     navigateToDashboard
   });
 
   // Mount event listener for end shift
-  React.useEffect(() => {
-    const screenManager = document.getElementById('pos-screen-manager');
-    if (screenManager) {
-      const onEndShift = () => handleEndShift();
-      screenManager.addEventListener('endshift', onEndShift);
-      return () => screenManager.removeEventListener('endshift', onEndShift);
-    }
-  }, [cart, currentShift]);
+  useScreenEvents({
+    cart,
+    handleEndShift: screenState.handleEndShift
+  });
+
+  // Render withdrawal screen
+  if (showWithdrawalScreen) {
+    return (
+      <WithdrawalScreen 
+        onCancel={() => setShowWithdrawalScreen(false)}
+      />
+    );
+  }
 
   // Render special screens (payment options, refund, profit plus)
   if (showPaymentOptions || showRefundScreen || showProfitPlusScreen) {
@@ -140,8 +112,8 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         showPaymentOptions={showPaymentOptions}
         showRefundScreen={showRefundScreen}
         showProfitPlusScreen={showProfitPlusScreen}
-        handleSelectPaymentMethod={handleSelectPaymentMethod}
-        handleProcessRefund={handleProcessRefund}
+        handleSelectPaymentMethod={paymentHandlers.handleSelectPaymentMethod}
+        handleProcessRefund={paymentHandlers.handleProcessRefund}
         setShowPaymentOptions={setShowPaymentOptions}
         setShowRefundScreen={setShowRefundScreen}
         setShowProfitPlusScreen={setShowProfitPlusScreen}
@@ -150,45 +122,45 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   }
   
   // Render payment screens
-  if (showPaymentForm || showCardPayment || showShop2Shop || 
-      showAccountPayment || showSplitPayment) {
+  if (screenState.showPaymentForm || screenState.showCardPayment || screenState.showShop2Shop || 
+      screenState.showAccountPayment || screenState.showSplitPayment) {
     return (
       <PaymentScreens
-        showPaymentForm={showPaymentForm}
-        showCardPayment={showCardPayment}
-        showShop2Shop={showShop2Shop}
-        showAccountPayment={showAccountPayment}
-        showSplitPayment={showSplitPayment}
+        showPaymentForm={screenState.showPaymentForm}
+        showCardPayment={screenState.showCardPayment}
+        showShop2Shop={screenState.showShop2Shop}
+        showAccountPayment={screenState.showAccountPayment}
+        showSplitPayment={screenState.showSplitPayment}
         calculateTotal={calculateTotal}
-        customerInfo={customerInfo}
-        handlePaymentComplete={handlePaymentComplete}
-        handleNonCashPayment={handleNonCashPayment}
-        handleAccountPayment={handleAccountPayment}
-        handleSplitPayment={handleSplitPayment}
-        setShowPaymentForm={setShowPaymentForm}
-        setShowCardPayment={setShowCardPayment}
-        setShowShop2Shop={setShowShop2Shop}
-        setShowAccountPayment={setShowAccountPayment}
-        setShowSplitPayment={setShowSplitPayment}
+        customerInfo={screenState.customerInfo}
+        handlePaymentComplete={paymentHandlers.handlePaymentComplete}
+        handleNonCashPayment={paymentHandlers.handleNonCashPayment}
+        handleAccountPayment={paymentHandlers.handleAccountPayment}
+        handleSplitPayment={paymentHandlers.handleSplitPayment}
+        setShowPaymentForm={screenState.setShowPaymentForm}
+        setShowCardPayment={screenState.setShowCardPayment}
+        setShowShop2Shop={screenState.setShowShop2Shop}
+        setShowAccountPayment={screenState.setShowAccountPayment}
+        setShowSplitPayment={screenState.setShowSplitPayment}
       />
     );
   }
   
   // Render end shift screens
-  if (showEndShiftForm || (showReconciliationReport && completedShift)) {
+  if (screenState.showEndShiftForm || (screenState.showReconciliationReport && screenState.completedShift)) {
     return (
       <EndShiftScreens
-        showEndShiftForm={showEndShiftForm}
-        showReconciliationReport={showReconciliationReport}
-        completedShift={completedShift}
-        endShiftCashAmount={endShiftCashAmount}
-        handleSubmitEndShift={handleSubmitEndShift}
-        setShowEndShiftForm={setShowEndShiftForm}
+        showEndShiftForm={screenState.showEndShiftForm}
+        showReconciliationReport={screenState.showReconciliationReport}
+        completedShift={screenState.completedShift}
+        endShiftCashAmount={screenState.endShiftCashAmount}
+        handleSubmitEndShift={shiftHandlers.handleSubmitEndShift}
+        setShowEndShiftForm={screenState.setShowEndShiftForm}
         getShiftPaymentBreakdown={getShiftPaymentBreakdown}
         getShiftRefundBreakdown={getShiftRefundBreakdown}
         getLowStockProducts={getLowStockProducts}
         calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
-        handleCloseReconciliation={handleCloseReconciliation}
+        handleCloseReconciliation={shiftHandlers.handleCloseReconciliation}
       />
     );
   }
