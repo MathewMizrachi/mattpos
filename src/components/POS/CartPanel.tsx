@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCartIcon } from 'lucide-react';
+import { ShoppingCartIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CartItem from '@/components/CartItem';
 import { CartItem as CartItemType } from '@/types';
@@ -56,6 +56,20 @@ const CartPanel: React.FC<CartPanelProps> = ({
             )}
           </div>
         </ScrollArea>
+        
+        {cartExpanded && (
+          <div className="p-2 border-t flex justify-center">
+            <button 
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCartExpand();
+              }}
+            >
+              <ChevronsRightIcon className="h-5 w-5" />
+            </button>
+          </div>
+        )}
       </div>
     );
   }
