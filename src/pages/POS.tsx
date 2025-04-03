@@ -1,13 +1,12 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { Product, SplitPaymentDetails } from '@/types';
 import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
+import { usePaymentStates } from './POS/usePaymentStates';
+import { usePaymentHandlers } from './POS/usePaymentHandlers';
 import PaymentOptions from '@/components/PaymentOptions';
-import { useToast } from '@/hooks/use-toast';
 
 const POS = () => {
   const { 
@@ -30,7 +29,6 @@ const POS = () => {
   } = useApp();
   
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   const {
     searchTerm,
@@ -40,16 +38,39 @@ const POS = () => {
     calculateTotal,
   } = usePOSState({ cart });
 
-  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showCardPayment, setShowCardPayment] = useState(false);
-  const [showShop2ShopScreen, setShowShop2ShopScreen] = useState(false);
-  const [showRefundScreen, setShowRefundScreen] = useState(false);
-  const [showProfitPlusScreen, setShowProfitPlusScreen] = useState(false);
-  const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
-  const [showSplitPayment, setShowSplitPayment] = useState(false);
-  const [showAccountPayment, setShowAccountPayment] = useState(false);
-  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
+  const paymentStates = usePaymentStates();
+  
+  const processWithdrawal = (amount: number, reason: string): boolean => {
+    if (!currentShift) {
+      toast({
+        title: "Error",
+        description: "No active shift to withdraw from",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    toast({
+      title: "Withdrawal successful",
+      description: `${amount.toFixed(2)} withdrawn from register for: ${reason}`,
+    });
+    return true;
+  };
+
+  const navigateToDashboard = () => {
+    navigate('/dashboard');
+  };
+  
+  const paymentHandlers = usePaymentHandlers({
+    paymentStates,
+    currentShift,
+    cart,
+    calculateTotal,
+    processPayment,
+    processRefund,
+    processWithdrawal,
+    endShift
+  });
   
   useEffect(() => {
     if (!currentUser) {
@@ -63,93 +84,26 @@ const POS = () => {
     }
   }, [currentShift, navigate]);
   
-  const handleAddToCart = (product: Product, quantity: number, customPrice?: number) => {
+  const handleAddToCart = (product: any, quantity: number, customPrice?: number) => {
     if (customPrice !== undefined && customPrice !== product.price) {
       addToCart(product, quantity, customPrice);
     } else {
       addToCart(product, quantity);
     }
   };
-
-  const handleEndShift = () => {
-    if (showPaymentOptions || showPaymentForm || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
-      return;
-    }
-    
-    const screenManager = document.getElementById('pos-screen-manager');
-    if (screenManager) {
-      const endShiftEvent = new CustomEvent('endshift');
-      screenManager.dispatchEvent(endShiftEvent);
-    }
-  };
-
-  const processWithdrawal = (amount: number, reason: string): boolean => {
-    if (!currentShift) {
-      toast({
-        title: "Error",
-        description: "No active shift to withdraw from",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    // In a real app, you would call the backend to record the withdrawal
-    // For this demo, we'll just show a success message
-    
-    toast({
-      title: "Withdrawal successful",
-      description: `${amount.toFixed(2)} withdrawn from register for: ${reason}`,
-    });
-    return true;
-  };
-
-  const navigateToDashboard = () => {
-    navigate('/dashboard');
-  };
   
-  const handleSelectPaymentMethod = (
-    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
-    customerInfo?: { name: string; phone: string }
-  ) => {
-    setShowPaymentOptions(false);
-    setCustomerInfo(customerInfo);
-    
-    switch (method) {
-      case 'cash':
-        setShowPaymentForm(true);
-        break;
-      case 'card':
-        setShowCardPayment(true);
-        break;
-      case 'shop2shop':
-        setShowShop2ShopScreen(true);
-        break;
-      case 'account':
-        setShowAccountPayment(true);
-        break;
-      case 'split':
-        setShowSplitPayment(true);
-        break;
-    }
-  };
-  
-  const handleShowPaymentForm = () => {
-    setShowPaymentOptions(true);
-  };
-  
-  if (showPaymentOptions) {
+  if (paymentStates.showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
         <PaymentOptions 
-          onSelectPaymentMethod={handleSelectPaymentMethod}
-          onCancel={() => setShowPaymentOptions(false)}
+          onSelectPaymentMethod={paymentHandlers.handleSelectPaymentMethod}
+          onCancel={() => paymentStates.setShowPaymentOptions(false)}
         />
       </div>
     );
   }
   
-  if (showPaymentForm || showCardPayment || showShop2ShopScreen || showRefundScreen || 
-      showProfitPlusScreen || showWithdrawalScreen || showSplitPayment || showAccountPayment) {
+  if (paymentStates.isAnyScreenActive()) {
     return (
       <div id="pos-screen-manager">
         <POSScreenManager
@@ -165,55 +119,53 @@ const POS = () => {
           getLowStockProducts={getLowStockProducts}
           calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
           navigateToDashboard={navigateToDashboard}
-          showPaymentForm={showPaymentForm}
-          showCardPayment={showCardPayment}
-          showShop2ShopScreen={showShop2ShopScreen}
-          showRefundScreen={showRefundScreen}
-          showProfitPlusScreen={showProfitPlusScreen}
-          showWithdrawalScreen={showWithdrawalScreen}
-          showSplitPayment={showSplitPayment}
-          showAccountPayment={showAccountPayment}
-          customerInfo={customerInfo}
-          onClosePaymentForm={() => setShowPaymentForm(false)}
-          onCloseCardPayment={() => setShowCardPayment(false)}
-          onCloseShop2ShopScreen={() => setShowShop2ShopScreen(false)}
-          onCloseRefundScreen={() => setShowRefundScreen(false)}
-          onCloseProfitPlusScreen={() => setShowProfitPlusScreen(false)}
-          onCloseWithdrawalScreen={() => setShowWithdrawalScreen(false)}
-          onCloseSplitPayment={() => setShowSplitPayment(false)}
-          onCloseAccountPayment={() => setShowAccountPayment(false)}
+          showPaymentForm={paymentStates.showPaymentForm}
+          showCardPayment={paymentStates.showCardPayment}
+          showShop2ShopScreen={paymentStates.showShop2ShopScreen}
+          showRefundScreen={paymentStates.showRefundScreen}
+          showProfitPlusScreen={paymentStates.showProfitPlusScreen}
+          showWithdrawalScreen={paymentStates.showWithdrawalScreen}
+          showSplitPayment={paymentStates.showSplitPayment}
+          showAccountPayment={paymentStates.showAccountPayment}
+          customerInfo={paymentStates.customerInfo}
+          onClosePaymentForm={() => paymentStates.setShowPaymentForm(false)}
+          onCloseCardPayment={() => paymentStates.setShowCardPayment(false)}
+          onCloseShop2ShopScreen={() => paymentStates.setShowShop2ShopScreen(false)}
+          onCloseRefundScreen={() => paymentStates.setShowRefundScreen(false)}
+          onCloseProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(false)}
+          onCloseWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(false)}
+          onCloseSplitPayment={() => paymentStates.setShowSplitPayment(false)}
+          onCloseAccountPayment={() => paymentStates.setShowAccountPayment(false)}
         />
       </div>
     );
   }
   
   return (
-    <>
-      <POSMain
-        currentUser={currentUser}
-        currentShift={currentShift}
-        products={products}
-        cart={cart}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onAddToCart={handleAddToCart}
-        onUpdateCartItem={updateCartItem}
-        onRemoveFromCart={removeFromCart}
-        onClearCart={clearCart}
-        cartExpanded={cartExpanded}
-        toggleCartExpand={toggleCartExpand}
-        calculateTotal={calculateTotal}
-        onEndShift={handleEndShift}
-        onLogout={logout}
-        onShowPaymentForm={handleShowPaymentForm}
-        onShowRefundScreen={() => setShowRefundScreen(true)}
-        onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
-        onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
-        onCashPayment={() => setShowPaymentForm(true)}
-        onCardPayment={() => setShowCardPayment(true)}
-        onShop2ShopPayment={() => setShowShop2ShopScreen(true)}
-      />
-    </>
+    <POSMain
+      currentUser={currentUser}
+      currentShift={currentShift}
+      products={products}
+      cart={cart}
+      searchTerm={searchTerm}
+      onSearchChange={setSearchTerm}
+      onAddToCart={handleAddToCart}
+      onUpdateCartItem={updateCartItem}
+      onRemoveFromCart={removeFromCart}
+      onClearCart={clearCart}
+      cartExpanded={cartExpanded}
+      toggleCartExpand={toggleCartExpand}
+      calculateTotal={calculateTotal}
+      onEndShift={paymentHandlers.handleEndShift}
+      onLogout={logout}
+      onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
+      onShowRefundScreen={() => paymentStates.setShowRefundScreen(true)}
+      onShowProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(true)}
+      onShowWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(true)}
+      onCashPayment={() => paymentStates.setShowPaymentForm(true)}
+      onCardPayment={() => paymentStates.setShowCardPayment(true)}
+      onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
+    />
   );
 };
 
