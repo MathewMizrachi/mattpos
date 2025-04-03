@@ -23,7 +23,7 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
       ? 'fixed bottom-0 right-0 w-full px-6 py-2 flex flex-col items-center justify-center' 
       : 'fixed bottom-0 right-0 w-96 px-6 py-2'} 
       z-20`} 
-      style={{ backgroundColor: '#FAA225' }}
+      style={{ backgroundColor: '#FAA225', height: isMobile ? '4.5rem' : '5rem' }}
     >
       <div className="flex justify-between w-full mb-1">
         <span className="text-lg font-semibold">Total</span>

@@ -14,10 +14,10 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
   
   return (
     <div 
-      className={`fixed ${isMobile ? 'bottom-16 left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
+      className={`fixed ${isMobile ? 'bottom-[4.5rem]' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
       style={{ 
         backgroundColor: '#0A2645',
-        height: isMobile ? '3.5rem' : '4rem'
+        height: isMobile ? '3.5rem' : '5rem'
       }}
     >
       <Button 
