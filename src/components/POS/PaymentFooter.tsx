@@ -20,46 +20,45 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
 }) => {
   return (
     <div className={`${isMobile 
-      ? 'fixed bottom-0 right-0 w-full px-6 py-3 flex flex-col items-center justify-center' 
-      : 'fixed bottom-0 right-0 w-96 px-6 py-3'} 
+      ? 'fixed bottom-0 right-0 w-full px-6 py-4 flex items-center justify-between' 
+      : 'fixed bottom-0 right-0 w-96 px-6 py-4'} 
       z-20`} 
       style={{ backgroundColor: '#FAA225', height: isMobile ? '4.5rem' : '5rem' }}
     >
-      <div className="flex justify-between w-full mb-1.5">
-        <span className="text-lg font-semibold">Total</span>
-        <span className="text-2xl font-bold">{formatCurrency(total)}</span>
-      </div>
+      <span className="text-2xl font-bold">{formatCurrency(total)}</span>
       
-      <div className="flex space-x-4 w-full">
+      <div className="flex space-x-3">
         {cartLength > 0 && (
           <Button 
             variant="outline" 
-            className="flex-1 max-w-[48%]"
+            className="flex-1"
             onClick={onClearCart}
             style={{ 
               backgroundColor: 'white', 
               color: 'black', 
-              fontSize: '0.95rem', 
+              fontSize: '1rem', 
               fontWeight: 'bold',
               border: '2px solid #FAA225',
-              height: '2.75rem'
+              height: '2.75rem',
+              padding: '0 1rem'
             }}
           >
-            Clear Cart
+            Clear
           </Button>
         )}
         <Button 
-          className={`flex-1 max-w-[48%] ${cartLength > 0 ? '' : 'w-full'}`}
+          className="flex-1"
           size="lg"
           disabled={cartLength === 0}
           onClick={onShowPaymentForm}
           style={{ 
             height: '2.75rem',
-            fontSize: '0.95rem',
-            fontWeight: 'bold'
+            fontSize: '1rem',
+            fontWeight: 'bold',
+            padding: '0 1rem'
           }}
         >
-          Pay Now
+          Pay
         </Button>
       </div>
     </div>
