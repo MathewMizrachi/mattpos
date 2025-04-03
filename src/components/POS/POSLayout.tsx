@@ -46,7 +46,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
       
       {children}
       
-      <div className="fixed bottom-20 left-0 right-0 z-10">
+      <div className="fixed bottom-28 left-0 right-0 z-10">
         <ActionStrip 
           onRefund={onShowRefundScreen}
           onProfitPlus={onShowProfitPlusScreen}
