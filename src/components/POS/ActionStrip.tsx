@@ -24,29 +24,35 @@ const ActionStrip: React.FC<ActionStripProps> = ({
         height: isMobile ? '3.5rem' : '4.5rem' // Match PaymentFooter height on widescreen
       }}
     >
+      {/* First quarter - Refunds */}
       <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold flex-1"
+        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold"
+        style={{ width: '25%' }}
         onClick={onRefund}
       >
         refunds
       </Button>
       
+      {/* Second quarter - Withdrawal */}
       <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold flex-1"
+        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold"
+        style={{ width: '25%' }}
         onClick={onWithdrawal}
       >
         withdrawal
       </Button>
       
+      {/* Second half - ProfitPlus */}
       <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] h-full rounded-none flex items-center justify-center flex-1"
+        className="bg-[#0A2645] hover:bg-[#1c3a5d] h-full rounded-none flex items-center justify-center"
+        style={{ width: '50%' }}
         onClick={onProfitPlus}
       >
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-13 w-13 md:h-18 md:w-18 object-contain" 
-          style={{ transform: 'scale(2.5)' }} 
+          className="h-12 w-12 md:h-16 md:w-16 object-contain" 
+          style={{ transform: 'scale(1.25)' }} 
         />
       </Button>
     </div>
