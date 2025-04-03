@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ShoppingCartIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -6,8 +7,8 @@ import { CartItem as CartItemType } from '@/types';
 
 interface CartPanelProps {
   cart: CartItemType[];
-  onUpdateQuantity: (productId: number, quantity: number) => void;
-  onRemove: (productId: number) => void;
+  onUpdateQuantity: (productId: number, quantity: number, price?: number) => void;
+  onRemove: (productId: number, price?: number) => void;
   isMobile: boolean;
   cartExpanded: boolean;
   toggleCartExpand: () => void;
@@ -36,13 +37,13 @@ const CartPanel: React.FC<CartPanelProps> = ({
               </div>
             ) : (
               <div className="space-y-2">
-                {cartExpanded && cart.map(item => (
+                {cartExpanded && cart.map((item, index) => (
                   <CartItem 
-                    key={item.product.id}
+                    key={`${item.product.id}-${item.product.price}-${index}`}
                     product={item.product}
                     quantity={item.quantity}
-                    onUpdateQuantity={onUpdateQuantity}
-                    onRemove={onRemove}
+                    onUpdateQuantity={(id, qty) => onUpdateQuantity(id, qty, item.product.price)}
+                    onRemove={(id) => onRemove(id, item.product.price)}
                   />
                 ))}
                 {!cartExpanded && (
@@ -73,13 +74,13 @@ const CartPanel: React.FC<CartPanelProps> = ({
             </div>
           ) : (
             <div className="space-y-2">
-              {cart.map(item => (
+              {cart.map((item, index) => (
                 <CartItem 
-                  key={item.product.id}
+                  key={`${item.product.id}-${item.product.price}-${index}`}
                   product={item.product}
                   quantity={item.quantity}
-                  onUpdateQuantity={onUpdateQuantity}
-                  onRemove={onRemove}
+                  onUpdateQuantity={(id, qty) => onUpdateQuantity(id, qty, item.product.price)}
+                  onRemove={(id) => onRemove(id, item.product.price)}
                 />
               ))}
             </div>

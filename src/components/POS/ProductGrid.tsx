@@ -17,7 +17,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   cartExpanded
 }) => {
   const handleProductClick = (product: Product) => {
-    onAddToCart(product, 1);
+    onAddToCart(product, 1, product.price);
   };
 
   return (
@@ -28,7 +28,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         <ProductCard 
           key={product.id} 
           product={product} 
-          onAddToCart={() => handleProductClick(product)}
+          onAddToCart={handleProductClick}
           isMobile={isMobile}
         />
       ))}
