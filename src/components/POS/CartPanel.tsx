@@ -26,7 +26,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
     return (
       <div 
         className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/5'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
-        onClick={cartExpanded ? undefined : toggleCartExpand}
+        onClick={cartExpanded ? toggleCartExpand : undefined}
       >
         <ScrollArea className="flex-1">
           <div className="p-2">
