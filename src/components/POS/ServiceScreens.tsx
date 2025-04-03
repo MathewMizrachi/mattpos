@@ -1,0 +1,120 @@
+
+import React from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/utils';
+import { Product } from '@/types';
+import RefundScreen from '@/components/RefundScreen';
+import ProfitPlusScreen from '@/components/ProfitPlusScreen';
+import EndShiftForm from '@/components/EndShiftForm';
+import ReconciliationReport from '@/components/ReconciliationReport';
+
+interface ServiceScreensProps {
+  showRefundScreen: boolean;
+  showProfitPlusScreen: boolean;
+  showEndShiftForm: boolean;
+  showReconciliationReport: boolean;
+  currentShift: any;
+  completedShift: any;
+  endShiftCashAmount: number;
+  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
+  onCloseRefundScreen: () => void;
+  onCloseProfitPlusScreen: () => void;
+  setShowEndShiftForm: (show: boolean) => void;
+  handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
+  handleCloseReconciliation: () => void;
+  getShiftPaymentBreakdown: (shiftId: number) => any;
+  getShiftRefundBreakdown: (shiftId: number) => any;
+  getLowStockProducts: (limit: number) => any[];
+  calculateExpectedCashInDrawer: (shiftId: number) => number;
+}
+
+const ServiceScreens: React.FC<ServiceScreensProps> = ({
+  showRefundScreen,
+  showProfitPlusScreen,
+  showEndShiftForm,
+  showReconciliationReport,
+  currentShift,
+  completedShift,
+  endShiftCashAmount,
+  processRefund,
+  onCloseRefundScreen,
+  onCloseProfitPlusScreen,
+  setShowEndShiftForm,
+  handleSubmitEndShift,
+  handleCloseReconciliation,
+  getShiftPaymentBreakdown,
+  getShiftRefundBreakdown,
+  getLowStockProducts,
+  calculateExpectedCashInDrawer
+}) => {
+  const { toast } = useToast();
+
+  const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => {
+    const success = processRefund(product, quantity, refundMethod);
+    
+    if (success) {
+      toast({
+        title: "Refund processed successfully",
+        description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'cash' ? 'cash' : 'Shop2Shop'}`,
+      });
+      onCloseRefundScreen();
+    } else {
+      toast({
+        title: "Refund failed",
+        description: "There was an error processing the refund",
+        variant: "destructive"
+      });
+    }
+  };
+
+  if (showRefundScreen) {
+    return (
+      <RefundScreen
+        onProcessRefund={handleProcessRefund}
+        onCancel={onCloseRefundScreen}
+      />
+    );
+  }
+  
+  if (showProfitPlusScreen) {
+    return (
+      <ProfitPlusScreen 
+        onCancel={onCloseProfitPlusScreen}
+      />
+    );
+  }
+
+  if (showEndShiftForm) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <EndShiftForm
+          onSubmit={(amount) => handleSubmitEndShift(amount, currentShift)}
+          onCancel={() => setShowEndShiftForm(false)}
+          expectedAmount={endShiftCashAmount}
+        />
+      </div>
+    );
+  }
+  
+  if (showReconciliationReport && completedShift) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <ReconciliationReport 
+          shift={completedShift}
+          totalSales={completedShift.salesTotal || 0}
+          grossProfit={completedShift.salesTotal ? completedShift.salesTotal * 0.25 : 0} // Assuming 25% profit margin
+          paymentBreakdown={getShiftPaymentBreakdown(completedShift.id)}
+          lowStockProducts={getLowStockProducts(5)}
+          refundBreakdown={getShiftRefundBreakdown(completedShift.id)}
+          cashExpected={calculateExpectedCashInDrawer(completedShift.id)}
+          cashActual={endShiftCashAmount}
+          onClose={handleCloseReconciliation}
+        />
+      </div>
+    );
+  }
+  
+  return null;
+};
+
+export default ServiceScreens;
