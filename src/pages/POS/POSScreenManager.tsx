@@ -5,11 +5,8 @@ import { formatCurrency } from '@/lib/utils';
 import { Product, SplitPaymentDetails } from '@/types';
 import PaymentForm from '@/components/PaymentForm';
 import ShiftSummary from '@/components/ShiftSummary';
-import PaymentOptions from '@/components/PaymentOptions';
 import CardPaymentScreen from '@/components/CardPaymentScreen';
 import Shop2ShopScreen from '@/components/Shop2ShopScreen';
-import AccountPaymentScreen from '@/components/AccountPaymentScreen';
-import SplitPaymentScreen from '@/components/SplitPaymentScreen';
 import RefundScreen from '@/components/RefundScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
@@ -27,6 +24,16 @@ interface POSScreenManagerProps {
   getLowStockProducts: (limit: number) => any[];
   calculateExpectedCashInDrawer: (shiftId: number) => number;
   navigateToDashboard: () => void;
+  showPaymentForm?: boolean;
+  showCardPayment?: boolean;
+  showShop2ShopScreen?: boolean;
+  showRefundScreen?: boolean;
+  showProfitPlusScreen?: boolean;
+  onClosePaymentForm?: () => void;
+  onCloseCardPayment?: () => void;
+  onCloseShop2ShopScreen?: () => void;
+  onCloseRefundScreen?: () => void;
+  onCloseProfitPlusScreen?: () => void;
 }
 
 const POSScreenManager: React.FC<POSScreenManagerProps> = ({
@@ -41,40 +48,50 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   getLowStockProducts,
   calculateExpectedCashInDrawer,
   navigateToDashboard,
+  showPaymentForm = false,
+  showCardPayment = false,
+  showShop2ShopScreen = false,
+  showRefundScreen = false,
+  showProfitPlusScreen = false,
+  onClosePaymentForm = () => {},
+  onCloseCardPayment = () => {},
+  onCloseShop2ShopScreen = () => {},
+  onCloseRefundScreen = () => {},
+  onCloseProfitPlusScreen = () => {},
 }) => {
   const { toast } = useToast();
   
-  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showCardPayment, setShowCardPayment] = useState(false);
-  const [showShop2Shop, setShowShop2Shop] = useState(false);
-  const [showAccountPayment, setShowAccountPayment] = useState(false);
-  const [showSplitPayment, setShowSplitPayment] = useState(false);
-  const [showRefundScreen, setShowRefundScreen] = useState(false);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
-  const [showProfitPlusScreen, setShowProfitPlusScreen] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
-  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
-  const handleEndShift = () => {
-    if (cart.length > 0) {
-      toast({
-        title: "Cannot end shift",
-        description: "Please complete or clear the current transaction",
-        variant: "destructive"
-      });
-      return;
+  React.useEffect(() => {
+    const screenManager = document.getElementById('pos-screen-manager');
+    if (screenManager) {
+      const handleEndShift = () => {
+        if (cart.length > 0) {
+          toast({
+            title: "Cannot end shift",
+            description: "Please complete or clear the current transaction",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        if (!currentShift) return;
+        
+        const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
+        setEndShiftCashAmount(expectedCash);
+        setShowEndShiftForm(true);
+      };
+      
+      screenManager.addEventListener('endshift', handleEndShift);
+      return () => {
+        screenManager.removeEventListener('endshift', handleEndShift);
+      };
     }
-    
-    if (!currentShift) return;
-    
-    const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
-    setEndShiftCashAmount(expectedCash);
-    setShowEndShiftForm(true);
-  };
+  }, [cart, currentShift, calculateExpectedCashInDrawer, toast]);
 
   const handleSubmitEndShift = (cashAmount: number) => {
     if (!currentShift) return;
@@ -90,112 +107,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     }
   };
   
-  const handleSelectPaymentMethod = (
-    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
-    customerInfo?: { name: string; phone: string }
-  ) => {
-    setPaymentMethod(method);
-    setShowPaymentOptions(false);
-    setCustomerInfo(customerInfo);
-    
-    switch (method) {
-      case 'cash':
-        setShowPaymentForm(true);
-        break;
-      case 'card':
-        setShowCardPayment(true);
-        break;
-      case 'shop2shop':
-        setShowShop2Shop(true);
-        break;
-      case 'account':
-        setShowAccountPayment(true);
-        break;
-      case 'split':
-        setShowSplitPayment(true);
-        break;
-    }
-  };
-  
-  const handleNonCashPayment = () => {
-    const result = processPayment(
-      calculateTotal(), 
-      paymentMethod,
-      customerInfo?.name,
-      customerInfo?.phone
-    );
-    
-    if (result.success) {
-      toast({
-        title: `${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)} payment successful`,
-        description: '',
-      });
-      setShowCardPayment(false);
-      setShowShop2Shop(false);
-      setShowAccountPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleAccountPayment = (customerName: string, customerPhone: string) => {
-    const result = processPayment(
-      calculateTotal(), 
-      'account',
-      customerName,
-      customerPhone
-    );
-    
-    if (result.success) {
-      toast({
-        title: "Account payment successful",
-        description: '',
-      });
-      setShowAccountPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handleSplitPayment = (splitPayments: SplitPaymentDetails[]) => {
-    const totalAmount = splitPayments.reduce((sum, payment) => sum + payment.amount, 0);
-    
-    const accountPayment = splitPayments.find(p => p.method === 'account');
-    const customerName = accountPayment?.customerName || customerInfo?.name;
-    const customerPhone = accountPayment?.customerPhone || customerInfo?.phone;
-    
-    const result = processPayment(
-      totalAmount, 
-      'split',
-      customerName,
-      customerPhone,
-      splitPayments
-    );
-    
-    if (result.success) {
-      toast({
-        title: "Split payment successful",
-        description: '',
-      });
-      setShowSplitPayment(false);
-    } else {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing the payment",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  const handlePaymentComplete = (cashReceived: number) => {
+  const handleProcessCashPayment = (cashReceived: number) => {
     const result = processPayment(cashReceived, 'cash');
     
     if (result.success) {
@@ -203,7 +115,43 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         title: "Payment successful",
         description: `Change: ${formatCurrency(result.change)}`,
       });
-      setShowPaymentForm(false);
+      onClosePaymentForm();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleProcessCardPayment = () => {
+    const result = processPayment(calculateTotal(), 'card');
+    
+    if (result.success) {
+      toast({
+        title: "Card payment successful",
+        description: "",
+      });
+      onCloseCardPayment();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleProcessShop2ShopPayment = () => {
+    const result = processPayment(calculateTotal(), 'shop2shop');
+    
+    if (result.success) {
+      toast({
+        title: "Shop2Shop payment successful",
+        description: "",
+      });
+      onCloseShop2ShopScreen();
     } else {
       toast({
         title: "Payment failed",
@@ -221,7 +169,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         title: "Refund processed successfully",
         description: `${formatCurrency(product.price * quantity)} refunded via ${refundMethod === 'cash' ? 'cash' : 'Shop2Shop'}`,
       });
-      setShowRefundScreen(false);
+      onCloseRefundScreen();
     } else {
       toast({
         title: "Refund failed",
@@ -237,16 +185,13 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   };
 
   // Show different screens based on state
-  if (showPaymentOptions) {
+  if (showPaymentForm) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg border border-gray-700">
-          <PaymentOptions 
-            onSelectPaymentMethod={handleSelectPaymentMethod}
-            onCancel={() => setShowPaymentOptions(false)}
-          />
-        </div>
-      </div>
+      <PaymentForm 
+        total={calculateTotal()}
+        onProcessPayment={handleProcessCashPayment}
+        onCancel={onClosePaymentForm}
+      />
     );
   }
   
@@ -254,40 +199,18 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     return (
       <CardPaymentScreen
         total={calculateTotal()}
-        onProcessPayment={handleNonCashPayment}
-        onCancel={() => setShowCardPayment(false)}
+        onProcessPayment={handleProcessCardPayment}
+        onCancel={onCloseCardPayment}
       />
     );
   }
   
-  if (showShop2Shop) {
+  if (showShop2ShopScreen) {
     return (
       <Shop2ShopScreen
         total={calculateTotal()}
-        onProcessPayment={handleNonCashPayment}
-        onCancel={() => setShowShop2Shop(false)}
-      />
-    );
-  }
-
-  if (showAccountPayment) {
-    return (
-      <AccountPaymentScreen
-        total={calculateTotal()}
-        onProcessPayment={handleAccountPayment}
-        onCancel={() => setShowAccountPayment(false)}
-        customerInfo={customerInfo}
-      />
-    );
-  }
-
-  if (showSplitPayment) {
-    return (
-      <SplitPaymentScreen
-        total={calculateTotal()}
-        onProcessSplitPayment={handleSplitPayment}
-        onCancel={() => setShowSplitPayment(false)}
-        customerInfo={customerInfo}
+        onProcessPayment={handleProcessShop2ShopPayment}
+        onCancel={onCloseShop2ShopScreen}
       />
     );
   }
@@ -296,22 +219,16 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     return (
       <RefundScreen
         onProcessRefund={handleProcessRefund}
-        onCancel={() => setShowRefundScreen(false)}
+        onCancel={onCloseRefundScreen}
       />
     );
   }
   
-  if (showPaymentForm) {
+  if (showProfitPlusScreen) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-          <PaymentForm 
-            total={calculateTotal()}
-            onProcessPayment={handlePaymentComplete}
-            onCancel={() => setShowPaymentForm(false)}
-          />
-        </div>
-      </div>
+      <ProfitPlusScreen 
+        onCancel={onCloseProfitPlusScreen}
+      />
     );
   }
 
@@ -342,14 +259,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
           onClose={handleCloseReconciliation}
         />
       </div>
-    );
-  }
-  
-  if (showProfitPlusScreen) {
-    return (
-      <ProfitPlusScreen 
-        onCancel={() => setShowProfitPlusScreen(false)}
-      />
     );
   }
   

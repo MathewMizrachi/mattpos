@@ -38,6 +38,9 @@ const POS = () => {
   } = usePOSState({ cart });
 
   const [showPaymentOptions, setShowPaymentOptions] = React.useState(false);
+  const [showPaymentForm, setShowPaymentForm] = React.useState(false);
+  const [showCardPayment, setShowCardPayment] = React.useState(false);
+  const [showShop2ShopScreen, setShowShop2ShopScreen] = React.useState(false);
   const [showRefundScreen, setShowRefundScreen] = React.useState(false);
   const [showProfitPlusScreen, setShowProfitPlusScreen] = React.useState(false);
   const [showWithdrawalScreen, setShowWithdrawalScreen] = React.useState(false);
@@ -78,7 +81,19 @@ const POS = () => {
     navigate('/dashboard');
   };
   
-  if (showPaymentOptions || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
+  const handleCashPayment = () => {
+    setShowPaymentForm(true);
+  };
+  
+  const handleCardPayment = () => {
+    setShowCardPayment(true);
+  };
+  
+  const handleShop2ShopPayment = () => {
+    setShowShop2ShopScreen(true);
+  };
+  
+  if (showPaymentForm || showCardPayment || showShop2ShopScreen || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
     return (
       <div id="pos-screen-manager">
         <POSScreenManager
@@ -93,6 +108,16 @@ const POS = () => {
           getLowStockProducts={getLowStockProducts}
           calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
           navigateToDashboard={navigateToDashboard}
+          showPaymentForm={showPaymentForm}
+          showCardPayment={showCardPayment}
+          showShop2ShopScreen={showShop2ShopScreen}
+          showRefundScreen={showRefundScreen}
+          showProfitPlusScreen={showProfitPlusScreen}
+          onClosePaymentForm={() => setShowPaymentForm(false)}
+          onCloseCardPayment={() => setShowCardPayment(false)}
+          onCloseShop2ShopScreen={() => setShowShop2ShopScreen(false)}
+          onCloseRefundScreen={() => setShowRefundScreen(false)}
+          onCloseProfitPlusScreen={() => setShowProfitPlusScreen(false)}
         />
       </div>
     );
@@ -120,6 +145,9 @@ const POS = () => {
         onShowRefundScreen={() => setShowRefundScreen(true)}
         onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
         onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
+        onCashPayment={handleCashPayment}
+        onCardPayment={handleCardPayment}
+        onShop2ShopPayment={handleShop2ShopPayment}
       />
     </>
   );

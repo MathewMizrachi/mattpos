@@ -2,46 +2,81 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { CreditCard, Banknote, ShoppingBag } from 'lucide-react';
 
 interface ActionStripProps {
   onRefund: () => void;
   onProfitPlus: () => void;
   onWithdrawal?: () => void;
+  onCashPayment?: () => void;
+  onCardPayment?: () => void;
+  onShop2ShopPayment?: () => void;
 }
 
-const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus, onWithdrawal = () => {} }) => {
+const ActionStrip: React.FC<ActionStripProps> = ({ 
+  onRefund, 
+  onProfitPlus, 
+  onWithdrawal = () => {}, 
+  onCashPayment = () => {}, 
+  onCardPayment = () => {}, 
+  onShop2ShopPayment = () => {} 
+}) => {
   const isMobile = useIsMobile();
   
   return (
     <div 
-      className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
+      className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex flex-wrap items-center`}
       style={{ 
         backgroundColor: '#dddddd',
-        height: isMobile ? '3.5rem' : '5rem'
+        height: isMobile ? 'auto' : '5rem'
       }}
     >
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-xl flex items-center justify-center font-bold flex-1"
         onClick={onRefund}
       >
         REFUNDS
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-xl flex items-center justify-center font-bold flex-1"
         onClick={onWithdrawal}
       >
         WITHDRAWAL
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] h-full w-1/3 rounded-none flex items-center justify-center"
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-xl flex items-center justify-center font-bold flex-1"
+        onClick={onCashPayment}
+      >
+        <Banknote className="h-5 w-5 mr-2" />
+        CASH
+      </Button>
+      
+      <Button 
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-xl flex items-center justify-center font-bold flex-1"
+        onClick={onCardPayment}
+      >
+        <CreditCard className="h-5 w-5 mr-2" />
+        CARD
+      </Button>
+      
+      <Button 
+        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full rounded-none text-lg md:text-xl flex items-center justify-center font-bold flex-1"
+        onClick={onShop2ShopPayment}
+      >
+        <ShoppingBag className="h-5 w-5 mr-2" />
+        SHOP2SHOP
+      </Button>
+      
+      <Button 
+        className="bg-[#dddddd] hover:bg-[#cccccc] h-full rounded-none flex items-center justify-center flex-1"
         onClick={onProfitPlus}
       >
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-30 w-30 md:h-36 md:w-36 object-contain"
+          className="h-24 w-24 md:h-30 md:w-30 object-contain"
           style={{ transform: 'scale(1.125)' }} 
         />
       </Button>

@@ -24,6 +24,9 @@ interface POSMainProps {
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
   onShowWithdrawalScreen: () => void;
+  onCashPayment: () => void;
+  onCardPayment: () => void;
+  onShop2ShopPayment: () => void;
 }
 
 const POSMain: React.FC<POSMainProps> = ({
@@ -46,6 +49,9 @@ const POSMain: React.FC<POSMainProps> = ({
   onShowRefundScreen,
   onShowProfitPlusScreen,
   onShowWithdrawalScreen,
+  onCashPayment,
+  onCardPayment,
+  onShop2ShopPayment,
 }) => {
   return (
     <POSLayout
@@ -60,6 +66,9 @@ const POSMain: React.FC<POSMainProps> = ({
       onShowRefundScreen={onShowRefundScreen}
       onShowProfitPlusScreen={onShowProfitPlusScreen}
       onShowWithdrawalScreen={onShowWithdrawalScreen}
+      onCashPayment={onCashPayment}
+      onCardPayment={onCardPayment}
+      onShop2ShopPayment={onShop2ShopPayment}
     >
       <POSContent
         products={products}
