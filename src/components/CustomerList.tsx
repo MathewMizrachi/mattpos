@@ -77,7 +77,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        disabled={processingId === customer.id || !customer.paymentTermDays}
+                        disabled={processingId === customer.id}
                         onClick={() => handleMakePayment(customer.id)}
                         className="flex items-center gap-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
                       >
