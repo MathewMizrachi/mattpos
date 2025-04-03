@@ -1,3 +1,4 @@
+
 // Simple in-memory database for demonstration purposes
 // In a real application, this would use IndexedDB or SQLite
 
@@ -53,8 +54,10 @@ interface Customer {
   id: number;
   name: string;
   phone: string;
+  idNumber?: string;
   createdAt: Date;
   updatedAt: Date;
+  paymentTermDays?: number;
 }
 
 class Database {
@@ -138,12 +141,14 @@ class Database {
     return this.customers.find(customer => customer.phone === phone);
   }
 
-  addCustomer(name: string, phone: string): Customer {
+  addCustomer(name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer {
     // Check if customer already exists
     const existingCustomer = this.getCustomerByPhone(phone);
     if (existingCustomer) {
-      // Update the name in case it changed
+      // Update the customer info if it changed
       existingCustomer.name = name;
+      if (idNumber) existingCustomer.idNumber = idNumber;
+      if (paymentTermDays) existingCustomer.paymentTermDays = paymentTermDays;
       existingCustomer.updatedAt = new Date();
       return existingCustomer;
     }
@@ -153,6 +158,8 @@ class Database {
       id: this.currentId.customer++,
       name,
       phone,
+      idNumber,
+      paymentTermDays,
       createdAt: new Date(),
       updatedAt: new Date()
     };

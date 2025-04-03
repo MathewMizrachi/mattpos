@@ -35,8 +35,10 @@ interface Customer {
   id: number;
   name: string;
   phone: string;
+  idNumber?: string;
   createdAt: Date;
   updatedAt: Date;
+  paymentTermDays?: number;
 }
 
 interface AppContextType {
@@ -62,7 +64,7 @@ interface AppContextType {
     change: number;
   };
   
-  addCustomer: (name: string, phone: string) => Customer;
+  addCustomer: (name: string, phone: string, idNumber?: string, paymentTermDays?: number) => Customer;
   getCustomers: () => Customer[];
   
   addProduct: (product: Omit<Product, 'id'>) => Product;
@@ -174,7 +176,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     
     if ((paymentMethod === 'account' || (paymentMethod === 'split' && splitPayments?.some(p => p.method === 'account'))) 
         && customerName && customerPhone) {
-      const customer = addCustomer(customerName, customerPhone);
+      const customerIdNumber = splitPayments?.find(p => p.method === 'account')?.customerIdNumber;
+      const paymentTermDays = splitPayments?.find(p => p.method === 'account')?.paymentTermDays;
+      const customer = addCustomer(customerName, customerPhone, customerIdNumber, paymentTermDays);
       customerId = customer.id;
     }
     
@@ -208,8 +212,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
   };
 
-  const addCustomer = (name: string, phone: string): Customer => {
-    const customer = db.addCustomer(name, phone);
+  const addCustomer = (name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer => {
+    const customer = db.addCustomer(name, phone, idNumber, paymentTermDays);
     refreshCustomers();
     return customer;
   };
