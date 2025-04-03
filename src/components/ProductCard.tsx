@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 
 interface Product {
@@ -18,18 +17,18 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobile }) => {
-  const handleAddToCart = () => {
+  const handleClick = () => {
     onAddToCart(product);
   };
   
   return (
-    <Card className="h-full flex flex-col">
+    <Card 
+      className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow" 
+      onClick={handleClick}
+    >
       <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
           <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-base md:text-lg'} mb-1 truncate`}>{product.name}</h3>
-          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold text-primary mb-1`}>
-            {formatCurrency(product.price)}
-          </p>
           
           {product.stock !== undefined && (
             <p className={`${isMobile ? 'text-xs' : 'text-xs'} ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
@@ -38,14 +37,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
           )}
         </div>
         
-        <Button 
-          onClick={handleAddToCart}
-          className={`${isMobile ? 'w-1/3 h-7 py-0 text-xs' : 'w-full'} mt-1`}
-          disabled={product.stock !== undefined && product.stock <= 0}
-          size={isMobile ? "sm" : "default"}
-        >
-          Add
-        </Button>
+        <div className="mt-1">
+          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold text-primary`}>
+            {formatCurrency(product.price)}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
