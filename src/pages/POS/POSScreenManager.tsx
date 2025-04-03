@@ -25,6 +25,7 @@ interface POSScreenManagerProps {
   getLowStockProducts: (limit: number) => any[];
   calculateExpectedCashInDrawer: (shiftId: number) => number;
   navigateToDashboard: () => void;
+  clearCart: () => void;
   showPaymentForm?: boolean;
   showCardPayment?: boolean;
   showShop2ShopScreen?: boolean;
@@ -54,6 +55,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   getLowStockProducts,
   calculateExpectedCashInDrawer,
   navigateToDashboard,
+  clearCart,
   showPaymentForm = false,
   showCardPayment = false,
   showShop2ShopScreen = false,

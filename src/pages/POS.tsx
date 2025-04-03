@@ -141,6 +141,7 @@ const POS = () => {
           getLowStockProducts={getLowStockProducts}
           calculateExpectedCashInDrawer={calculateExpectedCashInDrawer}
           navigateToDashboard={navigateToDashboard}
+          clearCart={clearCart}
           showPaymentForm={showPaymentForm}
           showCardPayment={showCardPayment}
           showShop2ShopScreen={showShop2ShopScreen}
