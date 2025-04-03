@@ -17,7 +17,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
       className="fixed bottom-32 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
       style={{ 
         backgroundColor: '#0A2645',
-        height: isMobile ? '3rem' : '3.5rem'  // Increased height
+        height: isMobile ? '3rem' : '3.5rem'
       }}
     >
       <ActionButton 
@@ -79,3 +79,4 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 };
 
 export default ActionStrip;
+
