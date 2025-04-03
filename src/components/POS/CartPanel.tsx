@@ -22,30 +22,21 @@ const CartPanel: React.FC<CartPanelProps> = ({
   cartExpanded,
   toggleCartExpand
 }) => {
-  // Handle clicks on the panel itself but prevent propagation from buttons
-  const handlePanelClick = (e: React.MouseEvent) => {
-    // Only toggle if clicking the panel background, not buttons or inputs
-    if (e.target === e.currentTarget || 
-        (e.target as HTMLElement).classList.contains('cart-panel-background')) {
-      toggleCartExpand();
-    }
-  };
-
   if (isMobile) {
     return (
       <div 
-        className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300 cart-panel-background`}
-        onClick={handlePanelClick}
+        className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
+        onClick={toggleCartExpand}
       >
-        <ScrollArea className="flex-1 cart-panel-background">
-          <div className="p-2 cart-panel-background">
+        <ScrollArea className="flex-1">
+          <div className="p-2">
             {cart.length === 0 ? (
-              <div className="text-center py-6 cart-panel-background">
+              <div className="text-center py-6">
                 <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-                <p className={`${cartExpanded ? 'block' : 'hidden'} text-muted-foreground cart-panel-background`}>No items in cart</p>
+                <p className={`${cartExpanded ? 'block' : 'hidden'} text-muted-foreground`}>No items in cart</p>
               </div>
             ) : (
-              <div className="space-y-2 cart-panel-background">
+              <div className="space-y-2">
                 {cartExpanded && cart.map((item) => (
                   <CartItem 
                     key={`${item.product.id}-${item.product.price}`}
@@ -56,9 +47,9 @@ const CartPanel: React.FC<CartPanelProps> = ({
                   />
                 ))}
                 {!cartExpanded && (
-                  <div className="text-center py-2 cart-panel-background">
+                  <div className="text-center py-2">
                     <ShoppingCartIcon className="h-8 w-8 mx-auto" />
-                    <span className="text-sm font-bold cart-panel-background">{cart.length}</span>
+                    <span className="text-sm font-bold">{cart.length}</span>
                   </div>
                 )}
               </div>
@@ -70,19 +61,19 @@ const CartPanel: React.FC<CartPanelProps> = ({
   }
 
   return (
-    <div className="w-96 fixed top-20 right-0 bottom-0 z-10 bg-white shadow-lg flex flex-col overflow-hidden cart-panel-background">
-      <ScrollArea className="flex-1 cart-panel-background">
-        <div className="p-4 cart-panel-background">
+    <div className="w-96 fixed top-20 right-0 bottom-0 z-10 bg-white shadow-lg flex flex-col overflow-hidden">
+      <ScrollArea className="flex-1">
+        <div className="p-4">
           {cart.length === 0 ? (
-            <div className="text-center py-6 cart-panel-background">
+            <div className="text-center py-6">
               <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
-              <p className="text-muted-foreground cart-panel-background">No items in cart</p>
-              <p className="text-sm text-muted-foreground cart-panel-background">
+              <p className="text-muted-foreground">No items in cart</p>
+              <p className="text-sm text-muted-foreground">
                 Add products to begin a sale
               </p>
             </div>
           ) : (
-            <div className="space-y-2 cart-panel-background">
+            <div className="space-y-2">
               {cart.map((item) => (
                 <CartItem 
                   key={`${item.product.id}-${item.product.price}`}
