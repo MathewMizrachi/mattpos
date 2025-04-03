@@ -30,7 +30,7 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
         <span className="text-2xl font-bold">{formatCurrency(total)}</span>
       </div>
       
-      <div className="flex space-x-4 w-full">
+      <div className="flex space-x-4 w-full mb-2">
         {cartLength > 0 && (
           <Button 
             variant="outline" 

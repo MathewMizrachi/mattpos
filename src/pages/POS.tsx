@@ -6,6 +6,7 @@ import { Product } from '@/types';
 import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
+import { useToast } from '@/hooks/use-toast';
 
 const POS = () => {
   const { 
@@ -27,6 +28,7 @@ const POS = () => {
     calculateExpectedCashInDrawer
   } = useApp();
   
+  const { toast } = useToast();
   const navigate = useNavigate();
   
   const {
@@ -71,6 +73,14 @@ const POS = () => {
       const endShiftEvent = new CustomEvent('endshift');
       screenManager.dispatchEvent(endShiftEvent);
     }
+  };
+
+  const handleWithdrawal = () => {
+    // For now, just show a toast notification
+    toast({
+      title: "Withdrawal",
+      description: "Withdrawal functionality will be implemented in the future",
+    });
   };
 
   const navigateToDashboard = () => {
@@ -118,6 +128,7 @@ const POS = () => {
         onShowPaymentOptions={() => setShowPaymentOptions(true)}
         onShowRefundScreen={() => setShowRefundScreen(true)}
         onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
+        onWithdrawal={handleWithdrawal}
       />
     </>
   );
