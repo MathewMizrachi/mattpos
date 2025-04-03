@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -172,28 +173,38 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     }
   };
   
-  const renderAccountPaymentScreen = () => {
-    if (!showAccountPayment) return null;
+  const handleProcessAccountPayment = () => {
+    if (!customerInfo) {
+      toast({
+        title: "Customer information missing",
+        description: "Customer name and phone are required for account payment",
+        variant: "destructive"
+      });
+      return;
+    }
     
-    return (
-      <AccountPaymentScreen
-        total={calculateTotal()}
-        onProcessPayment={() => {
-          if (customerInfo) {
-            const { name, phone } = customerInfo;
-            const result = processPayment(0, 'account', name, phone);
-            if (result.success) {
-              onCloseAccountPayment();
-              clearCart();
-              navigateToDashboard();
-            }
-          }
-        }}
-        onCancel={onCloseAccountPayment}
-      />
+    const result = processPayment(
+      calculateTotal(), 
+      'account', 
+      customerInfo.name, 
+      customerInfo.phone
     );
+    
+    if (result.success) {
+      toast({
+        title: "Account payment successful",
+        description: `Account created for ${customerInfo.name}`,
+      });
+      onCloseAccountPayment();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
   };
-
+  
   const handleProcessSplitPayment = (payments: SplitPaymentDetails[]) => {
     // Calculate total from split payments to ensure it matches
     const splitTotal = payments.reduce((sum, payment) => sum + payment.amount, 0);
@@ -286,7 +297,15 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   }
   
   if (showAccountPayment && customerInfo) {
-    return renderAccountPaymentScreen();
+    return (
+      <AccountPaymentScreen
+        total={calculateTotal()}
+        customerName={customerInfo.name}
+        customerPhone={customerInfo.phone}
+        onProcessPayment={handleProcessAccountPayment}
+        onCancel={onCloseAccountPayment}
+      />
+    );
   }
   
   if (showSplitPayment) {
