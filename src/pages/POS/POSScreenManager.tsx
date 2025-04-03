@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { Product, SplitPaymentDetails } from '@/types';
@@ -77,7 +77,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
-  React.useEffect(() => {
+  useEffect(() => {
     const screenManager = document.getElementById('pos-screen-manager');
     if (screenManager) {
       const handleEndShift = () => {
@@ -250,7 +250,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     navigateToDashboard();
   };
 
-  // Show different screens based on state
   if (showPaymentForm) {
     return (
       <PaymentForm 
@@ -350,7 +349,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     );
   }
   
-  // Return null for the main POS view since it's handled in the parent component
   return null;
 };
 
