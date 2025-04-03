@@ -17,6 +17,7 @@ interface POSLayoutProps {
   onShowPaymentForm: () => void;
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
+  onShowWithdrawalScreen: () => void;
 }
 
 const POSLayout: React.FC<POSLayoutProps> = ({
@@ -31,6 +32,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   onShowPaymentForm,
   onShowRefundScreen,
   onShowProfitPlusScreen,
+  onShowWithdrawalScreen,
 }) => {
   const isMobile = useIsMobile();
   
@@ -49,6 +51,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
       <ActionStrip 
         onRefund={onShowRefundScreen}
         onProfitPlus={onShowProfitPlusScreen}
+        onWithdrawal={onShowWithdrawalScreen}
       />
       
       <PaymentFooter 
