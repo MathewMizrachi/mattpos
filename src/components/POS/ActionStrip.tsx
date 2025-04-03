@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ArrowDown, Banknote } from 'lucide-react';
 
 interface ActionStripProps {
   onRefund: () => void;
@@ -16,26 +17,28 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus, onWit
     <div 
       className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
       style={{ 
-        backgroundColor: '#dddddd',
-        height: isMobile ? '3.5rem' : '5rem'
+        backgroundColor: '#0A2645',
+        height: isMobile ? '3.5rem' : '4.5rem'
       }}
     >
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#0A2645] hover:bg-[#0A2645]/80 text-[#FAA225] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold gap-2"
         onClick={onRefund}
       >
-        REFUNDS
+        <ArrowDown className="h-5 w-5 md:h-6 md:w-6" />
+        <span>Refunds</span>
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] text-[#0A2645] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold"
+        className="bg-[#0A2645] hover:bg-[#0A2645]/80 text-[#FAA225] h-full w-1/3 rounded-none text-lg md:text-2xl flex items-center justify-center font-bold gap-2"
         onClick={onWithdrawal}
       >
-        WITHDRAWAL
+        <Banknote className="h-5 w-5 md:h-6 md:w-6" />
+        <span>Withdrawal</span>
       </Button>
       
       <Button 
-        className="bg-[#dddddd] hover:bg-[#cccccc] h-full w-1/3 rounded-none flex items-center justify-center"
+        className="bg-[#0A2645] hover:bg-[#0A2645]/80 h-full w-1/3 rounded-none flex items-center justify-center"
         onClick={onProfitPlus}
       >
         <img 
