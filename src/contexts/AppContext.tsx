@@ -39,6 +39,7 @@ interface Customer {
   createdAt: Date;
   updatedAt: Date;
   paymentTermDays?: number;
+  isPaid?: boolean;
 }
 
 interface AppContextType {
@@ -66,6 +67,7 @@ interface AppContextType {
   
   addCustomer: (name: string, phone: string, idNumber?: string, paymentTermDays?: number) => Customer;
   getCustomers: () => Customer[];
+  markCustomerAsPaid: (customerId: number) => boolean;
   
   addProduct: (product: Omit<Product, 'id'>) => Product;
   updateProduct: (id: number, updates: Partial<Omit<Product, 'id'>>) => Product | null;
@@ -221,6 +223,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const getCustomers = (): Customer[] => {
     return customers;
   };
+  
+  const markCustomerAsPaid = (customerId: number): boolean => {
+    const success = db.markCustomerAsPaid(customerId);
+    if (success) {
+      refreshCustomers();
+    }
+    return success;
+  };
 
   const refreshCustomers = () => {
     setCustomers(db.getAllCustomers());
@@ -265,6 +275,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     processPayment,
     addCustomer,
     getCustomers,
+    markCustomerAsPaid,
     addProduct,
     updateProduct,
     deleteProduct,

@@ -36,6 +36,7 @@ export interface Customer {
   createdAt: Date;
   updatedAt: Date;
   paymentTermDays?: number;
+  isPaid?: boolean;
 }
 
 export interface SplitPaymentDetails {

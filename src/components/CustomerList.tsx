@@ -1,19 +1,57 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check } from 'lucide-react';
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { toast } from '@/hooks/use-toast';
 
 interface CustomerListProps {
   onBack: () => void;
 }
 
 const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
-  const { customers } = useApp();
+  const { customers, markCustomerAsPaid } = useApp();
+  const [processingId, setProcessingId] = useState<number | null>(null);
   
   // Format date to show only date part
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString();
+  };
+
+  const handleMarkAsPaid = async (customerId: number) => {
+    setProcessingId(customerId);
+    try {
+      const success = markCustomerAsPaid(customerId);
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Account marked as paid",
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to mark account as paid",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
+    } finally {
+      setProcessingId(null);
+    }
   };
   
   return (
@@ -24,7 +62,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-          <h1 className="text-2xl font-bold">Customers</h1>
+          <h1 className="text-2xl font-bold">Customers / Accounts</h1>
         </div>
         
         {customers.length === 0 ? (
@@ -33,60 +71,45 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID/Passport
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Payment Term
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Created
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Last Updated
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>ID/Passport</TableHead>
+                  <TableHead>Payment Term</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead>Last Updated</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {customers.map((customer) => (
-                  <tr key={customer.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {customer.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {customer.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {customer.phone}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {customer.idNumber || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {customer.paymentTermDays ? `${customer.paymentTermDays} days` : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDate(customer.createdAt)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDate(customer.updatedAt)}
-                    </td>
-                  </tr>
+                  <TableRow key={customer.id}>
+                    <TableCell className="font-medium">{customer.id}</TableCell>
+                    <TableCell>{customer.name}</TableCell>
+                    <TableCell>{customer.phone}</TableCell>
+                    <TableCell>{customer.idNumber || '-'}</TableCell>
+                    <TableCell>{customer.paymentTermDays ? `${customer.paymentTermDays} days` : '-'}</TableCell>
+                    <TableCell>{formatDate(customer.createdAt)}</TableCell>
+                    <TableCell>{formatDate(customer.updatedAt)}</TableCell>
+                    <TableCell>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        disabled={processingId === customer.id || !customer.paymentTermDays}
+                        onClick={() => handleMarkAsPaid(customer.id)}
+                        className="flex items-center gap-1"
+                      >
+                        <Check className="h-4 w-4" />
+                        Mark Paid
+                      </Button>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         )}
       </div>

@@ -58,6 +58,7 @@ interface Customer {
   createdAt: Date;
   updatedAt: Date;
   paymentTermDays?: number;
+  isPaid?: boolean;
 }
 
 class Database {
@@ -161,11 +162,25 @@ class Database {
       idNumber,
       paymentTermDays,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      isPaid: false
     };
     
     this.customers.push(newCustomer);
     return newCustomer;
+  }
+
+  markCustomerAsPaid(customerId: number): boolean {
+    const customerIndex = this.customers.findIndex(c => c.id === customerId);
+    if (customerIndex === -1) return false;
+    
+    this.customers[customerIndex] = {
+      ...this.customers[customerIndex],
+      isPaid: true,
+      updatedAt: new Date()
+    };
+    
+    return true;
   }
 
   // Shift methods

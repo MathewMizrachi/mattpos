@@ -14,6 +14,14 @@ const Customers = () => {
     }
   }, [currentUser, navigate]);
   
+  // Set the document title
+  React.useEffect(() => {
+    document.title = 'Customers / Accounts';
+    return () => {
+      document.title = 'POS System';
+    };
+  }, []);
+  
   return (
     <CustomerList onBack={() => navigate('/dashboard')} />
   );
