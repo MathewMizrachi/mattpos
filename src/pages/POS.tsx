@@ -1,11 +1,12 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { Product } from '@/types';
+import { Product, SplitPaymentDetails } from '@/types';
 import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
+import PaymentOptions from '@/components/PaymentOptions';
 
 const POS = () => {
   const { 
@@ -37,12 +38,16 @@ const POS = () => {
     calculateTotal,
   } = usePOSState({ cart });
 
-  const [showPaymentForm, setShowPaymentForm] = React.useState(false);
-  const [showCardPayment, setShowCardPayment] = React.useState(false);
-  const [showShop2ShopScreen, setShowShop2ShopScreen] = React.useState(false);
-  const [showRefundScreen, setShowRefundScreen] = React.useState(false);
-  const [showProfitPlusScreen, setShowProfitPlusScreen] = React.useState(false);
-  const [showWithdrawalScreen, setShowWithdrawalScreen] = React.useState(false);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showCardPayment, setShowCardPayment] = useState(false);
+  const [showShop2ShopScreen, setShowShop2ShopScreen] = useState(false);
+  const [showRefundScreen, setShowRefundScreen] = useState(false);
+  const [showProfitPlusScreen, setShowProfitPlusScreen] = useState(false);
+  const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
+  const [showSplitPayment, setShowSplitPayment] = useState(false);
+  const [showAccountPayment, setShowAccountPayment] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   
   useEffect(() => {
     if (!currentUser) {
@@ -65,7 +70,7 @@ const POS = () => {
   };
 
   const handleEndShift = () => {
-    if (showPaymentForm || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
+    if (showPaymentOptions || showPaymentForm || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
       return;
     }
     
@@ -80,23 +85,49 @@ const POS = () => {
     navigate('/dashboard');
   };
   
-  const handleCashPayment = () => {
-    setShowPaymentForm(true);
+  const handleSelectPaymentMethod = (
+    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
+    customerInfo?: { name: string; phone: string }
+  ) => {
+    setShowPaymentOptions(false);
+    setCustomerInfo(customerInfo);
+    
+    switch (method) {
+      case 'cash':
+        setShowPaymentForm(true);
+        break;
+      case 'card':
+        setShowCardPayment(true);
+        break;
+      case 'shop2shop':
+        setShowShop2ShopScreen(true);
+        break;
+      case 'account':
+        setShowAccountPayment(true);
+        break;
+      case 'split':
+        setShowSplitPayment(true);
+        break;
+    }
   };
   
-  const handleCardPayment = () => {
-    setShowCardPayment(true);
-  };
-  
-  const handleShop2ShopPayment = () => {
-    setShowShop2ShopScreen(true);
-  };
-
   const handleShowPaymentForm = () => {
-    setShowPaymentForm(true);
+    setShowPaymentOptions(true);
   };
   
-  if (showPaymentForm || showCardPayment || showShop2ShopScreen || showRefundScreen || showProfitPlusScreen || showWithdrawalScreen) {
+  if (showPaymentOptions) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
+        <PaymentOptions 
+          onSelectPaymentMethod={handleSelectPaymentMethod}
+          onCancel={() => setShowPaymentOptions(false)}
+        />
+      </div>
+    );
+  }
+  
+  if (showPaymentForm || showCardPayment || showShop2ShopScreen || showRefundScreen || 
+      showProfitPlusScreen || showWithdrawalScreen || showSplitPayment || showAccountPayment) {
     return (
       <div id="pos-screen-manager">
         <POSScreenManager
@@ -116,11 +147,16 @@ const POS = () => {
           showShop2ShopScreen={showShop2ShopScreen}
           showRefundScreen={showRefundScreen}
           showProfitPlusScreen={showProfitPlusScreen}
+          showSplitPayment={showSplitPayment}
+          showAccountPayment={showAccountPayment}
+          customerInfo={customerInfo}
           onClosePaymentForm={() => setShowPaymentForm(false)}
           onCloseCardPayment={() => setShowCardPayment(false)}
           onCloseShop2ShopScreen={() => setShowShop2ShopScreen(false)}
           onCloseRefundScreen={() => setShowRefundScreen(false)}
           onCloseProfitPlusScreen={() => setShowProfitPlusScreen(false)}
+          onCloseSplitPayment={() => setShowSplitPayment(false)}
+          onCloseAccountPayment={() => setShowAccountPayment(false)}
         />
       </div>
     );
@@ -148,9 +184,9 @@ const POS = () => {
         onShowRefundScreen={() => setShowRefundScreen(true)}
         onShowProfitPlusScreen={() => setShowProfitPlusScreen(true)}
         onShowWithdrawalScreen={() => setShowWithdrawalScreen(true)}
-        onCashPayment={handleCashPayment}
-        onCardPayment={handleCardPayment}
-        onShop2ShopPayment={handleShop2ShopPayment}
+        onCashPayment={() => setShowPaymentForm(true)}
+        onCardPayment={() => setShowCardPayment(true)}
+        onShop2ShopPayment={() => setShowShop2ShopScreen(true)}
       />
     </>
   );

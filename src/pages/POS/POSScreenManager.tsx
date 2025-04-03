@@ -11,6 +11,8 @@ import RefundScreen from '@/components/RefundScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
 import ProfitPlusScreen from '@/components/ProfitPlusScreen';
+import SplitPaymentScreen from '@/components/SplitPaymentScreen';
+import AccountPaymentScreen from '@/components/AccountPaymentScreen';
 
 interface POSScreenManagerProps {
   cart: any[];
@@ -29,11 +31,16 @@ interface POSScreenManagerProps {
   showShop2ShopScreen?: boolean;
   showRefundScreen?: boolean;
   showProfitPlusScreen?: boolean;
+  showSplitPayment?: boolean;
+  showAccountPayment?: boolean;
+  customerInfo?: { name: string; phone: string };
   onClosePaymentForm?: () => void;
   onCloseCardPayment?: () => void;
   onCloseShop2ShopScreen?: () => void;
   onCloseRefundScreen?: () => void;
   onCloseProfitPlusScreen?: () => void;
+  onCloseSplitPayment?: () => void;
+  onCloseAccountPayment?: () => void;
 }
 
 const POSScreenManager: React.FC<POSScreenManagerProps> = ({
@@ -53,11 +60,16 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   showShop2ShopScreen = false,
   showRefundScreen = false,
   showProfitPlusScreen = false,
+  showSplitPayment = false,
+  showAccountPayment = false,
+  customerInfo,
   onClosePaymentForm = () => {},
   onCloseCardPayment = () => {},
   onCloseShop2ShopScreen = () => {},
   onCloseRefundScreen = () => {},
   onCloseProfitPlusScreen = () => {},
+  onCloseSplitPayment = () => {},
+  onCloseAccountPayment = () => {},
 }) => {
   const { toast } = useToast();
   
@@ -160,6 +172,75 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
       });
     }
   };
+  
+  const handleProcessAccountPayment = () => {
+    if (!customerInfo) {
+      toast({
+        title: "Customer information missing",
+        description: "Customer name and phone are required for account payment",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const result = processPayment(
+      calculateTotal(), 
+      'account', 
+      customerInfo.name, 
+      customerInfo.phone
+    );
+    
+    if (result.success) {
+      toast({
+        title: "Account payment successful",
+        description: `Account created for ${customerInfo.name}`,
+      });
+      onCloseAccountPayment();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleProcessSplitPayment = (payments: SplitPaymentDetails[]) => {
+    // Calculate total from split payments to ensure it matches
+    const splitTotal = payments.reduce((sum, payment) => sum + payment.amount, 0);
+    const cartTotal = calculateTotal();
+    
+    if (Math.abs(splitTotal - cartTotal) > 0.01) {
+      toast({
+        title: "Payment amount mismatch",
+        description: `Total payments (${formatCurrency(splitTotal)}) don't match cart total (${formatCurrency(cartTotal)})`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const result = processPayment(
+      cartTotal, 
+      'split', 
+      customerInfo?.name, 
+      customerInfo?.phone, 
+      payments
+    );
+    
+    if (result.success) {
+      toast({
+        title: "Split payment successful",
+        description: `Total: ${formatCurrency(cartTotal)}`,
+      });
+      onCloseSplitPayment();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleProcessRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => {
     const success = processRefund(product, quantity, refundMethod);
@@ -211,6 +292,29 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         total={calculateTotal()}
         onProcessPayment={handleProcessShop2ShopPayment}
         onCancel={onCloseShop2ShopScreen}
+      />
+    );
+  }
+  
+  if (showAccountPayment && customerInfo) {
+    return (
+      <AccountPaymentScreen
+        total={calculateTotal()}
+        customerName={customerInfo.name}
+        customerPhone={customerInfo.phone}
+        onProcessPayment={handleProcessAccountPayment}
+        onCancel={onCloseAccountPayment}
+      />
+    );
+  }
+  
+  if (showSplitPayment) {
+    return (
+      <SplitPaymentScreen
+        total={calculateTotal()}
+        onProcessSplitPayment={handleProcessSplitPayment}
+        onCancel={onCloseSplitPayment}
+        customerInfo={customerInfo}
       />
     );
   }

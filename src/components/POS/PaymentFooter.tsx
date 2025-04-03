@@ -8,6 +8,9 @@ interface PaymentFooterProps {
   cartLength: number;
   onClearCart: () => void;
   onShowPaymentForm: () => void;
+  onCashPayment: () => void;
+  onCardPayment: () => void;
+  onShop2ShopPayment: () => void;
   isMobile: boolean;
 }
 
@@ -16,6 +19,9 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
   cartLength,
   onClearCart,
   onShowPaymentForm,
+  onCashPayment,
+  onCardPayment,
+  onShop2ShopPayment,
   isMobile
 }) => {
   return (

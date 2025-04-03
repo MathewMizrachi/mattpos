@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
 import { ShoppingBag, CreditCard, Banknote, Users, Split } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { toast } from '@/hooks/use-toast';
 
 interface CustomerInfo {
@@ -25,13 +23,6 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   
-  const form = useForm<CustomerInfo>({
-    defaultValues: {
-      name: '',
-      phone: ''
-    }
-  });
-
   const handleAccountPayment = () => {
     if (!customerName || !customerPhone) {
       toast({
