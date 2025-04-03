@@ -28,7 +28,6 @@ interface POSMainProps {
   onShowPaymentOptions: () => void;
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
-  onWithdrawal?: () => void;
 }
 
 const POSMain: React.FC<POSMainProps> = ({
@@ -50,7 +49,6 @@ const POSMain: React.FC<POSMainProps> = ({
   onShowPaymentOptions,
   onShowRefundScreen,
   onShowProfitPlusScreen,
-  onWithdrawal,
 }) => {
   const isMobile = useIsMobile();
   
@@ -100,7 +98,6 @@ const POSMain: React.FC<POSMainProps> = ({
       <ActionStrip 
         onRefund={onShowRefundScreen}
         onProfitPlus={onShowProfitPlusScreen}
-        onWithdrawal={onWithdrawal}
       />
       
       <PaymentFooter 
