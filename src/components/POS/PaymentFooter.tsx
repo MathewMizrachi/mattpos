@@ -19,11 +19,8 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
   isMobile
 }) => {
   return (
-    <div className={`${isMobile 
-      ? 'fixed bottom-0 right-0 w-full px-6 py-4 flex items-center justify-between' 
-      : 'fixed bottom-0 right-0 w-96 px-6 py-4'} 
-      z-20`} 
-      style={{ backgroundColor: '#FAA225', height: isMobile ? '4.5rem' : '5rem' }}
+    <div className={`fixed bottom-0 right-0 ${isMobile ? 'w-full' : 'w-96'} px-6 py-4 flex items-center justify-between z-20`} 
+      style={{ backgroundColor: '#FAA225', height: '4.5rem' }}
     >
       <span className="text-2xl font-bold">{formatCurrency(total)}</span>
       

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
@@ -31,9 +32,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
     // First, select this product card
     onSelect(product.id);
     
-    // If not already selected, just add to cart with default price
+    // If not already selected, just select it (don't add to cart yet)
     if (!isSelected) {
-      onAddToCart(product);
+      return;
     } else {
       // If already selected and we have a custom price, add with custom price
       if (customPrice !== null) {
@@ -68,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           const newPrice = parseFloat(priceInput);
           if (!isNaN(newPrice) && newPrice > 0) {
             setCustomPrice(newPrice);
-            onAddToCart(product, newPrice);
+            onAddToCart({...product, price: newPrice}, newPrice);
             onSelect(-1); // Deselect after adding to cart with custom price
           }
         } else {
