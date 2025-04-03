@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ShoppingCartIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -25,8 +24,8 @@ const CartPanel: React.FC<CartPanelProps> = ({
   if (isMobile) {
     return (
       <div 
-        className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/5'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
-        onClick={cartExpanded ? toggleCartExpand : undefined}
+        className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
+        onClick={toggleCartExpand}
       >
         <ScrollArea className="flex-1">
           <div className="p-2">
