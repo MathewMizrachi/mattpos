@@ -55,7 +55,7 @@ interface AppContextType {
   startShift: (userId: number, startFloat: number) => void;
   endShift: () => Shift | null;
   
-  addToCart: (product: Product, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number, customPrice?: number) => void;
   updateCartItem: (productId: number, quantity: number) => void;
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
@@ -116,20 +116,26 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return completedShift;
   };
 
-  const addToCart = (product: Product, quantity = 1) => {
+  const addToCart = (product: Product, quantity = 1, customPrice?: number) => {
+    const productToAdd = customPrice 
+      ? { ...product, price: customPrice }
+      : product;
+    
     setCart(prevCart => {
       const existingItem = prevCart.find(item => 
-        item.product.id === product.id && item.product.price === product.price
+        item.product.id === productToAdd.id && 
+        Math.abs(item.product.price - productToAdd.price) < 0.01
       );
       
       if (existingItem) {
         return prevCart.map(item => 
-          (item.product.id === product.id && item.product.price === product.price)
+          (item.product.id === productToAdd.id && 
+           Math.abs(item.product.price - productToAdd.price) < 0.01)
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
-        return [...prevCart, { product, quantity }];
+        return [...prevCart, { product: productToAdd, quantity }];
       }
     });
   };

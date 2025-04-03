@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ShoppingCartIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -38,7 +39,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
               <div className="space-y-2">
                 {cartExpanded && cart.map(item => (
                   <CartItem 
-                    key={item.product.id}
+                    key={`${item.product.id}-${item.product.price}`}
                     product={item.product}
                     quantity={item.quantity}
                     onUpdateQuantity={onUpdateQuantity}
@@ -75,7 +76,7 @@ const CartPanel: React.FC<CartPanelProps> = ({
             <div className="space-y-2">
               {cart.map(item => (
                 <CartItem 
-                  key={item.product.id}
+                  key={`${item.product.id}-${item.product.price}`}
                   product={item.product}
                   quantity={item.quantity}
                   onUpdateQuantity={onUpdateQuantity}
