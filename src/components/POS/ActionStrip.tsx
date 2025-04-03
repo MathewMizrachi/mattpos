@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
 import { RefreshCcw } from 'lucide-react';
 
 interface ActionStripProps {
@@ -12,7 +11,7 @@ interface ActionStripProps {
 const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => {
   return (
     <div 
-      className="fixed bottom-20 left-0 right-0 h-16 z-10 flex items-center justify-between px-6"
+      className="fixed bottom-24 left-0 right-0 h-16 z-10 flex items-center justify-between px-6"
       style={{ backgroundColor: '#0A2645' }}
     >
       <Button 
