@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ActionButton from './ActionButton';
+import ProfitPlusButton from './ProfitPlusButton';
 
 interface ActionStripProps {
   onRefund: () => void;
@@ -21,43 +22,22 @@ const ActionStrip: React.FC<ActionStripProps> = ({
       className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex flex-wrap items-center`}
       style={{ 
         backgroundColor: '#0A2645',
-        height: isMobile ? '3.5rem' : '4.5rem' // Match PaymentFooter height on widescreen
+        height: isMobile ? '3.5rem' : '4.5rem'
       }}
     >
-      {/* First quarter - Refunds */}
-      <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold"
-        style={{ width: '25%' }}
+      <ActionButton 
+        label="refunds"
         onClick={onRefund}
-      >
-        refunds
-      </Button>
+      />
       
-      {/* Second quarter - Withdrawal */}
-      <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold"
-        style={{ width: '25%' }}
+      <ActionButton 
+        label="withdrawal"
         onClick={onWithdrawal}
-      >
-        withdrawal
-      </Button>
+      />
       
-      {/* Second half - ProfitPlus */}
-      <Button 
-        className="bg-[#0A2645] hover:bg-[#1c3a5d] h-full rounded-none flex items-center justify-center"
-        style={{ width: '50%' }}
-        onClick={onProfitPlus}
-      >
-        <img 
-          src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
-          alt="ProfitPlus" 
-          className="h-12 w-12 md:h-16 md:w-16 object-contain" 
-          style={{ transform: 'scale(2.1)' }} 
-        />
-      </Button>
+      <ProfitPlusButton onClick={onProfitPlus} />
     </div>
   );
 };
 
 export default ActionStrip;
-
