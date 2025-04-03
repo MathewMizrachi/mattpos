@@ -14,7 +14,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
   
   return (
     <div 
-      className={`fixed ${isMobile ? 'bottom-[4.5rem]' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
+      className={`fixed ${isMobile ? 'bottom-[4.5rem] left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
       style={{ 
         backgroundColor: '#0A2645',
         height: isMobile ? '3.5rem' : '5rem'
@@ -29,7 +29,8 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
       </Button>
       
       <Button 
-        className="bg-[#0A2645] hover:bg-[#17365c] h-full w-auto rounded-none flex items-center justify-center"
+        className="bg-[#0A2645] hover:bg-[#17365c] h-full rounded-none flex items-center justify-center"
+        style={{ width: isMobile ? '40%' : '180px' }}
         onClick={onProfitPlus}
       >
         <img 
