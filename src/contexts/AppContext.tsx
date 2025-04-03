@@ -1,181 +1,56 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import { AppContextType } from './types';
+import { useAuth } from './hooks/useAuth';
+import { useCart } from './hooks/useCart';
+import { useShift } from './hooks/useShift';
+import { useInventory } from './hooks/useInventory';
+import { useCustomers } from './hooks/useCustomers';
+import { useTransactions } from './hooks/useTransactions';
 import db from '@/lib/db';
-import { SplitPaymentDetails, Shift, Product, CartItem, User, Customer } from '@/types';
-
-interface PaymentBreakdown {
-  cash: number;
-  card: number;
-  shop2shop: number;
-  account: number;
-}
-
-interface RefundBreakdown {
-  total: number;
-  items: {
-    productId: number;
-    productName: string;
-    quantity: number;
-    amount: number;
-  }[];
-}
-
-interface AppContextType {
-  currentUser: User | null;
-  currentShift: Shift | null;
-  cart: CartItem[];
-  products: Product[];
-  customers: Customer[];
-  
-  login: (pin: string) => boolean;
-  logout: () => void;
-  
-  startShift: (userId: number, startFloat: number) => void;
-  endShift: (endFloat: number) => Shift | null;
-  getLastShiftEndFloat: () => number | null;
-  
-  addToCart: (product: Product, quantity?: number, customPrice?: number) => void;
-  updateCartItem: (productId: number, quantity: number, price?: number) => void;
-  removeFromCart: (productId: number, price?: number) => void;
-  clearCart: () => void;
-  
-  processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => {
-    success: boolean;
-    change: number;
-  };
-  
-  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
-  
-  getShiftPaymentBreakdown: (shiftId: number) => PaymentBreakdown;
-  getShiftRefundBreakdown: (shiftId: number) => RefundBreakdown;
-  getLowStockProducts: (threshold?: number) => Product[];
-  calculateExpectedCashInDrawer: (shiftId: number) => number;
-  
-  addCustomer: (name: string, phone: string, idNumber?: string, paymentTermDays?: number) => Customer;
-  getCustomers: () => Customer[];
-  markCustomerAsPaid: (customerId: number) => boolean;
-  
-  addProduct: (product: Omit<Product, 'id'>) => Product;
-  updateProduct: (id: number, updates: Partial<Omit<Product, 'id'>>) => Product | null;
-  deleteProduct: (id: number) => boolean;
-  refreshProducts: () => void;
-}
+import { SplitPaymentDetails } from '@/types';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentShift, setCurrentShift] = useState<Shift | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [products, setProducts] = useState<Product[]>(db.getAllProducts());
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  // Initialize hooks
+  const { currentUser, login, logout } = useAuth();
+  const { cart, addToCart, updateCartItem, removeFromCart, clearCart } = useCart();
+  const { 
+    currentShift, 
+    startShift, 
+    endShift, 
+    getLastShiftEndFloat,
+    getShiftPaymentBreakdown,
+    getShiftRefundBreakdown,
+    calculateExpectedCashInDrawer,
+    initializeShift
+  } = useShift();
+  const {
+    products,
+    refreshProducts,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    getLowStockProducts
+  } = useInventory();
+  const {
+    customers,
+    refreshCustomers,
+    addCustomer,
+    getCustomers,
+    markCustomerAsPaid
+  } = useCustomers();
 
-  const login = (pin: string): boolean => {
-    const user = db.authenticateUser(pin);
-    if (user) {
-      setCurrentUser(user);
-      const activeShift = db.getCurrentShift();
-      if (activeShift) {
-        setCurrentShift(activeShift);
-      }
-      return true;
+  // Initialize shift if user is logged in
+  useEffect(() => {
+    if (currentUser) {
+      initializeShift();
+      refreshCustomers();
     }
-    return false;
-  };
+  }, [currentUser]);
 
-  const logout = () => {
-    setCurrentUser(null);
-    setCurrentShift(null);
-    clearCart();
-  };
-
-  const startShift = (userId: number, startFloat: number) => {
-    const shift = db.startShift(userId, startFloat);
-    setCurrentShift(shift);
-  };
-
-  const endShift = (endFloat: number) => {
-    if (!currentShift) return null;
-    
-    const completedShift = db.endShift(currentShift.id, endFloat);
-    setCurrentShift(null);
-    return completedShift;
-  };
-
-  const getLastShiftEndFloat = (): number | null => {
-    return db.getLastShiftEndFloat();
-  };
-
-  const addToCart = (product: Product, quantity = 1, customPrice?: number) => {
-    // If a custom price is provided, use it instead of the product's default price
-    const productToAdd = customPrice !== undefined ? { ...product, price: customPrice } : product;
-    
-    setCart(prevCart => {
-      // Check if this product (with same price) is already in the cart
-      const existingItemIndex = prevCart.findIndex(item => 
-        item.product.id === productToAdd.id && 
-        item.product.price === productToAdd.price
-      );
-      
-      if (existingItemIndex >= 0) {
-        // Update quantity of existing item
-        return prevCart.map((item, index) => 
-          index === existingItemIndex
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      } else {
-        // Check if this product (with different price) is in the cart
-        const sameProductDifferentPrice = prevCart.findIndex(item => 
-          item.product.id === productToAdd.id && 
-          item.product.price !== productToAdd.price
-        );
-        
-        if (sameProductDifferentPrice >= 0) {
-          // Remove all instances of this product and add with the new price and combined quantity
-          const totalQuantity = prevCart.reduce((sum, item) => 
-            item.product.id === productToAdd.id ? sum + item.quantity : sum, 0
-          );
-          
-          const cartWithoutProduct = prevCart.filter(item => item.product.id !== productToAdd.id);
-          return [...cartWithoutProduct, { product: productToAdd, quantity: totalQuantity + quantity }];
-        } else {
-          // Add new item to cart
-          return [...prevCart, { product: productToAdd, quantity }];
-        }
-      }
-    });
-  };
-
-  const updateCartItem = (productId: number, quantity: number, price?: number) => {
-    if (quantity <= 0) {
-      removeFromCart(productId, price);
-      return;
-    }
-    
-    setCart(prevCart => 
-      prevCart.map(item => 
-        (item.product.id === productId && 
-        (price === undefined || item.product.price === price))
-          ? { ...item, quantity }
-          : item
-      )
-    );
-  };
-
-  const removeFromCart = (productId: number, price?: number) => {
-    setCart(prevCart => 
-      prevCart.filter(item => 
-        !(item.product.id === productId &&
-        (price === undefined || item.product.price === price))
-      )
-    );
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
+  // Implement processPayment with access to cart
   const processPayment = (
     cashReceived: number, 
     paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash',
@@ -219,7 +94,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     
     const updatedShift = db.getCurrentShift();
     if (updatedShift) {
-      setCurrentShift(updatedShift);
+      initializeShift();
     }
     
     refreshProducts();
@@ -233,88 +108,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
   };
 
-  const processRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop'): boolean => {
-    if (!currentShift) return false;
-    
-    const amount = product.price * quantity;
-    
-    db.createRefund(
-      currentShift.id,
-      product.id,
-      quantity,
-      amount,
-      refundMethod
-    );
-    
-    const updatedShift = db.getCurrentShift();
-    if (updatedShift) {
-      setCurrentShift(updatedShift);
-    }
-    
-    refreshProducts();
-    
-    return true;
-  };
-
-  const getShiftPaymentBreakdown = (shiftId: number): PaymentBreakdown => {
-    return db.getShiftPaymentBreakdown(shiftId);
-  };
-
-  const getShiftRefundBreakdown = (shiftId: number): RefundBreakdown => {
-    return db.getShiftRefundBreakdown(shiftId);
-  };
-
-  const getLowStockProducts = (threshold?: number): Product[] => {
-    return db.getLowStockProducts(threshold);
-  };
-
-  const calculateExpectedCashInDrawer = (shiftId: number): number => {
-    return db.calculateExpectedCashInDrawer(shiftId);
-  };
-
-  const addCustomer = (name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer => {
-    const customer = db.addCustomer(name, phone, idNumber, paymentTermDays);
-    refreshCustomers();
-    return customer;
-  };
-
-  const getCustomers = (): Customer[] => {
-    return customers;
-  };
-  
-  const markCustomerAsPaid = (customerId: number): boolean => {
-    const success = db.markCustomerAsPaid(customerId);
-    if (success) {
-      refreshCustomers();
-    }
-    return success;
-  };
-
-  const refreshCustomers = () => {
-    setCustomers(db.getAllCustomers());
-  };
-
-  const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = db.addProduct(product);
-    refreshProducts();
-    return newProduct;
-  };
-
-  const updateProduct = (id: number, updates: Partial<Omit<Product, 'id'>>) => {
-    const updated = db.updateProduct(id, updates);
-    refreshProducts();
-    return updated;
-  };
-
-  const deleteProduct = (id: number) => {
-    const result = db.deleteProduct(id);
-    refreshProducts();
-    return result;
-  };
-
-  const refreshProducts = () => {
-    setProducts(db.getAllProducts());
-  };
+  // Implement transactions with access to functions from other hooks
+  const { processRefund } = useTransactions(
+    currentShift?.id || null,
+    refreshProducts,
+    refreshCustomers
+  );
 
   const value: AppContextType = {
     currentUser,
