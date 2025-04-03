@@ -32,8 +32,10 @@ export interface Customer {
   id: number;
   name: string;
   phone: string;
+  idNumber?: string;
   createdAt: Date;
   updatedAt: Date;
+  paymentTermDays?: number;
 }
 
 export interface SplitPaymentDetails {
@@ -41,4 +43,6 @@ export interface SplitPaymentDetails {
   amount: number;
   customerName?: string;
   customerPhone?: string;
+  customerIdNumber?: string;
+  paymentTermDays?: number;
 }

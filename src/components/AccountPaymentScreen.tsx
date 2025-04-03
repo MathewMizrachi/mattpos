@@ -9,9 +9,9 @@ import { Users } from 'lucide-react';
 
 interface AccountPaymentScreenProps {
   total: number;
-  onProcessPayment: (customerName: string, customerPhone: string) => void;
+  onProcessPayment: (customerName: string, customerPhone: string, customerIdNumber: string, paymentTermDays: number) => void;
   onCancel: () => void;
-  customerInfo?: { name: string; phone: string };
+  customerInfo?: { name: string; phone: string; idNumber?: string };
 }
 
 const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
@@ -22,19 +22,21 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
 }) => {
   const [customerName, setCustomerName] = useState(customerInfo?.name || '');
   const [customerPhone, setCustomerPhone] = useState(customerInfo?.phone || '');
+  const [customerIdNumber, setCustomerIdNumber] = useState(customerInfo?.idNumber || '');
+  const [paymentTermDays, setPaymentTermDays] = useState(30); // Default to 30 days
 
   const handlePayment = () => {
-    if (!customerName.trim() || !customerPhone.trim()) {
+    if (!customerName.trim() || !customerPhone.trim() || !customerIdNumber.trim()) {
       toast({
         title: "Missing information",
-        description: "Customer name and phone number are required",
+        description: "Customer name, phone number, and ID/Passport number are required",
         variant: "destructive"
       });
       return;
     }
 
     // Process account payment
-    onProcessPayment(customerName, customerPhone);
+    onProcessPayment(customerName, customerPhone, customerIdNumber, paymentTermDays);
   };
 
   return (
@@ -67,6 +69,30 @@ const AccountPaymentScreen: React.FC<AccountPaymentScreenProps> = ({
               value={customerPhone} 
               onChange={(e) => setCustomerPhone(e.target.value)} 
               placeholder="Enter phone number"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="customerIdNumber" className="text-white mb-1 block">ID/Passport Number</Label>
+            <Input 
+              id="customerIdNumber" 
+              value={customerIdNumber} 
+              onChange={(e) => setCustomerIdNumber(e.target.value)} 
+              placeholder="Enter ID or passport number"
+              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="paymentTermDays" className="text-white mb-1 block">Payment Term (Days)</Label>
+            <Input 
+              id="paymentTermDays" 
+              type="number"
+              value={paymentTermDays} 
+              onChange={(e) => setPaymentTermDays(parseInt(e.target.value))} 
+              placeholder="Number of days"
+              min={1}
               className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
             />
           </div>
