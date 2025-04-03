@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -173,24 +172,21 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     }
   };
   
-  const handleProcessAccountPayment = () => {
-    if (customerInfo) {
-      const { name, phone } = customerInfo;
-      const result = processPayment(calculateTotal(), 'account', name, phone);
-      
-      if (result.success) {
-        toast({
-          title: "Account payment successful",
-          description: "",
-        });
-        onCloseAccountPayment();
-      } else {
-        toast({
-          title: "Payment failed",
-          description: "There was an error processing the payment",
-          variant: "destructive"
-        });
-      }
+  const handleProcessAccountPayment = (customerName: string, customerPhone: string, idNumber?: string, paymentTermDays?: number) => {
+    const result = processPayment(calculateTotal(), 'account', customerName, customerPhone);
+    
+    if (result.success) {
+      toast({
+        title: "Account payment successful",
+        description: "",
+      });
+      onCloseAccountPayment();
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
     }
   };
 
@@ -285,14 +281,13 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     );
   }
   
-  if (showAccountPayment && customerInfo) {
+  if (showAccountPayment) {
     return (
       <AccountPaymentScreen
         total={calculateTotal()}
         onProcessPayment={handleProcessAccountPayment}
         onCancel={onCloseAccountPayment}
-        customerName={customerInfo.name}
-        customerPhone={customerInfo.phone}
+        customerInfo={customerInfo}
       />
     );
   }
