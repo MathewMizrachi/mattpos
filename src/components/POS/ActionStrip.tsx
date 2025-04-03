@@ -14,10 +14,10 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
   
   return (
     <div 
-      className="fixed bottom-24 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
+      className="fixed bottom-20 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
       style={{ 
         backgroundColor: '#0A2645',
-        height: isMobile ? '3rem' : '3.5rem'
+        height: isMobile ? '3.5rem' : '4rem'
       }}
     >
       <ActionButton 
@@ -32,7 +32,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
           <img 
             src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
             alt="ProfitPlus" 
-            className="h-8 w-8 md:h-10 md:w-10 object-contain"
+            className="h-10 w-10 md:h-12 md:w-12 object-contain"
           />
         }
         variant="icon"
@@ -59,7 +59,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   if (variant === 'icon') {
     return (
       <Button 
-        className="bg-[#0A2645] hover:bg-[#17365c] p-1.5 md:p-2 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center"
+        className="bg-[#0A2645] hover:bg-[#17365c] p-1.5 md:p-2 h-12 w-12 md:h-14 md:w-14 flex items-center justify-center"
         onClick={onClick}
       >
         {icon}
