@@ -34,13 +34,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     }
   };
   
-  const containerClasses = fullScreen 
-    ? "min-h-screen flex items-center justify-center bg-[#0A2645] p-4" 
-    : "w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg";
-  
   return (
     <div className={`${fullScreen ? 'min-h-screen' : ''} flex items-center justify-center bg-[#0A2645] p-4`}>
-      <div className={containerClasses}>
+      <div className={`${fullScreen ? 'w-full max-w-md' : 'w-full max-w-md'} p-8 bg-[#0A2645] rounded-lg shadow-lg`}>
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-white">Payment</h2>
         </div>
