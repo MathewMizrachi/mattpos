@@ -10,7 +10,7 @@ import { ArrowDown, DollarSign } from 'lucide-react';
 
 interface WithdrawalScreenProps {
   onCancel: () => void;
-  onWithdraw: (amount: number, reason: string) => void;
+  onWithdraw: (amount: number, reason: string) => boolean | void;
 }
 
 const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdraw }) => {

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Shift } from '@/types';
@@ -72,7 +71,7 @@ export function useShiftManager({
     setShowWithdrawalScreen(false);
   };
   
-  const handleProcessWithdrawal = (amount: number, reason: string) => {
+  const handleProcessWithdrawal = (amount: number, reason: string): boolean => {
     if (processWithdrawal) {
       const success = processWithdrawal(amount, reason);
       
@@ -89,7 +88,10 @@ export function useShiftManager({
           variant: "destructive"
         });
       }
+      
+      return success;
     }
+    return false;
   };
   
   return {
