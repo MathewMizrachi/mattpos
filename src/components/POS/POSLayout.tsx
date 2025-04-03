@@ -58,9 +58,6 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         onRefund={onShowRefundScreen}
         onProfitPlus={onShowProfitPlusScreen}
         onWithdrawal={onShowWithdrawalScreen}
-        onCashPayment={onCashPayment}
-        onCardPayment={onCardPayment}
-        onShop2ShopPayment={onShop2ShopPayment}
       />
       
       <PaymentFooter 
@@ -68,6 +65,9 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         cartLength={cart.length}
         onClearCart={onClearCart}
         onShowPaymentForm={onShowPaymentForm}
+        onCashPayment={onCashPayment}
+        onCardPayment={onCardPayment}
+        onShop2ShopPayment={onShop2ShopPayment}
         isMobile={isMobile}
       />
     </div>
