@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
@@ -14,35 +13,53 @@ interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product, customPrice?: number) => void;
   isMobile?: boolean;
+  isSelected: boolean;
+  onSelect: (productId: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobile }) => {
-  const [isListeningForPrice, setIsListeningForPrice] = useState(false);
+const ProductCard: React.FC<ProductCardProps> = ({ 
+  product, 
+  onAddToCart, 
+  isMobile, 
+  isSelected,
+  onSelect
+}) => {
   const [priceInput, setPriceInput] = useState('');
   const [customPrice, setCustomPrice] = useState<number | null>(null);
   
   const handleClick = () => {
-    if (isListeningForPrice) {
-      // If we're already listening for price input, add the product with the custom price
-      const productToAdd = {
-        ...product,
-        price: customPrice !== null ? customPrice : product.price
-      };
-      onAddToCart(productToAdd, customPrice !== null ? customPrice : undefined);
+    // First, select this product card
+    onSelect(product.id);
+    
+    // If not already selected, just add to cart with default price
+    if (!isSelected) {
+      onAddToCart(product);
     } else {
-      // Start listening for price input
-      setIsListeningForPrice(true);
-      setPriceInput('');
+      // If already selected and we have a custom price, add with custom price
+      if (customPrice !== null) {
+        onAddToCart(product, customPrice);
+      } else {
+        // Otherwise add with original price
+        onAddToCart(product);
+      }
     }
   };
   
+  // Reset price input when card is deselected
   useEffect(() => {
-    if (!isListeningForPrice) return;
+    if (!isSelected) {
+      setPriceInput('');
+      setCustomPrice(null);
+    }
+  }, [isSelected]);
+  
+  useEffect(() => {
+    if (!isSelected) return;
     
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         // Cancel price input mode
-        setIsListeningForPrice(false);
+        onSelect(-1); // Deselect
         setPriceInput('');
         setCustomPrice(null);
       } else if (e.key === 'Enter') {
@@ -50,15 +67,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
         if (priceInput) {
           const newPrice = parseFloat(priceInput);
           if (!isNaN(newPrice) && newPrice > 0) {
-            const productToAdd = { ...product, price: newPrice };
             setCustomPrice(newPrice);
-            onAddToCart(productToAdd, newPrice);
-            setIsListeningForPrice(false);
+            onAddToCart(product, newPrice);
           }
         } else {
           // If no price was entered, just add with original price
           onAddToCart(product);
-          setIsListeningForPrice(false);
         }
       } else if (/^\d$/.test(e.key) || e.key === '.' || e.key === ',') {
         // Only allow numbers and decimal point for price input
@@ -98,10 +112,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isListeningForPrice, priceInput, product, onAddToCart]);
+  }, [isSelected, priceInput, product, onAddToCart, onSelect]);
   
   // Determine which price to display
-  const displayPrice = isListeningForPrice && priceInput 
+  const displayPrice = isSelected && priceInput 
     ? priceInput 
     : customPrice !== null 
       ? customPrice 
@@ -109,7 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
   
   return (
     <Card 
-      className={`h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow ${isListeningForPrice ? 'ring-2 ring-primary' : ''}`}
+      className={`h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow ${isSelected ? 'ring-2 ring-primary' : ''}`}
       onClick={handleClick}
     >
       <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
@@ -124,12 +138,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isMobil
         </div>
         
         <div className="mt-1">
-          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold ${isListeningForPrice ? 'text-blue-500' : 'text-primary'}`}>
-            {isListeningForPrice && priceInput 
+          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold ${isSelected ? 'text-blue-500' : 'text-primary'}`}>
+            {isSelected && priceInput 
               ? `R ${priceInput}` 
               : formatCurrency(Number(displayPrice))}
           </p>
-          {isListeningForPrice && 
+          {isSelected && 
             <p className="text-xs text-muted-foreground">Enter price and press Enter</p>
           }
         </div>

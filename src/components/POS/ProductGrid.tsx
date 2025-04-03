@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import ProductCard from '@/components/ProductCard';
 import { Product } from '@/types';
 
@@ -16,9 +16,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   onAddToCart,
   cartExpanded
 }) => {
+  const [selectedProductId, setSelectedProductId] = useState<number>(-1);
+
   const handleProductClick = (product: Product, customPrice?: number) => {
     // Pass the custom price if provided, otherwise use the product's default price
     onAddToCart(product, 1, customPrice);
+  };
+
+  const handleProductSelect = (productId: number) => {
+    setSelectedProductId(productId);
   };
 
   return (
@@ -29,7 +35,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         <ProductCard 
           key={product.id} 
           product={product} 
-          onAddToCart={handleProductClick}
+          onAddToCart={(product, customPrice) => handleProductClick(product, customPrice)}
+          isSelected={selectedProductId === product.id}
+          onSelect={handleProductSelect}
           isMobile={isMobile}
         />
       ))}
