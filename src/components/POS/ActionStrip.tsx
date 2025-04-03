@@ -52,7 +52,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
           className="h-12 w-12 md:h-16 md:w-16 object-contain" 
-          style={{ transform: 'scale(1.65)' }} 
+          style={{ transform: 'scale(1.85)' }} 
         />
       </Button>
     </div>
