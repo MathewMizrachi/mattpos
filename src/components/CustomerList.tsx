@@ -12,6 +12,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { toast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface CustomerListProps {
   onBack: () => void;
@@ -20,45 +21,23 @@ interface CustomerListProps {
 const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
   const { customers, markCustomerAsPaid } = useApp();
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const navigate = useNavigate();
   
   // Format date to show only date part
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString();
   };
 
-  const handleMarkAsPaid = async (customerId: number) => {
-    setProcessingId(customerId);
-    try {
-      const success = markCustomerAsPaid(customerId);
-      if (success) {
-        toast({
-          title: "Success",
-          description: "Account marked as paid",
-          variant: "default"
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to mark account as paid",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive"
-      });
-    } finally {
-      setProcessingId(null);
-    }
+  const handleMakePayment = async (customerId: number) => {
+    // Navigate to POS with customer info
+    navigate('/pos', { state: { customerId } });
   };
   
   return (
     <div className="min-h-screen bg-gray-50 pt-6 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center mb-6">
-          <Button onClick={onBack} variant="outline" className="mr-4">
+          <Button onClick={onBack} variant="outline" className="mr-4 text-white">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
@@ -99,11 +78,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
                         variant="outline" 
                         size="sm"
                         disabled={processingId === customer.id || !customer.paymentTermDays}
-                        onClick={() => handleMarkAsPaid(customer.id)}
-                        className="flex items-center gap-1"
+                        onClick={() => handleMakePayment(customer.id)}
+                        className="flex items-center gap-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
                       >
                         <Check className="h-4 w-4" />
-                        Mark Paid
+                        Make Payment
                       </Button>
                     </TableCell>
                   </TableRow>
