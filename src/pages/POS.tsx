@@ -1,6 +1,8 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { useToast } from '@/hooks/use-toast';
 import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
@@ -29,6 +31,7 @@ const POS = () => {
   } = useApp();
   
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const {
     searchTerm,
