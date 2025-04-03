@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
 
@@ -27,27 +27,42 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [priceInput, setPriceInput] = useState('');
   const [customPrice, setCustomPrice] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   const handleClick = () => {
     // First, select this product card
     onSelect(product.id);
     
-    // If not already selected, just add to cart with default price
+    // If not already selected, add to cart with default price
     if (!isSelected) {
       onAddToCart(product);
-    } else {
-      // If already selected and we have a custom price, add with custom price
-      if (customPrice !== null) {
-        onAddToCart(product, customPrice);
-        // Reset after adding with custom price
-        setPriceInput('');
-        setCustomPrice(null);
-      } else {
-        // Otherwise add with original price
-        onAddToCart(product);
-      }
     }
+    
+    // Focus input field for price entry when selected
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 50);
   };
+  
+  // Apply the custom price when moving to another product
+  useEffect(() => {
+    // When card becomes deselected and we have a custom price
+    if (!isSelected && customPrice !== null && priceInput !== '') {
+      onAddToCart(product, customPrice);
+      // Reset after adding with custom price
+      setPriceInput('');
+      setCustomPrice(null);
+    }
+  }, [isSelected, customPrice, priceInput, product, onAddToCart]);
+  
+  // Auto-focus input when selected
+  useEffect(() => {
+    if (isSelected && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSelected]);
   
   // Reset price input when card is deselected
   useEffect(() => {
@@ -83,35 +98,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           onAddToCart(product);
           onSelect(-1); // Deselect after adding
         }
-      } else if (/^\d$/.test(e.key) || e.key === '.' || e.key === ',') {
-        // Only allow numbers and decimal point for price input
-        const nextChar = e.key === ',' ? '.' : e.key;
-        // Prevent multiple decimal points
-        if (nextChar === '.' && priceInput.includes('.')) return;
-        
-        // Update the price input
-        setPriceInput(prev => {
-          const newInput = prev + nextChar;
-          const parsedPrice = parseFloat(newInput);
-          if (!isNaN(parsedPrice)) {
-            setCustomPrice(parsedPrice);
-          }
-          return newInput;
-        });
-      } else if (e.key === 'Backspace') {
-        // Handle backspace for price input
-        setPriceInput(prev => {
-          const newInput = prev.slice(0, -1);
-          if (newInput) {
-            const parsedPrice = parseFloat(newInput);
-            if (!isNaN(parsedPrice)) {
-              setCustomPrice(parsedPrice);
-            }
-          } else {
-            setCustomPrice(null);
-          }
-          return newInput;
-        });
       }
     };
     
@@ -122,6 +108,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isSelected, priceInput, product, onAddToCart, onSelect]);
+  
+  // Handle price input changes
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Only allow numbers and one decimal point
+    if (/^-?\d*\.?\d*$/.test(value)) {
+      setPriceInput(value);
+      
+      const parsedValue = parseFloat(value);
+      if (!isNaN(parsedValue)) {
+        setCustomPrice(parsedValue);
+      } else {
+        setCustomPrice(null);
+      }
+    }
+  };
   
   // Determine which price to display
   const displayPrice = isSelected && priceInput 
@@ -146,12 +149,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
         
-        <div className="mt-1">
-          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold ${isSelected ? 'text-blue-500' : 'text-primary'}`}>
-            {isSelected && priceInput 
-              ? `R ${priceInput}` 
-              : formatCurrency(Number(displayPrice))}
-          </p>
+        <div className="mt-1 relative">
+          {isSelected ? (
+            <input
+              ref={inputRef}
+              type="text"
+              value={priceInput}
+              onChange={handlePriceChange}
+              className="w-full p-1 text-blue-500 font-bold text-lg bg-transparent border-b border-blue-500 focus:outline-none"
+              placeholder={formatCurrency(Number(product.price)).replace('R', '')}
+              autoFocus
+            />
+          ) : (
+            <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold ${isSelected ? 'text-blue-500' : 'text-primary'}`}>
+              {formatCurrency(Number(displayPrice))}
+            </p>
+          )}
           {isSelected && 
             <p className="text-xs text-muted-foreground">Enter price and press Enter</p>
           }

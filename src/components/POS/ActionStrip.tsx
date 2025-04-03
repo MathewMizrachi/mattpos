@@ -15,7 +15,7 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus, onWit
   
   return (
     <div 
-      className="fixed bottom-14 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
+      className="fixed bottom-[3.5rem] left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
       style={{ 
         backgroundColor: '#0A2645',
         height: isMobile ? '3rem' : '3.5rem'
