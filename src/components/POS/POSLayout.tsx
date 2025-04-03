@@ -35,7 +35,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   const isMobile = useIsMobile();
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-16">
       <POSHeader 
         currentUser={currentUser}
         currentShift={currentShift}
@@ -46,12 +46,10 @@ const POSLayout: React.FC<POSLayoutProps> = ({
       
       {children}
       
-      <div className="fixed bottom-28 left-0 right-0 z-10">
-        <ActionStrip 
-          onRefund={onShowRefundScreen}
-          onProfitPlus={onShowProfitPlusScreen}
-        />
-      </div>
+      <ActionStrip 
+        onRefund={onShowRefundScreen}
+        onProfitPlus={onShowProfitPlusScreen}
+      />
       
       <PaymentFooter 
         total={total}

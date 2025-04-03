@@ -14,22 +14,22 @@ const ActionStrip: React.FC<ActionStripProps> = ({ onRefund, onProfitPlus }) => 
   
   return (
     <div 
-      className="fixed bottom-20 left-0 right-0 z-10 flex items-center justify-between px-4 md:px-6"
+      className={`fixed ${isMobile ? 'bottom-16 left-0 right-0' : 'bottom-0 left-0 right-[24rem]'} z-10 flex items-center`}
       style={{ 
         backgroundColor: '#0A2645',
         height: isMobile ? '3.5rem' : '4rem'
       }}
     >
       <Button 
-        className="bg-[#0A2645] hover:bg-[#17365c] text-white h-full rounded-none text-xs md:text-sm flex items-center"
+        className="bg-[#0A2645] hover:bg-[#17365c] text-white h-full w-full rounded-none text-xs md:text-sm flex items-center justify-center"
         onClick={onRefund}
       >
         <RefreshCcw className="h-4 w-4 md:h-5 md:w-5 mr-1.5 md:mr-2" />
-        {isMobile ? 'Refunds' : 'Refunds'}
+        Refunds
       </Button>
       
       <Button 
-        className="bg-[#0A2645] hover:bg-[#17365c] h-full rounded-none flex items-center justify-center"
+        className="bg-[#0A2645] hover:bg-[#17365c] h-full w-auto rounded-none flex items-center justify-center"
         onClick={onProfitPlus}
       >
         <img 
