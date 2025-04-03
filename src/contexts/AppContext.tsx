@@ -1,6 +1,6 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import db from '@/lib/db';
+import { SplitPaymentDetails } from '@/types';
 
 interface User {
   id: number;
@@ -31,11 +31,20 @@ interface Shift {
   transactionCount?: number;
 }
 
+interface Customer {
+  id: number;
+  name: string;
+  phone: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface AppContextType {
   currentUser: User | null;
   currentShift: Shift | null;
   cart: CartItem[];
   products: Product[];
+  customers: Customer[];
   
   login: (pin: string) => boolean;
   logout: () => void;
@@ -48,10 +57,13 @@ interface AppContextType {
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
   
-  processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop') => {
+  processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => {
     success: boolean;
     change: number;
   };
+  
+  addCustomer: (name: string, phone: string) => Customer;
+  getCustomers: () => Customer[];
   
   addProduct: (product: Omit<Product, 'id'>) => Product;
   updateProduct: (id: number, updates: Partial<Omit<Product, 'id'>>) => Product | null;
@@ -66,6 +78,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [currentShift, setCurrentShift] = useState<Shift | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [products, setProducts] = useState<Product[]>(db.getAllProducts());
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   const login = (pin: string): boolean => {
     const user = db.authenticateUser(pin);
@@ -102,7 +115,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const addToCart = (product: Product, quantity = 1) => {
     setCart(prevCart => {
       const existingItem = prevCart.find(item => 
-        // For custom-priced products, we need to consider both id and price
         item.product.id === product.id && item.product.price === product.price
       );
       
@@ -141,7 +153,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCart([]);
   };
 
-  const processPayment = (cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' = 'cash') => {
+  const processPayment = (
+    cashReceived: number, 
+    paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash',
+    customerName?: string,
+    customerPhone?: string,
+    splitPayments?: SplitPaymentDetails[]
+  ) => {
     if (!currentShift || cart.length === 0) {
       return { success: false, change: 0 };
     }
@@ -152,7 +170,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       unitPrice: item.product.price
     }));
     
-    const transaction = db.createTransaction(currentShift.id, items, cashReceived, paymentMethod);
+    let customerId: number | undefined;
+    
+    if ((paymentMethod === 'account' || (paymentMethod === 'split' && splitPayments?.some(p => p.method === 'account'))) 
+        && customerName && customerPhone) {
+      const customer = addCustomer(customerName, customerPhone);
+      customerId = customer.id;
+    }
+    
+    const dbSplitPayments = splitPayments?.map(payment => ({
+      method: payment.method,
+      amount: payment.amount
+    }));
+    
+    const transaction = db.createTransaction(
+      currentShift.id, 
+      items, 
+      cashReceived, 
+      paymentMethod, 
+      customerId,
+      dbSplitPayments
+    );
     
     const updatedShift = db.getCurrentShift();
     if (updatedShift) {
@@ -160,6 +198,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
     
     refreshProducts();
+    refreshCustomers();
     
     clearCart();
     
@@ -167,6 +206,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       success: true, 
       change: transaction.change
     };
+  };
+
+  const addCustomer = (name: string, phone: string): Customer => {
+    const customer = db.addCustomer(name, phone);
+    refreshCustomers();
+    return customer;
+  };
+
+  const getCustomers = (): Customer[] => {
+    return customers;
+  };
+
+  const refreshCustomers = () => {
+    setCustomers(db.getAllCustomers());
   };
 
   const addProduct = (product: Omit<Product, 'id'>) => {
@@ -196,6 +249,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     currentShift,
     cart,
     products,
+    customers,
     login,
     logout,
     startShift,
@@ -205,6 +259,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     removeFromCart,
     clearCart,
     processPayment,
+    addCustomer,
+    getCustomers,
     addProduct,
     updateProduct,
     deleteProduct,

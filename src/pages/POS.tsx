@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -10,7 +9,9 @@ import ShiftSummary from '@/components/ShiftSummary';
 import PaymentOptions from '@/components/PaymentOptions';
 import CardPaymentScreen from '@/components/CardPaymentScreen';
 import Shop2ShopScreen from '@/components/Shop2ShopScreen';
-import { Product } from '@/types';
+import AccountPaymentScreen from '@/components/AccountPaymentScreen';
+import SplitPaymentScreen from '@/components/SplitPaymentScreen';
+import { Product, SplitPaymentDetails } from '@/types';
 
 import POSHeader from '@/components/POS/POSHeader';
 import ProductSearch from '@/components/POS/ProductSearch';
@@ -42,9 +43,12 @@ const POS = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showCardPayment, setShowCardPayment] = useState(false);
   const [showShop2Shop, setShowShop2Shop] = useState(false);
+  const [showAccountPayment, setShowAccountPayment] = useState(false);
+  const [showSplitPayment, setShowSplitPayment] = useState(false);
   const [showShiftSummary, setShowShiftSummary] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop'>('cash');
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop' | 'account' | 'split'>('cash');
+  const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   
   useEffect(() => {
     if (!currentUser) {
@@ -79,9 +83,13 @@ const POS = () => {
     }
   };
   
-  const handleSelectPaymentMethod = (method: 'shop2shop' | 'cash' | 'card') => {
+  const handleSelectPaymentMethod = (
+    method: 'shop2shop' | 'cash' | 'card' | 'account' | 'split',
+    customerInfo?: { name: string; phone: string }
+  ) => {
     setPaymentMethod(method);
     setShowPaymentOptions(false);
+    setCustomerInfo(customerInfo);
     
     switch (method) {
       case 'cash':
@@ -93,11 +101,22 @@ const POS = () => {
       case 'shop2shop':
         setShowShop2Shop(true);
         break;
+      case 'account':
+        setShowAccountPayment(true);
+        break;
+      case 'split':
+        setShowSplitPayment(true);
+        break;
     }
   };
   
   const handleNonCashPayment = () => {
-    const result = processPayment(calculateTotal(), paymentMethod);
+    const result = processPayment(
+      calculateTotal(), 
+      paymentMethod,
+      customerInfo?.name,
+      customerInfo?.phone
+    );
     
     if (result.success) {
       toast({
@@ -106,6 +125,60 @@ const POS = () => {
       });
       setShowCardPayment(false);
       setShowShop2Shop(false);
+      setShowAccountPayment(false);
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleAccountPayment = (customerName: string, customerPhone: string) => {
+    const result = processPayment(
+      calculateTotal(), 
+      'account',
+      customerName,
+      customerPhone
+    );
+    
+    if (result.success) {
+      toast({
+        title: "Account payment successful",
+        description: '',
+      });
+      setShowAccountPayment(false);
+    } else {
+      toast({
+        title: "Payment failed",
+        description: "There was an error processing the payment",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleSplitPayment = (splitPayments: SplitPaymentDetails[]) => {
+    const totalAmount = splitPayments.reduce((sum, payment) => sum + payment.amount, 0);
+    
+    const accountPayment = splitPayments.find(p => p.method === 'account');
+    const customerName = accountPayment?.customerName || customerInfo?.name;
+    const customerPhone = accountPayment?.customerPhone || customerInfo?.phone;
+    
+    const result = processPayment(
+      totalAmount, 
+      'split',
+      customerName,
+      customerPhone,
+      splitPayments
+    );
+    
+    if (result.success) {
+      toast({
+        title: "Split payment successful",
+        description: '',
+      });
+      setShowSplitPayment(false);
     } else {
       toast({
         title: "Payment failed",
@@ -154,7 +227,6 @@ const POS = () => {
     }
   };
   
-  // Render different payment screens based on state
   if (showPaymentOptions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -187,6 +259,28 @@ const POS = () => {
       />
     );
   }
+
+  if (showAccountPayment) {
+    return (
+      <AccountPaymentScreen
+        total={calculateTotal()}
+        onProcessPayment={handleAccountPayment}
+        onCancel={() => setShowAccountPayment(false)}
+        customerInfo={customerInfo}
+      />
+    );
+  }
+
+  if (showSplitPayment) {
+    return (
+      <SplitPaymentScreen
+        total={calculateTotal()}
+        onProcessSplitPayment={handleSplitPayment}
+        onCancel={() => setShowSplitPayment(false)}
+        customerInfo={customerInfo}
+      />
+    );
+  }
   
   if (showPaymentForm) {
     return (
@@ -215,7 +309,6 @@ const POS = () => {
     );
   }
   
-  // Main POS screen
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-32">
       <POSHeader 

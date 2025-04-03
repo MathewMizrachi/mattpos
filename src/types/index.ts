@@ -27,3 +27,18 @@ export interface Shift {
   salesTotal?: number;
   transactionCount?: number;
 }
+
+export interface Customer {
+  id: number;
+  name: string;
+  phone: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SplitPaymentDetails {
+  method: 'cash' | 'card' | 'shop2shop' | 'account';
+  amount: number;
+  customerName?: string;
+  customerPhone?: string;
+}

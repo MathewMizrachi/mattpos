@@ -33,13 +33,28 @@ interface Transaction {
   items: TransactionItem[];
   cashReceived: number;
   change: number;
-  paymentMethod: 'cash' | 'card' | 'shop2shop';
+  paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split';
+  customerId?: number;
+  splitPayments?: SplitPaymentDetail[];
+}
+
+interface SplitPaymentDetail {
+  method: 'cash' | 'card' | 'shop2shop' | 'account';
+  amount: number;
 }
 
 interface TransactionItem {
   productId: number;
   quantity: number;
   unitPrice: number;
+}
+
+interface Customer {
+  id: number;
+  name: string;
+  phone: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 class Database {
@@ -63,12 +78,14 @@ class Database {
     { id: 12, name: 'Data 1GB', price: 85, stock: 999 },
   ];
 
+  private customers: Customer[] = [];
   private shifts: Shift[] = [];
   private transactions: Transaction[] = [];
   private currentId = {
     shift: 1,
     transaction: 1,
     product: 13,
+    customer: 1,
   };
 
   // User methods
@@ -106,6 +123,42 @@ class Database {
     const initialLength = this.products.length;
     this.products = this.products.filter(product => product.id !== id);
     return initialLength !== this.products.length;
+  }
+
+  // Customer methods
+  getAllCustomers(): Customer[] {
+    return [...this.customers];
+  }
+
+  getCustomer(id: number): Customer | undefined {
+    return this.customers.find(customer => customer.id === id);
+  }
+
+  getCustomerByPhone(phone: string): Customer | undefined {
+    return this.customers.find(customer => customer.phone === phone);
+  }
+
+  addCustomer(name: string, phone: string): Customer {
+    // Check if customer already exists
+    const existingCustomer = this.getCustomerByPhone(phone);
+    if (existingCustomer) {
+      // Update the name in case it changed
+      existingCustomer.name = name;
+      existingCustomer.updatedAt = new Date();
+      return existingCustomer;
+    }
+
+    // Create new customer
+    const newCustomer: Customer = {
+      id: this.currentId.customer++,
+      name,
+      phone,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    this.customers.push(newCustomer);
+    return newCustomer;
   }
 
   // Shift methods
@@ -146,7 +199,7 @@ class Database {
   }
 
   // Transaction methods
-  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' = 'cash'): Transaction {
+  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash', customerId?: number, splitPayments?: SplitPaymentDetail[]): Transaction {
     const total = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
     const change = paymentMethod === 'cash' ? cashReceived - total : 0;
     
@@ -158,7 +211,9 @@ class Database {
       items,
       cashReceived,
       change,
-      paymentMethod
+      paymentMethod,
+      customerId,
+      splitPayments
     };
     
     this.transactions.push(newTransaction);
