@@ -53,10 +53,6 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-white">Select Payment Method</h2>
-      </div>
-      
       <div className="mb-6 space-y-4">
         <div>
           <Label htmlFor="customerName" className="text-white mb-1 block">Customer Name</Label>
@@ -65,7 +61,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             value={customerName} 
             onChange={(e) => setCustomerName(e.target.value)} 
             placeholder="Enter customer name"
-            className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+            className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
           />
         </div>
         
@@ -76,7 +72,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             value={customerPhone} 
             onChange={(e) => setCustomerPhone(e.target.value)} 
             placeholder="Enter phone number"
-            className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+            className="bg-white border-gray-300 text-[#0A2645] placeholder:text-gray-400"
           />
         </div>
       </div>

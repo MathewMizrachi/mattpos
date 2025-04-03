@@ -115,7 +115,7 @@ const Stock = () => {
         <div className="relative mb-4">
           <SearchIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input
-            className="pl-9 max-w-md"
+            className="pl-9 max-w-md bg-white text-[#0A2645]"
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
