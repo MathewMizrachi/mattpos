@@ -24,6 +24,8 @@ const ShiftSummary: React.FC<ShiftSummaryProps> = ({ shift, onClose }) => {
   };
   
   const calculateShiftDuration = () => {
+    if (!shift || !shift.startTime) return '0h 0m';
+    
     const start = new Date(shift.startTime);
     const end = shift.endTime ? new Date(shift.endTime) : new Date();
     
@@ -34,7 +36,21 @@ const ShiftSummary: React.FC<ShiftSummaryProps> = ({ shift, onClose }) => {
     return `${hours}h ${minutes}m`;
   };
   
-  const expectedCash = (shift.startFloat || 0) + (shift.salesTotal || 0);
+  // Handle potential undefined values with default fallbacks
+  const startFloat = shift?.startFloat || 0;
+  const salesTotal = shift?.salesTotal || 0;
+  const expectedCash = startFloat + salesTotal;
+  
+  if (!shift) {
+    return (
+      <div className="w-full max-w-md mx-auto bg-white p-4 rounded-md shadow">
+        <p className="text-center">No shift data available</p>
+        <div className="flex justify-center mt-4">
+          <Button onClick={onClose}>Close</Button>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="w-full max-w-md mx-auto">
@@ -61,12 +77,12 @@ const ShiftSummary: React.FC<ShiftSummaryProps> = ({ shift, onClose }) => {
         <div className="border-t border-border pt-2 mt-2">
           <div className="flex justify-between">
             <span>Starting Float:</span>
-            <span>{formatCurrency(shift.startFloat)}</span>
+            <span>{formatCurrency(startFloat)}</span>
           </div>
           
           <div className="flex justify-between">
             <span>Total Sales:</span>
-            <span>{formatCurrency(shift.salesTotal || 0)}</span>
+            <span>{formatCurrency(salesTotal)}</span>
           </div>
           
           <div className="flex justify-between font-bold">

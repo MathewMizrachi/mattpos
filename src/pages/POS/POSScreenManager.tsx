@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -172,26 +173,25 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     }
   };
   
-  const renderAccountPaymentScreen = () => {
-    if (!showAccountPayment) return null;
-    
-    return (
-      <AccountPaymentScreen
-        total={calculateTotal()}
-        onProcessPayment={() => {
-          if (customerInfo) {
-            const { name, phone } = customerInfo;
-            const result = processPayment(0, 'account', name, phone);
-            if (result.success) {
-              onCloseAccountPayment();
-              clearCart();
-              navigateToDashboard();
-            }
-          }
-        }}
-        onCancel={onCloseAccountPayment}
-      />
-    );
+  const handleProcessAccountPayment = () => {
+    if (customerInfo) {
+      const { name, phone } = customerInfo;
+      const result = processPayment(calculateTotal(), 'account', name, phone);
+      
+      if (result.success) {
+        toast({
+          title: "Account payment successful",
+          description: "",
+        });
+        onCloseAccountPayment();
+      } else {
+        toast({
+          title: "Payment failed",
+          description: "There was an error processing the payment",
+          variant: "destructive"
+        });
+      }
+    }
   };
 
   const handleProcessSplitPayment = (payments: SplitPaymentDetails[]) => {
@@ -286,7 +286,15 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   }
   
   if (showAccountPayment && customerInfo) {
-    return renderAccountPaymentScreen();
+    return (
+      <AccountPaymentScreen
+        total={calculateTotal()}
+        onProcessPayment={handleProcessAccountPayment}
+        onCancel={onCloseAccountPayment}
+        customerName={customerInfo.name}
+        customerPhone={customerInfo.phone}
+      />
+    );
   }
   
   if (showSplitPayment) {
