@@ -29,7 +29,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-2">
+    <div className="fixed inset-0 flex items-center justify-center bg-[#0A2645] z-50">
       <div className="w-full max-w-md mx-auto text-white">
         <div className="text-center mb-4">
           <div className="flex justify-center mb-2">
@@ -59,6 +59,13 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
         </div>
         
         <div className="flex justify-center space-x-4">
+          <Button
+            variant="outline"
+            onClick={onCancel}
+            className="bg-transparent text-white border-white hover:bg-white/10"
+          >
+            Cancel
+          </Button>
           <Button 
             onClick={handlePayment} 
             className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
