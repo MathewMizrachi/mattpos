@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PaymentForm from '@/components/PaymentForm';
 import CardPaymentScreen from '@/components/CardPaymentScreen';
@@ -50,6 +49,7 @@ export const PaymentScreens: React.FC<PaymentScreensProps> = ({
         total={calculateTotal()}
         onProcessPayment={handlePaymentComplete}
         onCancel={() => setShowPaymentForm(false)}
+        fullScreen={true}
       />
     );
   }

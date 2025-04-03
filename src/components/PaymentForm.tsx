@@ -9,12 +9,14 @@ interface PaymentFormProps {
   total: number;
   onProcessPayment: (cashReceived: number) => void;
   onCancel: () => void;
+  fullScreen?: boolean;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ 
   total, 
   onProcessPayment, 
-  onCancel 
+  onCancel,
+  fullScreen = false
 }) => {
   const [cashReceived, setCashReceived] = useState<string>('');
   const [change, setChange] = useState<number>(0);
@@ -37,9 +39,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     return amounts.filter(amount => amount >= total);
   };
   
+  const containerClasses = fullScreen 
+    ? "min-h-screen flex items-center justify-center bg-[#0A2645] p-4" 
+    : "w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg";
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-      <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
+    <div className={`${fullScreen ? 'min-h-screen' : ''} flex items-center justify-center bg-[#0A2645] p-4`}>
+      <div className={containerClasses}>
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-white">Payment</h2>
         </div>
