@@ -10,6 +10,7 @@ interface UseShiftManagerProps {
   getShiftRefundBreakdown: (shiftId: number) => any;
   getLowStockProducts: (limit: number) => any[];
   navigateToDashboard: () => void;
+  processWithdrawal?: (amount: number, reason: string) => boolean;
 }
 
 export function useShiftManager({
@@ -19,11 +20,14 @@ export function useShiftManager({
   getShiftRefundBreakdown,
   getLowStockProducts,
   navigateToDashboard,
+  processWithdrawal,
 }: UseShiftManagerProps) {
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
+  const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
   const [completedShift, setCompletedShift] = useState<Shift | null>(null);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
+  const { toast } = useToast();
   
   const handleEndShiftRequest = (currentShift: any, cart: any[]) => {
     if (cart.length > 0) {
@@ -60,14 +64,46 @@ export function useShiftManager({
     navigateToDashboard();
   };
   
+  const handleShowWithdrawalScreen = () => {
+    setShowWithdrawalScreen(true);
+  };
+  
+  const handleCloseWithdrawalScreen = () => {
+    setShowWithdrawalScreen(false);
+  };
+  
+  const handleProcessWithdrawal = (amount: number, reason: string) => {
+    if (processWithdrawal) {
+      const success = processWithdrawal(amount, reason);
+      
+      if (success) {
+        toast({
+          title: "Withdrawal completed",
+          description: `Successfully withdrawn from register`,
+        });
+        setShowWithdrawalScreen(false);
+      } else {
+        toast({
+          title: "Withdrawal failed",
+          description: "There was an error processing the withdrawal",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
   return {
     showEndShiftForm,
     showReconciliationReport,
+    showWithdrawalScreen,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm,
     handleEndShiftRequest,
     handleSubmitEndShift,
     handleCloseReconciliation,
+    handleShowWithdrawalScreen,
+    handleCloseWithdrawalScreen,
+    handleProcessWithdrawal,
   };
 }

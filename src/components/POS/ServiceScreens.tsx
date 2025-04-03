@@ -5,20 +5,24 @@ import { formatCurrency } from '@/lib/utils';
 import { Product } from '@/types';
 import RefundScreen from '@/components/RefundScreen';
 import ProfitPlusScreen from '@/components/ProfitPlusScreen';
+import WithdrawalScreen from '@/components/WithdrawalScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
 
 interface ServiceScreensProps {
   showRefundScreen: boolean;
   showProfitPlusScreen: boolean;
+  showWithdrawalScreen: boolean;
   showEndShiftForm: boolean;
   showReconciliationReport: boolean;
   currentShift: any;
   completedShift: any;
   endShiftCashAmount: number;
   processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
+  processWithdrawal: (amount: number, reason: string) => boolean;
   onCloseRefundScreen: () => void;
   onCloseProfitPlusScreen: () => void;
+  onCloseWithdrawalScreen: () => void;
   setShowEndShiftForm: (show: boolean) => void;
   handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
   handleCloseReconciliation: () => void;
@@ -31,14 +35,17 @@ interface ServiceScreensProps {
 const ServiceScreens: React.FC<ServiceScreensProps> = ({
   showRefundScreen,
   showProfitPlusScreen,
+  showWithdrawalScreen,
   showEndShiftForm,
   showReconciliationReport,
   currentShift,
   completedShift,
   endShiftCashAmount,
   processRefund,
+  processWithdrawal,
   onCloseRefundScreen,
   onCloseProfitPlusScreen,
+  onCloseWithdrawalScreen,
   setShowEndShiftForm,
   handleSubmitEndShift,
   handleCloseReconciliation,
@@ -80,6 +87,15 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
     return (
       <ProfitPlusScreen 
         onCancel={onCloseProfitPlusScreen}
+      />
+    );
+  }
+
+  if (showWithdrawalScreen) {
+    return (
+      <WithdrawalScreen
+        onWithdraw={processWithdrawal}
+        onCancel={onCloseWithdrawalScreen}
       />
     );
   }

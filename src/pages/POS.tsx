@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -6,6 +7,7 @@ import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
 import PaymentOptions from '@/components/PaymentOptions';
+import { useToast } from '@/hooks/use-toast';
 
 const POS = () => {
   const { 
@@ -28,6 +30,7 @@ const POS = () => {
   } = useApp();
   
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const {
     searchTerm,
@@ -78,6 +81,26 @@ const POS = () => {
       const endShiftEvent = new CustomEvent('endshift');
       screenManager.dispatchEvent(endShiftEvent);
     }
+  };
+
+  const processWithdrawal = (amount: number, reason: string): boolean => {
+    if (!currentShift) {
+      toast({
+        title: "Error",
+        description: "No active shift to withdraw from",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    // In a real app, you would call the backend to record the withdrawal
+    // For this demo, we'll just show a success message
+    
+    toast({
+      title: "Withdrawal successful",
+      description: `${amount.toFixed(2)} withdrawn from register for: ${reason}`,
+    });
+    return true;
   };
 
   const navigateToDashboard = () => {
@@ -135,6 +158,7 @@ const POS = () => {
           calculateTotal={calculateTotal}
           processPayment={processPayment}
           processRefund={processRefund}
+          processWithdrawal={processWithdrawal}
           endShift={endShift}
           getShiftPaymentBreakdown={getShiftPaymentBreakdown}
           getShiftRefundBreakdown={getShiftRefundBreakdown}
@@ -146,6 +170,7 @@ const POS = () => {
           showShop2ShopScreen={showShop2ShopScreen}
           showRefundScreen={showRefundScreen}
           showProfitPlusScreen={showProfitPlusScreen}
+          showWithdrawalScreen={showWithdrawalScreen}
           showSplitPayment={showSplitPayment}
           showAccountPayment={showAccountPayment}
           customerInfo={customerInfo}
@@ -154,6 +179,7 @@ const POS = () => {
           onCloseShop2ShopScreen={() => setShowShop2ShopScreen(false)}
           onCloseRefundScreen={() => setShowRefundScreen(false)}
           onCloseProfitPlusScreen={() => setShowProfitPlusScreen(false)}
+          onCloseWithdrawalScreen={() => setShowWithdrawalScreen(false)}
           onCloseSplitPayment={() => setShowSplitPayment(false)}
           onCloseAccountPayment={() => setShowAccountPayment(false)}
         />

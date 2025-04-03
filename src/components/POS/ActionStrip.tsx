@@ -6,13 +6,13 @@ import { useIsMobile } from '@/hooks/use-mobile';
 interface ActionStripProps {
   onRefund: () => void;
   onProfitPlus: () => void;
-  onWithdrawal?: () => void;
+  onWithdrawal: () => void;
 }
 
 const ActionStrip: React.FC<ActionStripProps> = ({ 
   onRefund, 
   onProfitPlus, 
-  onWithdrawal = () => {}
+  onWithdrawal
 }) => {
   const isMobile = useIsMobile();
   
