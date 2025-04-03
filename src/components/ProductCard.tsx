@@ -27,21 +27,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [priceInput, setPriceInput] = useState('');
   const [customPrice, setCustomPrice] = useState<number | null>(null);
+  const [lastTapTime, setLastTapTime] = useState(0);
   
   const handleClick = () => {
-    // First, select this product card
-    onSelect(product.id);
+    const now = new Date().getTime();
     
-    // If not already selected, just select it (don't add to cart yet)
-    if (!isSelected) {
-      return;
-    } else {
-      // If already selected and we have a custom price, add with custom price
+    // If product is already selected, just add to cart with current price
+    if (isSelected) {
       if (customPrice !== null) {
         onAddToCart(product, customPrice);
       } else {
-        // Otherwise add with original price
         onAddToCart(product);
+      }
+      return;
+    }
+    
+    // First tap selects the product
+    onSelect(product.id);
+    
+    // On mobile, if it's a quick double tap (within 300ms), add to cart immediately
+    if (isMobile && (now - lastTapTime < 300)) {
+      onAddToCart(product);
+    }
+    
+    setLastTapTime(now);
+    
+    // On mobile, focus invisible input to bring up keyboard for price entry
+    if (isMobile && isSelected) {
+      const priceInputEl = document.getElementById(`price-input-${product.id}`);
+      if (priceInputEl) {
+        priceInputEl.focus();
       }
     }
   };
@@ -51,8 +66,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (!isSelected) {
       setPriceInput('');
       setCustomPrice(null);
+    } else if (isMobile) {
+      // When selected on mobile, focus the input to show keyboard
+      setTimeout(() => {
+        const priceInputEl = document.getElementById(`price-input-${product.id}`);
+        if (priceInputEl) {
+          priceInputEl.focus();
+        }
+      }, 100);
     }
-  }, [isSelected]);
+  }, [isSelected, product.id, isMobile]);
   
   useEffect(() => {
     if (!isSelected) return;
@@ -116,6 +139,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isSelected, priceInput, product, onAddToCart, onSelect]);
+
+  // Handle mobile input change
+  const handleMobileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPriceInput(value);
+    
+    if (value) {
+      const parsedPrice = parseFloat(value);
+      if (!isNaN(parsedPrice)) {
+        setCustomPrice(parsedPrice);
+      }
+    } else {
+      setCustomPrice(null);
+    }
+  };
   
   // Determine which price to display
   const displayPrice = isSelected && priceInput 
@@ -146,9 +184,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
               ? `R ${priceInput}` 
               : formatCurrency(Number(displayPrice))}
           </p>
-          {isSelected && 
-            <p className="text-xs text-muted-foreground">Enter price and press Enter</p>
-          }
+          
+          {isSelected && (
+            <>
+              {isMobile ? (
+                <input
+                  id={`price-input-${product.id}`}
+                  type="number"
+                  inputMode="decimal"
+                  value={priceInput}
+                  onChange={handleMobileInputChange}
+                  className="opacity-0 absolute h-1 w-1"
+                  autoFocus
+                />
+              ) : (
+                <p className="text-xs text-muted-foreground">Enter price and press Enter</p>
+              )}
+            </>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -1,172 +1,187 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LogOutIcon, ShoppingCartIcon, PackageIcon, UsersIcon } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { useApp } from '@/contexts/AppContext';
+import PinPad from '@/components/PinPad';
 import FloatForm from '@/components/FloatForm';
-import ShiftSummary from '@/components/ShiftSummary';
-import {
-  CreditCardIcon,
-  ShoppingBagIcon,
-  UsersIcon,
-  FileTextIcon
-} from 'lucide-react';
 
 const Dashboard = () => {
-  const { currentUser, currentShift, getLastShiftEndFloat, startShift } = useApp();
-  const [showFloatForm, setShowFloatForm] = useState(false);
-  const [lastShift, setLastShift] = useState<any>(null);
+  const { currentUser, currentShift, logout, startShift } = useApp();
   const navigate = useNavigate();
-
+  const { toast } = useToast();
+  
+  const [showStaffPinPad, setShowStaffPinPad] = useState(false);
+  const [showFloatForm, setShowFloatForm] = useState(false);
+  const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null);
+  
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
-      return;
     }
-
+  }, [currentUser, navigate]);
+  
+  useEffect(() => {
     if (currentShift) {
       navigate('/pos');
     }
-    
-    // Mock last shift data for display
-    setLastShift({
-      id: 123,
-      userId: currentUser?.id || 1,
-      startTime: new Date(new Date().setDate(new Date().getDate() - 1)),
-      endTime: new Date(),
-      startFloat: 500,
-      endFloat: 1200,
-      salesTotal: 2500,
-      transactionCount: 35
-    });
-  }, [currentUser, currentShift, navigate]);
-
-  const handleStartPOS = () => {
-    setShowFloatForm(true);
+  }, [currentShift, navigate]);
+  
+  const handleStartShift = () => {
+    setShowStaffPinPad(true);
   };
-
+  
+  const handleStaffPinSubmit = (pin: string) => {
+    if (pin === '5678') {
+      setSelectedStaffId(2); // Staff ID
+      setShowStaffPinPad(false);
+      setShowFloatForm(true);
+    } else if (pin === '1234') {
+      setSelectedStaffId(1); // Manager ID
+      setShowStaffPinPad(false);
+      setShowFloatForm(true);
+    } else {
+      toast({
+        title: "Invalid PIN",
+        description: "Please enter a valid staff PIN",
+        variant: "destructive"
+      });
+    }
+  };
+  
   const handleFloatSubmit = (amount: number) => {
-    if (currentUser) {
-      startShift(currentUser.id, amount);
+    if (selectedStaffId) {
+      startShift(selectedStaffId, amount);
       navigate('/pos');
     }
   };
+  
+  const handleManageStock = () => {
+    navigate('/stock');
+  };
 
-  if (!currentUser) return null;
-
+  const handleManageCustomers = () => {
+    navigate('/customers');
+  };
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+  
+  if (showStaffPinPad) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+        <div className="w-full max-w-md p-8 bg-[#0A2645] text-white rounded-lg shadow-lg">
+          <PinPad 
+            onSubmit={handleStaffPinSubmit}
+            title="Staff Authentication"
+            subtitle="Enter staff PIN to start shift"
+            titleClassName="text-white"
+            subtitleClassName="text-white/70"
+          />
+          
+          <div className="mt-6 flex justify-center">
+            <Button variant="outline" onClick={() => setShowStaffPinPad(false)}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   if (showFloatForm) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <FloatForm
+        <FloatForm 
           onSubmit={handleFloatSubmit}
           onCancel={() => setShowFloatForm(false)}
         />
       </div>
     );
   }
-
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm py-4 px-6">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <img
-              src="/lovable-uploads/21ec9284-d40a-4bca-a789-7478910aa1fd.png"
-              alt="Shop2Shop Logo"
-              className="h-10"
-            />
-            <div>
-              <h1 className="text-2xl font-bold text-primary">MiniPOS</h1>
-              <p className="text-sm text-muted-foreground">Welcome, {currentUser.name}</p>
+    <div className="min-h-screen bg-[#0A2645] p-4">
+      <div className="max-w-4xl mx-auto">
+        <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png" 
+                alt="Shop2Shop Logo" 
+                className="h-12 w-auto object-contain mr-3"
+              />
+              <div>
+                <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
+                <p className="text-muted-foreground">Welcome, {currentUser?.name}</p>
+              </div>
             </div>
           </div>
-          
-          <Button
-            onClick={handleStartPOS}
-            className="bg-[#FAA225] hover:bg-[#E88C00] text-black"
+          <Button 
+            variant="secondary" 
+            size="icon" 
+            onClick={handleLogout}
           >
-            Start New Shift
+            <LogOutIcon className="h-5 w-5" />
           </Button>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        </header>
+        
+        <div className="grid gap-6 md:grid-cols-3">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Point of Sale</CardTitle>
-              <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="pb-2">
+              <CardTitle>Start Shift</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={handleStartPOS}
-                className="w-full"
+              <p className="text-sm text-muted-foreground mb-4">
+                Start a new shift to begin processing sales.
+              </p>
+              <Button 
+                className="w-full" 
+                onClick={handleStartShift}
+                style={{ backgroundColor: '#FAA225', color: 'black' }}
               >
-                Start Transaction
+                <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                Start Shift
               </Button>
             </CardContent>
           </Card>
-
+          
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Inventory</CardTitle>
-              <ShoppingBagIcon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="pb-2">
+              <CardTitle>Manage Stock</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={() => navigate('/stock')}
-                variant="outline"
-                className="w-full"
-              >
+              <p className="text-sm text-muted-foreground mb-4">
+                Add, edit, or remove products from your inventory.
+              </p>
+              <Button className="w-full" onClick={handleManageStock}>
+                <PackageIcon className="h-4 w-4 mr-2" />
                 Manage Stock
               </Button>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Customers</CardTitle>
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="pb-2">
+              <CardTitle>Customers</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button
-                onClick={() => navigate('/customers')}
-                variant="outline"
-                className="w-full"
-              >
+              <p className="text-sm text-muted-foreground mb-4">
+                View and manage customer accounts.
+              </p>
+              <Button className="w-full" onClick={handleManageCustomers}>
+                <UsersIcon className="h-4 w-4 mr-2" />
                 Manage Customers
               </Button>
             </CardContent>
           </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Reports</CardTitle>
-              <FileTextIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <Button
-                onClick={() => navigate('/reports')}
-                variant="outline"
-                className="w-full"
-              >
-                View Reports
-              </Button>
-            </CardContent>
-          </Card>
         </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4">Last Shift Summary</h2>
-          {lastShift && (
-            <ShiftSummary 
-              shift={lastShift}
-              onClose={() => {}}
-            />
-          )}
-        </div>
-      </main>
+      </div>
     </div>
   );
 };

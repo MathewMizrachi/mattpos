@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { ShoppingCartIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CartItem from '@/components/CartItem';
 import { CartItem as CartItemType } from '@/types';
+import { Button } from '@/components/ui/button';
 
 interface CartPanelProps {
   cart: CartItemType[];
@@ -22,14 +22,21 @@ const CartPanel: React.FC<CartPanelProps> = ({
   cartExpanded,
   toggleCartExpand
 }) => {
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only toggle if clicking the background or container, not the buttons or inputs
+    if (e.target === e.currentTarget) {
+      toggleCartExpand();
+    }
+  };
+
   if (isMobile) {
     return (
       <div 
         className={`fixed top-20 bottom-0 right-0 ${cartExpanded ? 'w-3/5' : 'w-1/7'} z-10 bg-white shadow-lg flex flex-col overflow-hidden transition-all duration-300`}
-        onClick={toggleCartExpand}
+        onClick={handleBackgroundClick}
       >
         <ScrollArea className="flex-1">
-          <div className="p-2">
+          <div className="p-2" onClick={handleBackgroundClick}>
             {cart.length === 0 ? (
               <div className="text-center py-6">
                 <ShoppingCartIcon className="h-10 w-10 mx-auto text-muted-foreground opacity-50 mb-2" />
@@ -59,15 +66,17 @@ const CartPanel: React.FC<CartPanelProps> = ({
         
         {cartExpanded && (
           <div className="p-2 border-t flex justify-center">
-            <button 
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+            <Button 
+              variant="outline" 
+              size="icon" 
               onClick={(e) => {
                 e.stopPropagation();
                 toggleCartExpand();
               }}
+              className="bg-white hover:bg-gray-100"
             >
-              <ChevronsRightIcon className="h-5 w-5" />
-            </button>
+              <ChevronsRightIcon className="h-4 w-4" />
+            </Button>
           </div>
         )}
       </div>

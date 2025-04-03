@@ -12,13 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Shift, Product } from '@/types';
-import { 
-  CalendarIcon, 
-  ReceiptIcon, 
-  ShoppingCartIcon, 
-  FileTextIcon,
-  ChartBarIcon
-} from 'lucide-react';
 
 interface PaymentBreakdown {
   cash: number;
@@ -47,7 +40,6 @@ interface ReconciliationReportProps {
   cashExpected: number;
   cashActual: number;
   onClose: () => void;
-  isPrintable?: boolean;
 }
 
 const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
@@ -59,25 +51,17 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
   refundBreakdown,
   cashExpected,
   cashActual,
-  onClose,
-  isPrintable = false
+  onClose
 }) => {
   const cashDifference = cashActual - cashExpected;
   const formattedDate = new Date(shift.startTime).toLocaleDateString();
   const formattedStartTime = new Date(shift.startTime).toLocaleTimeString();
   const formattedEndTime = shift.endTime ? new Date(shift.endTime).toLocaleTimeString() : '';
-  
-  const handlePrint = () => {
-    window.print();
-  };
 
   return (
-    <div className={`w-full max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg ${isPrintable ? 'print:shadow-none print:p-0' : ''}`}>
-      <div className="text-center mb-6 border-b pb-4">
-        <div className="flex justify-center items-center gap-2 mb-2">
-          <CalendarIcon className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold text-primary">End-of-Day Reconciliation Report</h1>
-        </div>
+    <div className="w-full max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <div className="text-center mb-6">
+        <h1 className="text-2xl font-bold text-primary">End-of-Day Reconciliation Report</h1>
         <p className="text-muted-foreground">
           Shift #{shift.id} - {formattedDate} ({formattedStartTime} to {formattedEndTime})
         </p>
@@ -85,10 +69,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <ChartBarIcon className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">Sales Summary</h2>
-          </div>
+          <h2 className="text-xl font-semibold">Sales Summary</h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-between py-2 border-b">
               <span className="font-medium">Total Sales</span>
@@ -122,10 +103,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
         </div>
         
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <ReceiptIcon className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">Payment Method Breakdown</h2>
-          </div>
+          <h2 className="text-xl font-semibold">Payment Method Breakdown</h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-between py-2 border-b">
               <span className="font-medium">Cash</span>
@@ -153,10 +131,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
       
       {refundBreakdown.items.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <FileTextIcon className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">Refunds ({formatCurrency(refundBreakdown.total)})</h2>
-          </div>
+          <h2 className="text-xl font-semibold mb-4">Refunds ({formatCurrency(refundBreakdown.total)})</h2>
           <Table>
             <TableHeader>
               <TableRow>
@@ -180,10 +155,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
       
       {lowStockProducts.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <ShoppingCartIcon className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">Low Stock Items</h2>
-          </div>
+          <h2 className="text-xl font-semibold mb-4">Low Stock Items</h2>
           <Table>
             <TableHeader>
               <TableRow>
@@ -205,11 +177,8 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
         </div>
       )}
       
-      <div className="flex justify-center gap-4 mt-8 print:hidden">
-        <Button onClick={handlePrint} variant="outline" className="min-w-[150px]">
-          Print Report
-        </Button>
-        <Button onClick={onClose} className="min-w-[150px]">
+      <div className="flex justify-center mt-8">
+        <Button onClick={onClose} className="min-w-[200px]">
           Close Report
         </Button>
       </div>
