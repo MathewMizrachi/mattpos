@@ -130,6 +130,7 @@ const POS = () => {
           showWithdrawalScreen={paymentStates.showWithdrawalScreen}
           showSplitPayment={paymentStates.showSplitPayment}
           showAccountPayment={paymentStates.showAccountPayment}
+          showEndShiftForm={paymentStates.showEndShiftForm}
           customerInfo={paymentStates.customerInfo}
           onClosePaymentForm={() => paymentStates.setShowPaymentForm(false)}
           onCloseCardPayment={() => paymentStates.setShowCardPayment(false)}
@@ -139,6 +140,7 @@ const POS = () => {
           onCloseWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(false)}
           onCloseSplitPayment={() => paymentStates.setShowSplitPayment(false)}
           onCloseAccountPayment={() => paymentStates.setShowAccountPayment(false)}
+          onCloseEndShiftForm={() => paymentStates.setShowEndShiftForm(false)}
         />
       </div>
     );

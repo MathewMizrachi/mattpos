@@ -11,13 +11,15 @@ export const usePaymentStates = () => {
   const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
   const [showSplitPayment, setShowSplitPayment] = useState(false);
   const [showAccountPayment, setShowAccountPayment] = useState(false);
+  const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<{ name: string; phone: string } | undefined>(undefined);
   
   // Function to check if any payment or service screen is visible
   const isAnyScreenActive = () => {
     return showPaymentOptions || showPaymentForm || showCardPayment || 
            showShop2ShopScreen || showRefundScreen || showProfitPlusScreen || 
-           showWithdrawalScreen || showSplitPayment || showAccountPayment;
+           showWithdrawalScreen || showSplitPayment || showAccountPayment ||
+           showEndShiftForm;
   };
   
   // Function to reset all screen states
@@ -31,6 +33,7 @@ export const usePaymentStates = () => {
     setShowWithdrawalScreen(false);
     setShowSplitPayment(false);
     setShowAccountPayment(false);
+    setShowEndShiftForm(false);
     setCustomerInfo(undefined);
   };
   
@@ -53,6 +56,8 @@ export const usePaymentStates = () => {
     setShowSplitPayment,
     showAccountPayment,
     setShowAccountPayment,
+    showEndShiftForm,
+    setShowEndShiftForm,
     customerInfo,
     setCustomerInfo,
     isAnyScreenActive,

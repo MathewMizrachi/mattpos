@@ -27,6 +27,7 @@ interface POSScreenManagerProps {
   showWithdrawalScreen?: boolean;
   showSplitPayment?: boolean;
   showAccountPayment?: boolean;
+  showEndShiftForm?: boolean;
   customerInfo?: { name: string; phone: string };
   onClosePaymentForm?: () => void;
   onCloseCardPayment?: () => void;
@@ -36,6 +37,7 @@ interface POSScreenManagerProps {
   onCloseWithdrawalScreen?: () => void;
   onCloseSplitPayment?: () => void;
   onCloseAccountPayment?: () => void;
+  onCloseEndShiftForm?: () => void;
 }
 
 const POSScreenManager: React.FC<POSScreenManagerProps> = ({
@@ -59,6 +61,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   showWithdrawalScreen = false,
   showSplitPayment = false,
   showAccountPayment = false,
+  showEndShiftForm = false,
   customerInfo,
   onClosePaymentForm = () => {},
   onCloseCardPayment = () => {},
@@ -68,16 +71,17 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   onCloseWithdrawalScreen = () => {},
   onCloseSplitPayment = () => {},
   onCloseAccountPayment = () => {},
+  onCloseEndShiftForm = () => {},
 }) => {
   const { toast } = useToast();
   
   const {
-    showEndShiftForm,
+    showEndShiftForm: managerShowEndShiftForm,
     showReconciliationReport,
     showWithdrawalScreen: managerShowWithdrawalScreen,
     completedShift,
     endShiftCashAmount,
-    setShowEndShiftForm,
+    setShowEndShiftForm: managerSetShowEndShiftForm,
     handleEndShiftRequest,
     handleSubmitEndShift,
     handleCloseReconciliation,
@@ -93,29 +97,15 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     navigateToDashboard,
     processWithdrawal,
   });
-  
-  useEffect(() => {
-    const screenManager = document.getElementById('pos-screen-manager');
-    if (screenManager) {
-      const handleEndShift = () => {
-        const result = handleEndShiftRequest(currentShift, cart);
-        if (!result.success && result.message) {
-          toast({
-            title: "Cannot end shift",
-            description: result.message,
-            variant: "destructive"
-          });
-        }
-      };
-      
-      screenManager.addEventListener('endshift', handleEndShift);
-      return () => {
-        screenManager.removeEventListener('endshift', handleEndShift);
-      };
-    }
-  }, [cart, currentShift, toast, handleEndShiftRequest]);
 
-  // If external withdrawal screen is requested
+  // Effect to handle external end shift form request
+  useEffect(() => {
+    if (showEndShiftForm) {
+      managerSetShowEndShiftForm(true);
+    }
+  }, [showEndShiftForm, managerSetShowEndShiftForm]);
+  
+  // Effect to handle external withdrawal screen request
   useEffect(() => {
     if (showWithdrawalScreen) {
       handleShowWithdrawalScreen();
@@ -146,13 +136,13 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   
   // Show service screens if any service option is active
   if (showRefundScreen || showProfitPlusScreen || managerShowWithdrawalScreen || 
-      showEndShiftForm || showReconciliationReport) {
+      managerShowEndShiftForm || showReconciliationReport) {
     return (
       <ServiceScreens
         showRefundScreen={showRefundScreen}
         showProfitPlusScreen={showProfitPlusScreen}
         showWithdrawalScreen={managerShowWithdrawalScreen}
-        showEndShiftForm={showEndShiftForm}
+        showEndShiftForm={managerShowEndShiftForm}
         showReconciliationReport={showReconciliationReport}
         currentShift={currentShift}
         completedShift={completedShift}
@@ -162,7 +152,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         onCloseRefundScreen={onCloseRefundScreen}
         onCloseProfitPlusScreen={onCloseProfitPlusScreen}
         onCloseWithdrawalScreen={handleCloseWithdrawalScreen}
-        setShowEndShiftForm={setShowEndShiftForm}
+        setShowEndShiftForm={managerSetShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}
         handleCloseReconciliation={handleCloseReconciliation}
         getShiftPaymentBreakdown={getShiftPaymentBreakdown}
