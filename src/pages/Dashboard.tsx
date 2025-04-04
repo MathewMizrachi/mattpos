@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOutIcon, ShoppingCartIcon, PackageIcon, UsersIcon, ChartBarIcon } from 'lucide-react';
+import { LogOutIcon, ShoppingCartIcon, PackageIcon, UsersIcon, ChartBarIcon, AlertCircleIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import PinPad from '@/components/PinPad';
@@ -24,14 +24,12 @@ const Dashboard = () => {
     }
   }, [currentUser, navigate]);
   
-  useEffect(() => {
-    if (currentShift) {
-      navigate('/pos');
-    }
-  }, [currentShift, navigate]);
-  
   const handleStartShift = () => {
     setShowStaffPinPad(true);
+  };
+  
+  const handleResumeShift = () => {
+    navigate('/pos');
   };
   
   const handleStaffPinSubmit = (pin: string) => {
@@ -136,24 +134,48 @@ const Dashboard = () => {
         </header>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Start Shift</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Start a new shift to begin processing sales.
-              </p>
-              <Button 
-                className="w-full" 
-                onClick={handleStartShift}
-                style={{ backgroundColor: '#FAA225', color: 'black' }}
-              >
-                <ShoppingCartIcon className="h-4 w-4 mr-2" />
-                Start Shift
-              </Button>
-            </CardContent>
-          </Card>
+          {currentShift ? (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center">
+                  <AlertCircleIcon className="h-4 w-4 mr-2 text-amber-500" />
+                  Active Shift
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  You have an active shift. Resume your current shift.
+                </p>
+                <Button 
+                  className="w-full" 
+                  onClick={handleResumeShift}
+                  style={{ backgroundColor: '#FAA225', color: 'black' }}
+                >
+                  <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                  Resume Shift
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle>Start Shift</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Start a new shift to begin processing sales.
+                </p>
+                <Button 
+                  className="w-full" 
+                  onClick={handleStartShift}
+                  style={{ backgroundColor: '#FAA225', color: 'black' }}
+                >
+                  <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                  Start Shift
+                </Button>
+              </CardContent>
+            </Card>
+          )}
           
           <Card>
             <CardHeader className="pb-2">

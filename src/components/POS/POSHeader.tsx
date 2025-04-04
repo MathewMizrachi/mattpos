@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOutIcon, MoreVerticalIcon } from 'lucide-react';
+import { LogOutIcon, MoreVerticalIcon, ArrowLeftIcon } from 'lucide-react';
 import { User, Shift } from '@/types';
 import {
   DropdownMenu,
@@ -58,6 +58,24 @@ const POSHeader: React.FC<POSHeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center space-x-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <ArrowLeftIcon className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+              Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onEndShift}>
+              End Shift
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
         {options.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

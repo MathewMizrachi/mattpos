@@ -163,4 +163,3 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
 };
 
 export default WithdrawalScreen;
-
