@@ -32,7 +32,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
       </div>
       
       {/* Main content with the three images */}
-      <div className={`flex-grow p-6 flex ${isMobile ? 'flex-col space-y-6' : 'justify-center items-center space-x-6'}`}>
+      <div className={`flex-grow p-6 flex ${isMobile ? 'flex-col space-y-6' : 'justify-center items-center space-x-8'}`}>
         <div className={`${isMobile ? 'w-full' : 'w-1/3 h-full'} max-w-sm mx-auto`}>
           <img 
             src="/lovable-uploads/3d914bdb-a5d0-4d7d-a1f8-debd2456d19a.png"
@@ -64,3 +64,4 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
 };
 
 export default ProfitPlusScreen;
+
