@@ -2,8 +2,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOutIcon, ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon } from 'lucide-react';
 import { User, Shift } from '@/types';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,10 +35,19 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   options = []
 }) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   const handleLogout = () => {
     onLogout();
     navigate('/');
+  };
+
+  const handleEndShift = () => {
+    onEndShift();
+  };
+
+  const handleGoToDashboard = () => {
+    navigate('/dashboard');
   };
   
   return (
@@ -58,27 +68,34 @@ const POSHeader: React.FC<POSHeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]" size="icon">
-              <ArrowLeftIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Navigation</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+        {isMobile ? (
+          // Mobile view - just the back button
+          <Button
+            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+            size="icon"
+            onClick={handleGoToDashboard}
+          >
+            <ArrowLeftIcon className="h-4 w-4" />
+          </Button>
+        ) : (
+          // Desktop view - buttons for both options
+          <>
+            <Button
+              variant="outline"
+              className="bg-transparent border border-gray-300 hover:bg-gray-100 text-[#0A2645]"
+              onClick={handleGoToDashboard}
+            >
               Dashboard
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onEndShift}>
+            </Button>
+            <Button
+              variant="outline"
+              className="bg-transparent border border-gray-300 hover:bg-gray-100 text-[#0A2645]"
+              onClick={handleEndShift}
+            >
               End Shift
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        <Button variant="ghost" size="icon" onClick={handleLogout}>
-          <LogOutIcon className="h-5 w-5" />
-        </Button>
+            </Button>
+          </>
+        )}
       </div>
     </header>
   );

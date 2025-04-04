@@ -61,15 +61,17 @@ export const usePaymentHandlers = ({
   };
   
   const handleEndShift = () => {
-    if (paymentStates.isAnyScreenActive()) {
+    if (cart.length > 0) {
+      toast({
+        title: "Cannot end shift",
+        description: "Please complete or clear the current transaction first",
+        variant: "destructive"
+      });
       return;
     }
     
-    const screenManager = document.getElementById('pos-screen-manager');
-    if (screenManager) {
-      const endShiftEvent = new CustomEvent('endshift');
-      screenManager.dispatchEvent(endShiftEvent);
-    }
+    // Simply show the end shift form directly
+    paymentStates.setShowEndShiftForm(true);
   };
   
   return {
