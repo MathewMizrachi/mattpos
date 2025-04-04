@@ -17,7 +17,7 @@ export interface ServiceItemProps {
 const ServiceItem: React.FC<ServiceItemProps> = ({ name, logo, bgColor, subItems, imageUrl }) => {
   return (
     <div 
-      className="relative rounded-lg overflow-hidden shadow-md h-28"
+      className="relative aspect-square rounded-lg overflow-hidden shadow-md"
       style={{ backgroundColor: bgColor }}
     >
       {imageUrl ? (

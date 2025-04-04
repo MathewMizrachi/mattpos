@@ -21,19 +21,19 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Easyload Voucher", 
         logo: "🐪", 
         bgColor: "#003870",
-        imageUrl: "/lovable-uploads/f198ecdc-2216-48ac-933b-0d0505b307d3.png"
+        imageUrl: "/lovable-uploads/68476df1-6984-4862-8a62-57921fed15cc.png"  // Swapped with DStv
       },
       { 
         name: "Vodacom", 
         logo: "V", 
         bgColor: "#e60000",
-        imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png"
+        imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png"  // Will be swapped with EasyPay below
       },
       { 
         name: "MTN", 
         logo: "MTN", 
         bgColor: "#ffcc00",
-        imageUrl: "/lovable-uploads/432ed033-b0d4-4e63-a8e1-813a0004a9e8.png"
+        imageUrl: "/lovable-uploads/87b24dcb-77dd-440d-bf52-e8737b7db87d.png"  // Swapped with Talk360
       },
       { 
         name: "Cell C", 
@@ -45,7 +45,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Telkom", 
         logo: "T", 
         bgColor: "#0066b3",
-        imageUrl: "/lovable-uploads/7e4a9d58-e7da-44fc-806b-f6ec5298f50c.png"
+        imageUrl: "/lovable-uploads/215a0aa3-9021-450c-9b7f-c1bc2a85bf64.png"  // Updated with new image
       },
       { 
         name: "Electricity & Water", 
@@ -57,7 +57,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "DStv", 
         logo: "DStv", 
         bgColor: "#003870",
-        imageUrl: "/lovable-uploads/68476df1-6984-4862-8a62-57921fed15cc.png"
+        imageUrl: "/lovable-uploads/f198ecdc-2216-48ac-933b-0d0505b307d3.png"  // Swapped with Easyload Voucher
       },
     ]
   },
@@ -74,7 +74,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "OTT", 
         logo: "OTT", 
         bgColor: "#a3d45c",
-        imageUrl: "/lovable-uploads/b3a44ee4-148c-498c-9955-7d3fe8b96a4d.png"
+        imageUrl: "/lovable-uploads/2f91cbf7-c519-4e46-b658-77ae9ef9e25e.png"  // Will be swapped with SupaBets/Playa
       },
       { 
         name: "1Voucher", 
@@ -97,7 +97,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Vodacom", 
         logo: "V", 
         bgColor: "#e60000",
-        imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png",
+        imageUrl: "/lovable-uploads/8b668ae2-bd6d-45f7-b19e-cc4b3e3a63ff.png", // Updated with new WhatsApp image
         subItems: [{ name: "WhatsApp", icon: "whatsapp" }]
       },
       { 
@@ -118,7 +118,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Telkom", 
         logo: "T", 
         bgColor: "#0066b3",
-        imageUrl: "/lovable-uploads/7e4a9d58-e7da-44fc-806b-f6ec5298f50c.png",
+        imageUrl: "/lovable-uploads/f4b076d1-52c7-4a09-bdfc-74e07d4156a3.png", // Updated with new WhatsApp image
         subItems: [{ name: "WhatsApp", icon: "whatsapp" }]
       },
     ]
@@ -130,7 +130,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Vodacom", 
         logo: "V", 
         bgColor: "#e60000",
-        imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png",
+        imageUrl: "/lovable-uploads/687d9aa8-4b93-469d-bc7b-a5a4f1f95f28.png", // Updated with new Data image
         subItems: [{ name: "Data", icon: "data" }]
       },
       { 
@@ -151,7 +151,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Telkom", 
         logo: "T", 
         bgColor: "#0066b3",
-        imageUrl: "/lovable-uploads/7e4a9d58-e7da-44fc-806b-f6ec5298f50c.png",
+        imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png", // Updated with new Data image
         subItems: [{ name: "Data", icon: "data" }]
       },
     ]
@@ -187,7 +187,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Playa", 
         logo: "PLAYA", 
         bgColor: "#ffffff",
-        imageUrl: "/lovable-uploads/2f91cbf7-c519-4e46-b658-77ae9ef9e25e.png"
+        imageUrl: "/lovable-uploads/b3a44ee4-148c-498c-9955-7d3fe8b96a4d.png" // Will be swapped with OTT
       },
       { 
         name: "LottoStar", 
@@ -234,13 +234,13 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "Too Much Wifi", 
         logo: "TOO MUCH WIFI", 
         bgColor: "#000000",
-        imageUrl: "/lovable-uploads/d025cb8b-204c-49c2-ab4e-d538fba20b42.png"
+        imageUrl: "/lovable-uploads/d7c37c4d-5a4b-4558-97c3-6a5043a86af0.png" // Updated with new image
       },
       { 
         name: "Talk360", 
         logo: "Talk360", 
         bgColor: "#00b4d8",
-        imageUrl: "/lovable-uploads/87b24dcb-77dd-440d-bf52-e8737b7db87d.png"
+        imageUrl: "/lovable-uploads/432ed033-b0d4-4e63-a8e1-813a0004a9e8.png" // Swapped with MTN
       },
       { 
         name: "Knect", 
@@ -257,7 +257,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "EasyPay", 
         logo: "easypay", 
         bgColor: "#ffffff",
-        imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png"
+        imageUrl: "/lovable-uploads/aa391fd9-5e75-46ab-8fff-3f51925efd1b.png" // Swapped with Vodacom
       },
     ]
   },
@@ -280,7 +280,7 @@ export const serviceCategories: ServiceCategoryData[] = [
         name: "EcoCash", 
         logo: "EcoCash", 
         bgColor: "#ffffff",
-        imageUrl: "/lovable-uploads/cba535dc-a9ae-4fab-b3d1-39facb4a516c.png"
+        imageUrl: "/lovable-uploads/7e4a9d58-e7da-44fc-806b-f6ec5298f50c.png" // Swapped with Telkom
       },
     ]
   },

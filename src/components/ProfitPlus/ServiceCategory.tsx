@@ -20,7 +20,7 @@ const ServiceCategory: React.FC<ServiceCategoryProps> = ({
       <h2 className="text-center text-sm sm:text-base text-gray-600 font-medium mb-3 sm:mb-4">
         {title}
       </h2>
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-3 gap-3 sm:gap-4">
         {displayItems.map((item, index) => (
           <ServiceItem 
             key={index}
