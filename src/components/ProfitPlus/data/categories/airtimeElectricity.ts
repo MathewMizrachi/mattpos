@@ -15,12 +15,6 @@ export const airtimeElectricity: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/47e7e403-4167-4e1f-a2ec-2851cc945fed.png"
   },
   { 
-    name: "Easyload Voucher", 
-    logo: "🐪", 
-    bgColor: "#003870",
-    imageUrl: "/lovable-uploads/68476df1-6984-4862-8a62-57921fed15cc.png"
-  },
-  { 
     name: "Vodacom", 
     logo: "V", 
     bgColor: "#e60000",
