@@ -56,7 +56,7 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search for product..."
-            className="mb-2 bg-white text-[#0A2645] font-medium"
+            className="mb-2 bg-white text-[#0A2645] border-[#0A2645] font-medium"
           />
           
           <div className="max-h-60 overflow-y-auto border rounded-md">
@@ -87,7 +87,7 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                className="mt-1"
+                className="mt-1 bg-white text-[#0A2645] border-[#0A2645]"
               />
             </div>
             
@@ -97,7 +97,7 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
                 value={refundMethod}
                 onValueChange={(value) => setRefundMethod(value as 'cash' | 'shop2shop')}
               >
-                <SelectTrigger id="refund-method" className="mt-1">
+                <SelectTrigger id="refund-method" className="mt-1 bg-white text-[#0A2645] border-[#0A2645]">
                   <SelectValue placeholder="Select refund method" />
                 </SelectTrigger>
                 <SelectContent>
@@ -129,12 +129,13 @@ const RefundScreen: React.FC<RefundScreenProps> = ({
         )}
         
         <div className="flex justify-end space-x-4">
-          <Button variant="outline" onClick={onCancel} className="text-white bg-[#0A2645] hover:bg-[#1c3a5d] border-[#0A2645]">
+          <Button variant="outline" onClick={onCancel} className="text-[#0A2645] bg-white hover:bg-gray-100 border-[#0A2645]">
             Cancel
           </Button>
           <Button
             onClick={handleRefund}
             disabled={!selectedProduct || quantity <= 0}
+            className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-semibold"
           >
             Process Refund
           </Button>

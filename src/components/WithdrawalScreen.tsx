@@ -14,9 +14,19 @@ interface WithdrawalScreenProps {
 }
 
 const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdraw }) => {
+  const [name, setName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
   const [reason, setReason] = useState<string>('');
   const { toast } = useToast();
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+  };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -63,6 +73,34 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
         
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
+            <Label htmlFor="name" className="text-[#0A2645] font-semibold mb-1 block">
+              Name
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              className="bg-white border-[#0A2645] text-[#0A2645]"
+              placeholder="Enter name"
+            />
+          </div>
+          
+          <div className="mb-4">
+            <Label htmlFor="phone" className="text-[#0A2645] font-semibold mb-1 block">
+              Phone Number
+            </Label>
+            <Input
+              id="phone"
+              type="text"
+              value={phone}
+              onChange={handlePhoneChange}
+              className="bg-white border-[#0A2645] text-[#0A2645]"
+              placeholder="Enter phone number"
+            />
+          </div>
+          
+          <div className="mb-4">
             <Label htmlFor="amount" className="text-[#0A2645] font-semibold mb-1 block">
               Withdrawal Amount
             </Label>
@@ -81,7 +119,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
               />
             </div>
             <p className="mt-1 text-sm text-gray-500">
-              {amount > 0 ? `Withdrawing ${formatCurrency(amount)} from register` : ''}
+              {amount > 0 ? `Withdrawing R${amount.toFixed(2)} from register` : ''}
             </p>
           </div>
           
@@ -103,13 +141,13 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
             <Button
               type="button"
               onClick={onCancel}
-              className="bg-gray-500 text-white hover:bg-gray-600 flex-1"
+              className="bg-white text-[#0A2645] border border-[#0A2645] hover:bg-gray-100 flex-1"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-[#0A2645] text-white hover:bg-blue-800 flex-1"
+              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 flex-1 font-semibold"
             >
               Withdraw
             </Button>

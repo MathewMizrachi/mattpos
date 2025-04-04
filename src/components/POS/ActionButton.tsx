@@ -15,7 +15,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   return (
     <Button 
-      className={`bg-[#0A2645] hover:bg-[#1c3a5d] text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold ${className}`}
+      className={`bg-white hover:bg-gray-50 text-[#0A2645] h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold border-t border-gray-200 ${className}`}
       style={{ width: '25%' }}
       onClick={onClick}
     >

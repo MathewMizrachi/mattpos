@@ -80,13 +80,6 @@ const POSHeader: React.FC<POSHeaderProps> = ({
           </DropdownMenu>
         )}
         
-        <Button 
-          variant="outline" 
-          onClick={onEndShift}
-          style={{ backgroundColor: '#FAA225', color: 'black' }}
-        >
-          End Shift
-        </Button>
         <Button variant="ghost" size="icon" onClick={handleLogout}>
           <LogOutIcon className="h-5 w-5" />
         </Button>
