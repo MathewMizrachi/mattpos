@@ -1,11 +1,15 @@
-
 import { ServiceCategoryData } from './types';
 
 export const serviceCategories: ServiceCategoryData[] = [
   {
     title: "Airtime, Electricity & DStv",
     items: [
-      { name: "Airtime any Amount", logo: "A", bgColor: "#00a7e1" },
+      { 
+        name: "Airtime any Amount", 
+        logo: "A", 
+        bgColor: "#00a7e1",
+        imageUrl: "/lovable-uploads/7ece7bc9-74a4-4619-8877-6c1a695322b4.png"
+      },
       { name: "Easyload Airtime", logo: "🐪", bgColor: "#f7b217" },
       { name: "Easyload Voucher", logo: "🐪", bgColor: "#003870" },
       { name: "Vodacom", logo: "V", bgColor: "#e60000" },

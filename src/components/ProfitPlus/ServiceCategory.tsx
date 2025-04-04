@@ -28,6 +28,7 @@ const ServiceCategory: React.FC<ServiceCategoryProps> = ({
             logo={item.logo}
             bgColor={item.bgColor}
             subItems={item.subItems}
+            imageUrl={item.imageUrl}
           />
         ))}
       </div>

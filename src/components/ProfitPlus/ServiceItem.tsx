@@ -11,18 +11,27 @@ export interface ServiceItemProps {
   logo: string;
   bgColor: string;
   subItems?: ServiceSubItem[];
+  imageUrl?: string;
 }
 
-const ServiceItem: React.FC<ServiceItemProps> = ({ name, logo, bgColor, subItems }) => {
+const ServiceItem: React.FC<ServiceItemProps> = ({ name, logo, bgColor, subItems, imageUrl }) => {
   return (
     <div 
       className="relative rounded-lg overflow-hidden shadow-md"
       style={{ backgroundColor: bgColor }}
     >
       <div className="flex flex-col items-center justify-center p-4 h-24">
-        <div className="text-white font-bold text-center">
-          {logo}
-        </div>
+        {imageUrl ? (
+          <img 
+            src={imageUrl} 
+            alt={name} 
+            className="h-16 w-16 object-contain"
+          />
+        ) : (
+          <div className="text-white font-bold text-center">
+            {logo}
+          </div>
+        )}
       </div>
       
       {subItems && (
