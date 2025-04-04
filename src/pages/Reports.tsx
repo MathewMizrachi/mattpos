@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -30,7 +29,6 @@ const Reports = () => {
     }
   }, [currentUser, navigate]);
   
-  // Mock data for reports
   const salesData = [
     { date: '2025-03-31', total: 1256.75, transactions: 42, avgSale: 29.92 },
     { date: '2025-04-01', total: 987.50, transactions: 35, avgSale: 28.21 },
@@ -46,9 +44,9 @@ const Reports = () => {
   ];
   
   const paymentMethodsData = [
-    { method: 'Cash', amount: 1845.50, percentage: 38.5 },
-    { method: 'Card', amount: 2156.75, percentage: 45.0 },
     { method: 'Shop2Shop', amount: 587.25, percentage: 12.2 },
+    { method: 'Card', amount: 2156.75, percentage: 45.0 },
+    { method: 'Cash', amount: 1845.50, percentage: 38.5 },
     { method: 'Account', amount: 205.00, percentage: 4.3 },
   ];
 
@@ -61,7 +59,7 @@ const Reports = () => {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-normal"
+                className="w-full justify-start text-left font-normal bg-white text-[#0A2645] border-[#0A2645]"
               >
                 {format(fromDate, "PPP")}
               </Button>
@@ -83,7 +81,7 @@ const Reports = () => {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-normal"
+                className="w-full justify-start text-left font-normal bg-white text-[#0A2645] border-[#0A2645]"
               >
                 {format(toDate, "PPP")}
               </Button>
