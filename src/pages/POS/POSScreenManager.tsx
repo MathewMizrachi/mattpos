@@ -88,6 +88,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     handleShowWithdrawalScreen,
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
+    handleEndOfDayReport,
   } = useShiftManager({
     calculateExpectedCashInDrawer,
     endShift,
@@ -155,6 +156,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         setShowEndShiftForm={managerSetShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}
         handleCloseReconciliation={handleCloseReconciliation}
+        handleEndOfDayReport={handleEndOfDayReport}
         getShiftPaymentBreakdown={getShiftPaymentBreakdown}
         getShiftRefundBreakdown={getShiftRefundBreakdown}
         getLowStockProducts={getLowStockProducts}

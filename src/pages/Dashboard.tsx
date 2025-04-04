@@ -56,6 +56,10 @@ const Dashboard = () => {
     }
   };
   
+  const handleManageStock = () => {
+    navigate('/stock');
+  };
+
   const handleManageCustomers = () => {
     navigate('/customers');
   };

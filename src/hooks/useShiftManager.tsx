@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Shift } from '@/types';
@@ -24,6 +25,7 @@ export function useShiftManager({
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
+  const [showShiftReport, setShowShiftReport] = useState(false);
   const [completedShift, setCompletedShift] = useState<Shift | null>(null);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   const { toast } = useToast();
@@ -62,6 +64,16 @@ export function useShiftManager({
     setShowReconciliationReport(false);
     navigateToDashboard();
   };
+
+  const handleEndOfDayReport = () => {
+    setShowEndShiftForm(false);
+    setShowShiftReport(true);
+  };
+  
+  const handleCloseShiftReport = () => {
+    setShowShiftReport(false);
+    setShowEndShiftForm(true);
+  };
   
   const handleShowWithdrawalScreen = () => {
     setShowWithdrawalScreen(true);
@@ -98,12 +110,15 @@ export function useShiftManager({
     showEndShiftForm,
     showReconciliationReport,
     showWithdrawalScreen,
+    showShiftReport,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm,
     handleEndShiftRequest,
     handleSubmitEndShift,
     handleCloseReconciliation,
+    handleEndOfDayReport,
+    handleCloseShiftReport,
     handleShowWithdrawalScreen,
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
