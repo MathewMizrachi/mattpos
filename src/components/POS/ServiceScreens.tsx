@@ -4,7 +4,6 @@ import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { Product } from '@/types';
 import RefundScreen from '@/components/RefundScreen';
-import ProfitPlusScreen from '@/components/ProfitPlusScreen';
 import WithdrawalScreen from '@/components/WithdrawalScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
@@ -86,14 +85,6 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
       <RefundScreen
         onProcessRefund={handleProcessRefund}
         onCancel={onCloseRefundScreen}
-      />
-    );
-  }
-  
-  if (showProfitPlusScreen) {
-    return (
-      <ProfitPlusScreen 
-        onCancel={onCloseProfitPlusScreen}
       />
     );
   }

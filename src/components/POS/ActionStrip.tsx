@@ -2,17 +2,14 @@
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ActionButton from './ActionButton';
-import ProfitPlusButton from './ProfitPlusButton';
 
 interface ActionStripProps {
   onRefund: () => void;
-  onProfitPlus: () => void;
   onWithdrawal: () => void;
 }
 
 const ActionStrip: React.FC<ActionStripProps> = ({ 
   onRefund, 
-  onProfitPlus, 
   onWithdrawal
 }) => {
   const isMobile = useIsMobile();
@@ -34,8 +31,6 @@ const ActionStrip: React.FC<ActionStripProps> = ({
         label="withdrawal"
         onClick={onWithdrawal}
       />
-      
-      <ProfitPlusButton onClick={onProfitPlus} />
     </div>
   );
 };

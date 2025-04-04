@@ -126,7 +126,6 @@ const POS = () => {
           showCardPayment={paymentStates.showCardPayment}
           showShop2ShopScreen={paymentStates.showShop2ShopScreen}
           showRefundScreen={paymentStates.showRefundScreen}
-          showProfitPlusScreen={paymentStates.showProfitPlusScreen}
           showWithdrawalScreen={paymentStates.showWithdrawalScreen}
           showSplitPayment={paymentStates.showSplitPayment}
           showAccountPayment={paymentStates.showAccountPayment}
@@ -136,7 +135,6 @@ const POS = () => {
           onCloseCardPayment={() => paymentStates.setShowCardPayment(false)}
           onCloseShop2ShopScreen={() => paymentStates.setShowShop2ShopScreen(false)}
           onCloseRefundScreen={() => paymentStates.setShowRefundScreen(false)}
-          onCloseProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(false)}
           onCloseWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(false)}
           onCloseSplitPayment={() => paymentStates.setShowSplitPayment(false)}
           onCloseAccountPayment={() => paymentStates.setShowAccountPayment(false)}
@@ -165,7 +163,6 @@ const POS = () => {
       onLogout={logout}
       onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
       onShowRefundScreen={() => paymentStates.setShowRefundScreen(true)}
-      onShowProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(true)}
       onShowWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(true)}
       onCashPayment={() => paymentStates.setShowPaymentForm(true)}
       onCardPayment={() => paymentStates.setShowCardPayment(true)}

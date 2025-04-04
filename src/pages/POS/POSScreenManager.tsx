@@ -23,7 +23,6 @@ interface POSScreenManagerProps {
   showCardPayment?: boolean;
   showShop2ShopScreen?: boolean;
   showRefundScreen?: boolean;
-  showProfitPlusScreen?: boolean;
   showWithdrawalScreen?: boolean;
   showSplitPayment?: boolean;
   showAccountPayment?: boolean;
@@ -33,7 +32,6 @@ interface POSScreenManagerProps {
   onCloseCardPayment?: () => void;
   onCloseShop2ShopScreen?: () => void;
   onCloseRefundScreen?: () => void;
-  onCloseProfitPlusScreen?: () => void;
   onCloseWithdrawalScreen?: () => void;
   onCloseSplitPayment?: () => void;
   onCloseAccountPayment?: () => void;
@@ -57,7 +55,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   showCardPayment = false,
   showShop2ShopScreen = false,
   showRefundScreen = false,
-  showProfitPlusScreen = false,
   showWithdrawalScreen = false,
   showSplitPayment = false,
   showAccountPayment = false,
@@ -67,7 +64,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   onCloseCardPayment = () => {},
   onCloseShop2ShopScreen = () => {},
   onCloseRefundScreen = () => {},
-  onCloseProfitPlusScreen = () => {},
   onCloseWithdrawalScreen = () => {},
   onCloseSplitPayment = () => {},
   onCloseAccountPayment = () => {},
@@ -138,12 +134,12 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   }
   
   // Show service screens if any service option is active
-  if (showRefundScreen || showProfitPlusScreen || managerShowWithdrawalScreen || 
+  if (showRefundScreen || managerShowWithdrawalScreen || 
       managerShowEndShiftForm || showReconciliationReport || showShiftReport) {
     return (
       <ServiceScreens
         showRefundScreen={showRefundScreen}
-        showProfitPlusScreen={showProfitPlusScreen}
+        showProfitPlusScreen={false}
         showWithdrawalScreen={managerShowWithdrawalScreen}
         showEndShiftForm={managerShowEndShiftForm}
         showReconciliationReport={showReconciliationReport}
@@ -154,7 +150,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         processRefund={processRefund}
         processWithdrawal={handleProcessWithdrawal}
         onCloseRefundScreen={onCloseRefundScreen}
-        onCloseProfitPlusScreen={onCloseProfitPlusScreen}
+        onCloseProfitPlusScreen={() => {}}
         onCloseWithdrawalScreen={handleCloseWithdrawalScreen}
         setShowEndShiftForm={managerSetShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}
