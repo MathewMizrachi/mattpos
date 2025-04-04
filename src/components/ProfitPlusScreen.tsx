@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileLayout from './ProfitPlus/MobileLayout';
 import DesktopLayout from './ProfitPlus/DesktopLayout';
-import { serviceCategories } from './ProfitPlus/serviceData';
+import { serviceCategories } from './ProfitPlus/data';
 
 interface ProfitPlusScreenProps {
   onCancel: () => void;

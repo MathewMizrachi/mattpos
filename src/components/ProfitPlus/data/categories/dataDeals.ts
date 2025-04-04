@@ -1,0 +1,29 @@
+
+import { ServiceItemProps } from '../../ServiceItem';
+
+export const dataDeals: ServiceItemProps[] = [
+  { 
+    name: "Vodacom Data", 
+    logo: "V", 
+    bgColor: "#e60000",
+    imageUrl: "/lovable-uploads/687d9aa8-4b93-469d-bc7b-a5a4f1f95f28.png"
+  },
+  { 
+    name: "MTN Data", 
+    logo: "MTN", 
+    bgColor: "#ffcc00",
+    imageUrl: "/lovable-uploads/5fda7500-6dfe-498a-901c-794e5fed2ffe.png"
+  },
+  { 
+    name: "Cell C Data", 
+    logo: "C", 
+    bgColor: "#ee7203",
+    imageUrl: "/lovable-uploads/84a1d240-6f6a-4f37-a597-c9e2108a2818.png"
+  },
+  { 
+    name: "Telkom Data", 
+    logo: "T", 
+    bgColor: "#0066b3",
+    imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png"
+  }
+];
