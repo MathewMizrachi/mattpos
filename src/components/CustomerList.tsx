@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
@@ -15,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import CustomerProfile from './CustomerProfile';
 
 interface CustomerListProps {
   onBack: () => void;
@@ -31,6 +31,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'shop2shop'>('cash');
+  const [showCustomerProfile, setShowCustomerProfile] = useState(false);
   const navigate = useNavigate();
   
   // Format date to show only date part
@@ -79,6 +80,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
     }
   };
 
+  const handleRowClick = (customerId: number) => {
+    setSelectedCustomerId(customerId);
+    setShowCustomerProfile(true);
+  };
+
   // Sort and memoize the customers array
   const sortedCustomers = useMemo(() => {
     return [...customers].sort((a, b) => {
@@ -105,6 +111,20 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
     
     return diffDays > customer.paymentTermDays;
   };
+  
+  // If showing customer profile
+  if (showCustomerProfile && selectedCustomerId !== null) {
+    return (
+      <CustomerProfile 
+        customerId={selectedCustomerId}
+        onBack={() => {
+          setShowCustomerProfile(false);
+          setSelectedCustomerId(null);
+        }}
+        onMakePayment={handleMakePayment}
+      />
+    );
+  }
   
   // If showing payment options modal
   if (showPaymentOptions && selectedCustomerId !== null) {
@@ -192,7 +212,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
               </TableHeader>
               <TableBody>
                 {sortedCustomers.map((customer) => (
-                  <TableRow key={customer.id}>
+                  <TableRow 
+                    key={customer.id} 
+                    className="cursor-pointer hover:bg-gray-50"
+                    onClick={() => handleRowClick(customer.id)}
+                  >
                     <TableCell className="font-medium">{customer.id}</TableCell>
                     <TableCell className={hasExceededPaymentTerm(customer) ? "text-red-600 font-semibold" : ""}>
                       {customer.name}
@@ -202,23 +226,16 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack }) => {
                     <TableCell>{customer.paymentTermDays ? `${customer.paymentTermDays} days` : '-'}</TableCell>
                     <TableCell>{formatDate(customer.createdAt)}</TableCell>
                     <TableCell>{formatDate(customer.updatedAt)}</TableCell>
-                    <TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
                       <div className="flex space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          disabled={processingId === customer.id}
-                          onClick={() => handleMakePayment(customer.id)}
-                          className="flex items-center gap-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
-                        >
-                          <Check className="h-4 w-4" />
-                          Make Payment
-                        </Button>
                         {!customer.isPaid && (
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handlePaymentOptionClick(customer.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePaymentOptionClick(customer.id);
+                            }}
                             className="bg-green-600 text-white hover:bg-green-700 border-green-600"
                           >
                             Mark Paid

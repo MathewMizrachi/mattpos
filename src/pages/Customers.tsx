@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import CustomerList from '@/components/CustomerList';
 import { useApp } from '@/contexts/AppContext';
 
