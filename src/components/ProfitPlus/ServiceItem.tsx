@@ -17,25 +17,25 @@ export interface ServiceItemProps {
 const ServiceItem: React.FC<ServiceItemProps> = ({ name, logo, bgColor, subItems, imageUrl }) => {
   return (
     <div 
-      className="relative rounded-lg overflow-hidden shadow-md"
+      className="relative rounded-lg overflow-hidden shadow-md h-24"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="flex flex-col items-center justify-center p-4 h-24">
+      <div className="flex flex-col items-center justify-center p-2 h-full">
         {imageUrl ? (
           <img 
             src={imageUrl} 
             alt={name} 
-            className="h-16 w-16 object-contain"
+            className="w-full h-full object-contain"
           />
         ) : (
-          <div className="text-white font-bold text-center">
+          <div className="text-white font-bold text-center text-xl">
             {logo}
           </div>
         )}
       </div>
       
       {subItems && (
-        <div className="absolute bottom-0 left-0 right-0 bg-green-500 p-2 flex items-center justify-center">
+        <div className="absolute bottom-0 left-0 right-0 bg-green-500 p-1 flex items-center justify-center">
           {subItems.map((subItem, idx) => (
             <div key={idx} className="text-xs text-white flex items-center">
               <span className="mr-1">{subItem.icon === 'whatsapp' ? '📱' : '💾'}</span>
