@@ -5,46 +5,46 @@ export const airtimeElectricityItems: ServiceItem[] = [
   {
     id: 'airtime-any-amount',
     name: 'Airtime Any Amount',
-    imageUrl: '/lovable-uploads/1fa1bfc6-ba0b-44c2-ad18-4250bcbb7475.png',
+    imageUrl: '/lovable-uploads/79824005-4ae1-4e58-bc97-7b2400b95c51.png',
   },
   {
     id: 'easyload-airtime',
     name: 'Easyload Airtime',
-    imageUrl: '/lovable-uploads/2fc8b08c-805a-4d42-b91e-53bb6faa935a.png',
+    imageUrl: '/lovable-uploads/a7069370-00e2-4712-95c0-612e86e79cfe.png',
   },
   {
     id: 'easyload-voucher',
     name: 'Easyload Voucher',
-    imageUrl: '/lovable-uploads/90998c8f-47e5-4e08-9387-0ccfd1d05466.png',
+    imageUrl: '/lovable-uploads/d8dcb092-b366-4ae4-8606-6b8a477ff81d.png',
   },
   {
     id: 'vodacom',
     name: 'Vodacom',
-    imageUrl: '/lovable-uploads/4919aa82-f61d-432d-8be1-bf41f2b5baf8.png',
+    imageUrl: '/lovable-uploads/8802e169-38d5-4fa7-8dd2-e15935cf40c5.png',
   },
   {
     id: 'mtn',
     name: 'MTN',
-    imageUrl: '/lovable-uploads/0a22ac61-f5a7-4795-8e7b-547d5586dae6.png',
+    imageUrl: '/lovable-uploads/80ef83f3-64f0-40a1-97d5-bed4e7a01483.png',
   },
   {
     id: 'cellc',
     name: 'Cell C',
-    imageUrl: '/lovable-uploads/40329020-386a-45e7-8c31-c6d08308c2cd.png',
+    imageUrl: '/lovable-uploads/89fee141-ce0d-4970-afe2-f84c7d364b1c.png',
   },
   {
     id: 'telkom',
     name: 'Telkom',
-    imageUrl: '/lovable-uploads/a444e3a1-c6f5-4b61-aa64-45ca469dd403.png',
+    imageUrl: '/lovable-uploads/2a5ea122-4bd4-485b-8ba5-f8e038d66ec1.png',
   },
   {
     id: 'electricity-water',
     name: 'Electricity & Water',
-    imageUrl: '/lovable-uploads/4678310e-1996-4012-9c6e-8809927a5352.png',
+    imageUrl: '/lovable-uploads/1114a8e2-d0fb-4025-bdf8-2dc820322760.png',
   },
   {
     id: 'dstv',
     name: 'DStv',
-    imageUrl: '/lovable-uploads/bf257252-11e0-4351-ab82-23f4662ab359.png',
+    imageUrl: '/lovable-uploads/bd7b4352-bb22-44e8-b8bb-0675aa8c4ed6.png',
   },
 ];
