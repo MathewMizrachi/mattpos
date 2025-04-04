@@ -6,54 +6,54 @@ export const airtimeElectricity: ServiceItemProps[] = [
     name: "Airtime any Amount", 
     logo: "A", 
     bgColor: "#00a7e1",
-    imageUrl: "/lovable-uploads/9bf173ec-5f6c-4bff-b3b0-cb03ba8c6e70.png"
+    imageUrl: "/lovable-uploads/7f962c8e-b03b-4004-8a6a-524afebed8b0.png"
   },
   { 
     name: "Easyload Airtime", 
     logo: "🐪", 
     bgColor: "#ffa500",
-    imageUrl: "/lovable-uploads/47e7e403-4167-4e1f-a2ec-2851cc945fed.png"
+    imageUrl: "/lovable-uploads/788a8734-cdea-4dd5-a184-960423c0e2ae.png"
   },
   { 
     name: "Easyload Voucher", 
     logo: "🐪", 
     bgColor: "#003870",
-    imageUrl: "/lovable-uploads/80616df2-1a1b-48c7-9b2e-03114b756cfc.png"
+    imageUrl: "/lovable-uploads/061db5f1-4f38-4209-acd0-bde695fe3a40.png"
   },
   { 
     name: "Vodacom", 
     logo: "V", 
     bgColor: "#e60000",
-    imageUrl: "/lovable-uploads/7ee8492c-4d9d-4ca0-be54-33bec7e181bc.png"
+    imageUrl: "/lovable-uploads/e7a93c8c-eaf4-4628-b74d-b313d0132d97.png"
   },
   { 
     name: "MTN", 
     logo: "MTN", 
     bgColor: "#ffcc00",
-    imageUrl: "/lovable-uploads/87b24dcb-77dd-440d-bf52-e8737b7db87d.png"
+    imageUrl: "/lovable-uploads/70291de6-6a30-45ab-beac-461fa3b6a0f6.png"
   },
   { 
     name: "Cell C", 
     logo: "C", 
     bgColor: "#ee7203",
-    imageUrl: "/lovable-uploads/f165766a-9a41-4b94-810a-3fd2048bd6cf.png"
+    imageUrl: "/lovable-uploads/6f4bd6b5-946c-4be5-a367-e8791d8b5e46.png"
   },
   { 
     name: "Telkom", 
     logo: "T", 
     bgColor: "#0066b3",
-    imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png"
+    imageUrl: "/lovable-uploads/b81bef52-1304-41a6-916a-86e687e7860e.png"
   },
   { 
     name: "Electricity & Water", 
     logo: "⚡", 
     bgColor: "#00b4d8",
-    imageUrl: "/lovable-uploads/cba535dc-a9ae-4fab-b3d1-39facb4a516c.png"
+    imageUrl: "/lovable-uploads/d258008e-9893-46ee-b9c1-0b85d8c14884.png"
   },
   { 
     name: "DStv", 
     logo: "DStv", 
     bgColor: "#003870",
-    imageUrl: "/lovable-uploads/f198ecdc-2216-48ac-933b-0d0505b307d3.png"
+    imageUrl: "/lovable-uploads/d7c2162e-791f-43d3-b129-51862881c77d.png"
   }
 ];
