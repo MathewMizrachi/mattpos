@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -57,14 +56,10 @@ const Dashboard = () => {
     }
   };
   
-  const handleManageStock = () => {
-    navigate('/stock');
-  };
-
   const handleManageCustomers = () => {
     navigate('/customers');
   };
-  
+
   const handleViewReports = () => {
     navigate('/reports');
   };
@@ -202,7 +197,7 @@ const Dashboard = () => {
               </p>
               <Button className="w-full" onClick={handleManageCustomers}>
                 <UsersIcon className="h-4 w-4 mr-2" />
-                Manage Customers
+                View Customers
               </Button>
             </CardContent>
           </Card>
