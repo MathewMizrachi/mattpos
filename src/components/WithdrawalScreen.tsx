@@ -104,7 +104,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
           
           <div className="mb-4">
             <Label htmlFor="amount" className="text-[#0A2645] font-semibold mb-1 block">
-              Withdrawal Amount
+              Withdrawal Amount (Rand)
             </Label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0A2645] font-semibold">R</div>

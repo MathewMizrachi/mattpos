@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOutIcon, MoreVerticalIcon, ArrowLeftIcon } from 'lucide-react';
+import { LogOutIcon, ArrowLeftIcon } from 'lucide-react';
 import { User, Shift } from '@/types';
 import {
   DropdownMenu,
@@ -60,7 +60,7 @@ const POSHeader: React.FC<POSHeaderProps> = ({
       <div className="flex items-center space-x-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]" size="icon">
               <ArrowLeftIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -75,28 +75,6 @@ const POSHeader: React.FC<POSHeaderProps> = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        
-        {options.length > 0 && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <MoreVerticalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {options.map((option, index) => (
-                <DropdownMenuItem 
-                  key={index}
-                  onClick={option.action}
-                >
-                  {option.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
         
         <Button variant="ghost" size="icon" onClick={handleLogout}>
           <LogOutIcon className="h-5 w-5" />

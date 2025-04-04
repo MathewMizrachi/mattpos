@@ -42,12 +42,22 @@ const POSLayout: React.FC<POSLayoutProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
+  const handleEndShift = () => {
+    const screenManager = document.getElementById('pos-screen-manager');
+    if (screenManager) {
+      const endShiftEvent = new CustomEvent('endshift');
+      screenManager.dispatchEvent(endShiftEvent);
+    } else {
+      onEndShift();
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-16">
       <POSHeader 
         currentUser={currentUser}
         currentShift={currentShift}
-        onEndShift={onEndShift}
+        onEndShift={handleEndShift}
         onLogout={onLogout}
         options={[]}
       />

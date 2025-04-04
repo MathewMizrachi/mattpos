@@ -113,14 +113,14 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         screenManager.removeEventListener('endshift', handleEndShift);
       };
     }
-  }, [cart, currentShift, toast]);
+  }, [cart, currentShift, toast, handleEndShiftRequest]);
 
   // If external withdrawal screen is requested
   useEffect(() => {
     if (showWithdrawalScreen) {
       handleShowWithdrawalScreen();
     }
-  }, [showWithdrawalScreen]);
+  }, [showWithdrawalScreen, handleShowWithdrawalScreen]);
 
   // Show payment screens if any payment option is active
   if (showPaymentForm || showCardPayment || showShop2ShopScreen || 
@@ -161,7 +161,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         processWithdrawal={handleProcessWithdrawal}
         onCloseRefundScreen={onCloseRefundScreen}
         onCloseProfitPlusScreen={onCloseProfitPlusScreen}
-        onCloseWithdrawalScreen={onCloseWithdrawalScreen || handleCloseWithdrawalScreen}
+        onCloseWithdrawalScreen={handleCloseWithdrawalScreen}
         setShowEndShiftForm={setShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}
         handleCloseReconciliation={handleCloseReconciliation}
