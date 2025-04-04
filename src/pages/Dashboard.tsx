@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -193,7 +194,7 @@ const Dashboard = () => {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle>Customers</CardTitle>
+              <CardTitle>View Customers</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
