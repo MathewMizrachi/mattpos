@@ -178,7 +178,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
       <div className="pb-16 px-2">
         {serviceCategories.map((category, index) => (
           <div key={index} className="mb-8">
-            <h2 className="text-center text-sm text-gray-400 font-medium mb-3">
+            <h2 className="text-center text-sm text-gray-600 font-medium mb-3">
               {category.title}
             </h2>
             <div className="grid grid-cols-3 gap-3">
@@ -196,7 +196,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
         <div className="grid grid-cols-3 gap-8">
           {serviceCategories.slice(0, 3).map((category, index) => (
             <div key={index} className="mb-6">
-              <h2 className="text-center text-gray-400 font-medium mb-4">
+              <h2 className="text-center text-gray-600 font-medium mb-4">
                 {category.title}
               </h2>
               <div className="grid grid-cols-3 gap-3">
@@ -209,7 +209,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
         <div className="grid grid-cols-3 gap-8 mt-8">
           {serviceCategories.slice(3, 6).map((category, index) => (
             <div key={index} className="mb-6">
-              <h2 className="text-center text-gray-400 font-medium mb-4">
+              <h2 className="text-center text-gray-600 font-medium mb-4">
                 {category.title}
               </h2>
               <div className="grid grid-cols-3 gap-3">
@@ -222,7 +222,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
         <div className="grid grid-cols-2 gap-8 mt-8">
           {serviceCategories.slice(6, 8).map((category, index) => (
             <div key={index} className="mb-6">
-              <h2 className="text-center text-gray-400 font-medium mb-4">
+              <h2 className="text-center text-gray-600 font-medium mb-4">
                 {category.title}
               </h2>
               <div className="grid grid-cols-3 gap-3">
@@ -236,23 +236,23 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0A2645]">
-      <div className="flex items-center p-4 border-b border-gray-700">
+    <div className="min-h-screen flex flex-col bg-white">
+      <div className="flex items-center p-4 border-b border-gray-200">
         <Button 
           variant="ghost" 
-          className="text-white"
+          className="text-[#0A2645]"
           onClick={onCancel}
         >
           <ArrowLeft className="mr-2 h-5 w-5" />
           Back
         </Button>
         
-        <h1 className="text-xl font-bold text-white mx-auto pr-12">ProfitPlus Services</h1>
+        <h1 className="text-xl font-bold text-[#0A2645] mx-auto pr-12">ProfitPlus Services</h1>
       </div>
       
       {isMobile ? renderMobileLayout() : renderDesktopLayout()}
       
-      <div className="mt-auto py-2 text-center text-white opacity-70 text-xs fixed bottom-0 left-0 right-0 bg-[#0A2645]">
+      <div className="mt-auto py-2 text-center text-[#0A2645] opacity-70 text-xs fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         Powered by ProfitPlus
       </div>
     </div>
