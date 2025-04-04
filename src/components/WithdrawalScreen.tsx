@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { formatCurrency } from '@/lib/utils';
-import { ArrowDown, DollarSign } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 interface WithdrawalScreenProps {
   onCancel: () => void;
@@ -83,6 +83,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
               onChange={handleNameChange}
               className="bg-white border-[#0A2645] text-[#0A2645]"
               placeholder="Enter name"
+              required
             />
           </div>
           
@@ -97,6 +98,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
               onChange={handlePhoneChange}
               className="bg-white border-[#0A2645] text-[#0A2645]"
               placeholder="Enter phone number"
+              required
             />
           </div>
           
@@ -105,7 +107,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
               Withdrawal Amount
             </Label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0A2645]" size={18} />
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0A2645] font-semibold">R</div>
               <Input
                 id="amount"
                 type="number"
@@ -113,9 +115,10 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
                 step="0.01"
                 value={amount || ''}
                 onChange={handleAmountChange}
-                className="pl-10 bg-white border-[#0A2645] text-[#0A2645]"
+                className="pl-8 bg-white border-[#0A2645] text-[#0A2645]"
                 placeholder="0.00"
                 autoFocus
+                required
               />
             </div>
             <p className="mt-1 text-sm text-gray-500">
@@ -134,6 +137,7 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
               className="bg-white border-[#0A2645] text-[#0A2645]"
               placeholder="Enter reason for withdrawal"
               rows={3}
+              required
             />
           </div>
           
@@ -159,3 +163,4 @@ const WithdrawalScreen: React.FC<WithdrawalScreenProps> = ({ onCancel, onWithdra
 };
 
 export default WithdrawalScreen;
+
