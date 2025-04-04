@@ -39,10 +39,10 @@ export const airtimeElectricity: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/f165766a-9a41-4b94-810a-3fd2048bd6cf.png"
   },
   { 
-    name: "Telkom", 
+    name: "Telkom Data", 
     logo: "T", 
     bgColor: "#0066b3",
-    imageUrl: "/lovable-uploads/215a0aa3-9021-450c-9b7f-c1bc2a85bf64.png"
+    imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png"
   },
   { 
     name: "Electricity & Water", 

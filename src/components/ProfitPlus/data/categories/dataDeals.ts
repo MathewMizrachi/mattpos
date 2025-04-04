@@ -21,9 +21,9 @@ export const dataDeals: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/84a1d240-6f6a-4f37-a597-c9e2108a2818.png"
   },
   { 
-    name: "Telkom Data", 
+    name: "Telkom", 
     logo: "T", 
     bgColor: "#0066b3",
-    imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png"
+    imageUrl: "/lovable-uploads/215a0aa3-9021-450c-9b7f-c1bc2a85bf64.png"
   }
 ];

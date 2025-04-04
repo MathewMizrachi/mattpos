@@ -15,13 +15,7 @@ export const wifiOthers: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/d7c37c4d-5a4b-4558-97c3-6a5043a86af0.png"
   },
   { 
-    name: "Talk360", 
-    logo: "Talk360", 
-    bgColor: "#00b4d8",
-    imageUrl: "/lovable-uploads/432ed033-b0d4-4e63-a8e1-813a0004a9e8.png"
-  },
-  { 
-    name: "Knect", 
+    name: "K'nect", 
     logo: "knect", 
     bgColor: "#2a9d8f",
     imageUrl: "/lovable-uploads/68c70505-741b-493d-b63f-35785c791091.png"
