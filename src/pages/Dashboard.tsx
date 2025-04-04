@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import PinPad from '@/components/PinPad';
 import FloatForm from '@/components/FloatForm';
+import EndShiftForm from '@/components/EndShiftForm';
 
 const Dashboard = () => {
   const { currentUser, currentShift, logout, startShift } = useApp();
@@ -17,7 +17,9 @@ const Dashboard = () => {
   const [showStaffPinPad, setShowStaffPinPad] = useState(false);
   const [showFloatForm, setShowFloatForm] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null);
-  
+  const [showEndShiftForm, setShowEndShiftForm] = useState(false);
+  const [expectedCashAmount, setExpectedCashAmount] = useState(0);
+
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
@@ -74,6 +76,12 @@ const Dashboard = () => {
     navigate('/');
   };
   
+  const handleEndOfShiftReport = () => {
+    setShowStaffPinPad(false);
+    setShowFloatForm(false);
+    navigate('/reports');
+  };
+
   if (showStaffPinPad) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
@@ -102,6 +110,19 @@ const Dashboard = () => {
         <FloatForm 
           onSubmit={handleFloatSubmit}
           onCancel={() => setShowFloatForm(false)}
+        />
+      </div>
+    );
+  }
+  
+  if (showEndShiftForm) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+        <EndShiftForm 
+          onSubmit={handleSubmitEndShift}
+          onCancel={() => setShowEndShiftForm(false)}
+          onEndShiftReport={handleEndOfShiftReport}
+          expectedAmount={expectedCashAmount}
         />
       </div>
     );

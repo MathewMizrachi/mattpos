@@ -23,14 +23,14 @@ type EndShiftFormValues = z.infer<typeof endShiftSchema>;
 interface EndShiftFormProps {
   onSubmit: (cashAmount: number) => void;
   onCancel: () => void;
-  onEndOfDayReport?: () => void;
+  onEndShiftReport?: () => void;
   expectedAmount: number;
 }
 
 const EndShiftForm: React.FC<EndShiftFormProps> = ({ 
   onSubmit, 
   onCancel,
-  onEndOfDayReport,
+  onEndShiftReport,
   expectedAmount 
 }) => {
   const form = useForm<EndShiftFormValues>({
@@ -92,14 +92,14 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
             >
               Complete Shift
             </Button>
-            {onEndOfDayReport && (
+            {onEndShiftReport && (
               <Button 
                 type="button" 
                 variant="outline" 
                 className="bg-white text-[#0A2645] hover:bg-white/80" 
-                onClick={onEndOfDayReport}
+                onClick={onEndShiftReport}
               >
-                End of Day Report
+                End-Shift Report
               </Button>
             )}
           </div>
@@ -110,3 +110,4 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
 };
 
 export default EndShiftForm;
+
