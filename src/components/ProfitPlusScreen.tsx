@@ -2,12 +2,15 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ProfitPlusScreenProps {
   onCancel: () => void;
 }
 
 const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
+  const isMobile = useIsMobile();
+  
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Header with ProfitPlus logo */}
@@ -34,40 +37,40 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
         
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
           <ServiceIcon 
-            icon="/lovable-uploads/0f3bbad6-4fe7-4711-86f3-94adb2235986.png"
+            icon="/lovable-uploads/482f9ff2-ee3a-4c77-881e-8b8c935fbd71.png"
             name="MTN"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/244aad63-e667-4a2e-a60c-e6e1a4338903.png"
+            icon="/lovable-uploads/35a6c037-2e57-41a8-bfbe-4c5ba108881f.png"
             name="Vodacom"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/4531f963-ec96-471b-b1d6-1adba2dbf7cb.png"
+            icon="/lovable-uploads/abfadc69-5bd5-40f2-899f-23d0fda25da0.png"
             name="Cell C"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png"
+            icon="/lovable-uploads/2dfa0bef-2c41-4930-8aeb-16533944ebd7.png"
             name="Telkom"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/994da451-404b-44cf-a00d-5d8a3840a069.png"
-            name="Eskom"
+            icon="/lovable-uploads/884156f9-9194-4015-82ec-621c3d5bc9b6.png"
+            name="Electricity & Water"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png"
-            name="City Power"
+            icon="/lovable-uploads/28553712-bce2-404f-adcd-bb4ecfe22e73.png"
+            name="Airtime Any Amount"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png"
+            icon="/lovable-uploads/836240e7-5634-46d4-b4ff-2fb2ee766db6.png"
             name="DStv"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png"
-            name="Metro"
+            icon="/lovable-uploads/b18e69fa-5c7f-4337-85f8-f2ebe3bae027.png"
+            name="Easyload Airtime"
           />
           <ServiceIcon 
-            icon="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png"
-            name="GOtv"
+            icon="/lovable-uploads/af2ab5f3-7141-42a6-b154-4348b296ebd7.png"
+            name="Easyload Voucher"
           />
         </div>
       </div>
@@ -87,14 +90,14 @@ interface ServiceIconProps {
 const ServiceIcon: React.FC<ServiceIconProps> = ({ icon, name }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-gray-100 rounded-lg p-3 mb-2 w-16 h-16 flex items-center justify-center">
+      <div className="rounded-lg overflow-hidden mb-2 w-16 h-16 flex items-center justify-center">
         <img 
           src={icon} 
           alt={name}
-          className="max-w-full max-h-full object-contain"
+          className="w-full h-full object-contain"
         />
       </div>
-      <span className="text-sm text-center">{name}</span>
+      <span className="text-xs text-center">{name}</span>
     </div>
   );
 };
