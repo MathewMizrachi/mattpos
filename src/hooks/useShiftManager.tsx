@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Shift } from '@/types';
 
 interface UseShiftManagerProps {
   calculateExpectedCashInDrawer: (shiftId: number) => number;
@@ -10,10 +9,10 @@ interface UseShiftManagerProps {
   getShiftRefundBreakdown: (shiftId: number) => any;
   getLowStockProducts: (limit: number) => any[];
   navigateToDashboard: () => void;
-  processWithdrawal?: (amount: number, reason: string) => boolean;
+  processWithdrawal: (amount: number, reason: string) => boolean;
 }
 
-export function useShiftManager({
+export const useShiftManager = ({
   calculateExpectedCashInDrawer,
   endShift,
   getShiftPaymentBreakdown,
@@ -21,41 +20,26 @@ export function useShiftManager({
   getLowStockProducts,
   navigateToDashboard,
   processWithdrawal,
-}: UseShiftManagerProps) {
+}: UseShiftManagerProps) => {
+  const { toast } = useToast();
+  
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
-  const [showShiftReport, setShowShiftReport] = useState(false);
-  const [completedShift, setCompletedShift] = useState<Shift | null>(null);
+  const [completedShift, setCompletedShift] = useState<any>(null);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
-  const { toast } = useToast();
   
-  const handleEndShiftRequest = (currentShift: any, cart: any[]) => {
-    if (cart.length > 0) {
-      return {
-        success: false,
-        message: "Cannot end shift. Please complete or clear the current transaction"
-      };
-    }
-    
-    if (!currentShift) return { success: false };
-    
-    const expectedCash = calculateExpectedCashInDrawer(currentShift.id);
-    setEndShiftCashAmount(expectedCash);
+  const handleEndShiftRequest = () => {
     setShowEndShiftForm(true);
-    return { success: true };
   };
   
   const handleSubmitEndShift = (cashAmount: number, currentShift: any) => {
-    if (!currentShift) return;
+    setEndShiftCashAmount(cashAmount);
+    const endedShift = endShift(cashAmount);
     
-    const shift = endShift(cashAmount);
-    if (shift) {
-      setCompletedShift(shift);
+    if (endedShift) {
+      setCompletedShift(endedShift);
       setShowEndShiftForm(false);
-      
-      // Prepare report data
-      setEndShiftCashAmount(cashAmount);
       setShowReconciliationReport(true);
     }
   };
@@ -63,16 +47,6 @@ export function useShiftManager({
   const handleCloseReconciliation = () => {
     setShowReconciliationReport(false);
     navigateToDashboard();
-  };
-
-  const handleEndOfDayReport = () => {
-    setShowEndShiftForm(false);
-    setShowShiftReport(true);
-  };
-  
-  const handleCloseShiftReport = () => {
-    setShowShiftReport(false);
-    setShowEndShiftForm(true);
   };
   
   const handleShowWithdrawalScreen = () => {
@@ -83,44 +57,39 @@ export function useShiftManager({
     setShowWithdrawalScreen(false);
   };
   
-  const handleProcessWithdrawal = (amount: number, reason: string): boolean => {
-    if (processWithdrawal) {
-      const success = processWithdrawal(amount, reason);
-      
-      if (success) {
-        toast({
-          title: "Withdrawal completed",
-          description: `Successfully withdrawn from register`,
-        });
-        setShowWithdrawalScreen(false);
-      } else {
-        toast({
-          title: "Withdrawal failed",
-          description: "There was an error processing the withdrawal",
-          variant: "destructive"
-        });
-      }
-      
-      return success;
+  const handleProcessWithdrawal = (amount: number, reason: string) => {
+    const success = processWithdrawal(amount, reason);
+    if (success) {
+      handleCloseWithdrawalScreen();
     }
-    return false;
+    return success;
+  };
+
+  const handleEndOfDayReport = () => {
+    // Navigate to reports page
+    navigateToDashboard();
+    
+    // Optionally navigate to reports page with shift data
+    // We could use react-router to navigate to reports with query params or state
+    toast({
+      title: "Navigating to shift reports",
+      description: "Please wait while we prepare your shift report"
+    });
   };
   
   return {
     showEndShiftForm,
     showReconciliationReport,
     showWithdrawalScreen,
-    showShiftReport,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm,
     handleEndShiftRequest,
     handleSubmitEndShift,
     handleCloseReconciliation,
-    handleEndOfDayReport,
-    handleCloseShiftReport,
     handleShowWithdrawalScreen,
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
+    handleEndOfDayReport,
   };
-}
+};

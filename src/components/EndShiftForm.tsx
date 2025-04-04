@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
+import { FileText } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -96,9 +97,10 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
               <Button 
                 type="button" 
                 variant="outline" 
-                className="bg-white text-[#0A2645] hover:bg-white/80" 
+                className="bg-white text-[#0A2645] hover:bg-white/80 flex items-center gap-2" 
                 onClick={onEndShiftReport}
               >
+                <FileText className="h-4 w-4" />
                 End-Shift Report
               </Button>
             )}
@@ -110,4 +112,3 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
 };
 
 export default EndShiftForm;
-
