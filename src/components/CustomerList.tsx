@@ -52,12 +52,12 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           
           <div className="flex gap-2 w-full sm:w-auto">
             <div className="relative flex-grow">
-              <Search className="absolute left-2 top-3 h-4 w-4 text-gray-500" />
+              <Search className="absolute left-2 top-3 h-4 w-4 text-[#0A2645]" />
               <Input
                 placeholder="Search customers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
+                className="pl-8 bg-white text-[#0A2645] border-gray-300"
               />
             </div>
             

@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Check } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
-import PaymentMethodSelection from './PaymentMethodSelection';
 import PaymentAmountInputs from './PaymentAmountInputs';
 import CustomerInformation from './CustomerInformation';
 
@@ -65,25 +64,21 @@ const SplitPaymentSetup: React.FC<SplitPaymentSetupProps> = ({
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <PaymentMethodSelection />
-            
-            {showCustomerFields && (
-              <CustomerInformation 
-                customerName={customerName}
-                customerPhone={customerPhone}
-                setCustomerName={setCustomerName}
-                setCustomerPhone={setCustomerPhone}
-              />
-            )}
-          </div>
-          
+        <div className="grid grid-cols-1 gap-6">
           <PaymentAmountInputs 
             amounts={amounts}
             handleAmountChange={handleAmountChange}
             setShowCustomerFields={setShowCustomerFields}
           />
+          
+          {showCustomerFields && (
+            <CustomerInformation 
+              customerName={customerName}
+              customerPhone={customerPhone}
+              setCustomerName={setCustomerName}
+              setCustomerPhone={setCustomerPhone}
+            />
+          )}
         </div>
         
         <div className="flex justify-between space-x-4 mt-6">

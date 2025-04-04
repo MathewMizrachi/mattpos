@@ -74,6 +74,31 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
     }
   };
   
+  // Mock transactions for display purposes
+  const transactions = [
+    {
+      id: 1,
+      date: new Date('2025-03-15'),
+      amount: 350.75,
+      isPaid: false,
+      description: 'Grocery Purchase'
+    },
+    {
+      id: 2,
+      date: new Date('2025-03-01'),
+      amount: 120.50,
+      isPaid: true,
+      description: 'Household Items'
+    },
+    {
+      id: 3,
+      date: new Date('2025-02-20'),
+      amount: 250.00,
+      isPaid: false,
+      description: 'Electronics'
+    }
+  ];
+  
   // If showing payment options modal
   if (showPaymentOptions) {
     return (
@@ -172,9 +197,51 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
         
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
-          <div className="text-center py-4 text-gray-500">
-            {customer.isPaid ? "All accounts have been settled" : "Outstanding account balance"}
-          </div>
+          {transactions.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((transaction) => (
+                  <TableRow key={transaction.id}>
+                    <TableCell>{formatDate(transaction.date)}</TableCell>
+                    <TableCell>{transaction.description}</TableCell>
+                    <TableCell>{formatCurrency(transaction.amount)}</TableCell>
+                    <TableCell>
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        transaction.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}>
+                        {transaction.isPaid ? "Paid" : "Outstanding"}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {!transaction.isPaid && (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={handleMarkAsPaid}
+                          className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
+                        >
+                          Pay
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center py-4 text-gray-500">
+              {customer.isPaid ? "All accounts have been settled" : "No transaction history available"}
+            </div>
+          )}
         </div>
       </div>
     </div>
