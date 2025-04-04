@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { SplitPaymentDetails } from '@/types';
@@ -11,12 +10,12 @@ interface SplitPaymentHandlerProps {
   onClose: () => void;
 }
 
-const SplitPaymentHandler: React.FC<SplitPaymentHandlerProps> = ({
+const useSplitPaymentHandler = ({
   calculateTotal,
   processPayment,
   customerInfo,
   onClose
-}) => {
+}: SplitPaymentHandlerProps) => {
   const { toast } = useToast();
   
   const handleProcessSplitPayment = (payments: SplitPaymentDetails[]) => {
@@ -61,4 +60,4 @@ const SplitPaymentHandler: React.FC<SplitPaymentHandlerProps> = ({
   };
 };
 
-export default SplitPaymentHandler;
+export default useSplitPaymentHandler;

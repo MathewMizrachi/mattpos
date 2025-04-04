@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Shop2ShopPaymentHandlerProps {
@@ -8,11 +7,11 @@ interface Shop2ShopPaymentHandlerProps {
   onClose: () => void;
 }
 
-const Shop2ShopPaymentHandler: React.FC<Shop2ShopPaymentHandlerProps> = ({
+const useShop2ShopPaymentHandler = ({
   calculateTotal,
   processPayment,
   onClose
-}) => {
+}: Shop2ShopPaymentHandlerProps) => {
   const { toast } = useToast();
   
   const handleProcessShop2ShopPayment = () => {
@@ -38,4 +37,4 @@ const Shop2ShopPaymentHandler: React.FC<Shop2ShopPaymentHandlerProps> = ({
   };
 };
 
-export default Shop2ShopPaymentHandler;
+export default useShop2ShopPaymentHandler;

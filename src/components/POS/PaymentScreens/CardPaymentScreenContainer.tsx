@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CardPaymentScreen from '@/components/CardPaymentScreen';
-import { CardPaymentHandler } from '../PaymentHandlers';
+import { useCardPaymentHandler } from '../PaymentHandlers';
 
 interface CardPaymentScreenContainerProps {
   calculateTotal: () => number;
@@ -14,7 +14,7 @@ const CardPaymentScreenContainer: React.FC<CardPaymentScreenContainerProps> = ({
   processPayment,
   onClose
 }) => {
-  const { handleProcessCardPayment } = CardPaymentHandler({
+  const { handleProcessCardPayment } = useCardPaymentHandler({
     calculateTotal,
     processPayment,
     onClose

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import SplitPaymentScreen from '@/components/SplitPaymentScreen';
-import { SplitPaymentHandler } from '../PaymentHandlers';
+import { useSplitPaymentHandler } from '../PaymentHandlers';
 
 interface SplitPaymentScreenContainerProps {
   calculateTotal: () => number;
@@ -16,7 +16,7 @@ const SplitPaymentScreenContainer: React.FC<SplitPaymentScreenContainerProps> = 
   customerInfo,
   onClose
 }) => {
-  const { handleProcessSplitPayment } = SplitPaymentHandler({
+  const { handleProcessSplitPayment } = useSplitPaymentHandler({
     calculateTotal,
     processPayment,
     customerInfo,

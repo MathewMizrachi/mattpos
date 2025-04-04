@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 
@@ -9,11 +8,11 @@ interface CashPaymentHandlerProps {
   onClose: () => void;
 }
 
-const CashPaymentHandler: React.FC<CashPaymentHandlerProps> = ({
+const useCashPaymentHandler = ({
   calculateTotal,
   processPayment,
   onClose
-}) => {
+}: CashPaymentHandlerProps) => {
   const { toast } = useToast();
   
   const handleProcessCashPayment = (cashReceived: number) => {
@@ -39,4 +38,4 @@ const CashPaymentHandler: React.FC<CashPaymentHandlerProps> = ({
   };
 };
 
-export default CashPaymentHandler;
+export default useCashPaymentHandler;

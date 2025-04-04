@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 interface AccountPaymentHandlerProps {
@@ -8,11 +7,11 @@ interface AccountPaymentHandlerProps {
   onClose: () => void;
 }
 
-const AccountPaymentHandler: React.FC<AccountPaymentHandlerProps> = ({
+const useAccountPaymentHandler = ({
   calculateTotal,
   processPayment,
   onClose
-}) => {
+}: AccountPaymentHandlerProps) => {
   const { toast } = useToast();
   
   const handleProcessAccountPayment = (customerName: string, customerPhone: string) => {
@@ -38,4 +37,4 @@ const AccountPaymentHandler: React.FC<AccountPaymentHandlerProps> = ({
   };
 };
 
-export default AccountPaymentHandler;
+export default useAccountPaymentHandler;

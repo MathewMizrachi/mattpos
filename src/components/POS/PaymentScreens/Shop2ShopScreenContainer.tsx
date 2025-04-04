@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Shop2ShopScreen from '@/components/Shop2ShopScreen';
-import { Shop2ShopPaymentHandler } from '../PaymentHandlers';
+import { useShop2ShopPaymentHandler } from '../PaymentHandlers';
 
 interface Shop2ShopScreenContainerProps {
   calculateTotal: () => number;
@@ -14,7 +14,7 @@ const Shop2ShopScreenContainer: React.FC<Shop2ShopScreenContainerProps> = ({
   processPayment,
   onClose
 }) => {
-  const { handleProcessShop2ShopPayment } = Shop2ShopPaymentHandler({
+  const { handleProcessShop2ShopPayment } = useShop2ShopPaymentHandler({
     calculateTotal,
     processPayment,
     onClose

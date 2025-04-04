@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 interface CardPaymentHandlerProps {
@@ -8,11 +7,11 @@ interface CardPaymentHandlerProps {
   onClose: () => void;
 }
 
-const CardPaymentHandler: React.FC<CardPaymentHandlerProps> = ({
+const useCardPaymentHandler = ({
   calculateTotal,
   processPayment,
   onClose
-}) => {
+}: CardPaymentHandlerProps) => {
   const { toast } = useToast();
   
   const handleProcessCardPayment = () => {
@@ -38,4 +37,4 @@ const CardPaymentHandler: React.FC<CardPaymentHandlerProps> = ({
   };
 };
 
-export default CardPaymentHandler;
+export default useCardPaymentHandler;
