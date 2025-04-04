@@ -21,11 +21,11 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
       className="flex flex-col items-center cursor-pointer p-2"
       onClick={onClick || (() => console.log(`Selected service: ${name}`))}
     >
-      <div className={`${isMobile ? 'w-20 h-20' : 'w-24 h-24'} rounded-lg overflow-hidden mb-1`}>
+      <div className={`${isMobile ? 'w-20 h-20' : 'w-24 h-24'} rounded-lg overflow-hidden mb-1 bg-gray-100 flex items-center justify-center`}>
         <img 
           src={imageUrl} 
           alt={name} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
       </div>
       {name && (
