@@ -38,7 +38,7 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
       <div className="min-h-screen bg-gray-50 pt-6 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center mb-6">
-            <Button onClick={onBack} variant="outline" className="mr-4">
+            <Button onClick={onBack} variant="outline" className="mr-4 text-white">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
@@ -101,7 +101,7 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
             <Button 
               variant="outline" 
               onClick={() => setShowPaymentOptions(false)}
-              className="flex-1"
+              className="flex-1 text-white"
             >
               Cancel
             </Button>
@@ -121,7 +121,7 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
     <div className="min-h-screen bg-gray-50 pt-6 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center mb-6">
-          <Button onClick={onBack} variant="outline" className="mr-4">
+          <Button onClick={onBack} variant="outline" className="mr-4 text-white">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
