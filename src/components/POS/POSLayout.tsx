@@ -56,8 +56,8 @@ const POSLayout: React.FC<POSLayoutProps> = ({
       
       <ActionStrip 
         onRefund={onShowRefundScreen}
-        onWithdrawal={onShowWithdrawalScreen}
         onProfitPlus={onShowProfitPlusScreen}
+        onWithdrawal={onShowWithdrawalScreen}
       />
       
       <PaymentFooter 

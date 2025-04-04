@@ -4,6 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { Product } from '@/types';
 import RefundScreen from '@/components/RefundScreen';
+import ProfitPlusScreen from '@/components/ProfitPlusScreen';
 import WithdrawalScreen from '@/components/WithdrawalScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
@@ -11,6 +12,7 @@ import ShiftReport from '@/components/ShiftReport';
 
 interface ServiceScreensProps {
   showRefundScreen: boolean;
+  showProfitPlusScreen: boolean;
   showWithdrawalScreen: boolean;
   showEndShiftForm: boolean;
   showReconciliationReport: boolean;
@@ -21,6 +23,7 @@ interface ServiceScreensProps {
   processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
   processWithdrawal: (amount: number, reason: string) => boolean;
   onCloseRefundScreen: () => void;
+  onCloseProfitPlusScreen: () => void;
   onCloseWithdrawalScreen: () => void;
   setShowEndShiftForm: (show: boolean) => void;
   handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
@@ -35,6 +38,7 @@ interface ServiceScreensProps {
 
 const ServiceScreens: React.FC<ServiceScreensProps> = ({
   showRefundScreen,
+  showProfitPlusScreen,
   showWithdrawalScreen,
   showEndShiftForm,
   showReconciliationReport,
@@ -45,6 +49,7 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   processRefund,
   processWithdrawal,
   onCloseRefundScreen,
+  onCloseProfitPlusScreen,
   onCloseWithdrawalScreen,
   setShowEndShiftForm,
   handleSubmitEndShift,
@@ -81,6 +86,14 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
       <RefundScreen
         onProcessRefund={handleProcessRefund}
         onCancel={onCloseRefundScreen}
+      />
+    );
+  }
+  
+  if (showProfitPlusScreen) {
+    return (
+      <ProfitPlusScreen 
+        onCancel={onCloseProfitPlusScreen}
       />
     );
   }
