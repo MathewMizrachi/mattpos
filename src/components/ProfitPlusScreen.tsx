@@ -57,30 +57,26 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
           </div>
         </div>
       ) : (
-        <div className="flex-grow flex justify-center items-center">
-          <div className="flex space-x-5">
+        <div className="flex-grow flex justify-center items-center pb-10">
+          <div className="flex space-x-8">
             <img 
               src="/lovable-uploads/3d914bdb-a5d0-4d7d-a1f8-debd2456d19a.png"
               alt="Airtime, Electricity & DStv"
-              className="max-h-[70vh] object-contain rounded-lg"
+              className="max-h-[80vh] object-contain rounded-lg"
             />
             <img 
               src="/lovable-uploads/6f1c1040-7a81-4020-b402-6ba070f21561.png"
               alt="WhatsApp & Social Bundles"
-              className="max-h-[70vh] object-contain rounded-lg"
+              className="max-h-[80vh] object-contain rounded-lg"
             />
             <img 
               src="/lovable-uploads/83575fc1-170c-4ed2-a5ea-b6577dbd1f03.png"
               alt="Gaming"
-              className="max-h-[70vh] object-contain rounded-lg"
+              className="max-h-[80vh] object-contain rounded-lg"
             />
           </div>
         </div>
       )}
-      
-      <div className="mt-auto py-4 text-center text-gray-500 opacity-70 text-sm">
-        Powered by ProfitPlus
-      </div>
     </div>
   );
 };
