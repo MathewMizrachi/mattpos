@@ -15,6 +15,12 @@ export const airtimeElectricity: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/47e7e403-4167-4e1f-a2ec-2851cc945fed.png"
   },
   { 
+    name: "Easyload Voucher", 
+    logo: "🐪", 
+    bgColor: "#003870",
+    imageUrl: "/lovable-uploads/68476df1-6984-4862-8a62-57921fed15cc.png"
+  },
+  { 
     name: "Vodacom", 
     logo: "V", 
     bgColor: "#e60000",
@@ -33,7 +39,7 @@ export const airtimeElectricity: ServiceItemProps[] = [
     imageUrl: "/lovable-uploads/f165766a-9a41-4b94-810a-3fd2048bd6cf.png"
   },
   { 
-    name: "Telkom Data", 
+    name: "Telkom", 
     logo: "T", 
     bgColor: "#0066b3",
     imageUrl: "/lovable-uploads/3853a19f-79e5-4e78-8455-fc980814bf2f.png"
