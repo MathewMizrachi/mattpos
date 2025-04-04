@@ -32,29 +32,51 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
       </div>
       
       {/* Main content with the three images */}
-      <div className={`flex-grow p-6 flex ${isMobile ? 'flex-col space-y-6' : 'justify-center items-center space-x-8'}`}>
-        <div className={`${isMobile ? 'w-full' : 'w-1/3 h-full'} max-w-sm mx-auto`}>
-          <img 
-            src="/lovable-uploads/3d914bdb-a5d0-4d7d-a1f8-debd2456d19a.png"
-            alt="Airtime, Electricity & DStv"
-            className={`w-full ${!isMobile && 'h-full max-h-[70vh] object-contain'} rounded-lg`}
-          />
+      {isMobile ? (
+        <div className="flex-grow p-6 flex flex-col space-y-6">
+          <div className="w-full max-w-sm mx-auto">
+            <img 
+              src="/lovable-uploads/3d914bdb-a5d0-4d7d-a1f8-debd2456d19a.png"
+              alt="Airtime, Electricity & DStv"
+              className="w-full rounded-lg"
+            />
+          </div>
+          <div className="w-full max-w-sm mx-auto">
+            <img 
+              src="/lovable-uploads/6f1c1040-7a81-4020-b402-6ba070f21561.png"
+              alt="WhatsApp & Social Bundles"
+              className="w-full rounded-lg"
+            />
+          </div>
+          <div className="w-full max-w-sm mx-auto">
+            <img 
+              src="/lovable-uploads/83575fc1-170c-4ed2-a5ea-b6577dbd1f03.png"
+              alt="Gaming"
+              className="w-full rounded-lg"
+            />
+          </div>
         </div>
-        <div className={`${isMobile ? 'w-full' : 'w-1/3 h-full'} max-w-sm mx-auto`}>
-          <img 
-            src="/lovable-uploads/6f1c1040-7a81-4020-b402-6ba070f21561.png"
-            alt="WhatsApp & Social Bundles"
-            className={`w-full ${!isMobile && 'h-full max-h-[70vh] object-contain'} rounded-lg`}
-          />
+      ) : (
+        <div className="flex-grow flex justify-center items-center">
+          <div className="flex space-x-5">
+            <img 
+              src="/lovable-uploads/3d914bdb-a5d0-4d7d-a1f8-debd2456d19a.png"
+              alt="Airtime, Electricity & DStv"
+              className="max-h-[70vh] object-contain rounded-lg"
+            />
+            <img 
+              src="/lovable-uploads/6f1c1040-7a81-4020-b402-6ba070f21561.png"
+              alt="WhatsApp & Social Bundles"
+              className="max-h-[70vh] object-contain rounded-lg"
+            />
+            <img 
+              src="/lovable-uploads/83575fc1-170c-4ed2-a5ea-b6577dbd1f03.png"
+              alt="Gaming"
+              className="max-h-[70vh] object-contain rounded-lg"
+            />
+          </div>
         </div>
-        <div className={`${isMobile ? 'w-full' : 'w-1/3 h-full'} max-w-sm mx-auto`}>
-          <img 
-            src="/lovable-uploads/83575fc1-170c-4ed2-a5ea-b6577dbd1f03.png"
-            alt="Gaming"
-            className={`w-full ${!isMobile && 'h-full max-h-[70vh] object-contain'} rounded-lg`}
-          />
-        </div>
-      </div>
+      )}
       
       <div className="mt-auto py-4 text-center text-gray-500 opacity-70 text-sm">
         Powered by ProfitPlus
@@ -64,4 +86,3 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
 };
 
 export default ProfitPlusScreen;
-
