@@ -9,6 +9,7 @@ import { usePOSState } from './POS/usePOSState';
 import { usePaymentStates } from './POS/usePaymentStates';
 import { usePaymentHandlers } from './POS/usePaymentHandlers';
 import PaymentOptions from '@/components/PaymentOptions';
+import ProfitPlusScreen from '@/components/ProfitPlus/ProfitPlusScreen';
 
 const POS = () => {
   const { 
@@ -105,6 +106,14 @@ const POS = () => {
       </div>
     );
   }
+
+  if (paymentStates.showProfitPlusScreen) {
+    return (
+      <ProfitPlusScreen 
+        onClose={() => paymentStates.setShowProfitPlusScreen(false)}
+      />
+    );
+  }
   
   if (paymentStates.isAnyScreenActive()) {
     return (
@@ -163,6 +172,7 @@ const POS = () => {
       onLogout={logout}
       onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
       onShowRefundScreen={() => paymentStates.setShowRefundScreen(true)}
+      onShowProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(true)}
       onShowWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(true)}
       onCashPayment={() => paymentStates.setShowPaymentForm(true)}
       onCardPayment={() => paymentStates.setShowCardPayment(true)}

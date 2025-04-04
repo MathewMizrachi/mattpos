@@ -1,26 +1,34 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ActionButtonProps {
   label: string;
   onClick: () => void;
-  className?: string;
+  icon?: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({
-  label,
+const ActionButton: React.FC<ActionButtonProps> = ({ 
+  label, 
   onClick,
-  className = ''
+  icon
 }) => {
+  const isMobile = useIsMobile();
+  
   return (
-    <Button 
-      className={`bg-[#0A2645] hover:bg-[#0A2645]/90 text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold ${className}`}
-      style={{ width: '25%' }}
+    <button 
       onClick={onClick}
+      className="flex-1 flex flex-col items-center justify-center p-2 h-full border-r border-white/20 hover:bg-white/10 transition-all"
     >
-      {label}
-    </Button>
+      {icon ? (
+        <div className="flex flex-col items-center">
+          <img src={icon} alt={label} className="w-6 h-6 mb-1" />
+          <span className={`text-white ${isMobile ? 'text-xs' : 'text-sm'}`}>{label}</span>
+        </div>
+      ) : (
+        <span className={`text-white ${isMobile ? 'text-xs' : 'text-sm'}`}>{label}</span>
+      )}
+    </button>
   );
 };
 
