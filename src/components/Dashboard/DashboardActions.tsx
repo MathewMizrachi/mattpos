@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -89,7 +88,7 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
 
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle>View Customers</CardTitle>
+          <CardTitle>Customers and Accounts</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
@@ -97,7 +96,7 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
           </p>
           <Button className="w-full" onClick={onManageCustomers}>
             <UsersIcon className="h-4 w-4 mr-2" />
-            View Customers
+            Customers
           </Button>
         </CardContent>
       </Card>
