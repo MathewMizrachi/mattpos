@@ -22,7 +22,6 @@ interface POSMainProps {
   onLogout: () => void;
   onShowPaymentForm: () => void;
   onShowRefundScreen: () => void;
-  onShowProfitPlusScreen: () => void;
   onShowWithdrawalScreen: () => void;
   onCashPayment: () => void;
   onCardPayment: () => void;
@@ -47,7 +46,6 @@ const POSMain: React.FC<POSMainProps> = ({
   onLogout,
   onShowPaymentForm,
   onShowRefundScreen,
-  onShowProfitPlusScreen,
   onShowWithdrawalScreen,
   onCashPayment,
   onCardPayment,
@@ -64,7 +62,6 @@ const POSMain: React.FC<POSMainProps> = ({
       onClearCart={onClearCart}
       onShowPaymentForm={onShowPaymentForm}
       onShowRefundScreen={onShowRefundScreen}
-      onShowProfitPlusScreen={onShowProfitPlusScreen}
       onShowWithdrawalScreen={onShowWithdrawalScreen}
       onCashPayment={onCashPayment}
       onCardPayment={onCardPayment}

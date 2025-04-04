@@ -139,7 +139,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     return (
       <ServiceScreens
         showRefundScreen={showRefundScreen}
-        showProfitPlusScreen={false}
         showWithdrawalScreen={managerShowWithdrawalScreen}
         showEndShiftForm={managerShowEndShiftForm}
         showReconciliationReport={showReconciliationReport}
@@ -150,7 +149,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         processRefund={processRefund}
         processWithdrawal={handleProcessWithdrawal}
         onCloseRefundScreen={onCloseRefundScreen}
-        onCloseProfitPlusScreen={() => {}}
         onCloseWithdrawalScreen={handleCloseWithdrawalScreen}
         setShowEndShiftForm={managerSetShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}

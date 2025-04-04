@@ -11,7 +11,6 @@ import ShiftReport from '@/components/ShiftReport';
 
 interface ServiceScreensProps {
   showRefundScreen: boolean;
-  showProfitPlusScreen: boolean;
   showWithdrawalScreen: boolean;
   showEndShiftForm: boolean;
   showReconciliationReport: boolean;
@@ -22,7 +21,6 @@ interface ServiceScreensProps {
   processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
   processWithdrawal: (amount: number, reason: string) => boolean;
   onCloseRefundScreen: () => void;
-  onCloseProfitPlusScreen: () => void;
   onCloseWithdrawalScreen: () => void;
   setShowEndShiftForm: (show: boolean) => void;
   handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
@@ -37,7 +35,6 @@ interface ServiceScreensProps {
 
 const ServiceScreens: React.FC<ServiceScreensProps> = ({
   showRefundScreen,
-  showProfitPlusScreen,
   showWithdrawalScreen,
   showEndShiftForm,
   showReconciliationReport,
@@ -48,7 +45,6 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   processRefund,
   processWithdrawal,
   onCloseRefundScreen,
-  onCloseProfitPlusScreen,
   onCloseWithdrawalScreen,
   setShowEndShiftForm,
   handleSubmitEndShift,
