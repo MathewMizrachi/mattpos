@@ -72,7 +72,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
           <h2 className="text-xl font-semibold">Sales Summary</h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Total Sales</span>
+              <span className="font-medium">Revenue</span>
               <span>{formatCurrency(totalSales)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
@@ -80,7 +80,7 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
               <span>{formatCurrency(grossProfit)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Transaction Count</span>
+              <span className="font-medium">Sales Count</span>
               <span>{shift.transactionCount || 0}</span>
             </div>
             <div className="flex justify-between py-2 border-b">

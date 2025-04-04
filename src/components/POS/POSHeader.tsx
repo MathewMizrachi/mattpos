@@ -88,8 +88,7 @@ const POSHeader: React.FC<POSHeaderProps> = ({
               Dashboard
             </Button>
             <Button
-              variant="outline"
-              className="bg-transparent border border-gray-300 hover:bg-gray-100 text-[#0A2645]"
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-medium"
               onClick={handleEndShift}
             >
               End Shift
