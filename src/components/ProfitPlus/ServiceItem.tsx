@@ -17,22 +17,22 @@ export interface ServiceItemProps {
 const ServiceItem: React.FC<ServiceItemProps> = ({ name, logo, bgColor, subItems, imageUrl }) => {
   return (
     <div 
-      className="relative rounded-lg overflow-hidden shadow-md h-24"
+      className="relative rounded-lg overflow-hidden shadow-md h-28"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="flex flex-col items-center justify-center p-2 h-full">
-        {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={name} 
-            className="w-full h-full object-contain"
-          />
-        ) : (
+      {imageUrl ? (
+        <img 
+          src={imageUrl} 
+          alt={name} 
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <div className="flex items-center justify-center h-full">
           <div className="text-white font-bold text-center text-xl">
             {logo}
           </div>
-        )}
-      </div>
+        </div>
+      )}
       
       {subItems && (
         <div className="absolute bottom-0 left-0 right-0 bg-green-500 p-1 flex items-center justify-center">
