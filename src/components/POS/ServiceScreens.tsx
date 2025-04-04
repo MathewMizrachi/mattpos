@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -15,6 +16,7 @@ interface ServiceScreensProps {
   showWithdrawalScreen: boolean;
   showEndShiftForm: boolean;
   showReconciliationReport: boolean;
+  showShiftReport?: boolean;
   currentShift: any;
   completedShift: any;
   endShiftCashAmount: number;
@@ -27,6 +29,7 @@ interface ServiceScreensProps {
   handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
   handleCloseReconciliation: () => void;
   handleEndOfDayReport?: () => void;
+  handleCloseShiftReport?: () => void;
   getShiftPaymentBreakdown: (shiftId: number) => any;
   getShiftRefundBreakdown: (shiftId: number) => any;
   getLowStockProducts: (limit: number) => any[];
@@ -39,6 +42,7 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   showWithdrawalScreen,
   showEndShiftForm,
   showReconciliationReport,
+  showShiftReport,
   currentShift,
   completedShift,
   endShiftCashAmount,
@@ -51,6 +55,7 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   handleSubmitEndShift,
   handleCloseReconciliation,
   handleEndOfDayReport,
+  handleCloseShiftReport,
   getShiftPaymentBreakdown,
   getShiftRefundBreakdown,
   getLowStockProducts,
@@ -102,6 +107,21 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
     );
   }
 
+  if (showShiftReport && currentShift) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <ShiftReport
+          shift={currentShift}
+          paymentBreakdown={getShiftPaymentBreakdown(currentShift.id)}
+          refundBreakdown={getShiftRefundBreakdown(currentShift.id)}
+          lowStockProducts={getLowStockProducts(5)}
+          expectedCashInDrawer={calculateExpectedCashInDrawer(currentShift.id)}
+          onClose={handleCloseShiftReport || (() => setShowEndShiftForm(true))}
+        />
+      </div>
+    );
+  }
+
   if (showEndShiftForm && currentShift) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -128,21 +148,6 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
           cashExpected={calculateExpectedCashInDrawer(completedShift.id)}
           cashActual={endShiftCashAmount}
           onClose={handleCloseReconciliation}
-        />
-      </div>
-    );
-  }
-
-  if (currentShift) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <ShiftReport
-          shift={currentShift}
-          paymentBreakdown={getShiftPaymentBreakdown(currentShift.id)}
-          refundBreakdown={getShiftRefundBreakdown(currentShift.id)}
-          lowStockProducts={getLowStockProducts(5)}
-          expectedCashInDrawer={calculateExpectedCashInDrawer(currentShift.id)}
-          onClose={() => setShowEndShiftForm(true)}
         />
       </div>
     );

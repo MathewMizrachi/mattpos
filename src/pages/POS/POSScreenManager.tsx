@@ -79,6 +79,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     showEndShiftForm: managerShowEndShiftForm,
     showReconciliationReport,
     showWithdrawalScreen: managerShowWithdrawalScreen,
+    showShiftReport,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm: managerSetShowEndShiftForm,
@@ -89,6 +90,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
     handleEndOfDayReport,
+    handleCloseShiftReport,
   } = useShiftManager({
     calculateExpectedCashInDrawer,
     endShift,
@@ -137,7 +139,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   
   // Show service screens if any service option is active
   if (showRefundScreen || showProfitPlusScreen || managerShowWithdrawalScreen || 
-      managerShowEndShiftForm || showReconciliationReport) {
+      managerShowEndShiftForm || showReconciliationReport || showShiftReport) {
     return (
       <ServiceScreens
         showRefundScreen={showRefundScreen}
@@ -145,6 +147,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         showWithdrawalScreen={managerShowWithdrawalScreen}
         showEndShiftForm={managerShowEndShiftForm}
         showReconciliationReport={showReconciliationReport}
+        showShiftReport={showShiftReport}
         currentShift={currentShift}
         completedShift={completedShift}
         endShiftCashAmount={endShiftCashAmount}
@@ -157,6 +160,7 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         handleSubmitEndShift={handleSubmitEndShift}
         handleCloseReconciliation={handleCloseReconciliation}
         handleEndOfDayReport={handleEndOfDayReport}
+        handleCloseShiftReport={handleCloseShiftReport}
         getShiftPaymentBreakdown={getShiftPaymentBreakdown}
         getShiftRefundBreakdown={getShiftRefundBreakdown}
         getLowStockProducts={getLowStockProducts}

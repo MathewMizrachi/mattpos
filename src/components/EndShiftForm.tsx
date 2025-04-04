@@ -101,7 +101,7 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
                 onClick={onEndShiftReport}
               >
                 <FileText className="h-4 w-4" />
-                End-Shift Report
+                Shift Report
               </Button>
             )}
           </div>

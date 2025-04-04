@@ -26,6 +26,7 @@ export const useShiftManager = ({
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [showReconciliationReport, setShowReconciliationReport] = useState(false);
   const [showWithdrawalScreen, setShowWithdrawalScreen] = useState(false);
+  const [showShiftReport, setShowShiftReport] = useState(false);
   const [completedShift, setCompletedShift] = useState<any>(null);
   const [endShiftCashAmount, setEndShiftCashAmount] = useState(0);
   
@@ -66,21 +67,20 @@ export const useShiftManager = ({
   };
 
   const handleEndOfDayReport = () => {
-    // Navigate to reports page
-    navigateToDashboard();
-    
-    // Optionally navigate to reports page with shift data
-    // We could use react-router to navigate to reports with query params or state
-    toast({
-      title: "Navigating to shift reports",
-      description: "Please wait while we prepare your shift report"
-    });
+    setShowShiftReport(true);
+  };
+  
+  const handleCloseShiftReport = () => {
+    setShowShiftReport(false);
+    // Return to the end shift form instead of navigating away
+    setShowEndShiftForm(true);
   };
   
   return {
     showEndShiftForm,
     showReconciliationReport,
     showWithdrawalScreen,
+    showShiftReport,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm,
@@ -91,5 +91,6 @@ export const useShiftManager = ({
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
     handleEndOfDayReport,
+    handleCloseShiftReport,
   };
 };
