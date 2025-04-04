@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -109,7 +108,7 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
         <EndShiftForm
           onSubmit={(amount) => handleSubmitEndShift(amount, currentShift)}
           onCancel={() => setShowEndShiftForm(false)}
-          onEndOfDayReport={handleEndOfDayReport}
+          onEndShiftReport={handleEndOfDayReport}
           expectedAmount={calculateExpectedCashInDrawer(currentShift.id)}
         />
       </div>

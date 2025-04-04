@@ -1,0 +1,38 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { LogOutIcon } from 'lucide-react';
+
+interface DashboardHeaderProps {
+  userName: string;
+  onLogout: () => void;
+}
+
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout }) => {
+  return (
+    <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
+      <div className="flex items-center">
+        <div className="flex items-center">
+          <img 
+            src="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png" 
+            alt="Shop2Shop Logo" 
+            className="h-12 w-auto object-contain mr-3"
+          />
+          <div>
+            <h1 className="text-4xl font-bold text-primary">MiniPos</h1>
+            <p className="text-muted-foreground">Welcome, {userName}</p>
+          </div>
+        </div>
+      </div>
+      <Button 
+        variant="secondary" 
+        size="icon" 
+        onClick={onLogout}
+      >
+        <LogOutIcon className="h-5 w-5" />
+      </Button>
+    </header>
+  );
+};
+
+export default DashboardHeader;
