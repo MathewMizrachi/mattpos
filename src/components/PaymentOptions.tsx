@@ -27,8 +27,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     if (!customerName || !customerPhone) {
       toast({
         title: "Customer information required",
-        description: "Please enter customer name and phone number for account payment",
-        variant: "destructive"
+        description: "Please enter customer name and phone number for account payment"
       });
       return;
     }

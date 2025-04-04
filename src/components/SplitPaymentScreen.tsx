@@ -93,8 +93,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
     if (amount <= 0) {
       toast({
         title: "Invalid amount",
-        description: "Payment amount must be greater than 0",
-        variant: "destructive"
+        description: "Payment amount must be greater than 0"
       });
       return;
     }
@@ -103,8 +102,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
     if (method === 'account' && (!customerName || !customerPhone)) {
       toast({
         title: "Customer information required",
-        description: "Please enter customer name and phone number for account payment",
-        variant: "destructive"
+        description: "Please enter customer name and phone number for account payment"
       });
       return;
     }
@@ -161,7 +159,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
               
               <RadioGroup className="space-y-3">
                 <div className="flex items-center space-x-3 border border-gray-700 p-3 rounded-md bg-gray-800">
-                  <RadioGroupItem value="shop2shop" id="shop2shop" className="bg-white" />
+                  <RadioGroupItem value="shop2shop" id="shop2shop" />
                   <Label htmlFor="shop2shop" className="flex items-center">
                     <ShoppingBag className="h-5 w-5 mr-2" />
                     Shop2Shop
@@ -169,7 +167,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
                 </div>
                 
                 <div className="flex items-center space-x-3 border border-gray-700 p-3 rounded-md bg-gray-800">
-                  <RadioGroupItem value="cash" id="cash" className="bg-white" />
+                  <RadioGroupItem value="cash" id="cash" />
                   <Label htmlFor="cash" className="flex items-center">
                     <Banknote className="h-5 w-5 mr-2" />
                     Cash
@@ -177,7 +175,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
                 </div>
                 
                 <div className="flex items-center space-x-3 border border-gray-700 p-3 rounded-md bg-gray-800">
-                  <RadioGroupItem value="card" id="card" className="bg-white" />
+                  <RadioGroupItem value="card" id="card" />
                   <Label htmlFor="card" className="flex items-center">
                     <CreditCard className="h-5 w-5 mr-2" />
                     Card
@@ -185,7 +183,7 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
                 </div>
                 
                 <div className="flex items-center space-x-3 border border-gray-700 p-3 rounded-md bg-gray-800">
-                  <RadioGroupItem value="account" id="account" className="bg-white" />
+                  <RadioGroupItem value="account" id="account" />
                   <Label htmlFor="account" className="flex items-center">
                     <Users className="h-5 w-5 mr-2" />
                     Account
