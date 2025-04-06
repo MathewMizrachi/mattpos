@@ -4,7 +4,7 @@ import { toast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import SplitPaymentSetup from './SplitPayment/SplitPaymentSetup';
 import PaymentProcess from './SplitPayment/PaymentProcess';
-import SplitShop2ShopScreen from './SplitPayment/SplitShop2ShopScreen';
+import Shop2ShopScreen from './Shop2ShopScreen';
 
 interface SplitPaymentScreenProps {
   total: number;
@@ -195,10 +195,8 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
   // Show Shop2Shop screen if needed
   if (showShop2ShopScreen) {
     return (
-      <SplitShop2ShopScreen
-        amount={currentShop2ShopAmount}
-        currentPaymentIndex={currentPaymentIndex}
-        totalPayments={paymentMethods.length}
+      <Shop2ShopScreen
+        total={currentShop2ShopAmount}
         onProcessPayment={handleShop2ShopPayment}
         onCancel={onCancel}
       />

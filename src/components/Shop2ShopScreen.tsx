@@ -29,48 +29,42 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-2">
       <div className="w-full max-w-md mx-auto text-white">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <div className="flex justify-center mb-2">
             <img 
-              src="/lovable-uploads/9894750c-6a6c-4995-883d-ddd554ab010a.png" 
+              src="/lovable-uploads/4531f963-ec96-471b-b1d6-1adba2dbf7cb.png" 
               alt="Shop2Shop Logo" 
               className="h-36 w-36 object-contain"
             />
           </div>
-          
+          <h2 className="text-3xl font-bold">Total to Pay</h2>
+          <p className="text-5xl mt-2 font-extrabold">{formatCurrency(total)}</p>
+        </div>
+        
+        <div className="mb-6">
           <div className="flex justify-center mb-4">
             <img 
               src="/lovable-uploads/886ad285-9db8-4d56-bcad-1cdc5ab763b5.png" 
               alt="QR Code" 
-              className="w-[200px] h-[200px] object-contain border-4 border-white"
+              className="w-[150px] h-[150px] object-contain"
             />
           </div>
           
-          <p className="text-gray-300 mb-2">Shop Code</p>
-          <p className="text-5xl font-bold tracking-widest mb-8">RALXLF</p>
-          
-          <p className="text-2xl">Total to Pay</p>
-          <p className="text-5xl mt-2 font-extrabold">{formatCurrency(total)}</p>
+          <div className="text-center">
+            <p className="text-gray-400 mb-2">Shop Code</p>
+            <p className="text-3xl font-bold tracking-widest">RALXLF</p>
+          </div>
         </div>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-4">
           <Button 
-            onClick={handlePayment}
-            className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-bold text-xl px-8 py-6 rounded-md"
+            onClick={handlePayment} 
+            className="bg-[#FAA225] text-black hover:bg-[#FAA225]/90"
           >
             Complete
           </Button>
-        </div>
-        
-        <div className="mt-4 text-center text-sm">
-          <button 
-            onClick={onCancel}
-            className="text-gray-400 hover:text-white"
-          >
-            Cancel
-          </button>
         </div>
       </div>
     </div>
