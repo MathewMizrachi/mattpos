@@ -59,7 +59,7 @@ const POSHeader: React.FC<POSHeaderProps> = ({
           className="h-10 mr-2" 
         />
         <div>
-          <h1 className="text-2xl font-bold text-primary">MiniPos</h1>
+          <h1 className="text-2xl font-bold text-primary">MiniPOS</h1>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <span>{currentUser?.name}</span>
             <span>•</span>

@@ -56,6 +56,17 @@ const ShiftReport: React.FC<ShiftReportProps> = ({
   const totalSales = shift?.salesTotal || 0;
   const grossProfit = totalSales * 0.25; // Assuming 25% profit margin
   
+  // Calculate Profit+ stats (example data - should be replaced with real data in production)
+  const profitPlusStats = {
+    transactions: 5,
+    revenue: 450.00,
+    commission: 22.50,
+    products: [
+      { name: "Airtime R10", count: 15, value: 150.00, commission: 7.50 },
+      { name: "Electricity", count: 3, value: 300.00, commission: 15.00 }
+    ]
+  };
+  
   const formattedDate = shift ? format(new Date(shift.startTime), 'yyyy-MM-dd') : '';
   const formattedStartTime = shift ? format(new Date(shift.startTime), 'HH:mm:ss') : '';
   const formattedEndTime = shift?.endTime ? format(new Date(shift.endTime), 'HH:mm:ss') : 'Active';
@@ -85,6 +96,7 @@ const ShiftReport: React.FC<ShiftReportProps> = ({
             {lowStockProducts.length > 0 && (
               <TabsTrigger value="inventory" className="data-[state=active]:bg-white">Low Stock</TabsTrigger>
             )}
+            <TabsTrigger value="profitplus" className="data-[state=active]:bg-white">Profit+</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sales">
@@ -200,6 +212,51 @@ const ShiftReport: React.FC<ShiftReportProps> = ({
               </Table>
             </TabsContent>
           )}
+          
+          <TabsContent value="profitplus">
+            <div className="space-y-6">
+              <div className="bg-gray-50 p-4 rounded-md">
+                <h3 className="text-lg font-medium mb-4">Profit+ Summary</h3>
+                
+                <div className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Transactions</span>
+                  <span>{profitPlusStats.transactions}</span>
+                </div>
+                
+                <div className="flex justify-between py-2 border-b">
+                  <span className="font-medium">Revenue</span>
+                  <span>{formatCurrency(profitPlusStats.revenue)}</span>
+                </div>
+                
+                <div className="flex justify-between py-2">
+                  <span className="font-medium">Commission Earned</span>
+                  <span>{formatCurrency(profitPlusStats.commission)}</span>
+                </div>
+              </div>
+              
+              <h3 className="text-lg font-medium my-4">Product Breakdown</h3>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product</TableHead>
+                    <TableHead className="text-right">Count</TableHead>
+                    <TableHead className="text-right">Value</TableHead>
+                    <TableHead className="text-right">Commission</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {profitPlusStats.products.map((product, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell className="text-right">{product.count}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(product.value)}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(product.commission)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </TabsContent>
         </Tabs>
         
         <div className="flex justify-end mt-8">

@@ -58,6 +58,18 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
   const formattedStartTime = new Date(shift.startTime).toLocaleTimeString();
   const formattedEndTime = shift.endTime ? new Date(shift.endTime).toLocaleTimeString() : '';
 
+  // Sample Profit+ stats (replace with actual data from your system)
+  const profitPlusStats = {
+    transactions: 7,
+    revenue: 675.00,
+    commission: 33.75,
+    products: [
+      { name: "Airtime R10", count: 20, value: 200.00, commission: 10.00 },
+      { name: "Data 1GB", count: 5, value: 425.00, commission: 21.25 },
+      { name: "Electricity", count: 1, value: 50.00, commission: 2.50 }
+    ]
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
       <div className="text-center mb-6">
@@ -176,6 +188,47 @@ const ReconciliationReport: React.FC<ReconciliationReportProps> = ({
           </Table>
         </div>
       )}
+      
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Profit+ Summary</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="flex justify-between py-2 border-b">
+              <span className="font-medium">Profit+ Transactions</span>
+              <span>{profitPlusStats.transactions}</span>
+            </div>
+            <div className="flex justify-between py-2 border-b">
+              <span className="font-medium">Revenue</span>
+              <span>{formatCurrency(profitPlusStats.revenue)}</span>
+            </div>
+            <div className="flex justify-between py-2 font-bold">
+              <span>Commission Earned</span>
+              <span>{formatCurrency(profitPlusStats.commission)}</span>
+            </div>
+          </div>
+          
+          <div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead className="text-right">Count</TableHead>
+                  <TableHead className="text-right">Commission</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {profitPlusStats.products.map((product, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell className="text-right">{product.count}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(product.commission)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
       
       <div className="flex justify-center mt-8">
         <Button onClick={onClose} className="min-w-[200px]">

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { useToast } from '@/hooks/use-toast';
+import { useToast, showLowStockAlert } from '@/components/ui/use-toast';
 import POSScreenManager from './POS/POSScreenManager';
 import POSMain from './POS/POSMain';
 import { usePOSState } from './POS/usePOSState';
@@ -87,11 +87,24 @@ const POS = () => {
     }
   }, [currentShift, navigate]);
   
+  // Sort products by most sold (This would typically come from a sales analytics function)
+  const sortedProducts = [...products].sort((a, b) => {
+    // This is a placeholder - in a real app, you'd track sales per product
+    // For now we'll just sort based on ID as an example
+    return a.id - b.id;
+  });
+  
   const handleAddToCart = (product: any, quantity: number, customPrice?: number) => {
     if (customPrice !== undefined && customPrice !== product.price) {
       addToCart(product, quantity, customPrice);
     } else {
       addToCart(product, quantity);
+    }
+    
+    // Check if stock is low after adding to cart
+    if (product.stock !== undefined && product.stock <= 5) {
+      // Show low stock alert
+      showLowStockAlert(product.name, product.stock);
     }
   };
   
@@ -136,11 +149,17 @@ const POS = () => {
           onCloseCardPayment={() => paymentStates.setShowCardPayment(false)}
           onCloseShop2ShopScreen={() => paymentStates.setShowShop2ShopScreen(false)}
           onCloseRefundScreen={() => paymentStates.setShowRefundScreen(false)}
-          onCloseProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(false)}
+          onCloseProfitPlusScreen={() => {
+            paymentStates.setShowProfitPlusScreen(false);
+            navigate('/pos');
+          }}
           onCloseWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(false)}
           onCloseSplitPayment={() => paymentStates.setShowSplitPayment(false)}
           onCloseAccountPayment={() => paymentStates.setShowAccountPayment(false)}
-          onCloseEndShiftForm={() => paymentStates.setShowEndShiftForm(false)}
+          onCloseEndShiftForm={() => {
+            paymentStates.setShowEndShiftForm(false);
+            navigate('/pos');
+          }}
         />
       </div>
     );
@@ -150,7 +169,7 @@ const POS = () => {
     <POSMain
       currentUser={currentUser}
       currentShift={currentShift}
-      products={products}
+      products={sortedProducts}
       cart={cart}
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}

@@ -11,6 +11,7 @@ import {
   TrashIcon,
   XIcon,
   Package2Icon,
+  ImportIcon,
 } from 'lucide-react';
 import {
   Table,
@@ -30,10 +31,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
 import ProductForm from '@/components/ProductForm';
+import ProductImportModal from '@/components/ProductImportModal';
 
 const Stock = () => {
   const { currentUser, products, addProduct, updateProduct, deleteProduct } = useApp();
@@ -44,6 +46,7 @@ const Stock = () => {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isImportProductOpen, setIsImportProductOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   
   const filteredProducts = products.filter(product => 
@@ -89,6 +92,13 @@ const Stock = () => {
     setIsDeleteDialogOpen(true);
   };
   
+  const handleImportProducts = (products: any[]) => {
+    toast({
+      title: "Products imported",
+      description: `${products.length} products have been imported to your inventory.`,
+    });
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white p-4 shadow-sm flex justify-between items-center">
@@ -105,17 +115,26 @@ const Stock = () => {
             <p className="text-sm text-muted-foreground">Add, edit, and remove products</p>
           </div>
         </div>
-        <Button onClick={() => setIsAddProductOpen(true)}>
-          <PlusIcon className="h-4 w-4 mr-2" />
-          Add Product
-        </Button>
+        <div className="flex space-x-2">
+          <Button 
+            onClick={() => setIsImportProductOpen(true)} 
+            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+          >
+            <ImportIcon className="h-4 w-4 mr-2" />
+            Import Products
+          </Button>
+          <Button onClick={() => setIsAddProductOpen(true)}>
+            <PlusIcon className="h-4 w-4 mr-2" />
+            Add Product
+          </Button>
+        </div>
       </header>
       
       <div className="p-4">
         <div className="relative mb-4">
-          <SearchIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0A2645]" />
           <Input
-            className="pl-9 max-w-md"
+            className="pl-9 max-w-md bg-white text-[#0A2645]"
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -207,6 +226,13 @@ const Stock = () => {
           onSubmit={handleEditProduct}
         />
       )}
+      
+      {/* Import Products Modal */}
+      <ProductImportModal
+        isOpen={isImportProductOpen}
+        onClose={() => setIsImportProductOpen(false)}
+        onImport={handleImportProducts}
+      />
       
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
