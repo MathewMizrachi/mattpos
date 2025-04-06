@@ -7,11 +7,12 @@ import { useToast } from '@/hooks/use-toast';
 import { X } from 'lucide-react';
 
 interface ProductImportModalProps {
+  isOpen: boolean; // Add isOpen prop to match what's passed in Stock.tsx
   onClose: () => void;
   onImport: (products: any[]) => void;
 }
 
-const ProductImportModal: React.FC<ProductImportModalProps> = ({ onClose, onImport }) => {
+const ProductImportModal: React.FC<ProductImportModalProps> = ({ isOpen, onClose, onImport }) => {
   const [csvText, setCsvText] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { toast } = useToast();
@@ -70,10 +71,16 @@ const ProductImportModal: React.FC<ProductImportModalProps> = ({ onClose, onImpo
           product[header] = values[index];
         });
         
-        // Convert numeric fields
-        if ('price' in product) product['price'] = parseFloat(product['price']);
-        if ('stock' in product) product['stock'] = parseInt(product['stock']);
-        if ('barcode' in product) product['barcode'] = product['barcode'].toString();
+        // Convert numeric fields - Fix TypeScript errors by adding explicit type checks
+        if ('price' in product && product['price'] !== undefined) {
+          product['price'] = parseFloat(String(product['price']));
+        }
+        if ('stock' in product && product['stock'] !== undefined) {
+          product['stock'] = parseInt(String(product['stock']));
+        }
+        if ('barcode' in product && product['barcode'] !== undefined) {
+          product['barcode'] = String(product['barcode']);
+        }
         
         products.push(product);
       }
@@ -114,6 +121,9 @@ const ProductImportModal: React.FC<ProductImportModalProps> = ({ onClose, onImpo
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+
+  // Don't render if not open
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">

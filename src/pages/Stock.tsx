@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -210,14 +209,12 @@ const Stock = () => {
         </div>
       </div>
       
-      {/* Add Product Modal */}
       <ProductForm
         isOpen={isAddProductOpen}
         onClose={() => setIsAddProductOpen(false)}
         onSubmit={handleAddProduct}
       />
       
-      {/* Edit Product Modal */}
       {selectedProduct && (
         <ProductForm
           product={selectedProduct}
@@ -227,14 +224,12 @@ const Stock = () => {
         />
       )}
       
-      {/* Import Products Modal */}
       <ProductImportModal
         isOpen={isImportProductOpen}
         onClose={() => setIsImportProductOpen(false)}
         onImport={handleImportProducts}
       />
       
-      {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
