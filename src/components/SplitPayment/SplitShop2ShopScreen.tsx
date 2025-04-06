@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, Check } from 'lucide-react';
 
 interface SplitShop2ShopScreenProps {
@@ -19,6 +20,19 @@ const SplitShop2ShopScreen: React.FC<SplitShop2ShopScreenProps> = ({
   onProcessPayment,
   onCancel
 }) => {
+  const handlePayment = () => {
+    // Show the success toast
+    toast({
+      title: "Payment Successful",
+      description: "",
+      className: "bg-[#0A2645] text-white text-2xl font-bold text-center p-6",
+      duration: 3000, // 3 seconds
+    });
+    
+    // Call the original process payment function
+    onProcessPayment();
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
       <div className="w-full max-w-md mx-auto text-white">
@@ -43,33 +57,27 @@ const SplitShop2ShopScreen: React.FC<SplitShop2ShopScreenProps> = ({
           <p className="text-5xl font-bold tracking-widest mb-8">RALXLF</p>
           
           <p className="text-2xl">Amount to Pay:</p>
-          <p className="text-6xl mt-2 font-extrabold mb-4">{formatCurrency(amount)}</p>
+          <p className="text-5xl mt-2 font-extrabold mb-4">{formatCurrency(amount)}</p>
           
           <p className="text-xl mb-6">Payment {currentPaymentIndex + 1} of {totalPayments}</p>
         </div>
         
-        <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-md mb-8">
-          <p>Process Shop2Shop payment of {formatCurrency(amount)}</p>
-          <p className="mt-2">Verify Shop2Shop transaction before proceeding</p>
+        <div className="flex justify-center">
+          <Button 
+            onClick={handlePayment}
+            className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-bold text-xl px-8 py-6 rounded-md"
+          >
+            Complete
+          </Button>
         </div>
         
-        <div className="flex justify-between space-x-4">
-          <Button 
-            onClick={onCancel} 
-            variant="outline"
-            className="flex-1 bg-transparent text-white border-gray-600 hover:bg-gray-700"
+        <div className="mt-4 text-center text-sm">
+          <button 
+            onClick={onCancel}
+            className="text-gray-400 hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
             Cancel
-          </Button>
-          
-          <Button 
-            onClick={onProcessPayment}
-            className="flex-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-bold"
-          >
-            <Check className="h-4 w-4 mr-2" />
-            {currentPaymentIndex < totalPayments - 1 ? "Next Payment" : "Complete Payment"}
-          </Button>
+          </button>
         </div>
       </div>
     </div>
