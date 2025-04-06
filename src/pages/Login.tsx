@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import PinPad from '@/components/PinPad';
 import { useApp } from '@/contexts/AppContext';
 
@@ -30,10 +31,10 @@ const Login = () => {
           <div className="max-w-[150px] mx-auto">
             <img 
               src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
-              alt="MiniPos Logo" 
+              alt="MiniPOS Logo" 
               className="h-auto w-full object-contain mx-auto mb-4"
             />
-            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>MiniPos</h1>
+            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>MiniPOS</h1>
           </div>
         </div>
         

@@ -1,192 +1,176 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { AlertCircle, FileText, Upload } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { X } from 'lucide-react';
 
 interface ProductImportModalProps {
-  isOpen: boolean;
   onClose: () => void;
   onImport: (products: any[]) => void;
 }
 
-interface ImportedProduct {
-  name: string;
-  price: number;
-  stock?: number;
-}
+const ProductImportModal: React.FC<ProductImportModalProps> = ({ onClose, onImport }) => {
+  const [csvText, setCsvText] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const { toast } = useToast();
 
-const ProductImportModal: React.FC<ProductImportModalProps> = ({ isOpen, onClose, onImport }) => {
-  const [importText, setImportText] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<ImportedProduct[]>([]);
-  
-  const parseCSV = (csvText: string) => {
-    const lines = csvText.trim().split('\n');
-    const header = lines[0].split(',');
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
     
-    if (!header.includes('name') || !header.includes('price')) {
-      throw new Error('CSV must include at least "name" and "price" columns');
-    }
+    setFile(selectedFile);
     
-    const nameIndex = header.indexOf('name');
-    const priceIndex = header.indexOf('price');
-    const stockIndex = header.indexOf('stock');
-    
-    const products: ImportedProduct[] = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',');
-      
-      if (values.length >= 2) {
-        const product: ImportedProduct = {
-          name: values[nameIndex].trim(),
-          price: parseFloat(values[priceIndex].trim()),
-        };
-        
-        if (stockIndex !== -1 && values[stockIndex]) {
-          product.stock = parseInt(values[stockIndex].trim(), 10);
-        }
-        
-        // Validate product
-        if (!product.name || isNaN(product.price) || product.price <= 0) {
-          throw new Error(`Invalid product at line ${i + 1}: Name must not be empty, price must be a positive number`);
-        }
-        
-        if (product.stock !== undefined && (isNaN(product.stock) || product.stock < 0)) {
-          throw new Error(`Invalid stock value at line ${i + 1}: Stock must be a non-negative number`);
-        }
-        
-        products.push(product);
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      if (evt.target?.result) {
+        setCsvText(evt.target.result as string);
       }
-    }
-    
-    if (products.length > 1000) {
-      throw new Error('Import limited to 1000 products at a time');
-    }
-    
-    return products;
-  };
-  
-  const handlePreview = () => {
-    try {
-      setError(null);
-      const products = parseCSV(importText);
-      setPreview(products);
-    } catch (err: any) {
-      setError(err.message || 'Failed to parse CSV data');
-      setPreview([]);
-    }
+    };
+    reader.readAsText(selectedFile);
   };
   
   const handleImport = () => {
-    if (preview.length > 0) {
-      onImport(preview);
-      onClose();
-    } else {
-      handlePreview();
+    if (!csvText.trim()) {
+      toast({
+        title: "No data to import",
+        description: "Please upload a CSV file or paste CSV data",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      // Parse CSV
+      const lines = csvText.split('\n');
+      const headers = lines[0].split(',').map(header => header.trim());
+      
+      const products = [];
+      
+      // Process up to 1000 products max
+      const maxProducts = Math.min(lines.length - 1, 1000);
+      
+      for (let i = 1; i <= maxProducts; i++) {
+        if (!lines[i]?.trim()) continue;
+        
+        const values = lines[i].split(',').map(value => value.trim());
+        
+        if (values.length !== headers.length) {
+          toast({
+            title: "Invalid CSV format",
+            description: `Line ${i+1} has a different number of columns than the header`,
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        const product = {};
+        headers.forEach((header, index) => {
+          product[header] = values[index];
+        });
+        
+        // Convert numeric fields
+        if ('price' in product) product['price'] = parseFloat(product['price']);
+        if ('stock' in product) product['stock'] = parseInt(product['stock']);
+        if ('barcode' in product) product['barcode'] = product['barcode'].toString();
+        
+        products.push(product);
+      }
+      
+      if (products.length > 0) {
+        onImport(products);
+        toast({
+          title: `${products.length} products imported`,
+          description: products.length < 1000 
+            ? "All products were imported successfully"
+            : "Maximum 1000 products imported. If you have more, please import them in batches."
+        });
+      } else {
+        toast({
+          title: "No valid products found",
+          description: "Check your CSV format and try again",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error importing products",
+        description: "An error occurred while parsing the CSV data",
+        variant: "destructive"
+      });
     }
   };
   
-  const handleSampleDownload = () => {
-    const sampleCSV = 'name,price,stock\nSample Product,19.99,10\nAnother Product,24.50,5';
+  const handleDownloadSample = () => {
+    const sampleCSV = "name,price,stock,barcode,category\nProduct 1,19.99,50,123456789,Category A\nProduct 2,29.99,75,987654321,Category B";
     const blob = new Blob([sampleCSV], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'sample_import.csv';
+    a.download = 'sample_products.csv';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[600px] bg-white">
-        <DialogHeader>
-          <DialogTitle>Import Products</DialogTitle>
-        </DialogHeader>
+    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
+      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Import Products</h2>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
         
-        <div className="space-y-4 py-2">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-muted-foreground">
-              Import products from a CSV file (max 1000 products at a time)
-            </p>
+        <div className="space-y-4">
+          <div>
+            <p className="mb-2">Upload a CSV file or paste CSV content below. Maximum 1000 products per import.</p>
+            <p className="mb-2 text-sm text-gray-600">CSV should have headers: name, price, stock, barcode, category</p>
+            <Input 
+              type="file" 
+              accept=".csv" 
+              onChange={handleFileChange}
+              className="mb-2" 
+            />
             <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleSampleDownload}
-              className="flex items-center"
+              onClick={handleDownloadSample}
+              className="text-[#0A2645] bg-white border border-[#0A2645] hover:bg-gray-100"
             >
-              <FileText className="h-4 w-4 mr-1" />
-              Download Sample
+              Download Sample CSV
             </Button>
           </div>
           
-          <Textarea 
-            placeholder="Paste your CSV data here (name,price,stock)"
-            value={importText}
-            onChange={(e) => setImportText(e.target.value)}
-            className="min-h-[200px] font-mono"
-          />
+          <div>
+            <label className="block mb-2">Or paste CSV content:</label>
+            <Textarea 
+              value={csvText}
+              onChange={(e) => setCsvText(e.target.value)}
+              rows={10}
+              placeholder="name,price,stock,barcode,category"
+              className="w-full p-2 border"
+            />
+          </div>
           
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          
-          {preview.length > 0 && (
-            <div className="border rounded-md p-2">
-              <p className="font-medium mb-2">Preview ({preview.length} products)</p>
-              <div className="max-h-[200px] overflow-y-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-1 px-2">Name</th>
-                      <th className="text-right py-1 px-2">Price</th>
-                      <th className="text-right py-1 px-2">Stock</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {preview.slice(0, 5).map((product, index) => (
-                      <tr key={index} className="border-b border-dashed">
-                        <td className="py-1 px-2">{product.name}</td>
-                        <td className="text-right py-1 px-2">${product.price.toFixed(2)}</td>
-                        <td className="text-right py-1 px-2">{product.stock ?? 'N/A'}</td>
-                      </tr>
-                    ))}
-                    {preview.length > 5 && (
-                      <tr>
-                        <td colSpan={3} className="text-center py-1 px-2 text-muted-foreground">
-                          And {preview.length - 5} more...
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+          <div className="flex justify-end space-x-2">
+            <Button 
+              onClick={onClose}
+              className="text-[#0A2645] bg-white border border-[#0A2645] hover:bg-gray-100"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleImport}
+              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90"
+            >
+              Import Products
+            </Button>
+          </div>
         </div>
-        
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          {preview.length > 0 ? (
-            <Button onClick={handleImport} className="bg-[#0A2645] hover:bg-[#0A2645]/90">
-              <Upload className="h-4 w-4 mr-2" />
-              Import {preview.length} Products
-            </Button>
-          ) : (
-            <Button onClick={handlePreview}>
-              Preview
-            </Button>
-          )}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 

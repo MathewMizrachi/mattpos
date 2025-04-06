@@ -4,6 +4,7 @@ import { toast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import SplitPaymentSetup from './SplitPayment/SplitPaymentSetup';
 import PaymentProcess from './SplitPayment/PaymentProcess';
+import Shop2ShopScreen from './Shop2ShopScreen';
 
 interface SplitPaymentScreenProps {
   total: number;
@@ -17,6 +18,7 @@ export interface SplitPaymentDetails {
   amount: number;
   customerName?: string;
   customerPhone?: string;
+  paid?: boolean;
 }
 
 const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
@@ -42,6 +44,8 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
   const [totalAllocated, setTotalAllocated] = useState(0);
   const [readyForPayment, setReadyForPayment] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState<('shop2shop' | 'cash' | 'card' | 'account')[]>([]);
+  const [showShop2ShopScreen, setShowShop2ShopScreen] = useState(false);
+  const [currentShop2ShopAmount, setCurrentShop2ShopAmount] = useState(0);
 
   useEffect(() => {
     const newTotal = Object.entries(amounts).reduce((sum, [method, amountStr]) => {
@@ -79,6 +83,38 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
     }));
   };
 
+  const handleShop2ShopPayment = () => {
+    // Mark the current Shop2Shop payment as paid
+    setPayments(currentPayments => {
+      const updatedPayments = [...currentPayments];
+      if (updatedPayments[currentPaymentIndex]) {
+        updatedPayments[currentPaymentIndex] = { 
+          ...updatedPayments[currentPaymentIndex], 
+          paid: true 
+        };
+      }
+      return updatedPayments;
+    });
+    
+    // Hide Shop2Shop screen and continue with normal payment process
+    setShowShop2ShopScreen(false);
+    
+    // Move to next payment method if available
+    if (currentPaymentIndex < paymentMethods.length - 1) {
+      setCurrentPaymentIndex(currentPaymentIndex + 1);
+    } else {
+      // All payments are processed
+      const updatedPayments = [...payments];
+      if (updatedPayments[currentPaymentIndex]) {
+        updatedPayments[currentPaymentIndex] = { 
+          ...updatedPayments[currentPaymentIndex], 
+          paid: true 
+        };
+      }
+      onProcessSplitPayment(updatedPayments);
+    }
+  };
+
   const handleProcessPayment = () => {
     if (currentPaymentIndex >= paymentMethods.length) {
       return;
@@ -114,15 +150,24 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
       newPayment.customerPhone = customerPhone;
     }
     
-    setPayments([...payments, newPayment]);
-    setRemainingAmount(prev => prev - amount);
-    
-    // Move to next payment method
-    if (currentPaymentIndex < paymentMethods.length - 1) {
-      setCurrentPaymentIndex(currentPaymentIndex + 1);
+    // If it's a Shop2Shop payment, show the Shop2Shop screen first
+    if (method === 'shop2shop') {
+      setPayments([...payments, newPayment]);
+      setRemainingAmount(prev => prev - amount);
+      setCurrentShop2ShopAmount(amount);
+      setShowShop2ShopScreen(true);
     } else {
-      // All payments processed, complete the transaction
-      onProcessSplitPayment([...payments, newPayment]);
+      // For other payment methods, just proceed normally
+      setPayments([...payments, {...newPayment, paid: true}]);
+      setRemainingAmount(prev => prev - amount);
+      
+      // Move to next payment method
+      if (currentPaymentIndex < paymentMethods.length - 1) {
+        setCurrentPaymentIndex(currentPaymentIndex + 1);
+      } else {
+        // All payments processed, complete the transaction
+        onProcessSplitPayment([...payments, {...newPayment, paid: true}]);
+      }
     }
   };
 
@@ -143,6 +188,17 @@ const SplitPaymentScreen: React.FC<SplitPaymentScreenProps> = ({
         onCancel={onCancel}
         onProceed={() => setCurrentPaymentIndex(0)}
         readyForPayment={readyForPayment}
+      />
+    );
+  }
+
+  // Show Shop2Shop screen if needed
+  if (showShop2ShopScreen) {
+    return (
+      <Shop2ShopScreen
+        total={currentShop2ShopAmount}
+        onProcessPayment={handleShop2ShopPayment}
+        onCancel={onCancel}
       />
     );
   }
