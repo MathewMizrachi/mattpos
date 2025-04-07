@@ -18,6 +18,8 @@ interface POSLayoutProps {
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
   onShowWithdrawalScreen: () => void;
+  onBottleDeposit?: () => void; // New prop
+  onCoinExchange?: () => void;  // New prop
   onCashPayment: () => void;
   onCardPayment: () => void;
   onShop2ShopPayment: () => void;
@@ -36,6 +38,8 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   onShowRefundScreen,
   onShowProfitPlusScreen,
   onShowWithdrawalScreen,
+  onBottleDeposit = () => {}, // Default empty function
+  onCoinExchange = () => {},  // Default empty function
   onCashPayment,
   onCardPayment,
   onShop2ShopPayment,
@@ -58,6 +62,8 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         onRefund={onShowRefundScreen}
         onProfitPlus={onShowProfitPlusScreen}
         onWithdrawal={onShowWithdrawalScreen}
+        onBottleDeposit={onBottleDeposit}
+        onCoinExchange={onCoinExchange}
       />
       
       <PaymentFooter 

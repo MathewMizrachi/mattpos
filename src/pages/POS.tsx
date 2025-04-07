@@ -75,6 +75,21 @@ const POS = () => {
     endShift
   });
   
+  // New handlers for bottle deposit and coin exchange
+  const handleBottleDeposit = () => {
+    toast({
+      title: "Bottle Deposit",
+      description: "Bottle deposit functionality is not implemented yet",
+    });
+  };
+  
+  const handleCoinExchange = () => {
+    toast({
+      title: "Coin Exchange",
+      description: "Coin exchange functionality is not implemented yet",
+    });
+  };
+  
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
@@ -186,6 +201,8 @@ const POS = () => {
       onShowRefundScreen={() => paymentStates.setShowRefundScreen(true)}
       onShowProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(true)}
       onShowWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(true)}
+      onBottleDeposit={handleBottleDeposit}
+      onCoinExchange={handleCoinExchange}
       onCashPayment={() => paymentStates.setShowPaymentForm(true)}
       onCardPayment={() => paymentStates.setShowCardPayment(true)}
       onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}

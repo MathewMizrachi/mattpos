@@ -24,6 +24,8 @@ interface POSMainProps {
   onShowRefundScreen: () => void;
   onShowProfitPlusScreen: () => void;
   onShowWithdrawalScreen: () => void;
+  onBottleDeposit?: () => void; // New prop
+  onCoinExchange?: () => void;  // New prop
   onCashPayment: () => void;
   onCardPayment: () => void;
   onShop2ShopPayment: () => void;
@@ -49,6 +51,8 @@ const POSMain: React.FC<POSMainProps> = ({
   onShowRefundScreen,
   onShowProfitPlusScreen,
   onShowWithdrawalScreen,
+  onBottleDeposit = () => {}, // Default empty function
+  onCoinExchange = () => {},  // Default empty function
   onCashPayment,
   onCardPayment,
   onShop2ShopPayment,
@@ -66,6 +70,8 @@ const POSMain: React.FC<POSMainProps> = ({
       onShowRefundScreen={onShowRefundScreen}
       onShowProfitPlusScreen={onShowProfitPlusScreen}
       onShowWithdrawalScreen={onShowWithdrawalScreen}
+      onBottleDeposit={onBottleDeposit}
+      onCoinExchange={onCoinExchange}
       onCashPayment={onCashPayment}
       onCardPayment={onCardPayment}
       onShop2ShopPayment={onShop2ShopPayment}
