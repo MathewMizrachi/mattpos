@@ -16,6 +16,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   return (
     <Button 
       className={`bg-[#0A2645] hover:bg-[#0A2645]/90 text-white h-full rounded-none text-sm md:text-base flex items-center justify-center font-bold ${className}`}
+      style={{ width: '25%' }}
       onClick={onClick}
     >
       {label}

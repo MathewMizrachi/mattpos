@@ -3,20 +3,25 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
+import { ArrowLeft, Check } from 'lucide-react';
 
-interface Shop2ShopScreenProps {
-  total: number;
+interface SplitShop2ShopScreenProps {
+  amount: number;
+  currentPaymentIndex: number;
+  totalPayments: number;
   onProcessPayment: () => void;
   onCancel: () => void;
 }
 
-const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
-  total,
+const SplitShop2ShopScreen: React.FC<SplitShop2ShopScreenProps> = ({
+  amount,
+  currentPaymentIndex,
+  totalPayments,
   onProcessPayment,
   onCancel
 }) => {
   const handlePayment = () => {
-    // First show the custom toast
+    // Show the success toast
     toast({
       title: "Payment Successful",
       description: "",
@@ -24,10 +29,10 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
       duration: 3000, // 3 seconds
     });
     
-    // Then call the original process payment function
+    // Call the original process payment function
     onProcessPayment();
   };
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
       <div className="w-full max-w-md mx-auto text-white">
@@ -51,8 +56,10 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
           <p className="text-gray-300 mb-2">Shop Code</p>
           <p className="text-5xl font-bold tracking-widest mb-8">RALXLF</p>
           
-          <p className="text-2xl">Total to Pay</p>
-          <p className="text-5xl mt-2 font-extrabold">{formatCurrency(total)}</p>
+          <p className="text-2xl">Amount to Pay:</p>
+          <p className="text-5xl mt-2 font-extrabold mb-4">{formatCurrency(amount)}</p>
+          
+          <p className="text-xl mb-6">Payment {currentPaymentIndex + 1} of {totalPayments}</p>
         </div>
         
         <div className="flex justify-center">
@@ -77,4 +84,4 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
   );
 };
 
-export default Shop2ShopScreen;
+export default SplitShop2ShopScreen;
