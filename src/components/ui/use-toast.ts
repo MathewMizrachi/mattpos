@@ -1,5 +1,4 @@
 
-import { useToast, toast } from "@/hooks/use-toast";
-import { showLowStockAlert } from "../ui/low-stock-alert";
+import { useToast, toast, showLowStockAlert } from "@/hooks/use-toast";
 
 export { useToast, toast, showLowStockAlert };

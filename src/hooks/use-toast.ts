@@ -1,5 +1,5 @@
-
 import * as React from "react"
+import { toast } from "./use-toast"
 
 import type {
   ToastActionElement,
@@ -173,6 +173,15 @@ function toast({ ...props }: Toast) {
     update,
   }
 }
+
+// Add the missing showLowStockAlert function
+export const showLowStockAlert = (productName: string, stockCount: number) => {
+  toast({
+    title: "Low Stock Alert",
+    description: `${productName} has only ${stockCount} items left in stock.`,
+    variant: "destructive",
+  });
+};
 
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
