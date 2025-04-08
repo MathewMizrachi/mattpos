@@ -1,5 +1,4 @@
 import * as React from "react"
-import { toast } from "./use-toast"
 
 import type {
   ToastActionElement,
@@ -140,7 +139,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ ...props }: Toast) {
+function createToast({ ...props }: Toast) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -174,7 +173,10 @@ function toast({ ...props }: Toast) {
   }
 }
 
-// Add the missing showLowStockAlert function
+// Export the toast function
+export const toast = createToast;
+
+// Add the showLowStockAlert function
 export const showLowStockAlert = (productName: string, stockCount: number) => {
   toast({
     title: "Low Stock Alert",
@@ -203,4 +205,4 @@ function useToast() {
   }
 }
 
-export { useToast, toast }
+export { useToast }
