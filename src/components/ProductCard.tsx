@@ -28,6 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [priceInput, setPriceInput] = useState('');
   const [customPrice, setCustomPrice] = useState<number | null>(null);
   const [lastTapTime, setLastTapTime] = useState(0);
+  const [isKeyboardHandlingActive, setIsKeyboardHandlingActive] = useState(false);
   
   const handleClick = () => {
     const now = new Date().getTime();
@@ -51,14 +52,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
     
     setLastTapTime(now);
-    
-    // On mobile, focus invisible input to bring up keyboard for price entry
-    if (isMobile && isSelected) {
-      const priceInputEl = document.getElementById(`price-input-${product.id}`);
-      if (priceInputEl) {
-        priceInputEl.focus();
-      }
-    }
   };
   
   // Reset price input when card is deselected
@@ -66,19 +59,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (!isSelected) {
       setPriceInput('');
       setCustomPrice(null);
+      setIsKeyboardHandlingActive(false);
     } else if (isMobile) {
       // When selected on mobile, focus the input to show keyboard
       setTimeout(() => {
         const priceInputEl = document.getElementById(`price-input-${product.id}`);
         if (priceInputEl) {
           priceInputEl.focus();
+          setIsKeyboardHandlingActive(true);
         }
       }, 100);
     }
   }, [isSelected, product.id, isMobile]);
   
   useEffect(() => {
-    if (!isSelected) return;
+    if (!isSelected || isMobile) return;
     
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -138,10 +133,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isSelected, priceInput, product, onAddToCart, onSelect]);
+  }, [isSelected, priceInput, product, onAddToCart, onSelect, isMobile]);
 
   // Handle mobile input change
   const handleMobileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only process if keyboard handling is active to prevent double entry
+    if (!isKeyboardHandlingActive) return;
+    
     const value = e.target.value;
     setPriceInput(value);
     
@@ -153,6 +151,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
     } else {
       setCustomPrice(null);
     }
+  };
+
+  // For mobile entries, we directly handle input focus
+  const handleMobileInputFocus = () => {
+    setIsKeyboardHandlingActive(true);
+  };
+
+  const handleMobileInputBlur = () => {
+    setIsKeyboardHandlingActive(false);
   };
   
   // Determine which price to display
@@ -194,6 +201,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   inputMode="decimal"
                   value={priceInput}
                   onChange={handleMobileInputChange}
+                  onFocus={handleMobileInputFocus}
+                  onBlur={handleMobileInputBlur}
                   className="opacity-0 absolute h-1 w-1"
                   autoFocus
                 />
