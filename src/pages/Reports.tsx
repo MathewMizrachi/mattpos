@@ -18,7 +18,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
 const Reports = () => {
-  const { currentUser, getShiftPaymentBreakdown } = useApp();
+  const { currentUser, getShiftPaymentBreakdown, products } = useApp();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('sales');
   const [fromDate, setFromDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 7)));
@@ -37,12 +37,13 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  const inventoryData = [
-    { productName: 'Widget A', currentStock: 43, reorderLevel: 20, lastRestocked: '2025-03-25' },
-    { productName: 'Widget B', currentStock: 12, reorderLevel: 15, lastRestocked: '2025-03-28' },
-    { productName: 'Widget C', currentStock: 65, reorderLevel: 30, lastRestocked: '2025-03-22' },
-    { productName: 'Widget D', currentStock: 8, reorderLevel: 10, lastRestocked: '2025-04-01' },
-  ];
+  // Create inventory data from real products
+  const inventoryData = products.map(product => ({
+    productName: product.name,
+    currentStock: product.stock !== undefined ? product.stock : 0,
+    reorderLevel: Math.max(10, Math.floor((product.stock || 0) * 0.2)), // 20% of current stock as reorder level
+    lastRestocked: '2025-04-01' // Sample data as we don't have real restock dates
+  }));
   
   const paymentMethodsData = [
     { method: 'Shop2Shop', amount: 587.25, percentage: 12.2 },
@@ -199,7 +200,7 @@ const Reports = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {inventoryData.map((item) => (
+                    {inventoryData.slice(0, 10).map((item) => (
                       <TableRow key={item.productName}>
                         <TableCell>{item.productName}</TableCell>
                         <TableCell>{item.currentStock}</TableCell>
@@ -221,6 +222,7 @@ const Reports = () => {
                 <div className="mt-4 bg-gray-50 p-4 rounded-md">
                   <h4 className="font-medium mb-2">Inventory Summary</h4>
                   <p>Products Below Reorder Level: <strong>{inventoryData.filter(item => item.currentStock < item.reorderLevel).length}</strong></p>
+                  <p>Total Products: <strong>{inventoryData.length}</strong></p>
                 </div>
               </TabsContent>
               

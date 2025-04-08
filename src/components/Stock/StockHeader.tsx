@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ImportIcon, PlusIcon } from 'lucide-react';
+import { ChevronLeftIcon, ImportIcon, PlusIcon, PackageIcon } from 'lucide-react';
 
 interface StockHeaderProps {
   onOpenAddProduct: () => void;
@@ -28,6 +28,14 @@ const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImpor
         </div>
       </div>
       <div className="flex space-x-2">
+        <Button 
+          variant="outline" 
+          className="bg-white text-[#0A2645] border-[#0A2645]"
+          onClick={() => console.log("Global Stock Master clicked")}
+        >
+          <PackageIcon className="h-4 w-4 mr-2" />
+          Global Stock Master
+        </Button>
         <Button 
           onClick={onOpenImportProduct} 
           className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
