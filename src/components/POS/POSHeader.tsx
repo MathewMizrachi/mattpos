@@ -60,7 +60,7 @@ const POSHeader: React.FC<POSHeaderProps> = ({
         />
         <div>
           <h1 className="text-2xl font-bold text-primary">MiniPOS</h1>
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <div className="flex items-center space-x-2 text-muted-foreground" style={isMobile ? {fontSize: '0.75rem'} : {}}>
             <span>{currentUser?.name}</span>
             <span>•</span>
             <span>Shift Active</span>
