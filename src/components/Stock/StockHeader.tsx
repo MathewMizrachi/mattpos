@@ -37,10 +37,10 @@ const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImpor
       </div>
       <div className="flex space-x-2">
         {isMobile ? (
-          // Mobile view - show dropdown menu with 3 dots
+          // Mobile view - show dropdown menu with white button
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="bg-white text-[#0A2645] border-[#0A2645]">
                 <MoreVerticalIcon className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>

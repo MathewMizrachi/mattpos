@@ -151,14 +151,12 @@ const POS = () => {
           onCloseRefundScreen={() => paymentStates.setShowRefundScreen(false)}
           onCloseProfitPlusScreen={() => {
             paymentStates.setShowProfitPlusScreen(false);
-            navigate('/pos');
           }}
           onCloseWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(false)}
           onCloseSplitPayment={() => paymentStates.setShowSplitPayment(false)}
           onCloseAccountPayment={() => paymentStates.setShowAccountPayment(false)}
           onCloseEndShiftForm={() => {
             paymentStates.setShowEndShiftForm(false);
-            navigate('/pos');
           }}
         />
       </div>

@@ -69,14 +69,22 @@ const POSHeader: React.FC<POSHeaderProps> = ({
       </div>
       <div className="flex items-center space-x-2">
         {isMobile ? (
-          // Mobile view - just the back button
-          <Button
-            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-            size="icon"
-            onClick={handleGoToDashboard}
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-          </Button>
+          // Mobile view - show End Shift and back button
+          <>
+            <Button
+              className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-[#FAA225]"
+              onClick={handleEndShift}
+            >
+              End Shift
+            </Button>
+            <Button
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+              size="icon"
+              onClick={handleGoToDashboard}
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+            </Button>
+          </>
         ) : (
           // Desktop view - buttons for both options
           <>
