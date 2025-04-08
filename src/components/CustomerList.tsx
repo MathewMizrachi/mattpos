@@ -28,14 +28,19 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
     customer.phone.includes(searchQuery)
   );
   
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString();
-  };
-  
   const handleCustomerClick = (customerId: number) => {
     if (onSelectCustomer) {
       onSelectCustomer(customerId);
     }
+  };
+  
+  // Mock function to get a random amount owed for each customer
+  // In a real application, this would come from the actual customer data
+  const getAmountOwed = (customerId: number) => {
+    // Generate a consistent random amount based on customer ID
+    const baseAmount = customerId * 100;
+    const multiplier = (customerId % 3) + 1;
+    return baseAmount * multiplier;
   };
   
   return (
@@ -74,7 +79,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Phone</TableHead>
-                <TableHead>Date Added</TableHead>
+                <TableHead>Amount Owed</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -95,7 +100,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                   >
                     <TableCell className="font-medium">{customer.name}</TableCell>
                     <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{formatDate(customer.createdAt)}</TableCell>
+                    <TableCell>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
                     <TableCell>
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
