@@ -27,7 +27,7 @@ const ProfitPlusScreen: React.FC<ProfitPlusScreenProps> = ({ onCancel }) => {
         <img 
           src="/lovable-uploads/f4e28baf-787d-4f4b-aebf-26b48b90ba07.png" 
           alt="ProfitPlus" 
-          className="h-12 object-contain" 
+          className={`h-12 object-contain ${isMobile ? 'absolute right-4' : ''}`} 
         />
       </div>
       

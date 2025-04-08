@@ -2,7 +2,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ImportIcon, PlusIcon, PackageIcon } from 'lucide-react';
+import { ChevronLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface StockHeaderProps {
   onOpenAddProduct: () => void;
@@ -11,6 +18,7 @@ interface StockHeaderProps {
 
 const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImportProduct }) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   return (
     <header className="bg-white p-4 shadow-sm flex justify-between items-center">
@@ -28,25 +36,53 @@ const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImpor
         </div>
       </div>
       <div className="flex space-x-2">
-        <Button 
-          variant="outline" 
-          className="bg-white text-[#0A2645] border-[#0A2645]"
-          onClick={() => console.log("Global Stock Master clicked")}
-        >
-          <PackageIcon className="h-4 w-4 mr-2" />
-          Global Stock Master
-        </Button>
-        <Button 
-          onClick={onOpenImportProduct} 
-          className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-        >
-          <ImportIcon className="h-4 w-4 mr-2" />
-          Import Products
-        </Button>
-        <Button onClick={onOpenAddProduct}>
-          <PlusIcon className="h-4 w-4 mr-2" />
-          Add Product
-        </Button>
+        {isMobile ? (
+          // Mobile view - show dropdown menu with 3 dots
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <MoreVerticalIcon className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")}>
+                <PackageIcon className="h-4 w-4 mr-2" />
+                Global Stock Master
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onOpenImportProduct}>
+                <ImportIcon className="h-4 w-4 mr-2" />
+                Import Products
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onOpenAddProduct}>
+                <PlusIcon className="h-4 w-4 mr-2" />
+                Add Product
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          // Desktop view - show all buttons
+          <>
+            <Button 
+              variant="outline" 
+              className="bg-white text-[#0A2645] border-[#0A2645]"
+              onClick={() => console.log("Global Stock Master clicked")}
+            >
+              <PackageIcon className="h-4 w-4 mr-2" />
+              Global Stock Master
+            </Button>
+            <Button 
+              onClick={onOpenImportProduct} 
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+            >
+              <ImportIcon className="h-4 w-4 mr-2" />
+              Import Products
+            </Button>
+            <Button onClick={onOpenAddProduct}>
+              <PlusIcon className="h-4 w-4 mr-2" />
+              Add Product
+            </Button>
+          </>
+        )}
       </div>
     </header>
   );
