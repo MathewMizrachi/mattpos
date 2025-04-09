@@ -28,7 +28,7 @@ const TabsList = React.forwardRef<
 
   if (scrollable) {
     return (
-      <ScrollArea className="w-full" orientation="horizontal">
+      <ScrollArea className="w-full">
         {tabsList}
       </ScrollArea>
     )
