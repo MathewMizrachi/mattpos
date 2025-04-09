@@ -79,11 +79,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead className={isMobile ? "text-xs p-2" : ""}>Name</TableHead>
                 {!isMobile && <TableHead>Phone</TableHead>}
-                <TableHead>Total Outstanding</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className={isMobile ? "text-xs p-2" : ""}>Total Outstanding</TableHead>
+                <TableHead className={isMobile ? "text-xs p-2" : ""}>Status</TableHead>
+                <TableHead className={isMobile ? "text-xs p-2" : ""}>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -97,25 +97,25 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                 filteredCustomers.map((customer) => (
                   <TableRow 
                     key={customer.id} 
-                    className="cursor-pointer hover:bg-gray-50"
+                    className={`cursor-pointer hover:bg-gray-50 ${isMobile ? 'text-xs' : ''}`}
                     onClick={() => handleCustomerClick(customer.id)}
                   >
-                    <TableCell className="font-medium">{customer.name}</TableCell>
+                    <TableCell className={`font-medium ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
                     {!isMobile && <TableCell>{customer.phone}</TableCell>}
-                    <TableCell>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
-                    <TableCell>
+                    <TableCell className={isMobile ? 'p-2' : ''}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
+                    <TableCell className={isMobile ? 'p-2' : ''}>
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }`}>
                         {customer.isPaid ? "Paid" : "Outstanding"}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={isMobile ? 'p-2' : ''}>
                       <div className="flex items-center space-x-2">
                         <Button 
                           variant="outline" 
                           size="sm"
-                          className="text-white"
+                          className={`text-white ${isMobile ? 'text-xs px-2 py-1' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCustomerClick(customer.id);
@@ -137,3 +137,4 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
 };
 
 export default CustomerList;
+
