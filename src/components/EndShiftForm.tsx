@@ -1,25 +1,9 @@
 
-import React from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { FileText } from 'lucide-react';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-
-const endShiftSchema = z.object({
-  cashAmount: z.coerce.number().nonnegative({ message: 'Cash amount must be 0 or greater' }),
-});
-
-type EndShiftFormValues = z.infer<typeof endShiftSchema>;
+import { formatCurrency } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 
 interface EndShiftFormProps {
   onSubmit: (cashAmount: number) => void;
@@ -28,85 +12,79 @@ interface EndShiftFormProps {
   expectedAmount: number;
 }
 
-const EndShiftForm: React.FC<EndShiftFormProps> = ({ 
-  onSubmit, 
+const EndShiftForm: React.FC<EndShiftFormProps> = ({
+  onSubmit,
   onCancel,
   onEndShiftReport,
-  expectedAmount 
+  expectedAmount
 }) => {
-  const form = useForm<EndShiftFormValues>({
-    resolver: zodResolver(endShiftSchema),
-    defaultValues: { cashAmount: expectedAmount },
-  });
+  const [cashAmount, setCashAmount] = useState(expectedAmount || 0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (data: EndShiftFormValues) => {
-    onSubmit(data.cashAmount);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    onSubmit(cashAmount);
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-[#0A2645] text-white p-6 rounded-lg">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">End Shift</h2>
-        <p className="text-gray-300 mt-1">
-          Please count and enter the actual amount of cash in the drawer.
-        </p>
-        <p className="text-gray-300 mt-2">
-          Expected amount: R{expectedAmount.toFixed(2)}
-        </p>
+    <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="p-4 bg-[#0A2645] text-white flex items-center">
+        <Button variant="ghost" size="icon" onClick={onCancel} className="mr-2">
+          <ArrowLeft className="h-5 w-5 text-white" />
+        </Button>
+        <h2 className="text-xl font-bold">End Shift</h2>
       </div>
       
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="cashAmount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-white">Actual Cash Amount (R)</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    step="0.01" 
-                    min="0" 
-                    placeholder="0.00"
-                    className="bg-white text-black"
-                    {...field} 
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="space-y-2">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-gray-700">Expected Cash in Drawer:</span>
+            <span className="font-bold">{formatCurrency(expectedAmount)}</span>
+          </div>
+          
+          <label className="block text-gray-700 font-medium mb-1">
+            Actual Cash in Drawer
+          </label>
+          <Input
+            type="number"
+            step="0.01"
+            min="0"
+            value={cashAmount}
+            onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)}
+            className="w-full"
+            required
           />
           
-          <div className="flex justify-end space-x-4">
+          {cashAmount !== expectedAmount && (
+            <div className={`text-sm mt-1 ${cashAmount < expectedAmount ? 'text-red-600' : 'text-amber-600'}`}>
+              {cashAmount < expectedAmount
+                ? `Shortage of ${formatCurrency(expectedAmount - cashAmount)}`
+                : `Excess of ${formatCurrency(cashAmount - expectedAmount)}`}
+            </div>
+          )}
+        </div>
+        
+        <div className="flex flex-col space-y-2">
+          <Button 
+            type="submit" 
+            className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Processing...' : 'Submit & End Shift'}
+          </Button>
+          
+          {onEndShiftReport && (
             <Button 
               type="button" 
               variant="outline" 
-              className="text-white border-white hover:bg-white/20" 
-              onClick={onCancel}
+              onClick={onEndShiftReport}
             >
-              Cancel
+              View Shift Report
             </Button>
-            <Button 
-              type="submit" 
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
-            >
-              Complete Shift
-            </Button>
-            {onEndShiftReport && (
-              <Button 
-                type="button" 
-                variant="outline" 
-                className="bg-white text-[#0A2645] hover:bg-white/80 flex items-center gap-2" 
-                onClick={onEndShiftReport}
-              >
-                <FileText className="h-4 w-4" />
-                Shift Report
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
+          )}
+        </div>
+      </form>
     </div>
   );
 };

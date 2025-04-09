@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -147,7 +148,7 @@ const Reports = () => {
           <CardContent>
             <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
               <TabsList 
-                scrollable={isMobile}
+                scrollable={true}
                 className={cn(
                   "w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]",
                   isMobile && "w-[auto] min-w-full flex-nowrap"
