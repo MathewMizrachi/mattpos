@@ -13,6 +13,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { formatCurrency } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CustomerListProps {
   onBack: () => void;
@@ -22,6 +23,7 @@ interface CustomerListProps {
 const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer }) => {
   const { customers } = useApp();
   const [searchQuery, setSearchQuery] = React.useState('');
+  const isMobile = useIsMobile();
   
   const filteredCustomers = customers.filter(customer => 
     customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,8 +80,8 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Amount Owed</TableHead>
+                {!isMobile && <TableHead>Phone</TableHead>}
+                <TableHead>Total Outstanding</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -87,7 +89,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
             <TableBody>
               {filteredCustomers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-4 text-gray-500">
+                  <TableCell colSpan={isMobile ? 4 : 5} className="text-center py-4 text-gray-500">
                     No customers found
                   </TableCell>
                 </TableRow>
@@ -99,7 +101,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                     onClick={() => handleCustomerClick(customer.id)}
                   >
                     <TableCell className="font-medium">{customer.name}</TableCell>
-                    <TableCell>{customer.phone}</TableCell>
+                    {!isMobile && <TableCell>{customer.phone}</TableCell>}
                     <TableCell>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
                     <TableCell>
                       <span className={`px-2 py-1 rounded-full text-xs ${
