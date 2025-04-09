@@ -90,10 +90,7 @@ const ShiftReport: React.FC<ShiftReportProps> = ({
       
       <div className="p-6">
         <Tabs defaultValue="sales" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList 
-            scrollable={true}
-            className="w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]"
-          >
+          <TabsList className="w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]">
             <TabsTrigger value="sales" className="data-[state=active]:bg-white">Sales</TabsTrigger>
             <TabsTrigger value="payment" className="data-[state=active]:bg-white">Payment Methods</TabsTrigger>
             {refundBreakdown.items.length > 0 && (
