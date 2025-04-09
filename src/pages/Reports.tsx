@@ -9,6 +9,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { formatCurrency } from '@/lib/utils';
 import { format } from 'date-fns';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -116,6 +123,24 @@ const Reports = () => {
       </div>
     );
   };
+
+  const ReportTypeSelector = () => {
+    return (
+      <div className="mb-6">
+        <Select value={activeTab} onValueChange={setActiveTab}>
+          <SelectTrigger className="bg-white text-[#0A2645] border-[#0A2645]">
+            <SelectValue placeholder="Select Report Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="sales">Sales Report</SelectItem>
+            <SelectItem value="inventory">Inventory Status</SelectItem>
+            <SelectItem value="payment">Payment Methods</SelectItem>
+            <SelectItem value="profitplus">Profit+</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  };
   
   return (
     <div className="min-h-screen bg-[#0A2645] p-4">
@@ -145,113 +170,123 @@ const Reports = () => {
             <CardTitle>Report Dashboard</CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-              <TabsList 
-                scrollable={isMobile}
-                className={cn(
-                  "w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]",
-                  isMobile && "w-[auto] min-w-full flex-nowrap"
-                )}
-              >
-                <TabsTrigger value="sales" className="data-[state=active]:bg-white whitespace-nowrap">Sales Report</TabsTrigger>
-                <TabsTrigger value="inventory" className="data-[state=active]:bg-white whitespace-nowrap">Inventory Status</TabsTrigger>
-                <TabsTrigger value="payment" className="data-[state=active]:bg-white whitespace-nowrap">Payment Methods</TabsTrigger>
-                <TabsTrigger value="profitplus" className="data-[state=active]:bg-white whitespace-nowrap">Profit+</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="sales">
+            {isMobile ? (
+              <ReportTypeSelector />
+            ) : (
+              <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
+                <TabsList className="w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]">
+                  <TabsTrigger value="sales" className="data-[state=active]:bg-white whitespace-nowrap">Sales Report</TabsTrigger>
+                  <TabsTrigger value="inventory" className="data-[state=active]:bg-white whitespace-nowrap">Inventory Status</TabsTrigger>
+                  <TabsTrigger value="payment" className="data-[state=active]:bg-white whitespace-nowrap">Payment Methods</TabsTrigger>
+                  <TabsTrigger value="profitplus" className="data-[state=active]:bg-white whitespace-nowrap">Profit+</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            )}
+            
+            {activeTab === 'sales' && (
+              <div>
                 <DateRangePicker />
                 <h3 className="text-lg font-medium mb-4">Daily Sales Overview</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Revenue</TableHead>
-                      <TableHead>Sales</TableHead>
-                      <TableHead>Avg. Sale</TableHead>
-                      <TableHead>Gross Profit</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {salesData.map((row) => (
-                      <TableRow key={row.date}>
-                        <TableCell>{row.date}</TableCell>
-                        <TableCell>{formatCurrency(row.total)}</TableCell>
-                        <TableCell>{row.transactions}</TableCell>
-                        <TableCell>{formatCurrency(row.avgSale)}</TableCell>
-                        <TableCell>{formatCurrency(row.total * 0.25)}</TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Revenue</TableHead>
+                        <TableHead>Sales</TableHead>
+                        <TableHead>Avg. Sale</TableHead>
+                        <TableHead>Gross Profit</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {salesData.map((row) => (
+                        <TableRow key={row.date}>
+                          <TableCell>{row.date}</TableCell>
+                          <TableCell>{formatCurrency(row.total)}</TableCell>
+                          <TableCell>{row.transactions}</TableCell>
+                          <TableCell>{formatCurrency(row.avgSale)}</TableCell>
+                          <TableCell>{formatCurrency(row.total * 0.25)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
                 <div className="mt-4 bg-gray-50 p-4 rounded-md">
                   <h4 className="font-medium mb-2">Summary</h4>
                   <p>Total Revenue for Period: <strong>{formatCurrency(salesData.reduce((sum, item) => sum + item.total, 0))}</strong></p>
                   <p>Total Sales: <strong>{salesData.reduce((sum, item) => sum + item.transactions, 0)}</strong></p>
                   <p>Total Gross Profit: <strong>{formatCurrency(salesData.reduce((sum, item) => sum + item.total, 0) * 0.25)}</strong></p>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="inventory">
+              </div>
+            )}
+            
+            {activeTab === 'inventory' && (
+              <div>
                 <h3 className="text-lg font-medium mb-4">Inventory Status Report</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product Name</TableHead>
-                      <TableHead>Current Stock</TableHead>
-                      <TableHead>Reorder Level</TableHead>
-                      <TableHead>Last Restocked</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {inventoryData.slice(0, 10).map((item) => (
-                      <TableRow key={item.productName}>
-                        <TableCell>{item.productName}</TableCell>
-                        <TableCell>{item.currentStock}</TableCell>
-                        <TableCell>{item.reorderLevel}</TableCell>
-                        <TableCell>{item.lastRestocked}</TableCell>
-                        <TableCell>
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-                            item.currentStock < item.reorderLevel 
-                              ? 'bg-red-100 text-red-800' 
-                              : 'bg-green-100 text-green-800'
-                          }`}>
-                            {item.currentStock < item.reorderLevel ? 'Reorder' : 'Ok'}
-                          </span>
-                        </TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Product Name</TableHead>
+                        <TableHead>Current Stock</TableHead>
+                        <TableHead>Reorder Level</TableHead>
+                        <TableHead>Last Restocked</TableHead>
+                        <TableHead>Status</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {inventoryData.slice(0, 10).map((item) => (
+                        <TableRow key={item.productName}>
+                          <TableCell>{item.productName}</TableCell>
+                          <TableCell>{item.currentStock}</TableCell>
+                          <TableCell>{item.reorderLevel}</TableCell>
+                          <TableCell>{item.lastRestocked}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              item.currentStock < item.reorderLevel 
+                                ? 'bg-red-100 text-red-800' 
+                                : 'bg-green-100 text-green-800'
+                            }`}>
+                              {item.currentStock < item.reorderLevel ? 'Reorder' : 'Ok'}
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
                 <div className="mt-4 bg-gray-50 p-4 rounded-md">
                   <h4 className="font-medium mb-2">Inventory Summary</h4>
                   <p>Products Below Reorder Level: <strong>{inventoryData.filter(item => item.currentStock < item.reorderLevel).length}</strong></p>
                   <p>Total Products: <strong>{inventoryData.length}</strong></p>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="payment">
+              </div>
+            )}
+            
+            {activeTab === 'payment' && (
+              <div>
                 <DateRangePicker />
                 <h3 className="text-lg font-medium mb-4">Payment Methods Analysis</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Payment Method</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Percentage</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paymentMethodsData.map((method) => (
-                      <TableRow key={method.method}>
-                        <TableCell>{method.method}</TableCell>
-                        <TableCell>{formatCurrency(method.amount)}</TableCell>
-                        <TableCell>{method.percentage}%</TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Payment Method</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Percentage</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {paymentMethodsData.map((method) => (
+                        <TableRow key={method.method}>
+                          <TableCell>{method.method}</TableCell>
+                          <TableCell>{formatCurrency(method.amount)}</TableCell>
+                          <TableCell>{method.percentage}%</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
                 <div className="mt-4 bg-gray-50 p-4 rounded-md">
                   <h4 className="font-medium mb-2">Payment Methods Summary</h4>
                   <p>Total Amount: <strong>{formatCurrency(paymentMethodsData.reduce((sum, method) => sum + method.amount, 0))}</strong></p>
@@ -261,53 +296,59 @@ const Reports = () => {
                     ).method
                   }</strong></p>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="profitplus">
+              </div>
+            )}
+            
+            {activeTab === 'profitplus' && (
+              <div>
                 <DateRangePicker />
                 <h3 className="text-lg font-medium mb-4">Profit+ Performance</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Transactions</TableHead>
-                      <TableHead>Revenue</TableHead>
-                      <TableHead>Commission</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {profitPlusData.daily.map((day) => (
-                      <TableRow key={day.date}>
-                        <TableCell>{day.date}</TableCell>
-                        <TableCell>{day.transactions}</TableCell>
-                        <TableCell>{formatCurrency(day.revenue)}</TableCell>
-                        <TableCell>{formatCurrency(day.commission)}</TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Transactions</TableHead>
+                        <TableHead>Revenue</TableHead>
+                        <TableHead>Commission</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {profitPlusData.daily.map((day) => (
+                        <TableRow key={day.date}>
+                          <TableCell>{day.date}</TableCell>
+                          <TableCell>{day.transactions}</TableCell>
+                          <TableCell>{formatCurrency(day.revenue)}</TableCell>
+                          <TableCell>{formatCurrency(day.commission)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
                 
                 <h3 className="text-lg font-medium my-4">Product Breakdown</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Count</TableHead>
-                      <TableHead>Value</TableHead>
-                      <TableHead>Commission</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {profitPlusData.products.map((product, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{product.name}</TableCell>
-                        <TableCell>{product.count}</TableCell>
-                        <TableCell>{formatCurrency(product.value)}</TableCell>
-                        <TableCell>{formatCurrency(product.commission)}</TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Product</TableHead>
+                        <TableHead>Count</TableHead>
+                        <TableHead>Value</TableHead>
+                        <TableHead>Commission</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {profitPlusData.products.map((product, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{product.name}</TableCell>
+                          <TableCell>{product.count}</TableCell>
+                          <TableCell>{formatCurrency(product.value)}</TableCell>
+                          <TableCell>{formatCurrency(product.commission)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
                 
                 <div className="mt-4 bg-gray-50 p-4 rounded-md">
                   <h4 className="font-medium mb-2">Profit+ Summary</h4>
@@ -320,8 +361,8 @@ const Reports = () => {
                     ).name
                   }</strong></p>
                 </div>
-              </TabsContent>
-            </Tabs>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { FileText } from 'lucide-react';
+import { FileText, ArrowLeft } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -45,15 +45,26 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
 
   return (
     <div className="w-full max-w-md mx-auto bg-[#0A2645] text-white p-6 rounded-lg">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">End Shift</h2>
-        <p className="text-gray-300 mt-1">
-          Please count and enter the actual amount of cash in the drawer.
-        </p>
-        <p className="text-gray-300 mt-2">
-          Expected amount: R{expectedAmount.toFixed(2)}
-        </p>
+      <div className="flex items-center mb-6">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onCancel} 
+          className="mr-2 text-white hover:bg-white/10"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <div className="text-center flex-1 pr-9">
+          <h2 className="text-2xl font-bold">End Shift</h2>
+        </div>
       </div>
+      
+      <p className="text-gray-300 mb-4">
+        Please count and enter the actual amount of cash in the drawer.
+      </p>
+      <p className="text-gray-300 mb-6">
+        Expected amount: R{expectedAmount.toFixed(2)}
+      </p>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -79,14 +90,6 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
           />
           
           <div className="flex justify-end space-x-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="text-white border-white hover:bg-white/20" 
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
             <Button 
               type="submit" 
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
