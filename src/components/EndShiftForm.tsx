@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { FileText, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Form,
   FormControl,
@@ -38,9 +39,14 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
     resolver: zodResolver(endShiftSchema),
     defaultValues: { cashAmount: expectedAmount },
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (data: EndShiftFormValues) => {
     onSubmit(data.cashAmount);
+  };
+
+  const handleBackClick = () => {
+    navigate('/dashboard');
   };
 
   return (
@@ -49,7 +55,7 @@ const EndShiftForm: React.FC<EndShiftFormProps> = ({
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={onCancel} 
+          onClick={handleBackClick} 
           className="mr-2 text-white hover:bg-white/10"
         >
           <ArrowLeft className="h-5 w-5" />
