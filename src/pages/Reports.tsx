@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Reports = () => {
   const { currentUser, getShiftPaymentBreakdown, products } = useApp();
@@ -23,6 +23,7 @@ const Reports = () => {
   const [activeTab, setActiveTab] = useState('sales');
   const [fromDate, setFromDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 7)));
   const [toDate, setToDate] = useState<Date>(new Date());
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (!currentUser) {
@@ -37,7 +38,6 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  // Create inventory data from real products
   const inventoryData = products.map(product => ({
     productName: product.name,
     currentStock: product.stock !== undefined ? product.stock : 0,
@@ -52,7 +52,6 @@ const Reports = () => {
     { method: 'Account', amount: 205.00, percentage: 4.3 },
   ];
   
-  // Sample Profit+ data
   const profitPlusData = {
     daily: [
       { date: '2025-03-31', transactions: 5, revenue: 450.00, commission: 22.50 },
@@ -147,11 +146,17 @@ const Reports = () => {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-              <TabsList className="w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]">
-                <TabsTrigger value="sales" className="data-[state=active]:bg-white">Sales Report</TabsTrigger>
-                <TabsTrigger value="inventory" className="data-[state=active]:bg-white">Inventory Status</TabsTrigger>
-                <TabsTrigger value="payment" className="data-[state=active]:bg-white">Payment Methods</TabsTrigger>
-                <TabsTrigger value="profitplus" className="data-[state=active]:bg-white">Profit+</TabsTrigger>
+              <TabsList 
+                scrollable={isMobile}
+                className={cn(
+                  "w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]",
+                  isMobile && "w-[auto] min-w-full flex-nowrap"
+                )}
+              >
+                <TabsTrigger value="sales" className="data-[state=active]:bg-white whitespace-nowrap">Sales Report</TabsTrigger>
+                <TabsTrigger value="inventory" className="data-[state=active]:bg-white whitespace-nowrap">Inventory Status</TabsTrigger>
+                <TabsTrigger value="payment" className="data-[state=active]:bg-white whitespace-nowrap">Payment Methods</TabsTrigger>
+                <TabsTrigger value="profitplus" className="data-[state=active]:bg-white whitespace-nowrap">Profit+</TabsTrigger>
               </TabsList>
               
               <TabsContent value="sales">

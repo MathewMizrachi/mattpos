@@ -1,23 +1,41 @@
+
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const Tabs = TabsPrimitive.Root
 
+interface TabsListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
+  scrollable?: boolean;
+}
+
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    {...props}
-  />
-))
+  TabsListProps
+>(({ className, scrollable, ...props }, ref) => {
+  const tabsList = (
+    <TabsPrimitive.List
+      ref={ref}
+      className={cn(
+        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+        className
+      )}
+      {...props}
+    />
+  )
+
+  if (scrollable) {
+    return (
+      <ScrollArea className="w-full" orientation="horizontal">
+        {tabsList}
+      </ScrollArea>
+    )
+  }
+
+  return tabsList
+})
 TabsList.displayName = TabsPrimitive.List.displayName
 
 const TabsTrigger = React.forwardRef<

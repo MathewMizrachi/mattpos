@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
@@ -19,6 +18,8 @@ import {
 } from "@/components/ui/tabs";
 import { ArrowLeft } from 'lucide-react';
 import { Shift } from '@/types';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from "@/lib/utils";
 
 interface ShiftReportProps {
   shift: Shift;
@@ -51,6 +52,8 @@ const ShiftReport: React.FC<ShiftReportProps> = ({
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState('sales');
+  
+  const isMobile = useIsMobile();
   
   // Calculate totals
   const totalSales = shift?.salesTotal || 0;
