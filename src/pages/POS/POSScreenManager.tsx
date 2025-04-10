@@ -77,19 +77,16 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   
   const {
     showEndShiftForm: managerShowEndShiftForm,
-    showReconciliationReport,
-    showWithdrawalScreen: managerShowWithdrawalScreen,
     showShiftReport,
+    showWithdrawalScreen: managerShowWithdrawalScreen,
     completedShift,
     endShiftCashAmount,
     setShowEndShiftForm: managerSetShowEndShiftForm,
     handleEndShiftRequest,
     handleSubmitEndShift,
-    handleCloseReconciliation,
     handleShowWithdrawalScreen,
     handleCloseWithdrawalScreen,
     handleProcessWithdrawal,
-    handleEndOfDayReport,
     handleCloseShiftReport,
   } = useShiftManager({
     calculateExpectedCashInDrawer,
@@ -139,14 +136,13 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
   
   // Show service screens if any service option is active
   if (showRefundScreen || showProfitPlusScreen || managerShowWithdrawalScreen || 
-      managerShowEndShiftForm || showReconciliationReport || showShiftReport) {
+      managerShowEndShiftForm || showShiftReport) {
     return (
       <ServiceScreens
         showRefundScreen={showRefundScreen}
         showProfitPlusScreen={showProfitPlusScreen}
         showWithdrawalScreen={managerShowWithdrawalScreen}
         showEndShiftForm={managerShowEndShiftForm}
-        showReconciliationReport={showReconciliationReport}
         showShiftReport={showShiftReport}
         currentShift={currentShift}
         completedShift={completedShift}
@@ -158,8 +154,6 @@ const POSScreenManager: React.FC<POSScreenManagerProps> = ({
         onCloseWithdrawalScreen={handleCloseWithdrawalScreen}
         setShowEndShiftForm={managerSetShowEndShiftForm}
         handleSubmitEndShift={handleSubmitEndShift}
-        handleCloseReconciliation={handleCloseReconciliation}
-        handleEndOfDayReport={handleEndOfDayReport}
         handleCloseShiftReport={handleCloseShiftReport}
         getShiftPaymentBreakdown={getShiftPaymentBreakdown}
         getShiftRefundBreakdown={getShiftRefundBreakdown}
