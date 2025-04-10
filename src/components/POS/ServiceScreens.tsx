@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -8,7 +7,7 @@ import ProfitPlusScreen from '@/components/ProfitPlusScreen';
 import WithdrawalScreen from '@/components/WithdrawalScreen';
 import EndShiftForm from '@/components/EndShiftForm';
 import ReconciliationReport from '@/components/ReconciliationReport';
-import ShiftReport from '@/components/ShiftReport';
+import ShiftReport from '@/components/Reports/ShiftReport';
 
 interface ServiceScreensProps {
   showRefundScreen: boolean;
