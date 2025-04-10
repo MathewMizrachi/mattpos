@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
@@ -7,6 +6,7 @@ import RefundScreen from '@/components/RefundScreen';
 import ProfitPlusScreen from '@/components/ProfitPlusScreen';
 import WithdrawalScreen from '@/components/WithdrawalScreen';
 import EndShiftForm from '@/components/EndShiftForm';
+import ReconciliationReport from '@/components/ReconciliationReport';
 import ShiftReport from '@/components/Reports/ShiftReport';
 
 interface ServiceScreensProps {
@@ -14,6 +14,7 @@ interface ServiceScreensProps {
   showProfitPlusScreen: boolean;
   showWithdrawalScreen: boolean;
   showEndShiftForm: boolean;
+  showReconciliationReport: boolean;
   showShiftReport?: boolean;
   currentShift: any;
   completedShift: any;
@@ -25,6 +26,8 @@ interface ServiceScreensProps {
   onCloseWithdrawalScreen: () => void;
   setShowEndShiftForm: (show: boolean) => void;
   handleSubmitEndShift: (cashAmount: number, currentShift: any) => void;
+  handleCloseReconciliation: () => void;
+  handleEndOfDayReport?: () => void;
   handleCloseShiftReport?: () => void;
   getShiftPaymentBreakdown: (shiftId: number) => any;
   getShiftRefundBreakdown: (shiftId: number) => any;
@@ -37,6 +40,7 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   showProfitPlusScreen,
   showWithdrawalScreen,
   showEndShiftForm,
+  showReconciliationReport,
   showShiftReport,
   currentShift,
   completedShift,
@@ -48,6 +52,8 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
   onCloseWithdrawalScreen,
   setShowEndShiftForm,
   handleSubmitEndShift,
+  handleCloseReconciliation,
+  handleEndOfDayReport,
   handleCloseShiftReport,
   getShiftPaymentBreakdown,
   getShiftRefundBreakdown,
@@ -121,8 +127,26 @@ const ServiceScreens: React.FC<ServiceScreensProps> = ({
         <EndShiftForm
           onSubmit={(amount) => handleSubmitEndShift(amount, currentShift)}
           onCancel={() => setShowEndShiftForm(false)}
-          onEndShiftReport={handleCloseShiftReport}
+          onEndShiftReport={handleEndOfDayReport}
           expectedAmount={calculateExpectedCashInDrawer(currentShift.id)}
+        />
+      </div>
+    );
+  }
+  
+  if (showReconciliationReport && completedShift) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <ReconciliationReport 
+          shift={completedShift}
+          totalSales={completedShift.salesTotal || 0}
+          grossProfit={completedShift.salesTotal ? completedShift.salesTotal * 0.25 : 0}
+          paymentBreakdown={getShiftPaymentBreakdown(completedShift.id)}
+          lowStockProducts={getLowStockProducts(5)}
+          refundBreakdown={getShiftRefundBreakdown(completedShift.id)}
+          cashExpected={calculateExpectedCashInDrawer(completedShift.id)}
+          cashActual={endShiftCashAmount}
+          onClose={handleCloseReconciliation}
         />
       </div>
     );

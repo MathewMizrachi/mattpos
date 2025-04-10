@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import FloatForm from '@/components/FloatForm';
 import EndShiftForm from '@/components/EndShiftForm';
