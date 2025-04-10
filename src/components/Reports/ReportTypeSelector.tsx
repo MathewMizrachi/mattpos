@@ -20,7 +20,7 @@ export const ReportTypeSelector: React.FC<ReportTypeSelectorProps> = ({
   return (
     <div className="mb-6">
       <Select value={activeTab} onValueChange={setActiveTab}>
-        <SelectTrigger className="bg-white text-[#0A2645] border-[#0A2645]">
+        <SelectTrigger className="bg-[#FAA225] text-[#0A2645] border-[#0A2645]">
           <SelectValue placeholder="Select Report Type" />
         </SelectTrigger>
         <SelectContent>
