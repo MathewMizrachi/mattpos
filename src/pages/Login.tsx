@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import PinPad from '@/components/PinPad';
@@ -45,9 +45,8 @@ const Login = () => {
         />
         
         <div className="mt-4 text-center text-sm" style={{ color: '#FAA225' }}>
-          <p>Demo PINs:</p>
-          <p>Manager: 1234</p>
-          <p>Staff: 5678</p>
+          <p>Demo PIN:</p>
+          <p>All Users: 55</p>
         </div>
       </div>
     </div>
