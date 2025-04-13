@@ -34,7 +34,7 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
         <div className="text-center mb-6">
           <div className="flex justify-center mb-2">
             <img 
-              src="/lovable-uploads/9894750c-6a6c-4995-883d-ddd554ab010a.png" 
+              src="/lovable-uploads/4d765655-41b0-42ba-a5ce-2313baaa255c.png" 
               alt="Shop2Shop Logo" 
               className="h-36 w-36 object-contain"
             />
@@ -78,3 +78,4 @@ const Shop2ShopScreen: React.FC<Shop2ShopScreenProps> = ({
 };
 
 export default Shop2ShopScreen;
+
