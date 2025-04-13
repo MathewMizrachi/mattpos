@@ -1,4 +1,3 @@
-
 // Simple in-memory database for demonstration purposes
 // In a real application, this would use IndexedDB or SQLite
 
@@ -75,8 +74,8 @@ interface Customer {
 
 class Database {
   private users: User[] = [
-    { id: 1, name: 'Owner', pin: '1234', role: 'manager' },
-    { id: 2, name: 'Staff 1', pin: '5678', role: 'staff' },
+    { id: 1, name: 'Owner', pin: '55', role: 'manager' },
+    { id: 2, name: 'Staff 1', pin: '55', role: 'staff' },
   ];
 
   private products: Product[] = [

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import PinPad from '@/components/PinPad';
@@ -13,9 +12,7 @@ const StaffAuthPinPad: React.FC<StaffAuthPinPadProps> = ({ onCancel, onPinSubmit
   const { toast } = useToast();
   
   const handlePinSubmit = (pin: string) => {
-    if (pin === '5678') {
-      onPinSubmit(2); // Staff ID
-    } else if (pin === '1234') {
+    if (pin === '55') {
       onPinSubmit(1); // Manager ID
     } else {
       toast({
