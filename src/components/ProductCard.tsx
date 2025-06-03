@@ -1,8 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
 
 interface Product {
@@ -23,36 +22,65 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart, 
   isMobile
 }) => {
-  const [showPriceInput, setShowPriceInput] = useState(false);
-  const [customPrice, setCustomPrice] = useState(product.price.toString());
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [editablePrice, setEditablePrice] = useState(product.price.toString());
+  const priceRef = useRef<HTMLDivElement>(null);
   
   const handleCardClick = () => {
-    // Add item to cart when card is tapped
-    onAddToCart(product);
+    if (!isEditingPrice) {
+      onAddToCart(product);
+    }
   };
   
   const handlePriceButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click
-    setShowPriceInput(true);
-    setCustomPrice(product.price.toString());
+    e.stopPropagation();
+    setIsEditingPrice(true);
+    setEditablePrice(product.price.toString());
+    
+    // Focus the price element
+    setTimeout(() => {
+      if (priceRef.current) {
+        priceRef.current.focus();
+      }
+    }, 0);
   };
   
-  const handlePriceSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const newPrice = parseFloat(customPrice);
+  const handlePriceKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      const newPrice = parseFloat(editablePrice);
+      if (!isNaN(newPrice) && newPrice > 0) {
+        onAddToCart({ ...product, price: newPrice }, newPrice);
+      }
+      setIsEditingPrice(false);
+    } else if (e.key === 'Escape') {
+      setIsEditingPrice(false);
+      setEditablePrice(product.price.toString());
+    }
+  };
+  
+  const handlePriceChange = (e: React.FormEvent<HTMLDivElement>) => {
+    const value = e.currentTarget.textContent || '';
+    setEditablePrice(value);
+  };
+  
+  const handlePriceBlur = () => {
+    const newPrice = parseFloat(editablePrice);
     if (!isNaN(newPrice) && newPrice > 0) {
       onAddToCart({ ...product, price: newPrice }, newPrice);
     }
-    setShowPriceInput(false);
+    setIsEditingPrice(false);
   };
   
-  const handlePriceCancel = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowPriceInput(false);
-    setCustomPrice(product.price.toString());
-  };
+  useEffect(() => {
+    if (isEditingPrice && priceRef.current) {
+      // Select all text when entering edit mode
+      const range = document.createRange();
+      range.selectNodeContents(priceRef.current);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+  }, [isEditingPrice]);
   
   return (
     <Card 
@@ -60,7 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onClick={handleCardClick}
     >
       {/* Small price button in top right corner */}
-      {!showPriceInput && (
+      {!isEditingPrice && (
         <Button 
           variant="outline" 
           size="sm" 
@@ -85,43 +113,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
         
         <div className="mt-1">
-          <p className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold text-primary mb-2`}>
-            {formatCurrency(product.price)}
-          </p>
-          
-          {showPriceInput && (
-            <form onSubmit={handlePriceSubmit} className="space-y-2">
-              <Input
-                type="number"
-                step="0.01"
-                min="0"
-                value={customPrice}
-                onChange={(e) => setCustomPrice(e.target.value)}
-                className="text-sm"
-                autoFocus
-                onClick={(e) => e.stopPropagation()}
-              />
-              <div className="flex gap-1">
-                <Button 
-                  type="submit" 
-                  size="sm" 
-                  className="flex-1 text-xs"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Set
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 text-xs"
-                  onClick={handlePriceCancel}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          )}
+          <div 
+            ref={priceRef}
+            className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold mb-2 ${
+              isEditingPrice ? 'text-[#FAA225] outline-none' : 'text-primary'
+            } ${isEditingPrice ? 'cursor-text' : 'cursor-pointer'}`}
+            contentEditable={isEditingPrice}
+            suppressContentEditableWarning={true}
+            onKeyDown={handlePriceKeyDown}
+            onInput={handlePriceChange}
+            onBlur={handlePriceBlur}
+            onClick={(e) => isEditingPrice && e.stopPropagation()}
+          >
+            {isEditingPrice ? editablePrice : formatCurrency(product.price)}
+          </div>
         </div>
       </CardContent>
     </Card>
