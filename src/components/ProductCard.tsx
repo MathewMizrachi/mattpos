@@ -56,12 +56,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   return (
     <Card 
-      className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow"
+      className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative"
       onClick={handleCardClick}
     >
+      {/* Small price button in top right corner */}
+      {!showPriceInput && (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1"
+          onClick={handlePriceButtonClick}
+        >
+          Price
+        </Button>
+      )}
+
       <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
-          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-base md:text-lg'} mb-1 truncate`}>
+          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-base md:text-lg'} mb-1 truncate pr-16`}>
             {product.name}
           </h3>
           
@@ -77,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {formatCurrency(product.price)}
           </p>
           
-          {showPriceInput ? (
+          {showPriceInput && (
             <form onSubmit={handlePriceSubmit} className="space-y-2">
               <Input
                 type="number"
@@ -109,15 +121,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </Button>
               </div>
             </form>
-          ) : (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className={`w-full ${isMobile ? 'text-xs py-1' : 'text-sm'}`}
-              onClick={handlePriceButtonClick}
-            >
-              Price
-            </Button>
           )}
         </div>
       </CardContent>
