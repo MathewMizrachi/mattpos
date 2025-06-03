@@ -16,7 +16,8 @@ import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
 
 const floatSchema = z.object({
-  amount: z.coerce.number().nonnegative({ message: 'Float amount must be 0 or greater' }),
+  cash: z.coerce.number().nonnegative({ message: 'Cash amount must be 0 or greater' }),
+  coins: z.coerce.number().nonnegative({ message: 'Coins amount must be 0 or greater' }),
 });
 
 type FloatFormValues = z.infer<typeof floatSchema>;
@@ -38,19 +39,17 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   const form = useForm<FloatFormValues>({
     resolver: zodResolver(floatSchema),
     defaultValues: { 
-      amount: previousFloat || 0 
+      cash: 0,
+      coins: 0
     },
   });
 
-  // Update form values when previousFloat changes
-  useEffect(() => {
-    if (previousFloat !== null) {
-      form.setValue('amount', previousFloat);
-    }
-  }, [previousFloat, form]);
+  const watchedValues = form.watch();
+  const totalAmount = watchedValues.cash + watchedValues.coins;
 
   const handleSubmit = (data: FloatFormValues) => {
-    onSubmit(data.amount);
+    const totalFloat = data.cash + data.coins;
+    onSubmit(totalFloat);
   };
 
   return (
@@ -58,7 +57,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold">Enter Starting Float</h2>
         <p className="text-gray-300 mt-1">
-          Please enter the amount of cash in the drawer at the start of this shift.
+          Please enter the amount of cash and coins in the drawer at the start of this shift.
         </p>
         {previousFloat !== null && (
           <p className="text-gray-300 mt-2">
@@ -71,10 +70,10 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="amount"
+            name="cash"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Cash Amount (R)</FormLabel>
+                <FormLabel className="text-white">Cash Notes (R)</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
@@ -89,6 +88,34 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="coins"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-white">Coins (R)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    step="0.01" 
+                    min="0" 
+                    placeholder="0.00"
+                    className="bg-white text-black"
+                    {...field} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="bg-white/10 p-3 rounded-lg">
+            <div className="text-center">
+              <p className="text-sm text-gray-300">Total Float Amount</p>
+              <p className="text-xl font-bold text-white">R{totalAmount.toFixed(2)}</p>
+            </div>
+          </div>
           
           <div className="flex justify-end space-x-4">
             <Button type="button" variant="outline" className="text-white border-white hover:bg-white/20" onClick={onCancel}>
