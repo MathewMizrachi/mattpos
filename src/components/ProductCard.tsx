@@ -64,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1"
+          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1 text-white"
           onClick={handlePriceButtonClick}
         >
           Price
