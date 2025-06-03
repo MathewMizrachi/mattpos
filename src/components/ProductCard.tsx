@@ -24,18 +24,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [editablePrice, setEditablePrice] = useState(product.price.toString());
+  const [currentPrice, setCurrentPrice] = useState(product.price);
   const priceRef = useRef<HTMLDivElement>(null);
   
   const handleCardClick = () => {
     if (!isEditingPrice) {
-      onAddToCart(product);
+      onAddToCart(product, currentPrice);
     }
   };
   
   const handlePriceButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsEditingPrice(true);
-    setEditablePrice(product.price.toString());
+    setEditablePrice(currentPrice.toString());
     
     // Focus the price element
     setTimeout(() => {
@@ -49,12 +50,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (e.key === 'Enter') {
       const newPrice = parseFloat(editablePrice);
       if (!isNaN(newPrice) && newPrice > 0) {
+        setCurrentPrice(newPrice);
         onAddToCart({ ...product, price: newPrice }, newPrice);
       }
       setIsEditingPrice(false);
     } else if (e.key === 'Escape') {
       setIsEditingPrice(false);
-      setEditablePrice(product.price.toString());
+      setEditablePrice(currentPrice.toString());
     }
   };
   
@@ -66,6 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const handlePriceBlur = () => {
     const newPrice = parseFloat(editablePrice);
     if (!isNaN(newPrice) && newPrice > 0) {
+      setCurrentPrice(newPrice);
       onAddToCart({ ...product, price: newPrice }, newPrice);
     }
     setIsEditingPrice(false);
@@ -125,7 +128,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             onBlur={handlePriceBlur}
             onClick={(e) => isEditingPrice && e.stopPropagation()}
           >
-            {isEditingPrice ? editablePrice : formatCurrency(product.price)}
+            {isEditingPrice ? editablePrice : formatCurrency(currentPrice)}
           </div>
         </div>
       </CardContent>
