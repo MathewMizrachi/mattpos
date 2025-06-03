@@ -104,13 +104,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative"
       onClick={handleCardClick}
     >
-      {/* Price button positioned to stay visible when cart expands */}
+      {/* Price button positioned to shift left when cart expands */}
       {!isEditingPrice && (
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-20 h-6 w-12 text-xs p-1 text-white bg-gray-600 hover:bg-gray-700 border-gray-600"
+          className="absolute top-2 right-2 z-20 h-6 w-12 text-xs p-1 text-white bg-gray-600 hover:bg-gray-700 border-gray-600 transition-all duration-300"
           onClick={handlePriceButtonClick}
+          style={{
+            transform: isMobile ? 'translateX(0)' : 'translateX(0)'
+          }}
         >
           Price
         </Button>
