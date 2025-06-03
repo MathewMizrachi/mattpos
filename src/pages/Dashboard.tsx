@@ -7,16 +7,13 @@ import FloatForm from '@/components/FloatForm';
 import EndShiftForm from '@/components/EndShiftForm';
 import DashboardHeader from '@/components/Dashboard/DashboardHeader';
 import DashboardActions from '@/components/Dashboard/DashboardActions';
-import StaffAuthPinPad from '@/components/Dashboard/StaffAuthPinPad';
 
 const Dashboard = () => {
   const { currentUser, currentShift, logout, startShift } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [showStaffPinPad, setShowStaffPinPad] = useState(false);
   const [showFloatForm, setShowFloatForm] = useState(false);
-  const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
   const [expectedCashAmount, setExpectedCashAmount] = useState(0);
 
@@ -27,22 +24,16 @@ const Dashboard = () => {
   }, [currentUser, navigate]);
   
   const handleStartShift = () => {
-    setShowStaffPinPad(true);
+    setShowFloatForm(true);
   };
   
   const handleResumeShift = () => {
     navigate('/pos');
   };
   
-  const handleStaffPinSubmit = (staffId: number) => {
-    setSelectedStaffId(staffId);
-    setShowStaffPinPad(false);
-    setShowFloatForm(true);
-  };
-  
   const handleFloatSubmit = (amount: number) => {
-    if (selectedStaffId) {
-      startShift(selectedStaffId, amount);
+    if (currentUser) {
+      startShift(currentUser.id, amount);
       navigate('/pos');
     }
   };
@@ -65,7 +56,6 @@ const Dashboard = () => {
   };
   
   const handleEndShiftReport = () => {
-    setShowStaffPinPad(false);
     setShowFloatForm(false);
     navigate('/reports');
   };
@@ -75,17 +65,6 @@ const Dashboard = () => {
     setShowEndShiftForm(false);
     navigate('/dashboard');
   };
-
-  if (showStaffPinPad) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
-        <StaffAuthPinPad
-          onCancel={() => setShowStaffPinPad(false)}
-          onPinSubmit={handleStaffPinSubmit}
-        />
-      </div>
-    );
-  }
   
   if (showFloatForm) {
     return (
