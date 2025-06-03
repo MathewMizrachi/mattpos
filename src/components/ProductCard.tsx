@@ -45,20 +45,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
       }
     }, 0);
   };
-
-  const handlePriceAreaClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isEditingPrice) {
-      setIsEditingPrice(true);
-      setEditablePrice(currentPrice.toString());
-      
-      setTimeout(() => {
-        if (priceRef.current) {
-          priceRef.current.focus();
-        }
-      }, 0);
-    }
-  };
   
   const handlePriceKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -104,16 +90,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative"
       onClick={handleCardClick}
     >
-      {/* Price button positioned to shift left when cart expands */}
+      {/* Price button positioned to stay visible when cart expands */}
       {!isEditingPrice && (
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-20 h-6 w-12 text-xs p-1 text-white bg-gray-600 hover:bg-gray-700 border-gray-600 transition-all duration-300"
+          className="absolute top-2 right-2 z-20 h-6 w-12 text-xs p-1 text-white bg-gray-600 hover:bg-gray-700 border-gray-600"
           onClick={handlePriceButtonClick}
-          style={{
-            transform: isMobile ? 'translateX(0)' : 'translateX(0)'
-          }}
         >
           Price
         </Button>
@@ -136,15 +119,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div 
             ref={priceRef}
             className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold mb-2 ${
-              isEditingPrice ? 'text-[#FAA225] outline-none caret-transparent cursor-text' : 'text-primary cursor-pointer'
-            } select-none`}
+              isEditingPrice ? 'text-[#FAA225] outline-none' : 'text-primary'
+            } ${isEditingPrice ? 'cursor-text' : 'cursor-pointer'}`}
             contentEditable={isEditingPrice}
             suppressContentEditableWarning={true}
             onKeyDown={handlePriceKeyDown}
             onInput={handlePriceChange}
             onBlur={handlePriceBlur}
-            onClick={handlePriceAreaClick}
-            style={{ caretColor: isEditingPrice ? 'transparent' : 'auto' }}
+            onClick={(e) => isEditingPrice && e.stopPropagation()}
           >
             {isEditingPrice ? editablePrice : formatCurrency(currentPrice)}
           </div>
