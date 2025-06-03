@@ -32,8 +32,15 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   const [previousFloat, setPreviousFloat] = useState<number | null>(null);
   
   useEffect(() => {
-    const lastFloat = getLastShiftEndFloat();
-    setPreviousFloat(lastFloat);
+    console.log('FloatForm: Component mounted');
+    try {
+      const lastFloat = getLastShiftEndFloat();
+      console.log('FloatForm: Last float retrieved:', lastFloat);
+      setPreviousFloat(lastFloat);
+    } catch (error) {
+      console.error('FloatForm: Error getting last float:', error);
+      setPreviousFloat(null);
+    }
   }, [getLastShiftEndFloat]);
 
   const form = useForm<FloatFormValues>({
@@ -45,12 +52,25 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   });
 
   const watchedValues = form.watch();
-  const totalAmount = watchedValues.cash + watchedValues.coins;
+  const totalAmount = (watchedValues.cash || 0) + (watchedValues.coins || 0);
+
+  console.log('FloatForm: Watched values:', watchedValues);
+  console.log('FloatForm: Total amount:', totalAmount);
 
   const handleSubmit = (data: FloatFormValues) => {
-    const totalFloat = data.cash + data.coins;
-    onSubmit(totalFloat);
+    console.log('FloatForm: Form submitted with data:', data);
+    try {
+      const totalFloat = (data.cash || 0) + (data.coins || 0);
+      console.log('FloatForm: Calculated total float:', totalFloat);
+      onSubmit(totalFloat);
+    } catch (error) {
+      console.error('FloatForm: Error in handleSubmit:', error);
+    }
   };
+
+  const handleFormSubmit = form.handleSubmit(handleSubmit);
+
+  console.log('FloatForm: Rendering component');
 
   return (
     <div className="w-full max-w-md mx-auto bg-[#0A2645] text-white p-6 rounded-lg">
@@ -67,7 +87,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
       </div>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           <FormField
             control={form.control}
             name="cash"
@@ -81,7 +101,11 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                     min="0" 
                     placeholder="0.00"
                     className="bg-white text-black"
-                    {...field} 
+                    {...field}
+                    onChange={(e) => {
+                      console.log('FloatForm: Cash field changed:', e.target.value);
+                      field.onChange(e);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -102,7 +126,11 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                     min="0" 
                     placeholder="0.00"
                     className="bg-white text-black"
-                    {...field} 
+                    {...field}
+                    onChange={(e) => {
+                      console.log('FloatForm: Coins field changed:', e.target.value);
+                      field.onChange(e);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -118,11 +146,23 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
           </div>
           
           <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline" className="text-white border-white hover:bg-white/20" onClick={onCancel}>
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="text-white border-white hover:bg-white/20" 
+              onClick={() => {
+                console.log('FloatForm: Cancel button clicked');
+                onCancel();
+              }}
+            >
               Cancel
             </Button>
-            <Button type="submit" className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
-              Start Shift
+            <Button 
+              type="submit" 
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              onClick={() => console.log('FloatForm: Submit button clicked')}
+            >
+              Open Till
             </Button>
           </div>
         </form>
