@@ -52,7 +52,8 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   });
 
   const watchedValues = form.watch();
-  const totalAmount = (watchedValues.cash || 0) + (watchedValues.coins || 0);
+  // Convert to numbers explicitly to avoid string concatenation
+  const totalAmount = Number(watchedValues.cash || 0) + Number(watchedValues.coins || 0);
 
   console.log('FloatForm: Watched values:', watchedValues);
   console.log('FloatForm: Total amount:', totalAmount);
