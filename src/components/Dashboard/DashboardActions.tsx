@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -53,11 +54,11 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
       ) : (
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle>Start Shift</CardTitle>
+            <CardTitle>Open Till</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              Start a new shift to begin processing sales.
+              Open the till to begin processing sales.
             </p>
             <Button 
               className="w-full" 
@@ -65,7 +66,7 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
               style={{ backgroundColor: '#FAA225', color: 'black' }}
             >
               <ShoppingCartIcon className="h-4 w-4 mr-2" />
-              Start Shift
+              Open Till
             </Button>
           </CardContent>
         </Card>
