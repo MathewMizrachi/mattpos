@@ -45,6 +45,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
       }
     }, 0);
   };
+
+  const handlePriceAreaClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isEditingPrice) {
+      setIsEditingPrice(true);
+      setEditablePrice(currentPrice.toString());
+      
+      setTimeout(() => {
+        if (priceRef.current) {
+          priceRef.current.focus();
+        }
+      }, 0);
+    }
+  };
   
   const handlePriceKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -119,14 +133,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div 
             ref={priceRef}
             className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold mb-2 ${
-              isEditingPrice ? 'text-[#FAA225] outline-none' : 'text-primary'
-            } ${isEditingPrice ? 'cursor-text' : 'cursor-pointer'}`}
+              isEditingPrice ? 'text-[#FAA225] outline-none caret-transparent cursor-text' : 'text-primary cursor-pointer'
+            } select-none`}
             contentEditable={isEditingPrice}
             suppressContentEditableWarning={true}
             onKeyDown={handlePriceKeyDown}
             onInput={handlePriceChange}
             onBlur={handlePriceBlur}
-            onClick={(e) => isEditingPrice && e.stopPropagation()}
+            onClick={handlePriceAreaClick}
+            style={{ caretColor: isEditingPrice ? 'transparent' : 'auto' }}
           >
             {isEditingPrice ? editablePrice : formatCurrency(currentPrice)}
           </div>
