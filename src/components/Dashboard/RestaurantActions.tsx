@@ -1,14 +1,9 @@
 
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  ClipboardListIcon, 
-  TableIcon, 
-  PackageIcon, 
-  UsersIcon, 
-  ChartBarIcon 
-} from 'lucide-react';
+import { Users, Table, Package, FileText, ChefHat } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface RestaurantActionsProps {
   onTakeOrders: () => void;
@@ -23,88 +18,83 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
   onManageTables,
   onManageStock,
   onManageCustomers,
-  onViewReports
+  onViewReports,
 }) => {
+  const navigate = useNavigate();
+
+  const handleKitchenOrders = () => {
+    navigate('/kitchen-orders');
+  };
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Take Orders</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Start taking customer orders and process payments.
-          </p>
-          <Button 
-            className="w-full" 
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
             onClick={onTakeOrders}
-            style={{ backgroundColor: '#FAA225', color: 'black' }}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
           >
-            <ClipboardListIcon className="h-4 w-4 mr-2" />
+            <Users className="h-8 w-8" />
             Take Orders
           </Button>
         </CardContent>
       </Card>
-      
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Manage Tables</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            View and manage restaurant table assignments.
-          </p>
-          <Button 
-            className="w-full" 
+
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
             onClick={onManageTables}
-            style={{ backgroundColor: '#FAA225', color: 'black' }}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
           >
-            <TableIcon className="h-4 w-4 mr-2" />
+            <Table className="h-8 w-8" />
             Manage Tables
           </Button>
         </CardContent>
       </Card>
-      
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Manage Stock</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Add, edit, or remove products from your inventory.
-          </p>
-          <Button className="w-full" onClick={onManageStock}>
-            <PackageIcon className="h-4 w-4 mr-2" />
+
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={handleKitchenOrders}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <ChefHat className="h-8 w-8" />
+            Kitchen Orders
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onManageStock}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <Package className="h-8 w-8" />
             Manage Stock
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Customers and Accounts</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            View and manage customer accounts.
-          </p>
-          <Button className="w-full" onClick={onManageCustomers}>
-            <UsersIcon className="h-4 w-4 mr-2" />
-            Customers
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onManageCustomers}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <Users className="h-8 w-8" />
+            Manage Customers
           </Button>
         </CardContent>
       </Card>
-      
-      <Card className="md:col-span-2 lg:col-span-1">
-        <CardHeader className="pb-2">
-          <CardTitle>Reports</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            View sales, inventory, and financial reports.
-          </p>
-          <Button className="w-full" onClick={onViewReports}>
-            <ChartBarIcon className="h-4 w-4 mr-2" />
+
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onViewReports}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <FileText className="h-8 w-8" />
             View Reports
           </Button>
         </CardContent>

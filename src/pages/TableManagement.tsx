@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -104,13 +103,6 @@ const TableManagement = () => {
               <p className="text-[#0A2645]/70">Cook2Day Restaurant System</p>
             </div>
           </div>
-          <Button
-            onClick={handleViewKitchenOrders}
-            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
-          >
-            <ChefHat className="h-5 w-5 mr-2" />
-            Kitchen Orders
-          </Button>
         </div>
 
         {/* Tables Grid */}
@@ -145,8 +137,8 @@ const TableManagement = () => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
-                        <DollarSignIcon className="h-4 w-4 mr-1 text-green-600" />
-                        <span className="font-medium text-[#0A2645]">Bill:</span>
+                        <DollarSignIcon className="h-4 w-4 mr-1 text-white" />
+                        <span className="font-medium text-white">Bill:</span>
                       </div>
                       <span className="font-bold text-green-600">
                         {formatCurrency(table.balance)}
@@ -155,10 +147,10 @@ const TableManagement = () => {
                     
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
-                        <UsersIcon className="h-4 w-4 mr-1 text-[#0A2645]" />
-                        <span className="font-medium text-[#0A2645]">People:</span>
+                        <UsersIcon className="h-4 w-4 mr-1 text-white" />
+                        <span className="font-medium text-white">People:</span>
                       </div>
-                      <span className="font-bold text-[#0A2645]">
+                      <span className="font-bold text-white">
                         {table.peopleCount}
                       </span>
                     </div>
@@ -166,14 +158,14 @@ const TableManagement = () => {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
                         <ClockIcon className="h-4 w-4 mr-1 text-[#FAA225]" />
-                        <span className="font-medium text-[#0A2645]">Time:</span>
+                        <span className="font-medium text-white">Time:</span>
                       </div>
                       <span className="font-bold text-[#FAA225]">
                         {formatTime(table.timeOccupied)}
                       </span>
                     </div>
 
-                    <div className="text-xs text-[#0A2645]/70 mt-2">
+                    <div className="text-xs text-white mt-2">
                       {table.orders.length} items ordered
                     </div>
                   </div>
