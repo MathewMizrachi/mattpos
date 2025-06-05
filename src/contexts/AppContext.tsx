@@ -1,6 +1,7 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Product, Customer, CartItem, Shift, SplitPaymentDetails, Refund, PaymentBreakdown, RefundBreakdown } from '@/types';
-import { getStoredUsers, getStoredProducts, getStoredCustomers } from '@/lib/db';
+import db from '@/lib/db';
 
 interface AppContextType {
   // User management
@@ -38,6 +39,7 @@ interface AppContextType {
   shifts: Shift[];
   startShift: (userId: number, startFloat: number) => boolean;
   endShift: (endFloat: number) => boolean;
+  getLastShiftEndFloat: () => number | null;
   
   // Transaction management
   processTransaction: (paymentDetails: SplitPaymentDetails[]) => boolean;
@@ -49,6 +51,10 @@ interface AppContextType {
   // Reports
   getPaymentBreakdown: (shiftId?: number) => PaymentBreakdown;
   getRefundBreakdown: (shiftId?: number) => RefundBreakdown;
+  getShiftPaymentBreakdown: (shiftId: number) => PaymentBreakdown;
+  getShiftRefundBreakdown: (shiftId: number) => RefundBreakdown;
+  getLowStockProducts: (threshold?: number) => Product[];
+  calculateExpectedCashInDrawer: (shiftId: number) => number;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -64,20 +70,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [refunds, setRefunds] = useState<Refund[]>([]);
   
   useEffect(() => {
-    const storedUsers = getStoredUsers();
-    if (storedUsers) {
-      setUsers(storedUsers);
-    }
+    // Initialize data from the database
+    setUsers([
+      { id: 1, name: 'Owner', pin: '55', role: 'manager' },
+      { id: 2, name: 'Staff 1', pin: '55', role: 'staff' },
+    ]);
     
-    const storedProducts = getStoredProducts();
-    if (storedProducts) {
-      setProducts(storedProducts);
-    }
-    
-    const storedCustomers = getStoredCustomers();
-    if (storedCustomers) {
-      setCustomers(storedCustomers);
-    }
+    setProducts(db.getAllProducts());
+    setCustomers(db.getAllCustomers());
   }, []);
   
   useEffect(() => {
@@ -101,10 +101,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const addProduct = (product: Omit<Product, 'id'>): boolean => {
     try {
-      const newProduct: Product = {
-        id: Date.now(), // Simple ID generation
-        ...product,
-      };
+      const newProduct = db.addProduct(product);
       setProducts(prev => [...prev, newProduct]);
       return true;
     } catch (error) {
@@ -115,10 +112,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const updateProduct = (id: number, product: Omit<Product, 'id'>): boolean => {
     try {
-      setProducts(prev =>
-        prev.map(p => (p.id === id ? { ...p, ...product } : p))
-      );
-      return true;
+      const updatedProduct = db.updateProduct(id, product);
+      if (updatedProduct) {
+        setProducts(prev =>
+          prev.map(p => (p.id === id ? updatedProduct : p))
+        );
+        return true;
+      }
+      return false;
     } catch (error) {
       console.error('Error updating product:', error);
       return false;
@@ -127,8 +128,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const deleteProduct = (id: number): boolean => {
     try {
-      setProducts(prev => prev.filter(product => product.id !== id));
-      return true;
+      const success = db.deleteProduct(id);
+      if (success) {
+        setProducts(prev => prev.filter(product => product.id !== id));
+      }
+      return success;
     } catch (error) {
       console.error('Error deleting product:', error);
       return false;
@@ -142,16 +146,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     paymentTermDays?: number;
   }) => {
     try {
-      const newCustomer: Customer = {
-        id: Date.now(), // Simple ID generation
-        name: customerData.name,
-        phone: customerData.phone,
-        idNumber: customerData.idNumber || '',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        paymentTermDays: customerData.paymentTermDays || 30,
-        isPaid: false,
-      };
+      const newCustomer = db.addCustomer(
+        customerData.name,
+        customerData.phone,
+        customerData.idNumber,
+        customerData.paymentTermDays
+      );
       
       setCustomers(prev => [...prev, newCustomer]);
       return true;
@@ -163,12 +163,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const markCustomerAsPaid = (customerId: number): boolean => {
     try {
-      setCustomers(prev =>
-        prev.map(customer =>
-          customer.id === customerId ? { ...customer, isPaid: true } : customer
-        )
-      );
-      return true;
+      const success = db.markCustomerAsPaid(customerId);
+      if (success) {
+        setCustomers(prev =>
+          prev.map(customer =>
+            customer.id === customerId ? { ...customer, isPaid: true } : customer
+          )
+        );
+      }
+      return success;
     } catch (error) {
       console.error('Error marking customer as paid:', error);
       return false;
@@ -208,12 +211,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const startShift = (userId: number, startFloat: number): boolean => {
     try {
-      const newShift: Shift = {
-        id: Date.now(), // Simple ID generation
-        userId: userId,
-        startTime: new Date(),
-        startFloat: startFloat,
-      };
+      const newShift = db.startShift(userId, startFloat);
       setCurrentShift(newShift);
       setShifts(prev => [...prev, newShift]);
       return true;
@@ -226,20 +224,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const endShift = (endFloat: number): boolean => {
     if (!currentShift) return false;
     try {
-      const updatedShift: Shift = {
-        ...currentShift,
-        endTime: new Date(),
-        endFloat: endFloat,
-      };
-      setCurrentShift(null);
-      setShifts(prev =>
-        prev.map(shift => (shift.id === updatedShift.id ? updatedShift : shift))
-      );
-      return true;
+      const updatedShift = db.endShift(currentShift.id, endFloat);
+      if (updatedShift) {
+        setCurrentShift(null);
+        setShifts(prev =>
+          prev.map(shift => (shift.id === updatedShift.id ? updatedShift : shift))
+        );
+        return true;
+      }
+      return false;
     } catch (error) {
       console.error('Error ending shift:', error);
       return false;
     }
+  };
+  
+  const getLastShiftEndFloat = (): number | null => {
+    return db.getLastShiftEndFloat();
   };
   
   const processTransaction = (paymentDetails: SplitPaymentDetails[]): boolean => {
@@ -278,7 +279,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
   
   const getPaymentBreakdown = (shiftId?: number): PaymentBreakdown => {
-    // Mock implementation
+    if (shiftId) {
+      return db.getShiftPaymentBreakdown(shiftId);
+    }
+    // Mock implementation for current shift
     return {
       cash: 100,
       card: 50,
@@ -288,7 +292,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
   
   const getRefundBreakdown = (shiftId?: number): RefundBreakdown => {
-    // Mock implementation
+    if (shiftId) {
+      return db.getShiftRefundBreakdown(shiftId);
+    }
+    // Mock implementation for current shift
     return {
       total: 50,
       items: [
@@ -300,6 +307,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         },
       ],
     };
+  };
+
+  const getShiftPaymentBreakdown = (shiftId: number): PaymentBreakdown => {
+    return db.getShiftPaymentBreakdown(shiftId);
+  };
+
+  const getShiftRefundBreakdown = (shiftId: number): RefundBreakdown => {
+    return db.getShiftRefundBreakdown(shiftId);
+  };
+
+  const getLowStockProducts = (threshold: number = 5): Product[] => {
+    return db.getLowStockProducts(threshold);
+  };
+
+  const calculateExpectedCashInDrawer = (shiftId: number): number => {
+    return db.calculateExpectedCashInDrawer(shiftId);
   };
 
   const value: AppContextType = {
@@ -333,6 +356,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     shifts,
     startShift,
     endShift,
+    getLastShiftEndFloat,
     
     // Transaction management
     processTransaction,
@@ -344,6 +368,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Reports
     getPaymentBreakdown,
     getRefundBreakdown,
+    getShiftPaymentBreakdown,
+    getShiftRefundBreakdown,
+    getLowStockProducts,
+    calculateExpectedCashInDrawer,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
