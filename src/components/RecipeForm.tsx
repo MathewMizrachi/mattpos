@@ -124,32 +124,32 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
-        <DialogHeader className="pb-4 border-b border-gray-100">
-          <DialogTitle className="text-xl font-semibold text-gray-900">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0A2645] border-[#0A2645]">
+        <DialogHeader className="pb-4 border-b border-[#FAA225]/30">
+          <DialogTitle className="text-xl font-semibold text-white">
             {recipe ? 'Edit Recipe' : 'Add New Recipe'}
           </DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-8 pt-4">
+        <form onSubmit={handleSubmit} className="space-y-6 pt-4">
           {/* Basic Information */}
           <div className="space-y-4">
             <div>
-              <Label htmlFor="name" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="name" className="text-sm font-medium text-white mb-2 block">
                 Recipe Name
               </Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full"
+                className="w-full bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                 placeholder="Enter recipe name"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="description" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="description" className="text-sm font-medium text-white mb-2 block">
                 Description
               </Label>
               <Textarea
@@ -158,6 +158,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Brief description of the recipe"
                 rows={2}
+                className="bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
               />
             </div>
           </div>
@@ -165,7 +166,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
           {/* Timing and Servings */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="prepTime" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="prepTime" className="text-sm font-medium text-white mb-2 block">
                 Prep (min)
               </Label>
               <Input
@@ -174,12 +175,13 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                 min="0"
                 value={formData.prepTime}
                 onChange={(e) => setFormData(prev => ({ ...prev, prepTime: parseInt(e.target.value) || 0 }))}
+                className="bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="cookTime" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="cookTime" className="text-sm font-medium text-white mb-2 block">
                 Cook (min)
               </Label>
               <Input
@@ -188,12 +190,13 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                 min="0"
                 value={formData.cookTime}
                 onChange={(e) => setFormData(prev => ({ ...prev, cookTime: parseInt(e.target.value) || 0 }))}
+                className="bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="servings" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="servings" className="text-sm font-medium text-white mb-2 block">
                 Servings
               </Label>
               <Input
@@ -202,6 +205,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                 min="1"
                 value={formData.servings}
                 onChange={(e) => setFormData(prev => ({ ...prev, servings: parseInt(e.target.value) || 1 }))}
+                className="bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                 required
               />
             </div>
@@ -210,13 +214,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
           {/* Ingredients */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label className="text-sm font-medium text-gray-700">Ingredients</Label>
+              <Label className="text-sm font-medium text-white">Ingredients</Label>
               <Button
                 type="button"
                 onClick={addIngredient}
-                variant="outline"
+                className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] border-[#FAA225]"
                 size="sm"
-                className="text-xs"
               >
                 <PlusIcon className="h-3 w-3 mr-1" />
                 Add
@@ -230,7 +233,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                     placeholder="Ingredient"
                     value={ingredient.name}
                     onChange={(e) => updateIngredient(ingredient.id, 'name', e.target.value)}
-                    className="flex-1"
+                    className="flex-1 bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                   />
                   <Input
                     type="number"
@@ -239,13 +242,13 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                     step="0.1"
                     value={ingredient.quantity || ''}
                     onChange={(e) => updateIngredient(ingredient.id, 'quantity', parseFloat(e.target.value) || 0)}
-                    className="w-20"
+                    className="w-20 bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                   />
                   <Input
                     placeholder="Unit"
                     value={ingredient.unit}
                     onChange={(e) => updateIngredient(ingredient.id, 'unit', e.target.value)}
-                    className="w-20"
+                    className="w-20 bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                   />
                   {ingredients.length > 1 && (
                     <Button
@@ -253,7 +256,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                       variant="ghost"
                       size="sm"
                       onClick={() => removeIngredient(ingredient.id)}
-                      className="text-gray-400 hover:text-red-500 p-1"
+                      className="text-white hover:text-[#FAA225] hover:bg-white/10 p-1"
                     >
                       <XIcon className="h-4 w-4" />
                     </Button>
@@ -266,13 +269,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
           {/* Instructions */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label className="text-sm font-medium text-gray-700">Instructions</Label>
+              <Label className="text-sm font-medium text-white">Instructions</Label>
               <Button
                 type="button"
                 onClick={addInstruction}
-                variant="outline"
+                className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] border-[#FAA225]"
                 size="sm"
-                className="text-xs"
               >
                 <PlusIcon className="h-3 w-3 mr-1" />
                 Add Step
@@ -282,14 +284,14 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
             <div className="space-y-3">
               {instructions.map((instruction, index) => (
                 <div key={index} className="flex gap-3 items-start">
-                  <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600 mt-2 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-[#FAA225] flex items-center justify-center text-xs font-medium text-[#0A2645] mt-2 flex-shrink-0">
                     {index + 1}
                   </div>
                   <Textarea
                     placeholder="Describe this step..."
                     value={instruction}
                     onChange={(e) => updateInstruction(index, e.target.value)}
-                    className="flex-1"
+                    className="flex-1 bg-white text-[#0A2645] border-white focus:border-[#FAA225] focus:ring-[#FAA225]"
                     rows={2}
                   />
                   {instructions.length > 1 && (
@@ -298,7 +300,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
                       variant="ghost"
                       size="sm"
                       onClick={() => removeInstruction(index)}
-                      className="text-gray-400 hover:text-red-500 p-1 mt-2"
+                      className="text-white hover:text-[#FAA225] hover:bg-white/10 p-1 mt-2"
                     >
                       <XIcon className="h-4 w-4" />
                     </Button>
@@ -309,17 +311,18 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
           </div>
           
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-6 border-t border-[#FAA225]/30">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
+              className="border-white text-white hover:bg-white hover:text-[#0A2645]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
             >
               {recipe ? 'Update Recipe' : 'Save Recipe'}
             </Button>
