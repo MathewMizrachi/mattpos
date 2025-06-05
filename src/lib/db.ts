@@ -1,3 +1,4 @@
+
 // Simple in-memory database for demonstration purposes
 // In a real application, this would use IndexedDB or SQLite
 
@@ -156,4 +157,412 @@ class Database {
     { id: 110925, name: 'DAWN LOTION 200ML ALOE VERA (1X1)', price: 25, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001087012324', stockCode: '110925', linkCode: '110925-001', avgCostIncl: 21 },
     { id: 110937, name: 'DAWN LOTION 400ML [M] ENERGY (1X1)', price: 30, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001087373791', stockCode: '110937', linkCode: '110937-001', avgCostIncl: 24.6 },
     { id: 110941, name: 'DAWN LOTION 400ML ALOE VERA (1X1)', price: 28, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001087012331', stockCode: '110941', linkCode: '110941-001', avgCostIncl: 23.52 },
-    { id: 111618, name: 'DETTOL ANTISEPTIC LIQUID 50ML (1X1)',
+    { id: 111618, name: 'DETTOL ANTISEPTIC LIQUID 50ML (1X1)', price: 18, stock: Math.floor(Math.random() * 21) + 10, barcode: '60050267', stockCode: '111618', linkCode: '111618-001', avgCostIncl: 15.12 },
+    { id: 111832, name: 'DISPRIN TABS 2S RED EXTRA (1X1)', price: 4, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001106120771', stockCode: '111832', linkCode: '111832-001', avgCostIncl: 3.36 },
+    { id: 148233, name: 'YUM YUM P/BUTTER 250G SMOOTH (1X1)', price: 33, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001069034139', stockCode: '148233', linkCode: '148233-001', avgCostIncl: 27.72 },
+  ];
+
+  private customers: Customer[] = [];
+  private shifts: Shift[] = [];
+  private transactions: Transaction[] = [];
+  private refunds: Refund[] = [];
+  private purchaseOrders: PurchaseOrder[] = [
+    // Sample purchase orders for demonstration
+    {
+      id: 1,
+      orderDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      supplier: 'ABC Food Supplies',
+      items: [
+        { productId: 108784, productName: 'COCA-COLA 1.5LT REGULAR (1X1)', quantity: 24, costPrice: 16.4 },
+        { productId: 108799, productName: 'COCA-COLA 2LT REG (1X1)', quantity: 12, costPrice: 21.84 }
+      ],
+      totalCost: 655.68,
+      status: 'received',
+      notes: 'Delivered on time'
+    },
+    {
+      id: 2,
+      orderDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+      supplier: 'Fresh Market Distributors',
+      items: [
+        { productId: 148555, productName: 'AUNT CAROLINE RICE 2KG (1X1)', quantity: 10, costPrice: 37.8 },
+        { productId: 148561, productName: 'AUNTY CAROLINE RICE 10KG', quantity: 6, costPrice: 142.8 }
+      ],
+      totalCost: 1235.8,
+      status: 'ordered'
+    },
+    {
+      id: 3,
+      orderDate: new Date(),
+      supplier: 'Global Food Partners',
+      items: [
+        { productId: 102939, productName: 'BAKERS CHOC-KITS 200G CHOC (1X1)', quantity: 15, costPrice: 31.16 }
+      ],
+      totalCost: 467.4,
+      status: 'pending'
+    }
+  ];
+
+  private currentId = {
+    shift: 1,
+    transaction: 1,
+    product: 200000,
+    customer: 1,
+    refund: 1,
+    purchaseOrder: 4,
+  };
+
+  // User methods
+  authenticateUser(pin: string): User | null {
+    return this.users.find(user => user.pin === pin) || null;
+  }
+
+  // Product methods
+  getAllProducts(): Product[] {
+    return [...this.products];
+  }
+
+  getProduct(id: number): Product | undefined {
+    return this.products.find(product => product.id === id);
+  }
+
+  addProduct(product: Omit<Product, 'id'>): Product {
+    const newProduct = {
+      ...product,
+      id: this.currentId.product++,
+    };
+    this.products.push(newProduct);
+    return newProduct;
+  }
+
+  updateProduct(id: number, updates: Partial<Omit<Product, 'id'>>): Product | null {
+    const index = this.products.findIndex(product => product.id === id);
+    if (index === -1) return null;
+    
+    this.products[index] = { ...this.products[index], ...updates };
+    return this.products[index];
+  }
+
+  deleteProduct(id: number): boolean {
+    const initialLength = this.products.length;
+    this.products = this.products.filter(product => product.id !== id);
+    return initialLength !== this.products.length;
+  }
+
+  // Customer methods
+  getAllCustomers(): Customer[] {
+    return [...this.customers];
+  }
+
+  getCustomer(id: number): Customer | undefined {
+    return this.customers.find(customer => customer.id === id);
+  }
+
+  getCustomerByPhone(phone: string): Customer | undefined {
+    return this.customers.find(customer => customer.phone === phone);
+  }
+
+  addCustomer(name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer {
+    // Check if customer already exists
+    const existingCustomer = this.getCustomerByPhone(phone);
+    if (existingCustomer) {
+      // Update the customer info if it changed
+      existingCustomer.name = name;
+      if (idNumber) existingCustomer.idNumber = idNumber;
+      if (paymentTermDays) existingCustomer.paymentTermDays = paymentTermDays;
+      existingCustomer.updatedAt = new Date();
+      return existingCustomer;
+    }
+
+    // Create new customer
+    const newCustomer: Customer = {
+      id: this.currentId.customer++,
+      name,
+      phone,
+      idNumber,
+      paymentTermDays,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPaid: false
+    };
+    
+    this.customers.push(newCustomer);
+    return newCustomer;
+  }
+
+  markCustomerAsPaid(customerId: number): boolean {
+    const customerIndex = this.customers.findIndex(c => c.id === customerId);
+    if (customerIndex === -1) return false;
+    
+    this.customers[customerIndex] = {
+      ...this.customers[customerIndex],
+      isPaid: true,
+      updatedAt: new Date()
+    };
+    
+    return true;
+  }
+
+  // Shift methods
+  startShift(userId: number, startFloat: number): Shift {
+    const newShift = {
+      id: this.currentId.shift++,
+      userId,
+      startTime: new Date(),
+      startFloat,
+      salesTotal: 0,
+      transactionCount: 0,
+    };
+    this.shifts.push(newShift);
+    return newShift;
+  }
+
+  getCurrentShift(): Shift | null {
+    return this.shifts.find(shift => !shift.endTime) || null;
+  }
+
+  getLastShift(): Shift | null {
+    if (this.shifts.length <= 1) return null;
+    
+    const completedShifts = this.shifts.filter(shift => shift.endTime);
+    if (completedShifts.length === 0) return null;
+    
+    return completedShifts.sort((a, b) => 
+      new Date(b.endTime!).getTime() - new Date(a.endTime!).getTime()
+    )[0];
+  }
+
+  getLastShiftEndFloat(): number | null {
+    const lastShift = this.getLastShift();
+    return lastShift?.endFloat !== undefined ? lastShift.endFloat : null;
+  }
+
+  endShift(shiftId: number, endFloat: number): Shift | null {
+    const index = this.shifts.findIndex(shift => shift.id === shiftId);
+    if (index === -1) return null;
+    
+    // Calculate shift totals
+    const shiftTransactions = this.transactions.filter(t => t.shiftId === shiftId);
+    const sales = shiftTransactions.filter(t => !t.isRefund).reduce((sum, t) => sum + t.total, 0);
+    const refundsTotal = shiftTransactions.filter(t => t.isRefund).reduce((sum, t) => sum + t.total, 0);
+    const salesTotal = sales - refundsTotal;
+    const transactionCount = shiftTransactions.length;
+    
+    this.shifts[index] = { 
+      ...this.shifts[index], 
+      endTime: new Date(),
+      endFloat,
+      salesTotal,
+      transactionCount,
+    };
+    
+    return this.shifts[index];
+  }
+
+  // Transaction methods
+  createTransaction(shiftId: number, items: TransactionItem[], cashReceived: number, paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash', customerId?: number, splitPayments?: SplitPaymentDetail[], isRefund: boolean = false): Transaction {
+    const total = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+    const change = paymentMethod === 'cash' ? cashReceived - total : 0;
+    
+    const newTransaction = {
+      id: this.currentId.transaction++,
+      shiftId,
+      timestamp: new Date(),
+      total,
+      items,
+      cashReceived,
+      change,
+      paymentMethod,
+      customerId,
+      splitPayments,
+      isRefund
+    };
+    
+    this.transactions.push(newTransaction);
+    
+    // Update shift totals
+    const shiftIndex = this.shifts.findIndex(shift => shift.id === shiftId);
+    if (shiftIndex !== -1) {
+      const currentTotal = this.shifts[shiftIndex].salesTotal || 0;
+      const currentCount = this.shifts[shiftIndex].transactionCount || 0;
+      
+      this.shifts[shiftIndex] = {
+        ...this.shifts[shiftIndex],
+        salesTotal: isRefund ? currentTotal - total : currentTotal + total,
+        transactionCount: currentCount + 1,
+      };
+    }
+    
+    // Update product stock
+    items.forEach(item => {
+      const productIndex = this.products.findIndex(p => p.id === item.productId);
+      if (productIndex !== -1 && this.products[productIndex].stock !== undefined) {
+        this.products[productIndex] = {
+          ...this.products[productIndex],
+          stock: (this.products[productIndex].stock || 0) + (isRefund ? item.quantity : -item.quantity),
+        };
+      }
+    });
+    
+    return newTransaction;
+  }
+
+  createRefund(shiftId: number, productId: number, quantity: number, amount: number, method: 'cash' | 'shop2shop'): Refund {
+    const newRefund = {
+      id: this.currentId.refund++,
+      shiftId,
+      timestamp: new Date(),
+      productId,
+      quantity,
+      amount,
+      method
+    };
+    
+    this.refunds.push(newRefund);
+    
+    // Create a transaction for this refund
+    const product = this.getProduct(productId);
+    if (product) {
+      this.createTransaction(
+        shiftId,
+        [{ productId, quantity, unitPrice: product.price }],
+        amount,
+        method,
+        undefined,
+        undefined,
+        true
+      );
+    }
+    
+    return newRefund;
+  }
+
+  getShiftTransactions(shiftId: number): Transaction[] {
+    return this.transactions.filter(t => t.shiftId === shiftId);
+  }
+
+  getShiftRefunds(shiftId: number): Refund[] {
+    return this.refunds.filter(r => r.shiftId === shiftId);
+  }
+
+  getShiftPaymentBreakdown(shiftId: number) {
+    const transactions = this.getShiftTransactions(shiftId);
+    
+    const breakdown = {
+      cash: 0,
+      card: 0,
+      shop2shop: 0,
+      account: 0
+    };
+    
+    transactions.forEach(t => {
+      if (t.isRefund) {
+        // For refunds, subtract from the appropriate payment method
+        if (t.paymentMethod === 'cash') breakdown.cash -= t.total;
+        if (t.paymentMethod === 'card') breakdown.card -= t.total;
+        if (t.paymentMethod === 'shop2shop') breakdown.shop2shop -= t.total;
+        if (t.paymentMethod === 'account') breakdown.account -= t.total;
+      } else if (t.paymentMethod === 'split' && t.splitPayments) {
+        // For split payments, add to each method
+        t.splitPayments.forEach(sp => {
+          if (sp.method === 'cash') breakdown.cash += sp.amount;
+          if (sp.method === 'card') breakdown.card += sp.amount;
+          if (sp.method === 'shop2shop') breakdown.shop2shop += sp.amount;
+          if (sp.method === 'account') breakdown.account += sp.amount;
+        });
+      } else {
+        // For regular payments
+        if (t.paymentMethod === 'cash') breakdown.cash += t.total;
+        if (t.paymentMethod === 'card') breakdown.card += t.total;
+        if (t.paymentMethod === 'shop2shop') breakdown.shop2shop += t.total;
+        if (t.paymentMethod === 'account') breakdown.account += t.total;
+      }
+    });
+    
+    return breakdown;
+  }
+
+  getShiftRefundBreakdown(shiftId: number) {
+    const refunds = this.getShiftRefunds(shiftId);
+    
+    const items = refunds.map(refund => {
+      const product = this.getProduct(refund.productId);
+      return {
+        productId: refund.productId,
+        productName: product ? product.name : `Product #${refund.productId}`,
+        quantity: refund.quantity,
+        amount: refund.amount
+      };
+    });
+    
+    const total = items.reduce((sum, item) => sum + item.amount, 0);
+    
+    return { total, items };
+  }
+
+  getLowStockProducts(threshold: number = 5): Product[] {
+    return this.products.filter(p => 
+      p.stock !== undefined && 
+      p.stock <= threshold && 
+      p.stock > 0
+    );
+  }
+
+  calculateExpectedCashInDrawer(shiftId: number): number {
+    const shift = this.shifts.find(s => s.id === shiftId);
+    if (!shift) return 0;
+    
+    const paymentBreakdown = this.getShiftPaymentBreakdown(shiftId);
+    
+    // Cash in drawer should be: starting float + cash payments - cash refunds - change given
+    const cashTransactions = this.transactions.filter(
+      t => t.shiftId === shiftId && (t.paymentMethod === 'cash' || (t.paymentMethod === 'split' && t.splitPayments?.some(sp => sp.method === 'cash')))
+    );
+    
+    const changeGiven = cashTransactions
+      .filter(t => !t.isRefund)
+      .reduce((sum, t) => sum + t.change, 0);
+    
+    return shift.startFloat + paymentBreakdown.cash - changeGiven;
+  }
+
+  // Purchase Order methods
+  createPurchaseOrder(supplier: string, items: PurchaseOrderItem[]): PurchaseOrder {
+    const totalCost = items.reduce((sum, item) => sum + (item.quantity * item.costPrice), 0);
+    
+    const newOrder: PurchaseOrder = {
+      id: this.currentId.purchaseOrder++,
+      orderDate: new Date(),
+      supplier,
+      items,
+      totalCost,
+      status: 'pending'
+    };
+    
+    this.purchaseOrders.push(newOrder);
+    return newOrder;
+  }
+
+  getAllPurchaseOrders(): PurchaseOrder[] {
+    return [...this.purchaseOrders].sort((a, b) => 
+      new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+    );
+  }
+
+  updatePurchaseOrderStatus(orderId: number, status: PurchaseOrder['status'], notes?: string): PurchaseOrder | null {
+    const index = this.purchaseOrders.findIndex(order => order.id === orderId);
+    if (index === -1) return null;
+    
+    this.purchaseOrders[index] = {
+      ...this.purchaseOrders[index],
+      status,
+      notes
+    };
+    
+    return this.purchaseOrders[index];
+  }
+}
+
+// Create a singleton instance
+const db = new Database();
+export default db;
