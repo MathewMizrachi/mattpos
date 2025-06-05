@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Table, FileText, ChefHat, Utensils, HomeIcon } from 'lucide-react';
+import { Users, Table, FileText, ChefHat, Utensils } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface RestaurantActionsProps {
@@ -116,18 +116,6 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
           >
             <FileText className="h-8 w-8" />
             View Reports
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
-        <CardContent className="p-6">
-          <Button
-            onClick={() => navigate('/dashboard')}
-            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
-          >
-            <HomeIcon className="h-8 w-8" />
-            Dashboard
           </Button>
         </CardContent>
       </Card>
