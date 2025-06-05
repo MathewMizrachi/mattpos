@@ -12,11 +12,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface StockHeaderProps {
+  title?: string;
+  description?: string;
   onOpenAddProduct: () => void;
   onOpenImportProduct: () => void;
 }
 
-const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImportProduct }) => {
+const StockHeader: React.FC<StockHeaderProps> = ({ 
+  title = "Manage Stock",
+  description = "Add, edit, and remove products",
+  onOpenAddProduct, 
+  onOpenImportProduct 
+}) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -31,8 +38,8 @@ const StockHeader: React.FC<StockHeaderProps> = ({ onOpenAddProduct, onOpenImpor
           <ChevronLeftIcon className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-primary">Manage Stock</h1>
-          <p className="text-sm text-muted-foreground">Add, edit, and remove products</p>
+          <h1 className="text-2xl font-bold text-primary">{title}</h1>
+          <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
       <div className="flex space-x-2">

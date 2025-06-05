@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import POS from "./pages/POS";
 import Stock from "./pages/Stock";
+import RestaurantStock from "./pages/RestaurantStock";
+import Recipes from "./pages/Recipes";
 import Customers from "./pages/Customers";
 import Reports from "./pages/Reports";
 import TableManagement from "./pages/TableManagement";
@@ -29,6 +31,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pos" element={<POS />} />
             <Route path="/stock" element={<Stock />} />
+            <Route path="/restaurant-stock" element={<RestaurantStock />} />
+            <Route path="/recipes" element={<Recipes />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/tables" element={<TableManagement />} />
