@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -76,7 +77,7 @@ const KitchenOrders = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'border-red-500 bg-red-50';
-      case 'medium': return 'border-yellow-500 bg-yellow-50';
+      case 'medium': return 'border-[#FAA225] bg-[#FAA225]/10';
       case 'low': return 'border-green-500 bg-green-50';
       default: return 'border-gray-300 bg-white';
     }
@@ -84,7 +85,7 @@ const KitchenOrders = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-500';
+      case 'pending': return 'bg-[#FAA225]';
       case 'preparing': return 'bg-blue-500';
       case 'ready': return 'bg-green-500';
       default: return 'bg-gray-500';
@@ -113,26 +114,26 @@ const KitchenOrders = () => {
     <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
+        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center border-2 border-[#FAA225]">
           <div className="flex items-center">
             <Button
               variant="secondary"
               size="icon"
               onClick={handleBackToTables}
-              className="mr-4"
+              className="mr-4 bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
             >
               <ArrowLeftIcon className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-4xl font-bold text-primary">Kitchen Orders</h1>
-              <p className="text-muted-foreground">Cook2Day Restaurant System - Kitchen View</p>
+              <h1 className="text-4xl font-bold text-[#0A2645]">Kitchen Orders</h1>
+              <p className="text-[#0A2645]/70">Cook2Day Restaurant System - Kitchen View</p>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-orange-600">
+            <div className="text-2xl font-bold text-[#FAA225]">
               {orders.length}
             </div>
-            <div className="text-sm text-gray-600">Active Orders</div>
+            <div className="text-sm text-[#0A2645]/70">Active Orders</div>
           </div>
         </div>
 
@@ -145,12 +146,21 @@ const KitchenOrders = () => {
             >
               <CardHeader className="pb-3">
                 <CardTitle className="flex justify-between items-center">
-                  <span className="text-xl font-bold">Table {order.tableNumber}</span>
+                  <span className="text-xl font-bold text-[#0A2645]">Table {order.tableNumber}</span>
                   <div className="flex items-center gap-2">
-                    <Badge variant={order.priority === 'high' ? 'destructive' : 'secondary'}>
+                    <Badge 
+                      variant={order.priority === 'high' ? 'destructive' : 'secondary'}
+                      className={
+                        order.priority === 'high' 
+                          ? 'bg-red-500 text-white' 
+                          : order.priority === 'medium'
+                          ? 'bg-[#FAA225] text-[#0A2645]'
+                          : 'bg-green-500 text-white'
+                      }
+                    >
                       {order.priority}
                     </Badge>
-                    <div className="text-sm text-gray-600 flex items-center gap-1">
+                    <div className="text-sm text-[#0A2645]/70 flex items-center gap-1">
                       <Clock className="h-4 w-4" />
                       {getTimeSince(order.orderTime)}
                     </div>
@@ -161,13 +171,13 @@ const KitchenOrders = () => {
               <CardContent>
                 <div className="space-y-3">
                   {order.items.map((item) => (
-                    <div key={item.id} className="border rounded-lg p-3 bg-white">
+                    <div key={item.id} className="border-2 border-[#0A2645]/20 rounded-lg p-3 bg-white">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
-                          <div className="font-medium">{item.name}</div>
-                          <div className="text-sm text-gray-600">Qty: {item.quantity}</div>
+                          <div className="font-medium text-[#0A2645]">{item.name}</div>
+                          <div className="text-sm text-[#0A2645]/70">Qty: {item.quantity}</div>
                           {item.notes && (
-                            <div className="text-sm text-blue-600 italic">Note: {item.notes}</div>
+                            <div className="text-sm text-[#FAA225] italic font-medium">Note: {item.notes}</div>
                           )}
                         </div>
                         <Badge className={`${getStatusColor(item.status)} text-white flex items-center gap-1`}>
@@ -181,7 +191,7 @@ const KitchenOrders = () => {
                           <Button
                             size="sm"
                             onClick={() => updateItemStatus(order.id, item.id, 'preparing')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
                           >
                             Start Cooking
                           </Button>
@@ -190,7 +200,7 @@ const KitchenOrders = () => {
                           <Button
                             size="sm"
                             onClick={() => updateItemStatus(order.id, item.id, 'ready')}
-                            className="bg-green-600 hover:bg-green-700 text-white"
+                            className="bg-green-600 hover:bg-green-700 text-white font-semibold"
                           >
                             Mark Ready
                           </Button>

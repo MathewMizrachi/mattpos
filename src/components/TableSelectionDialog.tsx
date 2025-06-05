@@ -45,12 +45,12 @@ const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
           <div className="space-y-3">
             <Label htmlFor="table" className="text-[#0A2645] font-semibold text-base">Table Number</Label>
             <Select value={selectedTable} onValueChange={setSelectedTable}>
-              <SelectTrigger className="border-[#0A2645] border-2 focus:ring-[#FAA225] focus:border-[#FAA225] h-12">
-                <SelectValue placeholder="Select table" />
+              <SelectTrigger className="bg-white border-[#0A2645] border-2 text-[#0A2645] focus:ring-[#FAA225] focus:border-[#FAA225] h-12">
+                <SelectValue placeholder="Select table" className="text-[#0A2645]" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-[#0A2645]">
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
+                  <SelectItem key={num} value={num.toString()} className="text-[#0A2645] hover:bg-[#FAA225]/10">
                     Table {num}
                   </SelectItem>
                 ))}
@@ -68,7 +68,7 @@ const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
               value={peopleCount}
               onChange={(e) => setPeopleCount(e.target.value)}
               placeholder="Enter number of people"
-              className="border-[#0A2645] border-2 focus:ring-[#FAA225] focus:border-[#FAA225] h-12"
+              className="bg-white border-[#0A2645] border-2 text-[#0A2645] placeholder:text-[#0A2645]/60 focus:ring-[#FAA225] focus:border-[#FAA225] h-12"
             />
           </div>
         </div>

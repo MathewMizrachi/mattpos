@@ -89,24 +89,24 @@ const TableManagement = () => {
     <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
+        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center border-2 border-[#FAA225]">
           <div className="flex items-center">
             <Button
               variant="secondary"
               size="icon"
               onClick={handleBackToDashboard}
-              className="mr-4"
+              className="mr-4 bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
             >
               <ArrowLeftIcon className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-4xl font-bold text-primary">Table Management</h1>
-              <p className="text-muted-foreground">Cook2Day Restaurant System</p>
+              <h1 className="text-4xl font-bold text-[#0A2645]">Table Management</h1>
+              <p className="text-[#0A2645]/70">Cook2Day Restaurant System</p>
             </div>
           </div>
           <Button
             onClick={handleViewKitchenOrders}
-            className="bg-orange-500 hover:bg-orange-600 text-white"
+            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
           >
             <ChefHat className="h-5 w-5 mr-2" />
             Kitchen Orders
@@ -118,22 +118,22 @@ const TableManagement = () => {
           {mockTables.map((table) => (
             <Card
               key={table.number}
-              className={`cursor-pointer transition-all hover:scale-105 ${
+              className={`cursor-pointer transition-all hover:scale-105 border-2 ${
                 table.isOccupied 
-                  ? 'border-orange-500 bg-orange-50 shadow-lg' 
-                  : 'border-gray-200 bg-white hover:bg-gray-50'
+                  ? 'border-[#FAA225] bg-[#FAA225]/10 shadow-lg' 
+                  : 'border-white bg-white hover:bg-gray-50'
               }`}
               onClick={() => handleTableClick(table)}
             >
               <CardHeader className="pb-2">
                 <CardTitle className="text-center">
                   <div className={`text-2xl font-bold ${
-                    table.isOccupied ? 'text-orange-600' : 'text-gray-600'
+                    table.isOccupied ? 'text-[#FAA225]' : 'text-[#0A2645]'
                   }`}>
                     Table {table.number}
                   </div>
                   <div className={`text-sm ${
-                    table.isOccupied ? 'text-orange-500' : 'text-gray-400'
+                    table.isOccupied ? 'text-[#FAA225]/80' : 'text-[#0A2645]/60'
                   }`}>
                     {table.isOccupied ? 'Occupied' : 'Available'}
                   </div>
@@ -146,7 +146,7 @@ const TableManagement = () => {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
                         <DollarSignIcon className="h-4 w-4 mr-1 text-green-600" />
-                        <span className="font-medium">Bill:</span>
+                        <span className="font-medium text-[#0A2645]">Bill:</span>
                       </div>
                       <span className="font-bold text-green-600">
                         {formatCurrency(table.balance)}
@@ -155,25 +155,25 @@ const TableManagement = () => {
                     
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
-                        <UsersIcon className="h-4 w-4 mr-1 text-blue-600" />
-                        <span className="font-medium">People:</span>
+                        <UsersIcon className="h-4 w-4 mr-1 text-[#0A2645]" />
+                        <span className="font-medium text-[#0A2645]">People:</span>
                       </div>
-                      <span className="font-bold text-blue-600">
+                      <span className="font-bold text-[#0A2645]">
                         {table.peopleCount}
                       </span>
                     </div>
                     
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center">
-                        <ClockIcon className="h-4 w-4 mr-1 text-purple-600" />
-                        <span className="font-medium">Time:</span>
+                        <ClockIcon className="h-4 w-4 mr-1 text-[#FAA225]" />
+                        <span className="font-medium text-[#0A2645]">Time:</span>
                       </div>
-                      <span className="font-bold text-purple-600">
+                      <span className="font-bold text-[#FAA225]">
                         {formatTime(table.timeOccupied)}
                       </span>
                     </div>
 
-                    <div className="text-xs text-gray-600 mt-2">
+                    <div className="text-xs text-[#0A2645]/70 mt-2">
                       {table.orders.length} items ordered
                     </div>
                   </div>
@@ -182,7 +182,7 @@ const TableManagement = () => {
               
               {!table.isOccupied && (
                 <CardContent className="pt-0 text-center">
-                  <div className="text-gray-400 text-sm">Click to seat customers</div>
+                  <div className="text-[#0A2645]/60 text-sm">Click to seat customers</div>
                 </CardContent>
               )}
             </Card>
@@ -191,43 +191,43 @@ const TableManagement = () => {
 
         {/* Summary Stats */}
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <Card>
+          <Card className="bg-white border-2 border-[#FAA225]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Occupied Tables</CardTitle>
+              <CardTitle className="text-lg text-[#0A2645]">Occupied Tables</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-orange-600">
+              <div className="text-3xl font-bold text-[#FAA225]">
                 {mockTables.filter(t => t.isOccupied).length}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-[#0A2645]/70">
                 out of {mockTables.length} tables
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white border-2 border-green-500">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Total Revenue</CardTitle>
+              <CardTitle className="text-lg text-[#0A2645]">Total Revenue</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green-600">
                 {formatCurrency(mockTables.reduce((sum, table) => sum + table.balance, 0))}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-[#0A2645]/70">
                 current open bills
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white border-2 border-[#0A2645]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Total Customers</CardTitle>
+              <CardTitle className="text-lg text-[#0A2645]">Total Customers</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-600">
+              <div className="text-3xl font-bold text-[#0A2645]">
                 {mockTables.reduce((sum, table) => sum + table.peopleCount, 0)}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-[#0A2645]/70">
                 currently dining
               </div>
             </CardContent>
@@ -237,8 +237,8 @@ const TableManagement = () => {
 
       {/* Order Details Dialog */}
       <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl bg-white border-2 border-[#0A2645]">
+          <DialogHeader className="bg-[#0A2645] text-white p-4 -m-6 mb-4 rounded-t-lg">
             <DialogTitle>
               Table {selectedTable?.number} - Order Details
             </DialogTitle>
@@ -246,13 +246,13 @@ const TableManagement = () => {
           
           {selectedTable && (
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+              <div className="flex justify-between items-center p-4 bg-[#FAA225]/10 rounded-lg border border-[#FAA225]">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-[#0A2645]">
                     <UsersIcon className="h-4 w-4" />
                     <span>{selectedTable.peopleCount} people</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-[#0A2645]">
                     <ClockIcon className="h-4 w-4" />
                     <span>{formatTime(selectedTable.timeOccupied)}</span>
                   </div>
@@ -261,17 +261,17 @@ const TableManagement = () => {
                   <div className="text-2xl font-bold text-green-600">
                     {formatCurrency(selectedTable.balance)}
                   </div>
-                  <div className="text-sm text-gray-600">Total Bill</div>
+                  <div className="text-sm text-[#0A2645]/70">Total Bill</div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Current Orders</h3>
+                <h3 className="text-lg font-semibold text-[#0A2645]">Current Orders</h3>
                 {selectedTable.orders.map((order) => (
-                  <div key={order.id} className="flex justify-between items-center p-3 border rounded-lg">
+                  <div key={order.id} className="flex justify-between items-center p-3 border-2 border-[#0A2645]/20 rounded-lg bg-white">
                     <div className="flex-1">
-                      <div className="font-medium">{order.name}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-medium text-[#0A2645]">{order.name}</div>
+                      <div className="text-sm text-[#0A2645]/70">
                         Qty: {order.quantity} × {formatCurrency(order.price)}
                       </div>
                     </div>
@@ -279,7 +279,7 @@ const TableManagement = () => {
                       <Badge className={`${getStatusColor(order.status)} text-white`}>
                         {order.status}
                       </Badge>
-                      <div className="font-bold">
+                      <div className="font-bold text-[#0A2645]">
                         {formatCurrency(order.price * order.quantity)}
                       </div>
                     </div>
@@ -287,10 +287,10 @@ const TableManagement = () => {
                 ))}
               </div>
 
-              <div className="flex gap-2 pt-4">
+              <div className="flex gap-2 pt-4 bg-gray-50 p-4 -m-6 mt-4 rounded-b-lg border-t border-gray-200">
                 <Button
                   onClick={handleAddMoreItems}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add More Items
@@ -298,7 +298,7 @@ const TableManagement = () => {
                 <Button
                   variant="outline"
                   onClick={() => setShowOrderDialog(false)}
-                  className="flex-1"
+                  className="flex-1 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
                 >
                   Close
                 </Button>
