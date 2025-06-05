@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -85,6 +84,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   }, [isEditingPrice]);
   
+  // Split product name into first word and rest
+  const words = product.name.split(' ');
+  const firstWord = words[0];
+  const restOfName = words.slice(1).join(' ');
+  
   return (
     <Card 
       className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative"
@@ -104,9 +108,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
       <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
-          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-sm md:text-base'} mb-1 pr-16 line-clamp-2 leading-tight`}>
-            {product.name}
-          </h3>
+          <div className="mb-1 pr-16">
+            <h3 className={`font-bold ${isMobile ? 'text-sm' : 'text-lg md:text-xl'} leading-tight`}>
+              {firstWord}
+            </h3>
+            {restOfName && (
+              <p className={`font-medium ${isMobile ? 'text-xs' : 'text-sm md:text-base'} text-muted-foreground leading-tight`}>
+                {restOfName}
+              </p>
+            )}
+          </div>
           
           {product.stock !== undefined && (
             <p className={`${isMobile ? 'text-xs' : 'text-xs'} ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
