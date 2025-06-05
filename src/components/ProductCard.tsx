@@ -95,16 +95,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-10 h-6 w-10 text-xs p-1 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90 font-bold uppercase"
+          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90 font-bold uppercase"
           onClick={handlePriceButtonClick}
         >
-          $
+          Price
         </Button>
       )}
 
       <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
-          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-base md:text-lg'} mb-1 pr-12 line-clamp-2 leading-tight`}>
+          <h3 className={`font-medium ${isMobile ? 'text-xs' : 'text-sm md:text-base'} mb-1 pr-16 line-clamp-2 leading-tight`}>
             {product.name}
           </h3>
           
