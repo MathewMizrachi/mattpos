@@ -86,12 +86,16 @@ const PurchaseOrder = () => {
           : item
       ));
     } else {
+      // Calculate cost price as 6%-20% lower than selling price
+      const discountPercentage = 0.06 + (Math.random() * 0.14); // Random between 6% and 20%
+      const costPrice = (product as any).avgCostIncl ?? (product.price * (1 - discountPercentage));
+      
       setCart([...cart, {
         id: product.id,
         name: product.name,
         price: product.price,
         quantity: 1,
-        costPrice: (product as any).avgCostIncl ?? product.price * 0.6 // Use cost price or estimate
+        costPrice: costPrice
       }]);
     }
   };
@@ -197,23 +201,29 @@ const PurchaseOrder = () => {
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
-                <div className="space-y-1 text-sm text-gray-600 mb-3">
-                  <p>Sell Price: R{product.price.toFixed(2)}</p>
-                  <p>Cost Price: R{((product as any).avgCostIncl ?? product.price * 0.6).toFixed(2)}</p>
-                  <p>Stock: {(product as any).stock ?? 0}</p>
+            {filteredProducts.map((product) => {
+              // Calculate display cost price for each product
+              const discountPercentage = 0.06 + (Math.random() * 0.14);
+              const displayCostPrice = (product as any).avgCostIncl ?? (product.price * (1 - discountPercentage));
+              
+              return (
+                <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
+                  <div className="space-y-1 text-sm text-gray-600 mb-3">
+                    <p>Sell Price: R{product.price.toFixed(2)}</p>
+                    <p>Cost Price: R{displayCostPrice.toFixed(2)}</p>
+                    <p>Stock: {(product as any).stock ?? 0}</p>
+                  </div>
+                  <Button
+                    onClick={() => addToCart(product)}
+                    className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+                    size="sm"
+                  >
+                    Add to Order
+                  </Button>
                 </div>
-                <Button
-                  onClick={() => addToCart(product)}
-                  className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-                  size="sm"
-                >
-                  Add to Order
-                </Button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
