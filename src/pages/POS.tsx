@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -63,12 +64,27 @@ const POS = () => {
     navigate('/dashboard');
   };
   
+  // Create a wrapper function that matches the expected signature
+  const handleProcessPayment = (amount: number, method: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: any[]) => {
+    if (method === 'split' && splitPayments) {
+      return processTransaction(splitPayments);
+    }
+    // For other payment methods, create a simple payment details array
+    const paymentDetails = [{
+      method,
+      amount,
+      customerName,
+      customerPhone
+    }];
+    return processTransaction(paymentDetails);
+  };
+  
   const paymentHandlers = usePaymentHandlers({
     paymentStates,
     currentShift,
     cart,
     calculateTotal,
-    processPayment: processTransaction,
+    processPayment: handleProcessPayment,
     processRefund,
     processWithdrawal,
     endShift
@@ -122,7 +138,7 @@ const POS = () => {
           cart={cart}
           currentShift={currentShift}
           calculateTotal={calculateTotal}
-          processPayment={processPayment}
+          processPayment={handleProcessPayment}
           processRefund={processRefund}
           processWithdrawal={processWithdrawal}
           endShift={endShift}
