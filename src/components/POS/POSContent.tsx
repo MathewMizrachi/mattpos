@@ -16,6 +16,13 @@ interface POSContentProps {
   onRemoveFromCart: (productId: number, price?: number) => void;
   cartExpanded: boolean;
   toggleCartExpand: () => void;
+  tableInfo?: {
+    selectedTable?: number;
+    peopleCount?: number;
+    isNewOrder?: boolean;
+    isAddingToOrder?: boolean;
+    existingOrders?: any[];
+  } | null;
 }
 
 const POSContent: React.FC<POSContentProps> = ({
@@ -28,6 +35,7 @@ const POSContent: React.FC<POSContentProps> = ({
   onRemoveFromCart,
   cartExpanded,
   toggleCartExpand,
+  tableInfo,
 }) => {
   const isMobile = useIsMobile();
   

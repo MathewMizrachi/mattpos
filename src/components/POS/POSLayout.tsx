@@ -25,7 +25,14 @@ interface POSLayoutProps {
   onShop2ShopPayment: () => void;
   onShowBarcodeScanner: () => void;
   onPrintReceipt?: () => void;
-  onSendOrder?: (tableNumber: number, peopleCount: number) => void;
+  onSendOrder?: () => void;
+  tableInfo?: {
+    selectedTable?: number;
+    peopleCount?: number;
+    isNewOrder?: boolean;
+    isAddingToOrder?: boolean;
+    existingOrders?: any[];
+  } | null;
 }
 
 const POSLayout: React.FC<POSLayoutProps> = ({
@@ -47,6 +54,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   onShowBarcodeScanner,
   onPrintReceipt = () => {},
   onSendOrder = () => {},
+  tableInfo,
 }) => {
   const isMobile = useIsMobile();
   const { currentMode } = useApp();
@@ -83,6 +91,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
           onPayment={onShowPaymentForm}
           onSendOrder={onSendOrder}
           isMobile={isMobile}
+          tableInfo={tableInfo}
         />
       ) : (
         <PaymentFooter 
