@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -88,47 +89,49 @@ const TableManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center border-2 border-[#FAA225]">
-          <div className="flex items-center">
-            <Button
-              variant="secondary"
-              size="icon"
-              onClick={handleBackToDashboard}
-              className="mr-4 bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
-            >
-              <ArrowLeftIcon className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-4xl font-bold text-[#0A2645]">Table Management</h1>
-              <p className="text-[#0A2645]/70">Cook2Day Restaurant System</p>
+        <div className="bg-white p-6 rounded-xl shadow-lg mb-8 border-l-4 border-[#FAA225]">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleBackToDashboard}
+                className="mr-4 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-4xl font-bold text-[#0A2645] mb-1">Table Management</h1>
+                <p className="text-[#0A2645]/70 text-lg">Cook2Day Restaurant System</p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Tables Grid */}
-        <div className="grid gap-4 md:grid-cols-5 sm:grid-cols-3 grid-cols-2">
+        <div className="grid gap-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-8">
           {mockTables.map((table) => (
             <Card
               key={table.number}
-              className={`cursor-pointer transition-all hover:scale-105 border-2 ${
+              className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
                 table.isOccupied 
-                  ? 'border-[#FAA225] bg-[#FAA225]/10 shadow-lg' 
-                  : 'border-white bg-white hover:bg-gray-50'
+                  ? 'bg-gradient-to-br from-[#FAA225] to-[#FAA225]/80 border-[#FAA225] shadow-lg transform' 
+                  : 'bg-white border-gray-200 hover:border-[#0A2645] shadow-md'
               }`}
               onClick={() => handleTableClick(table)}
             >
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-3">
                 <CardTitle className="text-center">
-                  <div className={`text-2xl font-bold ${
-                    table.isOccupied ? 'text-[#FAA225]' : 'text-[#0A2645]'
+                  <div className={`text-3xl font-bold mb-1 ${
+                    table.isOccupied ? 'text-white' : 'text-[#0A2645]'
                   }`}>
                     Table {table.number}
                   </div>
-                  <div className={`text-sm ${
-                    table.isOccupied ? 'text-[#FAA225]/80' : 'text-[#0A2645]/60'
+                  <div className={`text-sm font-medium ${
+                    table.isOccupied ? 'text-white/90' : 'text-[#0A2645]/60'
                   }`}>
                     {table.isOccupied ? 'Occupied' : 'Available'}
                   </div>
@@ -137,39 +140,43 @@ const TableManagement = () => {
               
               {table.isOccupied && (
                 <CardContent className="pt-0">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center">
-                        <DollarSignIcon className="h-4 w-4 mr-1 text-white" />
-                        <span className="font-medium text-white">Bill:</span>
+                  <div className="space-y-3">
+                    <div className="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <div className="flex items-center text-white">
+                          <DollarSignIcon className="h-4 w-4 mr-1" />
+                          <span className="font-medium">Bill:</span>
+                        </div>
+                        <span className="font-bold text-white text-lg">
+                          {formatCurrency(table.balance)}
+                        </span>
                       </div>
-                      <span className="font-bold text-green-600">
-                        {formatCurrency(table.balance)}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center">
-                        <UsersIcon className="h-4 w-4 mr-1 text-white" />
-                        <span className="font-medium text-white">People:</span>
+                      
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <div className="flex items-center text-white">
+                          <UsersIcon className="h-4 w-4 mr-1" />
+                          <span className="font-medium">People:</span>
+                        </div>
+                        <span className="font-bold text-white">
+                          {table.peopleCount}
+                        </span>
                       </div>
-                      <span className="font-bold text-white">
-                        {table.peopleCount}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center">
-                        <ClockIcon className="h-4 w-4 mr-1 text-[#FAA225]" />
-                        <span className="font-medium text-white">Time:</span>
+                      
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center text-white">
+                          <ClockIcon className="h-4 w-4 mr-1" />
+                          <span className="font-medium">Time:</span>
+                        </div>
+                        <span className="font-bold text-white">
+                          {formatTime(table.timeOccupied)}
+                        </span>
                       </div>
-                      <span className="font-bold text-[#FAA225]">
-                        {formatTime(table.timeOccupied)}
-                      </span>
                     </div>
 
-                    <div className="text-xs text-white mt-2">
-                      {table.orders.length} items ordered
+                    <div className="text-center">
+                      <span className="text-white/90 text-sm font-medium">
+                        {table.orders.length} items ordered
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -177,7 +184,9 @@ const TableManagement = () => {
               
               {!table.isOccupied && (
                 <CardContent className="pt-0 text-center">
-                  <div className="text-[#0A2645]/60 text-sm">Click to seat customers</div>
+                  <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                    <div className="text-[#0A2645]/60 text-sm font-medium">Click to seat customers</div>
+                  </div>
                 </CardContent>
               )}
             </Card>
@@ -185,13 +194,18 @@ const TableManagement = () => {
         </div>
 
         {/* Summary Stats */}
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <Card className="bg-white border-2 border-[#FAA225]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg text-[#0A2645]">Occupied Tables</CardTitle>
+        <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
+          <Card className="bg-white border-l-4 border-[#FAA225] shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-[#FAA225] p-2 rounded-lg mr-3">
+                  <UsersIcon className="h-5 w-5 text-white" />
+                </div>
+                Occupied Tables
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-[#FAA225]">
+              <div className="text-4xl font-bold text-[#FAA225] mb-1">
                 {mockTables.filter(t => t.isOccupied).length}
               </div>
               <div className="text-sm text-[#0A2645]/70">
@@ -200,12 +214,17 @@ const TableManagement = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-green-500">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg text-[#0A2645]">Total Revenue</CardTitle>
+          <Card className="bg-white border-l-4 border-green-500 shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-green-500 p-2 rounded-lg mr-3">
+                  <DollarSignIcon className="h-5 w-5 text-white" />
+                </div>
+                Total Revenue
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">
+              <div className="text-4xl font-bold text-green-600 mb-1">
                 {formatCurrency(mockTables.reduce((sum, table) => sum + table.balance, 0))}
               </div>
               <div className="text-sm text-[#0A2645]/70">
@@ -214,12 +233,17 @@ const TableManagement = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-[#0A2645]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg text-[#0A2645]">Total Customers</CardTitle>
+          <Card className="bg-white border-l-4 border-[#0A2645] shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-[#0A2645] p-2 rounded-lg mr-3">
+                  <UsersIcon className="h-5 w-5 text-white" />
+                </div>
+                Total Customers
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-[#0A2645]">
+              <div className="text-4xl font-bold text-[#0A2645] mb-1">
                 {mockTables.reduce((sum, table) => sum + table.peopleCount, 0)}
               </div>
               <div className="text-sm text-[#0A2645]/70">
@@ -232,49 +256,49 @@ const TableManagement = () => {
 
       {/* Order Details Dialog */}
       <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
-        <DialogContent className="max-w-2xl bg-white border-2 border-[#0A2645]">
-          <DialogHeader className="bg-[#0A2645] text-white p-4 -m-6 mb-4 rounded-t-lg">
-            <DialogTitle>
+        <DialogContent className="max-w-2xl bg-white border-2 border-[#0A2645] rounded-xl">
+          <DialogHeader className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 text-white p-6 -m-6 mb-6 rounded-t-xl">
+            <DialogTitle className="text-xl">
               Table {selectedTable?.number} - Order Details
             </DialogTitle>
           </DialogHeader>
           
           {selectedTable && (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-[#FAA225]/10 rounded-lg border border-[#FAA225]">
-                <div className="space-y-1">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center p-4 bg-gradient-to-r from-[#FAA225]/10 to-[#FAA225]/5 rounded-lg border-l-4 border-[#FAA225]">
+                <div className="space-y-2">
                   <div className="flex items-center gap-2 text-[#0A2645]">
                     <UsersIcon className="h-4 w-4" />
-                    <span>{selectedTable.peopleCount} people</span>
+                    <span className="font-medium">{selectedTable.peopleCount} people</span>
                   </div>
                   <div className="flex items-center gap-2 text-[#0A2645]">
                     <ClockIcon className="h-4 w-4" />
-                    <span>{formatTime(selectedTable.timeOccupied)}</span>
+                    <span className="font-medium">{formatTime(selectedTable.timeOccupied)}</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-3xl font-bold text-green-600">
                     {formatCurrency(selectedTable.balance)}
                   </div>
                   <div className="text-sm text-[#0A2645]/70">Total Bill</div>
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-[#0A2645]">Current Orders</h3>
                 {selectedTable.orders.map((order) => (
-                  <div key={order.id} className="flex justify-between items-center p-3 border-2 border-[#0A2645]/20 rounded-lg bg-white">
+                  <div key={order.id} className="flex justify-between items-center p-4 border-2 border-gray-100 rounded-lg bg-white hover:shadow-md transition-shadow">
                     <div className="flex-1">
                       <div className="font-medium text-[#0A2645]">{order.name}</div>
                       <div className="text-sm text-[#0A2645]/70">
                         Qty: {order.quantity} × {formatCurrency(order.price)}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <Badge className={`${getStatusColor(order.status)} text-white`}>
                         {order.status}
                       </Badge>
-                      <div className="font-bold text-[#0A2645]">
+                      <div className="font-bold text-[#0A2645] text-lg">
                         {formatCurrency(order.price * order.quantity)}
                       </div>
                     </div>
@@ -282,10 +306,10 @@ const TableManagement = () => {
                 ))}
               </div>
 
-              <div className="flex gap-2 pt-4 bg-gray-50 p-4 -m-6 mt-4 rounded-b-lg border-t border-gray-200">
+              <div className="flex gap-3 pt-4 bg-gray-50 p-6 -m-6 mt-6 rounded-b-xl border-t border-gray-200">
                 <Button
                   onClick={handleAddMoreItems}
-                  className="flex-1 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
+                  className="flex-1 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold h-12"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add More Items
@@ -293,7 +317,7 @@ const TableManagement = () => {
                 <Button
                   variant="outline"
                   onClick={() => setShowOrderDialog(false)}
-                  className="flex-1 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+                  className="flex-1 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white h-12"
                 >
                   Close
                 </Button>
