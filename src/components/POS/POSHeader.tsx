@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, Scan } from 'lucide-react';
+import { LogOut, Scan, HomeIcon } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface POSHeaderProps {
   currentUser: any;
@@ -21,6 +22,8 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   options,
   onShowBarcodeScanner
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#0A2645] text-white p-3 flex justify-between items-center z-20">
       <div className="flex items-center space-x-4">
@@ -44,6 +47,16 @@ const POSHeader: React.FC<POSHeaderProps> = ({
             Scan
           </Button>
         )}
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/dashboard')}
+          className="text-white border-white hover:bg-white/20"
+        >
+          <HomeIcon className="h-4 w-4 mr-1" />
+          Dashboard
+        </Button>
         
         <Button
           variant="outline"

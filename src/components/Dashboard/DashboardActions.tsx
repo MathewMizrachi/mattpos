@@ -7,8 +7,10 @@ import {
   PackageIcon, 
   UsersIcon, 
   ChartBarIcon, 
-  AlertCircleIcon 
+  AlertCircleIcon,
+  HomeIcon
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardActionsProps {
   hasActiveShift: boolean;
@@ -27,6 +29,8 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
   onManageCustomers,
   onViewReports
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {hasActiveShift ? (
@@ -87,6 +91,18 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
           >
             <ChartBarIcon className="h-8 w-8" />
             View Reports
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={() => navigate('/dashboard')}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <HomeIcon className="h-8 w-8" />
+            Dashboard
           </Button>
         </CardContent>
       </Card>

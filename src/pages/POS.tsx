@@ -9,6 +9,22 @@ import { usePaymentStates } from './POS/usePaymentStates';
 import { usePaymentHandlers } from './POS/usePaymentHandlers';
 import PaymentOptions from '@/components/PaymentOptions';
 
+// Restaurant stock items for restaurant mode
+const restaurantProducts = [
+  { id: 1001, name: 'Classic Burger', price: 85, stock: 50, barcode: '8001001001', stockCode: 'REST001', linkCode: 'REST001-001', avgCostIncl: 45 },
+  { id: 1002, name: 'Cheeseburger', price: 95, stock: 40, barcode: '8001001002', stockCode: 'REST002', linkCode: 'REST002-001', avgCostIncl: 52 },
+  { id: 1003, name: 'Chicken Burger', price: 90, stock: 35, barcode: '8001001003', stockCode: 'REST003', linkCode: 'REST003-001', avgCostIncl: 48 },
+  { id: 1004, name: 'Fish & Chips', price: 120, stock: 25, barcode: '8001001004', stockCode: 'REST004', linkCode: 'REST004-001', avgCostIncl: 65 },
+  { id: 1005, name: 'Coca Cola 330ml', price: 25, stock: 100, barcode: '8001001005', stockCode: 'REST005', linkCode: 'REST005-001', avgCostIncl: 15 },
+  { id: 1006, name: 'Sprite 330ml', price: 25, stock: 80, barcode: '8001001006', stockCode: 'REST006', linkCode: 'REST006-001', avgCostIncl: 15 },
+  { id: 1007, name: 'Fanta Orange 330ml', price: 25, stock: 90, barcode: '8001001007', stockCode: 'REST007', linkCode: 'REST007-001', avgCostIncl: 15 },
+  { id: 1008, name: 'French Fries Regular', price: 35, stock: 60, barcode: '8001001008', stockCode: 'REST008', linkCode: 'REST008-001', avgCostIncl: 18 },
+  { id: 1009, name: 'French Fries Large', price: 45, stock: 45, barcode: '8001001009', stockCode: 'REST009', linkCode: 'REST009-001', avgCostIncl: 22 },
+  { id: 1010, name: 'Chicken Wings (6pc)', price: 75, stock: 30, barcode: '8001001010', stockCode: 'REST010', linkCode: 'REST010-001', avgCostIncl: 38 },
+  { id: 1011, name: 'Pizza Margherita', price: 110, stock: 20, barcode: '8001001011', stockCode: 'REST011', linkCode: 'REST011-001', avgCostIncl: 55 },
+  { id: 1012, name: 'Caesar Salad', price: 65, stock: 25, barcode: '8001001012', stockCode: 'REST012', linkCode: 'REST012-001', avgCostIncl: 32 },
+];
+
 const POS = () => {
   const { 
     currentUser, 
@@ -119,7 +135,10 @@ const POS = () => {
     }
   }, [currentShift, currentMode, navigate]);
   
-  const sortedProducts = [...products].sort((a, b) => {
+  // Use restaurant products in restaurant mode, till products in till mode
+  const activeProducts = currentMode === 'restaurant' ? restaurantProducts : products;
+  
+  const sortedProducts = [...activeProducts].sort((a, b) => {
     return a.id - b.id;
   });
   
