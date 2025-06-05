@@ -25,10 +25,10 @@ const Stock = () => {
   );
   
   const handleAddProduct = (data: any) => {
-    addProduct(data);
+    const newProduct = addProduct(data);
     toast({
-      title: "Product added",
-      description: `${data.name} has been added to your inventory.`,
+      title: "Till item added",
+      description: `${data.name} has been added to your till stock.`,
     });
   };
   
@@ -36,7 +36,7 @@ const Stock = () => {
     if (selectedProduct) {
       updateProduct(selectedProduct.id, data);
       toast({
-        title: "Product updated",
+        title: "Till item updated",
         description: `${data.name} has been updated.`,
       });
     }
@@ -46,8 +46,8 @@ const Stock = () => {
     if (selectedProduct) {
       deleteProduct(selectedProduct.id);
       toast({
-        title: "Product deleted",
-        description: `${selectedProduct.name} has been removed from your inventory.`,
+        title: "Till item deleted",
+        description: `${selectedProduct.name} has been removed from your till stock.`,
       });
       setIsDeleteDialogOpen(false);
     }
@@ -66,8 +66,8 @@ const Stock = () => {
   const handleImportProducts = (products: any[]) => {
     products.forEach(product => addProduct(product));
     toast({
-      title: "Products imported",
-      description: `${products.length} products have been imported to your inventory.`,
+      title: "Till items imported",
+      description: `${products.length} items have been imported to your till stock.`,
     });
     setIsImportProductOpen(false);
   };
@@ -75,6 +75,8 @@ const Stock = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <StockHeader 
+        title="Till Stock"
+        description="Manage till inventory and products"
         onOpenAddProduct={() => setIsAddProductOpen(true)}
         onOpenImportProduct={() => setIsImportProductOpen(true)}
       />
