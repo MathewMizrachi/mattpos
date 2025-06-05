@@ -12,6 +12,7 @@ import RestaurantStock from '@/pages/RestaurantStock';
 import Reports from '@/pages/Reports';
 import Customers from '@/pages/Customers';
 import Cashup from '@/pages/Cashup';
+import Recipes from '@/pages/Recipes';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/cashup" element={<Cashup />} />
+            <Route path="/recipes" element={<Recipes />} />
           </Routes>
         </div>
         <Toaster />
