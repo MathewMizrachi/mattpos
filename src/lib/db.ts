@@ -83,7 +83,7 @@ class Database {
   ];
 
   private products: Product[] = [
-    // Original products from user's list
+    // New till stock products from user's list
     { id: 148571, name: 'ABC STINI AMERICAN BLUE CUBES 25G (1X1)', price: 10, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009605220961', stockCode: '148571', linkCode: '148571-001', avgCostIncl: 0 },
     { id: 100304, name: 'ACE SAMP 1KG (1X1)', price: 24, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001256003108', stockCode: '100304', linkCode: '100304-001', avgCostIncl: 7.18 },
     { id: 101494, name: 'ALWAYS MAXI 8S THICK 3IN1 LONG (1X1)', price: 22, stock: Math.floor(Math.random() * 21) + 10, barcode: '8700216268103', stockCode: '101494', linkCode: '101494-001', avgCostIncl: 0 },
