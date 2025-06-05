@@ -19,13 +19,13 @@ const MenuCategorySelector: React.FC<MenuCategorySelectorProps> = ({
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+    <div className="grid grid-cols-4 gap-2 mb-4">
       {categories.map((category) => (
         <Button
           key={category.id}
           variant="outline"
           onClick={() => onCategoryChange(category.id)}
-          className={`h-12 text-sm font-medium border-2 transition-colors ${
+          className={`h-12 text-xs sm:text-sm font-medium border-2 transition-colors ${
             selectedCategory === category.id 
               ? 'bg-[#FAA225] text-[#0A2645] border-[#FAA225] hover:bg-[#FAA225]/90' 
               : 'bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90'
