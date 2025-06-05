@@ -11,6 +11,10 @@ export interface Product {
   name: string;
   price: number;
   stock?: number;
+  barcode?: string;
+  stockCode?: string;
+  linkCode?: string;
+  avgCostIncl?: number;
 }
 
 export interface CartItem {

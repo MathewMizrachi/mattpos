@@ -13,6 +13,10 @@ interface Product {
   name: string;
   price: number;
   stock?: number;
+  barcode?: string;
+  stockCode?: string;
+  linkCode?: string;
+  avgCostIncl?: number;
 }
 
 interface Shift {
@@ -79,18 +83,28 @@ class Database {
   ];
 
   private products: Product[] = [
-    { id: 1, name: 'Bread', price: 15, stock: 20 },
-    { id: 2, name: 'Milk', price: 22, stock: 15 },
-    { id: 3, name: 'Eggs (6)', price: 25, stock: 10 },
-    { id: 4, name: 'Rice 1kg', price: 30, stock: 25 },
-    { id: 5, name: 'Maize Meal 2kg', price: 35, stock: 18 },
-    { id: 6, name: 'Cooking Oil 750ml', price: 45, stock: 12 },
-    { id: 7, name: 'Sugar 1kg', price: 28, stock: 20 },
-    { id: 8, name: 'Tea Bags (40)', price: 32, stock: 15 },
-    { id: 9, name: 'Airtime R10', price: 10, stock: 999 },
-    { id: 10, name: 'Airtime R20', price: 20, stock: 999 },
-    { id: 11, name: 'Airtime R50', price: 50, stock: 999 },
-    { id: 12, name: 'Data 1GB', price: 85, stock: 999 },
+    { id: 148571, name: 'ABC STINI AMERICAN BLUE CUBES 25G (1X1)', price: 10, stock: 1, barcode: '6009605220961', stockCode: '148571', linkCode: '148571-001', avgCostIncl: 0 },
+    { id: 100304, name: 'ACE SAMP 1KG (1X1)', price: 24, stock: 1, barcode: '6001256003108', stockCode: '100304', linkCode: '100304-001', avgCostIncl: 7.18 },
+    { id: 101494, name: 'ALWAYS MAXI 8S THICK 3IN1 LONG (1X1)', price: 22, stock: 1, barcode: '8700216268103', stockCode: '101494', linkCode: '101494-001', avgCostIncl: 0 },
+    { id: 148565, name: 'AMANDHLA FOWL FOOD 1KG MIXED (1X1)', price: 15, stock: 1, barcode: '6007561000214', stockCode: '148565', linkCode: '148565-001', avgCostIncl: 0 },
+    { id: 148559, name: 'AMANDHLA YELLOW MAIZE 1KG WHOLE (1X1)', price: 10, stock: 1, barcode: '6007561000467', stockCode: '148559', linkCode: '148559-001', avgCostIncl: 0 },
+    { id: 102309, name: 'AQUELLE WATER 1.5LT SPKL LITCHI (1X1)', price: 17, stock: 1, barcode: '6009612470298', stockCode: '102309', linkCode: '102309-001', avgCostIncl: 0 },
+    { id: 102311, name: 'AQUELLE WATER 1.5LT SPKL NAARTJIE (1X1)', price: 17, stock: 1, barcode: '6009612470281', stockCode: '102311', linkCode: '102311-001', avgCostIncl: 0 },
+    { id: 102330, name: 'AQUELLE WATER 500ML SPKL LITCHI (1X1)', price: 10, stock: 1, barcode: '6009612470175', stockCode: '102330', linkCode: '102330-001', avgCostIncl: 0 },
+    { id: 148555, name: 'AUNT CAROLINE RICE 2KG (1X1)', price: 45, stock: 1, barcode: '6001231000788', stockCode: '148555', linkCode: '148555-001', avgCostIncl: 0 },
+    { id: 148561, name: 'AUNTY CAROLINE RICE 10KG', price: 170, stock: 1, barcode: '6001231000511', stockCode: '148561', linkCode: '', avgCostIncl: 0 },
+    { id: 102939, name: 'BAKERS CHOC-KITS 200G CHOC (1X1)', price: 38, stock: 1, barcode: '6001056119009', stockCode: '102939', linkCode: '102939-001', avgCostIncl: 0 },
+    { id: 102953, name: 'BAKERS EET-SUM-MOR 200G (1X1)', price: 32, stock: 1, barcode: '6001056201001', stockCode: '102953', linkCode: '102953-001', avgCostIncl: 0 },
+    { id: 102997, name: 'BAKERS MARIE 200G ORIGINAL (1X1)', price: 20, stock: 1, barcode: '6001056453004', stockCode: '102997', linkCode: '102997-001', avgCostIncl: 0 },
+    { id: 103035, name: 'BAKERS RED LABEL 200G LEMON CREAMS (1X1)', price: 24, stock: 1, barcode: '6001056411004', stockCode: '103035', linkCode: '103035-001', avgCostIncl: 0 },
+    { id: 103042, name: 'BAKERS ROMANY CRM 200G CLASSIC CHOC (1X1)', price: 38, stock: 1, barcode: '6001125001877', stockCode: '103042', linkCode: '103042-001', avgCostIncl: 0 },
+    { id: 103080, name: 'BAKERS TENNIS 200G ORIGINAL (1X1)', price: 27, stock: 1, barcode: '6001056662000', stockCode: '103080', linkCode: '103080-001', avgCostIncl: 0 },
+    { id: 103085, name: 'BAKERS TOPPER 125G CHOC MINT (1X1)', price: 12, stock: 1, barcode: '6009704170136', stockCode: '103085', linkCode: '103085-001', avgCostIncl: 0 },
+    { id: 103086, name: 'BAKERS TOPPER 125G CHOCO (1X1)', price: 12, stock: 1, barcode: '6001056412919', stockCode: '103086', linkCode: '103086-001', avgCostIncl: 0 },
+    { id: 103088, name: 'BAKERS TOPPER 125G CUSTARD (1X1)', price: 12, stock: 1, barcode: '6001056412940', stockCode: '103088', linkCode: '103088-001', avgCostIncl: 0 },
+    { id: 103091, name: 'BAKERS TOPPER 125G VANILLA (1X1)', price: 12, stock: 1, barcode: '6001056412933', stockCode: '103091', linkCode: '103091-001', avgCostIncl: 0 },
+    { id: 148542, name: 'FUTURELIFE 500G SMART FOOD ZERO CHOCOLATE (1X1)', price: 60, stock: 1, barcode: '6009710612828', stockCode: '148542', linkCode: '148542-001', avgCostIncl: 0 },
+    { id: 148233, name: 'YUM YUM P/BUTTER 250G SMOOTH (1X1)', price: 33, stock: 1, barcode: '6001069034139', stockCode: '148233', linkCode: '148233-001', avgCostIncl: 0 },
   ];
 
   private customers: Customer[] = [];
@@ -100,7 +114,7 @@ class Database {
   private currentId = {
     shift: 1,
     transaction: 1,
-    product: 13,
+    product: 200000,
     customer: 1,
     refund: 1,
   };
