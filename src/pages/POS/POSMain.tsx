@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '@/types';
 import POSLayout from '@/components/POS/POSLayout';
 import POSContent from '@/components/POS/POSContent';
+import BarcodeScanner from '@/components/POS/BarcodeScanner';
 
 interface POSMainProps {
   currentUser: any;
@@ -53,35 +54,53 @@ const POSMain: React.FC<POSMainProps> = ({
   onCardPayment,
   onShop2ShopPayment,
 }) => {
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+
+  const handleBarcodeProductFound = (product: Product) => {
+    onAddToCart(product, 1);
+    setShowBarcodeScanner(false);
+  };
+
   return (
-    <POSLayout
-      currentUser={currentUser}
-      currentShift={currentShift}
-      onEndShift={onEndShift}
-      onLogout={onLogout}
-      cart={cart}
-      total={calculateTotal()}
-      onClearCart={onClearCart}
-      onShowPaymentForm={onShowPaymentForm}
-      onShowRefundScreen={onShowRefundScreen}
-      onShowProfitPlusScreen={onShowProfitPlusScreen}
-      onShowWithdrawalScreen={onShowWithdrawalScreen}
-      onCashPayment={onCashPayment}
-      onCardPayment={onCardPayment}
-      onShop2ShopPayment={onShop2ShopPayment}
-    >
-      <POSContent
-        products={products}
-        searchTerm={searchTerm}
-        onSearchChange={onSearchChange}
+    <>
+      <POSLayout
+        currentUser={currentUser}
+        currentShift={currentShift}
+        onEndShift={onEndShift}
+        onLogout={onLogout}
         cart={cart}
-        onAddToCart={onAddToCart}
-        onUpdateCartItem={onUpdateCartItem}
-        onRemoveFromCart={onRemoveFromCart}
-        cartExpanded={cartExpanded}
-        toggleCartExpand={toggleCartExpand}
-      />
-    </POSLayout>
+        total={calculateTotal()}
+        onClearCart={onClearCart}
+        onShowPaymentForm={onShowPaymentForm}
+        onShowRefundScreen={onShowRefundScreen}
+        onShowProfitPlusScreen={onShowProfitPlusScreen}
+        onShowWithdrawalScreen={onShowWithdrawalScreen}
+        onCashPayment={onCashPayment}
+        onCardPayment={onCardPayment}
+        onShop2ShopPayment={onShop2ShopPayment}
+        onShowBarcodeScanner={() => setShowBarcodeScanner(true)}
+      >
+        <POSContent
+          products={products}
+          searchTerm={searchTerm}
+          onSearchChange={onSearchChange}
+          cart={cart}
+          onAddToCart={onAddToCart}
+          onUpdateCartItem={onUpdateCartItem}
+          onRemoveFromCart={onRemoveFromCart}
+          cartExpanded={cartExpanded}
+          toggleCartExpand={toggleCartExpand}
+        />
+      </POSLayout>
+
+      {showBarcodeScanner && (
+        <BarcodeScanner
+          products={products}
+          onProductFound={handleBarcodeProductFound}
+          onClose={() => setShowBarcodeScanner(false)}
+        />
+      )}
+    </>
   );
 };
 

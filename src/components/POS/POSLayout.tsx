@@ -21,6 +21,7 @@ interface POSLayoutProps {
   onCashPayment: () => void;
   onCardPayment: () => void;
   onShop2ShopPayment: () => void;
+  onShowBarcodeScanner: () => void;
 }
 
 const POSLayout: React.FC<POSLayoutProps> = ({
@@ -39,6 +40,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   onCashPayment,
   onCardPayment,
   onShop2ShopPayment,
+  onShowBarcodeScanner,
 }) => {
   const isMobile = useIsMobile();
   
@@ -50,6 +52,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         onEndShift={onEndShift}
         onLogout={onLogout}
         options={[]}
+        onShowBarcodeScanner={onShowBarcodeScanner}
       />
       
       {children}
