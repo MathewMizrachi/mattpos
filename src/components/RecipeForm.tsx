@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -14,19 +15,6 @@ interface Ingredient {
   quantity: number;
   unit: string;
   costPerUnit: number;
-}
-
-interface Recipe {
-  id: number;
-  name: string;
-  description: string;
-  ingredients: Ingredient[];
-  instructions: string[];
-  prepTime: number;
-  cookTime: number;
-  servings: number;
-  totalCost: number;
-  isManualCost: boolean;
 }
 
 interface RecipeFormProps {
@@ -47,7 +35,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
     isManualCost: false,
   });
   
-  const [ingredients, setIngredients] = useState<Recipe['ingredients']>([
+  const [ingredients, setIngredients] = useState<Ingredient[]>([
     { id: 1, name: '', quantity: 0, unit: '', costPerUnit: 0 }
   ]);
   
@@ -107,7 +95,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
     setIngredients(prev => prev.filter(i => i.id !== id));
   };
   
-  const updateIngredient = (id: number, field: keyof Recipe['ingredients'][0], value: string | number) => {
+  const updateIngredient = (id: number, field: keyof Ingredient, value: string | number) => {
     setIngredients(prev => prev.map(i => 
       i.id === id ? { ...i, [field]: value } : i
     ));

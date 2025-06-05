@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -72,7 +73,7 @@ const Recipes = () => {
     }
     
     const totalCost = recipe.ingredients.reduce((sum, ingredient) => {
-      const ingredientCost = (ingredient.costPerUnit || 0) * ingredient.quantity;
+      const ingredientCost = ingredient.costPerUnit * ingredient.quantity;
       return sum + ingredientCost;
     }, 0);
     
@@ -234,11 +235,9 @@ const Recipes = () => {
                           {recipe.ingredients.slice(0, 3).map((ingredient) => (
                             <li key={ingredient.id}>
                               {ingredient.quantity} {ingredient.unit} {ingredient.name}
-                              {ingredient.costPerUnit && (
-                                <span className="text-[#FAA225] ml-1">
-                                  (R{(ingredient.costPerUnit * ingredient.quantity).toFixed(2)})
-                                </span>
-                              )}
+                              <span className="text-[#FAA225] ml-1">
+                                (R{(ingredient.costPerUnit * ingredient.quantity).toFixed(2)})
+                              </span>
                             </li>
                           ))}
                           {recipe.ingredients.length > 3 && (

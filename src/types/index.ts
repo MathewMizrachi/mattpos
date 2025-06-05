@@ -1,3 +1,4 @@
+
 export interface User {
   id: number;
   name: string;
@@ -88,7 +89,7 @@ export interface Recipe {
     name: string;
     quantity: number;
     unit: string;
-    costPerUnit?: number;
+    costPerUnit: number;
   }>;
   instructions: string[];
   prepTime: number;
