@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
-import { getProducts, addProduct as dbAddProduct, updateProduct as dbUpdateProduct, deleteProduct as dbDeleteProduct } from '@/lib/db';
+import db from '@/lib/db';
 import ProductForm from '@/components/ProductForm';
 import ProductImportModal from '@/components/ProductImportModal';
 import StockHeader from '@/components/Stock/StockHeader';
@@ -27,7 +27,7 @@ const Stock = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const dbProducts = await getProducts();
+        const dbProducts = db.getAllProducts();
         console.log('Loaded products from database:', dbProducts.length);
         setProducts(dbProducts);
       } catch (error) {
@@ -51,7 +51,7 @@ const Stock = () => {
   
   const handleAddProduct = async (data: any) => {
     try {
-      const newProduct = await dbAddProduct(data);
+      const newProduct = db.addProduct(data);
       setProducts(prev => [...prev, newProduct]);
       // Also add to context for POS
       addProduct(data);
@@ -72,14 +72,16 @@ const Stock = () => {
   const handleEditProduct = async (data: any) => {
     if (selectedProduct) {
       try {
-        await dbUpdateProduct(selectedProduct.id, data);
-        setProducts(prev => prev.map(p => p.id === selectedProduct.id ? { ...p, ...data } : p));
-        // Also update in context
-        updateProduct(selectedProduct.id, data);
-        toast({
-          title: "Till item updated",
-          description: `${data.name} has been updated.`,
-        });
+        const updatedProduct = db.updateProduct(selectedProduct.id, data);
+        if (updatedProduct) {
+          setProducts(prev => prev.map(p => p.id === selectedProduct.id ? updatedProduct : p));
+          // Also update in context
+          updateProduct(selectedProduct.id, data);
+          toast({
+            title: "Till item updated",
+            description: `${data.name} has been updated.`,
+          });
+        }
       } catch (error) {
         console.error('Error updating product:', error);
         toast({
@@ -94,15 +96,17 @@ const Stock = () => {
   const handleDeleteProduct = async () => {
     if (selectedProduct) {
       try {
-        await dbDeleteProduct(selectedProduct.id);
-        setProducts(prev => prev.filter(p => p.id !== selectedProduct.id));
-        // Also delete from context
-        deleteProduct(selectedProduct.id);
-        toast({
-          title: "Till item deleted",
-          description: `${selectedProduct.name} has been removed from your till stock.`,
-        });
-        setIsDeleteDialogOpen(false);
+        const success = db.deleteProduct(selectedProduct.id);
+        if (success) {
+          setProducts(prev => prev.filter(p => p.id !== selectedProduct.id));
+          // Also delete from context
+          deleteProduct(selectedProduct.id);
+          toast({
+            title: "Till item deleted",
+            description: `${selectedProduct.name} has been removed from your till stock.`,
+          });
+          setIsDeleteDialogOpen(false);
+        }
       } catch (error) {
         console.error('Error deleting product:', error);
         toast({
@@ -128,7 +132,7 @@ const Stock = () => {
     try {
       const addedProducts = [];
       for (const product of products) {
-        const newProduct = await dbAddProduct(product);
+        const newProduct = db.addProduct(product);
         addedProducts.push(newProduct);
         // Also add to context
         addProduct(product);
