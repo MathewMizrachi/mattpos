@@ -250,9 +250,19 @@ const PurchaseOrder = () => {
 
       <div className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="create">Create Order</TabsTrigger>
-            <TabsTrigger value="history">Order History</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-200">
+            <TabsTrigger 
+              value="create" 
+              className="bg-[#0A2645] text-[#FAA225] data-[state=active]:bg-[#FAA225] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90"
+            >
+              Create Order
+            </TabsTrigger>
+            <TabsTrigger 
+              value="history"
+              className="bg-[#0A2645] text-[#FAA225] data-[state=active]:bg-[#FAA225] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90"
+            >
+              Order History
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="create">
