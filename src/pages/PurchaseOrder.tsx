@@ -88,7 +88,7 @@ const PurchaseOrder = () => {
     } else {
       // Calculate cost price as 6%-20% lower than selling price
       const discountPercentage = 0.06 + (Math.random() * 0.14); // Random between 6% and 20%
-      const costPrice = (product as any).avgCostIncl ?? (product.price * (1 - discountPercentage));
+      const costPrice = product.price * (1 - discountPercentage);
       
       setCart([...cart, {
         id: product.id,
@@ -202,9 +202,9 @@ const PurchaseOrder = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => {
-              // Calculate display cost price for each product
+              // Calculate display cost price for each product (6-20% lower than selling price)
               const discountPercentage = 0.06 + (Math.random() * 0.14);
-              const displayCostPrice = (product as any).avgCostIncl ?? (product.price * (1 - discountPercentage));
+              const displayCostPrice = product.price * (1 - discountPercentage);
               
               return (
                 <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
