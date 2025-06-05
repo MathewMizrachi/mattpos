@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
   ShoppingCartIcon, 
@@ -28,90 +28,64 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
   onViewReports
 }) => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {hasActiveShift ? (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center">
-              <AlertCircleIcon className="h-4 w-4 mr-2 text-amber-500" />
-              Active Shift
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              You have an active shift. Resume your current shift.
-            </p>
-            <Button 
-              className="w-full" 
+        <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+          <CardContent className="p-6">
+            <Button
               onClick={onResumeShift}
-              style={{ backgroundColor: '#FAA225', color: 'black' }}
+              className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
             >
-              <ShoppingCartIcon className="h-4 w-4 mr-2" />
+              <AlertCircleIcon className="h-8 w-8" />
               Resume Shift
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Open Till</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Open the till to begin processing sales.
-            </p>
-            <Button 
-              className="w-full" 
+        <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+          <CardContent className="p-6">
+            <Button
               onClick={onStartShift}
-              style={{ backgroundColor: '#FAA225', color: 'black' }}
+              className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
             >
-              <ShoppingCartIcon className="h-4 w-4 mr-2" />
+              <ShoppingCartIcon className="h-8 w-8" />
               Open Till
             </Button>
           </CardContent>
         </Card>
       )}
       
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Manage Stock</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Add, edit, or remove products from your inventory.
-          </p>
-          <Button className="w-full" onClick={onManageStock}>
-            <PackageIcon className="h-4 w-4 mr-2" />
-            Manage Stock
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onManageStock}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <PackageIcon className="h-8 w-8" />
+            Till Stock
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Customers and Accounts</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            View and manage customer accounts.
-          </p>
-          <Button className="w-full" onClick={onManageCustomers}>
-            <UsersIcon className="h-4 w-4 mr-2" />
-            Customers
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onManageCustomers}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <UsersIcon className="h-8 w-8" />
+            Manage Customers
           </Button>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Reports</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            View sales, inventory, and financial reports.
-          </p>
-          <Button className="w-full" onClick={onViewReports}>
-            <ChartBarIcon className="h-4 w-4 mr-2" />
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onViewReports}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <ChartBarIcon className="h-8 w-8" />
             View Reports
           </Button>
         </CardContent>
