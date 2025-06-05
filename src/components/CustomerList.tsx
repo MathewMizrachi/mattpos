@@ -75,7 +75,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div className="flex items-center">
-            <Button onClick={onBack} variant="outline" className="mr-4 bg-[#0A2645] text-white border-[#0A2645] hover:bg-[#0A2645]/90">
+            <Button onClick={onBack} variant="outline" className="mr-4 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
@@ -107,12 +107,12 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           <Table>
             <TableHeader>
               <TableRow className="bg-[#0A2645]">
-                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Name</TableHead>
-                {!isMobile && <TableHead className="text-white font-bold">Phone</TableHead>}
-                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Total Purchases</TableHead>
-                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Owing</TableHead>
-                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Status</TableHead>
-                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Actions</TableHead>
+                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Name</TableHead>
+                {!isMobile && <TableHead className="text-[#FAA225] font-bold">Phone</TableHead>}
+                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Total Purchases</TableHead>
+                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Owing</TableHead>
+                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Status</TableHead>
+                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
