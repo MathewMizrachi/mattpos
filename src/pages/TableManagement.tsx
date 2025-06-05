@@ -92,7 +92,7 @@ const TableManagement = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white p-6 rounded-xl shadow-lg mb-8 border-l-4 border-[#FAA225]">
+        <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Button
@@ -104,15 +104,15 @@ const TableManagement = () => {
                 <ArrowLeftIcon className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-4xl font-bold text-[#0A2645] mb-1">Table Management</h1>
-                <p className="text-[#0A2645]/70 text-lg">Cook2Day Restaurant System</p>
+                <h1 className="text-3xl font-bold text-[#0A2645] mb-1">Table Management</h1>
+                <p className="text-[#0A2645]/70">Cook2Day Restaurant System</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tables Grid */}
-        <div className="grid gap-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-8">
+        <div className="grid gap-3 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 mb-6">
           {mockTables.map((table) => (
             <Card
               key={table.number}
@@ -123,14 +123,14 @@ const TableManagement = () => {
               }`}
               onClick={() => handleTableClick(table)}
             >
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-2 p-3">
                 <CardTitle className="text-center">
-                  <div className={`text-3xl font-bold mb-1 ${
+                  <div className={`text-xl font-bold mb-1 ${
                     table.isOccupied ? 'text-white' : 'text-[#0A2645]'
                   }`}>
                     Table {table.number}
                   </div>
-                  <div className={`text-sm font-medium ${
+                  <div className={`text-xs font-medium ${
                     table.isOccupied ? 'text-white/90' : 'text-[#0A2645]/60'
                   }`}>
                     {table.isOccupied ? 'Occupied' : 'Available'}
@@ -139,22 +139,22 @@ const TableManagement = () => {
               </CardHeader>
               
               {table.isOccupied && (
-                <CardContent className="pt-0">
-                  <div className="space-y-3">
-                    <div className="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
-                      <div className="flex items-center justify-between text-sm mb-2">
+                <CardContent className="pt-0 p-3">
+                  <div className="space-y-2">
+                    <div className="bg-white/20 rounded-lg p-2 backdrop-blur-sm">
+                      <div className="flex items-center justify-between text-xs mb-1">
                         <div className="flex items-center text-white">
-                          <DollarSignIcon className="h-4 w-4 mr-1" />
+                          <DollarSignIcon className="h-3 w-3 mr-1" />
                           <span className="font-medium">Bill:</span>
                         </div>
-                        <span className="font-bold text-white text-lg">
+                        <span className="font-bold text-white text-sm">
                           {formatCurrency(table.balance)}
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between text-sm mb-2">
+                      <div className="flex items-center justify-between text-xs mb-1">
                         <div className="flex items-center text-white">
-                          <UsersIcon className="h-4 w-4 mr-1" />
+                          <UsersIcon className="h-3 w-3 mr-1" />
                           <span className="font-medium">People:</span>
                         </div>
                         <span className="font-bold text-white">
@@ -162,9 +162,9 @@ const TableManagement = () => {
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center justify-between text-xs">
                         <div className="flex items-center text-white">
-                          <ClockIcon className="h-4 w-4 mr-1" />
+                          <ClockIcon className="h-3 w-3 mr-1" />
                           <span className="font-medium">Time:</span>
                         </div>
                         <span className="font-bold text-white">
@@ -174,7 +174,7 @@ const TableManagement = () => {
                     </div>
 
                     <div className="text-center">
-                      <span className="text-white/90 text-sm font-medium">
+                      <span className="text-white/90 text-xs font-medium">
                         {table.orders.length} items ordered
                       </span>
                     </div>
@@ -183,9 +183,9 @@ const TableManagement = () => {
               )}
               
               {!table.isOccupied && (
-                <CardContent className="pt-0 text-center">
-                  <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
-                    <div className="text-[#0A2645]/60 text-sm font-medium">Click to seat customers</div>
+                <CardContent className="pt-0 text-center p-3">
+                  <div className="bg-gray-50 rounded-lg p-2 border-2 border-dashed border-gray-300">
+                    <div className="text-[#0A2645]/60 text-xs font-medium">Click to seat customers</div>
                   </div>
                 </CardContent>
               )}
@@ -194,18 +194,18 @@ const TableManagement = () => {
         </div>
 
         {/* Summary Stats */}
-        <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
+        <div className="grid gap-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
           <Card className="bg-white border-l-4 border-[#FAA225] shadow-lg">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
                 <div className="bg-[#FAA225] p-2 rounded-lg mr-3">
-                  <UsersIcon className="h-5 w-5 text-white" />
+                  <UsersIcon className="h-4 w-4 text-white" />
                 </div>
                 Occupied Tables
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-[#FAA225] mb-1">
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-[#FAA225] mb-1">
                 {mockTables.filter(t => t.isOccupied).length}
               </div>
               <div className="text-sm text-[#0A2645]/70">
@@ -215,16 +215,16 @@ const TableManagement = () => {
           </Card>
 
           <Card className="bg-white border-l-4 border-green-500 shadow-lg">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
                 <div className="bg-green-500 p-2 rounded-lg mr-3">
-                  <DollarSignIcon className="h-5 w-5 text-white" />
+                  <DollarSignIcon className="h-4 w-4 text-white" />
                 </div>
                 Total Revenue
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-green-600 mb-1">
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-green-600 mb-1">
                 {formatCurrency(mockTables.reduce((sum, table) => sum + table.balance, 0))}
               </div>
               <div className="text-sm text-[#0A2645]/70">
@@ -234,16 +234,16 @@ const TableManagement = () => {
           </Card>
 
           <Card className="bg-white border-l-4 border-[#0A2645] shadow-lg">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
                 <div className="bg-[#0A2645] p-2 rounded-lg mr-3">
-                  <UsersIcon className="h-5 w-5 text-white" />
+                  <UsersIcon className="h-4 w-4 text-white" />
                 </div>
                 Total Customers
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-[#0A2645] mb-1">
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-[#0A2645] mb-1">
                 {mockTables.reduce((sum, table) => sum + table.peopleCount, 0)}
               </div>
               <div className="text-sm text-[#0A2645]/70">
