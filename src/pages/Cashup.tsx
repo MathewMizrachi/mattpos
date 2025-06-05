@@ -104,7 +104,7 @@ const Cashup = () => {
                 variant="outline"
                 size="icon"
                 onClick={handleBackToDashboard}
-                className="mr-4 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+                className="mr-4 bg-white border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
               >
                 <ArrowLeftIcon className="h-5 w-5" />
               </Button>
