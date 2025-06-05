@@ -95,7 +95,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1 text-white"
+          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90 font-bold uppercase"
           onClick={handlePriceButtonClick}
         >
           Price
