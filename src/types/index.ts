@@ -1,4 +1,3 @@
-
 export interface User {
   id: number;
   name: string;
@@ -78,4 +77,24 @@ export interface RefundBreakdown {
     quantity: number;
     amount: number;
   }[];
+}
+
+export interface Recipe {
+  id: number;
+  name: string;
+  description: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    quantity: number;
+    unit: string;
+    costPerUnit?: number;
+  }>;
+  instructions: string[];
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  totalCost?: number;
+  costPerServing?: number;
+  isManualCost?: boolean;
 }

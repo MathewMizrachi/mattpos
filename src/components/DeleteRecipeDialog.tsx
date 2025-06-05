@@ -10,22 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-
-interface Recipe {
-  id: number;
-  name: string;
-  description: string;
-  ingredients: Array<{
-    id: number;
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-  instructions: string[];
-  prepTime: number;
-  cookTime: number;
-  servings: number;
-}
+import { Recipe } from '@/types';
 
 interface DeleteRecipeDialogProps {
   isOpen: boolean;
