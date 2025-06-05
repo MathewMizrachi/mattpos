@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
+import { getProducts, addProduct as dbAddProduct, updateProduct as dbUpdateProduct, deleteProduct as dbDeleteProduct } from '@/lib/db';
 import ProductForm from '@/components/ProductForm';
 import ProductImportModal from '@/components/ProductImportModal';
 import StockHeader from '@/components/Stock/StockHeader';
@@ -10,7 +11,7 @@ import ProductTable from '@/components/Stock/ProductTable';
 import DeleteProductDialog from '@/components/Stock/DeleteProductDialog';
 
 const Stock = () => {
-  const { currentUser, products, addProduct, updateProduct, deleteProduct } = useApp();
+  const { currentUser, addProduct, updateProduct, deleteProduct } = useApp();
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,37 +20,97 @@ const Stock = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isImportProductOpen, setIsImportProductOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Load products from database on component mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const dbProducts = await getProducts();
+        console.log('Loaded products from database:', dbProducts.length);
+        setProducts(dbProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+        toast({
+          title: "Error loading products",
+          description: "Could not load products from database",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, [toast]);
   
   const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
-  const handleAddProduct = (data: any) => {
-    const newProduct = addProduct(data);
-    toast({
-      title: "Till item added",
-      description: `${data.name} has been added to your till stock.`,
-    });
-  };
-  
-  const handleEditProduct = (data: any) => {
-    if (selectedProduct) {
-      updateProduct(selectedProduct.id, data);
+  const handleAddProduct = async (data: any) => {
+    try {
+      const newProduct = await dbAddProduct(data);
+      setProducts(prev => [...prev, newProduct]);
+      // Also add to context for POS
+      addProduct(data);
       toast({
-        title: "Till item updated",
-        description: `${data.name} has been updated.`,
+        title: "Till item added",
+        description: `${data.name} has been added to your till stock.`,
+      });
+    } catch (error) {
+      console.error('Error adding product:', error);
+      toast({
+        title: "Error",
+        description: "Could not add product",
+        variant: "destructive"
       });
     }
   };
   
-  const handleDeleteProduct = () => {
+  const handleEditProduct = async (data: any) => {
     if (selectedProduct) {
-      deleteProduct(selectedProduct.id);
-      toast({
-        title: "Till item deleted",
-        description: `${selectedProduct.name} has been removed from your till stock.`,
-      });
-      setIsDeleteDialogOpen(false);
+      try {
+        await dbUpdateProduct(selectedProduct.id, data);
+        setProducts(prev => prev.map(p => p.id === selectedProduct.id ? { ...p, ...data } : p));
+        // Also update in context
+        updateProduct(selectedProduct.id, data);
+        toast({
+          title: "Till item updated",
+          description: `${data.name} has been updated.`,
+        });
+      } catch (error) {
+        console.error('Error updating product:', error);
+        toast({
+          title: "Error",
+          description: "Could not update product",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
+  const handleDeleteProduct = async () => {
+    if (selectedProduct) {
+      try {
+        await dbDeleteProduct(selectedProduct.id);
+        setProducts(prev => prev.filter(p => p.id !== selectedProduct.id));
+        // Also delete from context
+        deleteProduct(selectedProduct.id);
+        toast({
+          title: "Till item deleted",
+          description: `${selectedProduct.name} has been removed from your till stock.`,
+        });
+        setIsDeleteDialogOpen(false);
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        toast({
+          title: "Error",
+          description: "Could not delete product",
+          variant: "destructive"
+        });
+      }
     }
   };
   
@@ -63,14 +124,41 @@ const Stock = () => {
     setIsDeleteDialogOpen(true);
   };
   
-  const handleImportProducts = (products: any[]) => {
-    products.forEach(product => addProduct(product));
-    toast({
-      title: "Till items imported",
-      description: `${products.length} items have been imported to your till stock.`,
-    });
-    setIsImportProductOpen(false);
+  const handleImportProducts = async (products: any[]) => {
+    try {
+      const addedProducts = [];
+      for (const product of products) {
+        const newProduct = await dbAddProduct(product);
+        addedProducts.push(newProduct);
+        // Also add to context
+        addProduct(product);
+      }
+      setProducts(prev => [...prev, ...addedProducts]);
+      toast({
+        title: "Till items imported",
+        description: `${products.length} items have been imported to your till stock.`,
+      });
+      setIsImportProductOpen(false);
+    } catch (error) {
+      console.error('Error importing products:', error);
+      toast({
+        title: "Error",
+        description: "Could not import products",
+        variant: "destructive"
+      });
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading till stock...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
