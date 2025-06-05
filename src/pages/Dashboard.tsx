@@ -7,9 +7,10 @@ import FloatForm from '@/components/FloatForm';
 import EndShiftForm from '@/components/EndShiftForm';
 import DashboardHeader from '@/components/Dashboard/DashboardHeader';
 import DashboardActions from '@/components/Dashboard/DashboardActions';
+import RestaurantActions from '@/components/Dashboard/RestaurantActions';
 
 const Dashboard = () => {
-  const { currentUser, currentShift, logout, startShift } = useApp();
+  const { currentUser, currentShift, currentMode, logout, startShift } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -30,11 +31,28 @@ const Dashboard = () => {
   const handleResumeShift = () => {
     navigate('/pos');
   };
+
+  const handleTakeOrders = () => {
+    // For now, navigate to POS (will be updated later for restaurant-specific flow)
+    navigate('/pos');
+  };
+
+  const handleManageTables = () => {
+    // Placeholder for table management - for now show a toast
+    toast({
+      title: "Coming Soon",
+      description: "Table management feature is coming soon!",
+    });
+  };
   
   const handleFloatSubmit = (amount: number) => {
     if (currentUser) {
       startShift(currentUser.id, amount);
-      navigate('/pos');
+      if (currentMode === 'restaurant') {
+        handleTakeOrders();
+      } else {
+        navigate('/pos');
+      }
     }
   };
   
@@ -98,14 +116,24 @@ const Dashboard = () => {
           onLogout={handleLogout}
         />
         
-        <DashboardActions 
-          hasActiveShift={!!currentShift}
-          onStartShift={handleStartShift}
-          onResumeShift={handleResumeShift}
-          onManageStock={handleManageStock}
-          onManageCustomers={handleManageCustomers}
-          onViewReports={handleViewReports}
-        />
+        {currentMode === 'restaurant' ? (
+          <RestaurantActions 
+            onTakeOrders={handleTakeOrders}
+            onManageTables={handleManageTables}
+            onManageStock={handleManageStock}
+            onManageCustomers={handleManageCustomers}
+            onViewReports={handleViewReports}
+          />
+        ) : (
+          <DashboardActions 
+            hasActiveShift={!!currentShift}
+            onStartShift={handleStartShift}
+            onResumeShift={handleResumeShift}
+            onManageStock={handleManageStock}
+            onManageCustomers={handleManageCustomers}
+            onViewReports={handleViewReports}
+          />
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import PinPad from '@/components/PinPad';
 import { useApp } from '@/contexts/AppContext';
 
 const Login = () => {
-  const { login } = useApp();
+  const { login, currentMode, toggleMode } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -34,7 +34,14 @@ const Login = () => {
               alt="Till2Day Logo" 
               className="h-auto w-full object-contain mx-auto mb-6"
             />
-            <h1 className="text-6xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>Till2Day</h1>
+            <h1 
+              className="text-6xl font-bold text-center -ml-2 cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ color: '#FAA225' }}
+              onClick={toggleMode}
+              title={`Switch to ${currentMode === 'till' ? 'Cook2Day' : 'Till2Day'}`}
+            >
+              {currentMode === 'till' ? 'Till2Day' : 'Cook2Day'}
+            </h1>
           </div>
         </div>
         

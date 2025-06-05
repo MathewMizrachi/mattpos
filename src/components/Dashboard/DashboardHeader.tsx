@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { LogOutIcon } from 'lucide-react';
+import { useApp } from '@/contexts/AppContext';
 
 interface DashboardHeaderProps {
   userName: string;
@@ -9,6 +10,8 @@ interface DashboardHeaderProps {
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout }) => {
+  const { currentMode, toggleMode } = useApp();
+  
   return (
     <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
       <div className="flex items-center">
@@ -19,7 +22,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout })
             className="h-12 w-auto object-contain mr-3"
           />
           <div>
-            <h1 className="text-4xl font-bold text-primary">Till2Day</h1>
+            <h1 
+              className="text-4xl font-bold text-primary cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={toggleMode}
+              title={`Switch to ${currentMode === 'till' ? 'Cook2Day' : 'Till2Day'}`}
+            >
+              {currentMode === 'till' ? 'Till2Day' : 'Cook2Day'}
+            </h1>
             <p className="text-muted-foreground">Welcome, {userName}</p>
           </div>
         </div>
