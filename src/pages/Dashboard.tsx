@@ -33,11 +33,20 @@ const Dashboard = () => {
   };
 
   const handleTakeOrders = () => {
-    // In restaurant mode, if there's no active shift, start one first
-    if (!currentShift) {
-      setShowFloatForm(true);
-    } else {
+    // In restaurant mode, go directly to POS without float requirement
+    if (currentMode === 'restaurant') {
+      // Start shift with 0 float if no active shift
+      if (!currentShift && currentUser) {
+        startShift(currentUser.id, 0);
+      }
       navigate('/pos');
+    } else {
+      // In till mode, still require float
+      if (!currentShift) {
+        setShowFloatForm(true);
+      } else {
+        navigate('/pos');
+      }
     }
   };
 

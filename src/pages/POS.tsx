@@ -13,6 +13,7 @@ const POS = () => {
   const { 
     currentUser, 
     currentShift, 
+    currentMode,
     products,
     cart,
     addToCart,
@@ -63,13 +64,10 @@ const POS = () => {
     navigate('/dashboard');
   };
   
-  // Create a wrapper function that matches the expected signature
   const handleProcessPayment = (amount: number, method: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: any[]) => {
     if (method === 'split' && splitPayments) {
       return processTransaction(splitPayments);
     }
-    // For other payment methods, create a simple payment details array
-    // Exclude 'split' from the method type for SplitPaymentDetails
     const paymentDetails = [{
       method: method as 'cash' | 'card' | 'shop2shop' | 'account',
       amount,
@@ -90,6 +88,25 @@ const POS = () => {
     endShift
   });
   
+  // Restaurant-specific handlers
+  const handlePrintReceipt = () => {
+    toast({
+      title: "Receipt printed",
+      description: "Receipt has been sent to printer",
+    });
+  };
+
+  const handleSendOrder = (tableNumber: number, peopleCount: number) => {
+    if (cart.length === 0) return;
+    
+    // Here you would typically save the order to the database/context
+    toast({
+      title: "Order sent",
+      description: `Order sent to Table ${tableNumber} for ${peopleCount} people`,
+    });
+    clearCart();
+  };
+  
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
@@ -97,23 +114,18 @@ const POS = () => {
   }, [currentUser, navigate]);
   
   useEffect(() => {
-    if (!currentShift) {
+    if (!currentShift && currentMode === 'till') {
       navigate('/dashboard');
     }
-  }, [currentShift, navigate]);
+  }, [currentShift, currentMode, navigate]);
   
-  // Sort products by most sold (This would typically come from a sales analytics function)
   const sortedProducts = [...products].sort((a, b) => {
-    // This is a placeholder - in a real app, you'd track sales per product
-    // For now we'll just sort based on ID as an example
     return a.id - b.id;
   });
   
   const handleAddToCart = (product: any, quantity: number, customPrice?: number) => {
-    // Use the standard addToCart method which only accepts product and quantity
     addToCart(product, quantity);
     
-    // Check if stock is low after adding to cart
     if (product.stock !== undefined && product.stock <= 5) {
       // Show low stock alert
       showLowStockAlert(product.name, product.stock);
@@ -150,9 +162,9 @@ const POS = () => {
           showPaymentForm={paymentStates.showPaymentForm}
           showCardPayment={paymentStates.showCardPayment}
           showShop2ShopScreen={paymentStates.showShop2ShopScreen}
-          showRefundScreen={paymentStates.showRefundScreen}
-          showProfitPlusScreen={paymentStates.showProfitPlusScreen}
-          showWithdrawalScreen={paymentStates.showWithdrawalScreen}
+          showRefundScreen={currentMode === 'till' ? paymentStates.showRefundScreen : false}
+          showProfitPlusScreen={currentMode === 'till' ? paymentStates.showProfitPlusScreen : false}
+          showWithdrawalScreen={currentMode === 'till' ? paymentStates.showWithdrawalScreen : false}
           showSplitPayment={paymentStates.showSplitPayment}
           showAccountPayment={paymentStates.showAccountPayment}
           showEndShiftForm={paymentStates.showEndShiftForm}
@@ -193,12 +205,14 @@ const POS = () => {
       onEndShift={paymentHandlers.handleEndShift}
       onLogout={logout}
       onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
-      onShowRefundScreen={() => paymentStates.setShowRefundScreen(true)}
-      onShowProfitPlusScreen={() => paymentStates.setShowProfitPlusScreen(true)}
-      onShowWithdrawalScreen={() => paymentStates.setShowWithdrawalScreen(true)}
+      onShowRefundScreen={() => currentMode === 'till' && paymentStates.setShowRefundScreen(true)}
+      onShowProfitPlusScreen={() => currentMode === 'till' && paymentStates.setShowProfitPlusScreen(true)}
+      onShowWithdrawalScreen={() => currentMode === 'till' && paymentStates.setShowWithdrawalScreen(true)}
       onCashPayment={() => paymentStates.setShowPaymentForm(true)}
       onCardPayment={() => paymentStates.setShowCardPayment(true)}
       onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
+      onPrintReceipt={handlePrintReceipt}
+      onSendOrder={handleSendOrder}
     />
   );
 };

@@ -28,6 +28,8 @@ interface POSMainProps {
   onCashPayment: () => void;
   onCardPayment: () => void;
   onShop2ShopPayment: () => void;
+  onPrintReceipt?: () => void;
+  onSendOrder?: (tableNumber: number, peopleCount: number) => void;
 }
 
 const POSMain: React.FC<POSMainProps> = ({
@@ -53,6 +55,8 @@ const POSMain: React.FC<POSMainProps> = ({
   onCashPayment,
   onCardPayment,
   onShop2ShopPayment,
+  onPrintReceipt,
+  onSendOrder,
 }) => {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
@@ -79,6 +83,8 @@ const POSMain: React.FC<POSMainProps> = ({
         onCardPayment={onCardPayment}
         onShop2ShopPayment={onShop2ShopPayment}
         onShowBarcodeScanner={() => setShowBarcodeScanner(true)}
+        onPrintReceipt={onPrintReceipt}
+        onSendOrder={onSendOrder}
       >
         <POSContent
           products={products}
