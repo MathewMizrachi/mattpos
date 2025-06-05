@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon } from 'lucide-react';
+import { ArrowLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon, ShoppingCartIcon } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   DropdownMenu,
@@ -26,6 +26,10 @@ const StockHeader: React.FC<StockHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  const handlePurchaseOrder = () => {
+    navigate('/purchase-order');
+  };
 
   return (
     <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
@@ -57,6 +61,10 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                 <PackageIcon className="h-4 w-4 mr-2" />
                 Global Stock Master
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={handlePurchaseOrder}>
+                <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                Purchase Order
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={onOpenImportProduct}>
                 <ImportIcon className="h-4 w-4 mr-2" />
                 Import Products
@@ -77,6 +85,13 @@ const StockHeader: React.FC<StockHeaderProps> = ({
             >
               <PackageIcon className="h-4 w-4 mr-2" />
               Global Stock Master
+            </Button>
+            <Button 
+              onClick={handlePurchaseOrder} 
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <ShoppingCartIcon className="h-4 w-4 mr-2" />
+              Purchase Order
             </Button>
             <Button 
               onClick={onOpenImportProduct} 
