@@ -28,13 +28,13 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#0A2645]">
       <div className="w-full max-w-md p-8 bg-[#0A2645] rounded-lg shadow-lg">
         <div className="text-center mb-4">
-          <div className="max-w-[150px] mx-auto">
+          <div className="max-w-[200px] mx-auto">
             <img 
               src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
               alt="Till2Day Logo" 
-              className="h-auto w-full object-contain mx-auto mb-4"
+              className="h-auto w-full object-contain mx-auto mb-6"
             />
-            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>Till2Day</h1>
+            <h1 className="text-6xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>Till2Day</h1>
           </div>
         </div>
         

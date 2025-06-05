@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -51,10 +52,11 @@ const PinPad: React.FC<PinPadProps> = ({
             <div 
               key={i} 
               className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                i < pin.length ? 'bg-primary border-primary' : 'border-gray-300'
+                i < pin.length 
+                  ? 'bg-[#FAA225] border-[#FAA225]' 
+                  : 'border-gray-300 bg-transparent'
               }`}
             >
-              {i < pin.length && '•'}
             </div>
           ))}
         </div>
