@@ -25,44 +25,48 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
   isMobile
 }) => {
   return (
-    <div className={`fixed bottom-0 right-0 ${isMobile ? 'w-full' : 'w-96'} px-6 py-4 flex items-center justify-between z-20`} 
-      style={{ backgroundColor: '#FAA225', height: '4.5rem' }}
+    <div className={`fixed bottom-0 right-0 ${isMobile ? 'w-full' : 'w-96'} px-6 py-4 z-20`} 
+      style={{ backgroundColor: '#FAA225' }}
     >
-      <span className="text-2xl font-bold">{formatCurrency(total)}</span>
-      
-      <div className="flex space-x-3">
-        {cartLength > 0 && (
+      <div className="space-y-3">
+        {/* Total */}
+        <div className="text-center">
+          <span className="text-2xl font-bold">{formatCurrency(total)}</span>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="flex justify-center space-x-3">
+          {cartLength > 0 && (
+            <Button 
+              variant="outline" 
+              onClick={onClearCart}
+              style={{ 
+                backgroundColor: 'white', 
+                color: 'black', 
+                fontSize: '1rem', 
+                fontWeight: 'bold',
+                border: '2px solid #FAA225',
+                height: '2.75rem',
+                padding: '0 1rem'
+              }}
+            >
+              Clear
+            </Button>
+          )}
           <Button 
-            variant="outline" 
-            className="flex-1"
-            onClick={onClearCart}
+            size="lg"
+            disabled={cartLength === 0}
+            onClick={onShowPaymentForm}
             style={{ 
-              backgroundColor: 'white', 
-              color: 'black', 
-              fontSize: '1rem', 
-              fontWeight: 'bold',
-              border: '2px solid #FAA225',
               height: '2.75rem',
+              fontSize: '1rem',
+              fontWeight: 'bold',
               padding: '0 1rem'
             }}
           >
-            Clear
+            Pay
           </Button>
-        )}
-        <Button 
-          className="flex-1"
-          size="lg"
-          disabled={cartLength === 0}
-          onClick={onShowPaymentForm}
-          style={{ 
-            height: '2.75rem',
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            padding: '0 1rem'
-          }}
-        >
-          Pay
-        </Button>
+        </div>
       </div>
     </div>
   );

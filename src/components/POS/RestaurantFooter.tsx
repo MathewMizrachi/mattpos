@@ -34,52 +34,52 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
       style={{ backgroundColor: '#FAA225' }}
     >
       <div className="space-y-3">
-        {/* Total and Actions */}
-        <div className="flex items-center justify-between">
+        {/* Total */}
+        <div className="text-center">
           <span className="text-2xl font-bold text-[#0A2645]">{formatCurrency(total)}</span>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="flex justify-center space-x-2">
+          {cartLength > 0 && (
+            <Button 
+              size="sm"
+              onClick={onClearCart}
+              className="bg-white text-[#0A2645] border-[#0A2645] hover:bg-gray-100"
+            >
+              Clear
+            </Button>
+          )}
           
-          <div className="flex space-x-2">
-            {cartLength > 0 && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={onClearCart}
-                className="bg-white text-[#0A2645] border-[#0A2645] hover:bg-gray-100"
-              >
-                Clear
-              </Button>
-            )}
-            
-            <Button 
-              size="sm"
-              disabled={cartLength === 0}
-              onClick={onPrintReceipt}
-              className="bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
-            >
-              <Printer className="h-4 w-4 mr-1" />
-              Print
-            </Button>
-            
-            <Button 
-              size="sm"
-              disabled={cartLength === 0}
-              onClick={onPayment}
-              className="bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
-            >
-              <CreditCard className="h-4 w-4 mr-1" />
-              Pay
-            </Button>
-            
-            <Button 
-              size="sm"
-              disabled={cartLength === 0}
-              onClick={handleSendOrder}
-              className="bg-green-600 text-white hover:bg-green-700"
-            >
-              <Send className="h-4 w-4 mr-1" />
-              Send
-            </Button>
-          </div>
+          <Button 
+            size="sm"
+            disabled={cartLength === 0}
+            onClick={onPrintReceipt}
+            className="bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
+          >
+            <Printer className="h-4 w-4 mr-1" />
+            Print
+          </Button>
+          
+          <Button 
+            size="sm"
+            disabled={cartLength === 0}
+            onClick={onPayment}
+            className="bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
+          >
+            <CreditCard className="h-4 w-4 mr-1" />
+            Pay
+          </Button>
+          
+          <Button 
+            size="sm"
+            disabled={cartLength === 0}
+            onClick={handleSendOrder}
+            className="bg-green-600 text-white hover:bg-green-700"
+          >
+            <Send className="h-4 w-4 mr-1" />
+            Send
+          </Button>
         </div>
       </div>
     </div>
