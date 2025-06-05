@@ -105,16 +105,16 @@ export const ProfitPlusTab: React.FC<ProfitPlusTabProps> = ({
       {/* Search and Sort Controls for Products */}
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#0A2645] h-4 w-4" />
           <Input
-            className="pl-10"
+            className="pl-10 bg-[#FAA225] text-[#0A2645] placeholder:text-[#0A2645] border-[#0A2645]"
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px] bg-[#FAA225] text-[#0A2645] border-[#0A2645]">
             <SelectValue placeholder="Sort by..." />
           </SelectTrigger>
           <SelectContent>

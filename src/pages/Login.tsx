@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -30,10 +31,10 @@ const Login = () => {
           <div className="max-w-[150px] mx-auto">
             <img 
               src="/lovable-uploads/b6cede87-26cc-4d43-b178-f4555df34f1e.png" 
-              alt="MiniPOS Logo" 
+              alt="Till2Day Logo" 
               className="h-auto w-full object-contain mx-auto mb-4"
             />
-            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>MiniPOS</h1>
+            <h1 className="text-5xl font-bold text-center -ml-2" style={{ color: '#FAA225' }}>Till2Day</h1>
           </div>
         </div>
         
