@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import ProductForm from '@/components/ProductForm';
 import ProductImportModal from '@/components/ProductImportModal';

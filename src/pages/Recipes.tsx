@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeftIcon, PlusIcon, EditIcon, TrashIcon, ChefHatIcon } from 'lucide-react';
+import { ArrowLeftIcon, PlusIcon, EditIcon, TrashIcon, ChefHatIcon } from 'lucide-react';
 import RecipeForm from '@/components/RecipeForm';
 import DeleteRecipeDialog from '@/components/DeleteRecipeDialog';
 
@@ -121,15 +121,15 @@ const Recipes = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225]">
+      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
         <div className="flex items-center space-x-2">
           <Button 
             variant="ghost" 
             size="icon"
             onClick={() => navigate('/dashboard')}
-            className="text-[#0A2645]"
+            className="text-[#0A2645] hover:bg-[#0A2645]/10"
           >
-            <ChevronLeftIcon className="h-5 w-5" />
+            <ArrowLeftIcon className="h-5 w-5" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-[#0A2645]">Recipes</h1>

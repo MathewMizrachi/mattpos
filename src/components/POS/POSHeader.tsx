@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, Scan, HomeIcon } from 'lucide-react';
+import { LogOut, Scan, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ const POSHeader: React.FC<POSHeaderProps> = ({
           onClick={() => navigate('/dashboard')}
           className="text-white border-white hover:bg-white/20"
         >
-          <HomeIcon className="h-4 w-4 mr-1" />
+          <ArrowLeft className="h-4 w-4 mr-1" />
           Dashboard
         </Button>
         

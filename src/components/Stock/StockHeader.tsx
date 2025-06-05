@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon } from 'lucide-react';
+import { ArrowLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   DropdownMenu,
@@ -28,18 +28,19 @@ const StockHeader: React.FC<StockHeaderProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <header className="bg-white p-4 shadow-sm flex justify-between items-center">
+    <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
       <div className="flex items-center space-x-2">
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => navigate('/dashboard')}
+          className="text-[#0A2645] hover:bg-[#0A2645]/10"
         >
-          <ChevronLeftIcon className="h-5 w-5" />
+          <ArrowLeftIcon className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-primary">{title}</h1>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <h1 className="text-2xl font-bold text-[#0A2645]">{title}</h1>
+          <p className="text-sm text-[#0A2645]/70">{description}</p>
         </div>
       </div>
       <div className="flex space-x-2">

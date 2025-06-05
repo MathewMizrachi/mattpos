@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -89,27 +88,25 @@ const TableManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleBackToDashboard}
-                className="mr-4 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
-              >
-                <ArrowLeftIcon className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-3xl font-bold text-[#0A2645] mb-1">Table Management</h1>
-                <p className="text-[#0A2645]/70">Cook2Day Restaurant System</p>
-              </div>
+        <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg mb-6">
+          <div className="flex items-center space-x-2">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={handleBackToDashboard}
+              className="text-[#0A2645] hover:bg-[#0A2645]/10"
+            >
+              <ArrowLeftIcon className="h-5 w-5" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-[#0A2645]">Table Management</h1>
+              <p className="text-sm text-[#0A2645]/70">Cook2Day Restaurant System</p>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Tables Grid */}
         <div className="grid gap-3 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 mb-6">
