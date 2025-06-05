@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -8,6 +9,7 @@ import { usePOSState } from './POS/usePOSState';
 import { usePaymentStates } from './POS/usePaymentStates';
 import { usePaymentHandlers } from './POS/usePaymentHandlers';
 import PaymentOptions from '@/components/PaymentOptions';
+import db from '@/lib/db';
 
 // Restaurant stock items for restaurant mode
 const restaurantProducts = [
@@ -30,7 +32,6 @@ const POS = () => {
     currentUser, 
     currentShift, 
     currentMode,
-    products,
     cart,
     addToCart,
     updateCartQuantity,
@@ -48,6 +49,21 @@ const POS = () => {
   
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Load database products for till mode
+  const [databaseProducts, setDatabaseProducts] = React.useState<any[]>([]);
+  
+  React.useEffect(() => {
+    if (currentMode === 'till') {
+      try {
+        const dbProducts = db.getAllProducts();
+        setDatabaseProducts(dbProducts);
+        console.log('Loaded database products for POS:', dbProducts.length);
+      } catch (error) {
+        console.error('Error loading database products:', error);
+      }
+    }
+  }, [currentMode]);
   
   const {
     searchTerm,
@@ -135,8 +151,8 @@ const POS = () => {
     }
   }, [currentShift, currentMode, navigate]);
   
-  // Use restaurant products in restaurant mode, till products in till mode
-  const activeProducts = currentMode === 'restaurant' ? restaurantProducts : products;
+  // Use restaurant products in restaurant mode, database products in till mode
+  const activeProducts = currentMode === 'restaurant' ? restaurantProducts : databaseProducts;
   
   const sortedProducts = [...activeProducts].sort((a, b) => {
     return a.id - b.id;
