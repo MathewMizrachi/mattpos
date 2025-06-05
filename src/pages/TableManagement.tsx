@@ -46,7 +46,8 @@ const TableManagement = () => {
       navigate('/pos', { 
         state: { 
           selectedTable: table.number, 
-          peopleCount: 0 
+          peopleCount: 0,
+          isNewOrder: true
         } 
       });
     }
@@ -57,7 +58,9 @@ const TableManagement = () => {
     navigate('/pos', { 
       state: { 
         selectedTable: selectedTable.number, 
-        peopleCount: selectedTable.peopleCount 
+        peopleCount: selectedTable.peopleCount,
+        isAddingToOrder: true,
+        existingOrders: selectedTable.orders
       } 
     });
   };

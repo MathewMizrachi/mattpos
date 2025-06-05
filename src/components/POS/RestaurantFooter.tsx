@@ -10,8 +10,15 @@ interface RestaurantFooterProps {
   onClearCart: () => void;
   onPrintReceipt: () => void;
   onPayment: () => void;
-  onSendOrder: (tableNumber: number, peopleCount: number) => void;
+  onSendOrder: () => void;
   isMobile: boolean;
+  tableInfo?: {
+    selectedTable?: number;
+    peopleCount?: number;
+    isNewOrder?: boolean;
+    isAddingToOrder?: boolean;
+    existingOrders?: any[];
+  } | null;
 }
 
 const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
@@ -21,12 +28,21 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
   onPrintReceipt,
   onPayment,
   onSendOrder,
-  isMobile
+  isMobile,
+  tableInfo
 }) => {
-  const handleSendOrder = () => {
-    // For now, we'll use default values since table selection happens in the popup
-    // This could be enhanced to store the selected table info in context
-    onSendOrder(1, 1);
+  const getButtonText = () => {
+    if (tableInfo?.isAddingToOrder) {
+      return 'Add to Order';
+    }
+    return 'Send';
+  };
+
+  const getTableDisplay = () => {
+    if (tableInfo?.selectedTable) {
+      return `Table ${tableInfo.selectedTable}`;
+    }
+    return 'Order';
   };
 
   return (
@@ -34,9 +50,14 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
       style={{ backgroundColor: '#FAA225' }}
     >
       <div className="space-y-3">
-        {/* Total */}
-        <div className="text-center">
-          <span className="text-2xl font-bold text-[#0A2645]">{formatCurrency(total)}</span>
+        {/* Table Info and Total */}
+        <div className="text-center space-y-1">
+          {tableInfo?.selectedTable && (
+            <div className="text-sm font-medium text-[#0A2645]">
+              {getTableDisplay()} {tableInfo.peopleCount && `(${tableInfo.peopleCount} people)`}
+            </div>
+          )}
+          <div className="text-2xl font-bold text-[#0A2645]">{formatCurrency(total)}</div>
         </div>
         
         {/* Action Buttons */}
@@ -74,11 +95,11 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
           <Button 
             size="sm"
             disabled={cartLength === 0}
-            onClick={handleSendOrder}
+            onClick={onSendOrder}
             className="bg-green-600 text-white hover:bg-green-700"
           >
             <Send className="h-4 w-4 mr-1" />
-            Send
+            {getButtonText()}
           </Button>
         </div>
       </div>

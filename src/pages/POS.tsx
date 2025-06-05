@@ -1,6 +1,5 @@
-
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { useToast, showLowStockAlert } from '@/hooks/use-toast';
 import POSScreenManager from './POS/POSScreenManager';
@@ -48,11 +47,21 @@ const POS = () => {
   } = useApp();
   
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   
   // Load database products for till mode
   const [databaseProducts, setDatabaseProducts] = React.useState<any[]>([]);
   
+  // Get table information from navigation state
+  const tableInfo = location.state as {
+    selectedTable?: number;
+    peopleCount?: number;
+    isNewOrder?: boolean;
+    isAddingToOrder?: boolean;
+    existingOrders?: any[];
+  } | null;
+
   React.useEffect(() => {
     if (currentMode === 'till') {
       try {
@@ -131,12 +140,18 @@ const POS = () => {
   const handleSendOrder = (tableNumber: number, peopleCount: number) => {
     if (cart.length === 0) return;
     
-    // Here you would typically save the order to the database/context
+    const orderType = tableInfo?.isAddingToOrder ? "Additional items" : "Order";
+    const actionType = tableInfo?.isAddingToOrder ? "added to" : "sent to";
+    
     toast({
-      title: "Order sent",
-      description: `Order sent to Table ${tableNumber} for ${peopleCount} people`,
+      title: `${orderType} sent to kitchen`,
+      description: `${orderType} ${actionType} Table ${tableNumber} for ${peopleCount} people`,
     });
+    
     clearCart();
+    
+    // Navigate back to table management after sending order
+    navigate('/tables');
   };
   
   useEffect(() => {
@@ -248,6 +263,7 @@ const POS = () => {
       onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
       onPrintReceipt={handlePrintReceipt}
       onSendOrder={handleSendOrder}
+      tableInfo={tableInfo}
     />
   );
 };

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product } from '@/types';
 import POSLayout from '@/components/POS/POSLayout';
 import POSContent from '@/components/POS/POSContent';
@@ -30,6 +30,13 @@ interface POSMainProps {
   onShop2ShopPayment: () => void;
   onPrintReceipt?: () => void;
   onSendOrder?: (tableNumber: number, peopleCount: number) => void;
+  tableInfo?: {
+    selectedTable?: number;
+    peopleCount?: number;
+    isNewOrder?: boolean;
+    isAddingToOrder?: boolean;
+    existingOrders?: any[];
+  } | null;
 }
 
 const POSMain: React.FC<POSMainProps> = ({
@@ -57,12 +64,23 @@ const POSMain: React.FC<POSMainProps> = ({
   onShop2ShopPayment,
   onPrintReceipt,
   onSendOrder,
+  tableInfo,
 }) => {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
   const handleBarcodeProductFound = (product: Product) => {
     onAddToCart(product, 1);
     setShowBarcodeScanner(false);
+  };
+
+  // Enhanced send order handler to use table info
+  const handleSendOrder = () => {
+    if (tableInfo?.selectedTable && tableInfo?.peopleCount !== undefined) {
+      onSendOrder?.(tableInfo.selectedTable, tableInfo.peopleCount);
+    } else {
+      // Fallback to default values
+      onSendOrder?.(1, 1);
+    }
   };
 
   return (
@@ -84,7 +102,8 @@ const POSMain: React.FC<POSMainProps> = ({
         onShop2ShopPayment={onShop2ShopPayment}
         onShowBarcodeScanner={() => setShowBarcodeScanner(true)}
         onPrintReceipt={onPrintReceipt}
-        onSendOrder={onSendOrder}
+        onSendOrder={handleSendOrder}
+        tableInfo={tableInfo}
       >
         <POSContent
           products={products}
@@ -96,6 +115,7 @@ const POSMain: React.FC<POSMainProps> = ({
           onRemoveFromCart={onRemoveFromCart}
           cartExpanded={cartExpanded}
           toggleCartExpand={toggleCartExpand}
+          tableInfo={tableInfo}
         />
       </POSLayout>
 
