@@ -6,6 +6,7 @@ import { formatCurrency } from '@/lib/utils';
 import POSLayout from '@/components/POS/POSLayout';
 import POSContent from '@/components/POS/POSContent';
 import BarcodeScanner from '@/components/POS/BarcodeScanner';
+import db from '@/lib/db';
 
 interface RefundPOSProps {
   onProcessRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => void;
@@ -16,12 +17,25 @@ const RefundPOS: React.FC<RefundPOSProps> = ({
   onProcessRefund,
   onCancel
 }) => {
-  const { currentUser, currentShift, products } = useApp();
+  const { currentUser, currentShift } = useApp();
   const [cart, setCart] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [cartExpanded, setCartExpanded] = useState(false);
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [refundMethod, setRefundMethod] = useState<'cash' | 'shop2shop'>('cash');
+  
+  // Load database products for refunds
+  const [products, setProducts] = useState<Product[]>([]);
+  
+  React.useEffect(() => {
+    try {
+      const dbProducts = db.getAllProducts();
+      setProducts(dbProducts);
+      console.log('Loaded database products for refunds:', dbProducts.length);
+    } catch (error) {
+      console.error('Error loading database products for refunds:', error);
+    }
+  }, []);
 
   const addToCart = (product: Product, quantity: number = 1, customPrice?: number) => {
     const price = customPrice || product.price;
