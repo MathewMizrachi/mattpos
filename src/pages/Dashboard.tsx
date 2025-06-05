@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -8,6 +7,7 @@ import EndShiftForm from '@/components/EndShiftForm';
 import DashboardHeader from '@/components/Dashboard/DashboardHeader';
 import DashboardActions from '@/components/Dashboard/DashboardActions';
 import RestaurantActions from '@/components/Dashboard/RestaurantActions';
+import TableSelectionDialog from '@/components/TableSelectionDialog';
 
 const Dashboard = () => {
   const { currentUser, currentShift, currentMode, logout, startShift } = useApp();
@@ -16,6 +16,7 @@ const Dashboard = () => {
   
   const [showFloatForm, setShowFloatForm] = useState(false);
   const [showEndShiftForm, setShowEndShiftForm] = useState(false);
+  const [showTableDialog, setShowTableDialog] = useState(false);
   const [expectedCashAmount, setExpectedCashAmount] = useState(0);
 
   useEffect(() => {
@@ -33,21 +34,24 @@ const Dashboard = () => {
   };
 
   const handleTakeOrders = () => {
-    // In restaurant mode, go directly to POS without float requirement
-    if (currentMode === 'restaurant') {
-      // Start shift with 0 float if no active shift
-      if (!currentShift && currentUser) {
-        startShift(currentUser.id, 0);
-      }
-      navigate('/pos');
-    } else {
-      // In till mode, still require float
-      if (!currentShift) {
-        setShowFloatForm(true);
-      } else {
-        navigate('/pos');
-      }
+    setShowTableDialog(true);
+  };
+
+  const handleTableSelection = (tableNumber: number, peopleCount: number) => {
+    // Start shift with 0 float if no active shift in restaurant mode
+    if (!currentShift && currentUser) {
+      startShift(currentUser.id, 0);
     }
+    
+    setShowTableDialog(false);
+    
+    // Navigate to POS with table info (could be passed as state or stored in context)
+    navigate('/pos', { 
+      state: { 
+        selectedTable: tableNumber, 
+        peopleCount: peopleCount 
+      } 
+    });
   };
 
   const handleManageTables = () => {
@@ -144,6 +148,12 @@ const Dashboard = () => {
           />
         )}
       </div>
+      
+      <TableSelectionDialog
+        open={showTableDialog}
+        onOpenChange={setShowTableDialog}
+        onConfirm={handleTableSelection}
+      />
     </div>
   );
 };
