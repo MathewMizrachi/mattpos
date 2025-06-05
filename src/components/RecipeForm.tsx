@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { PlusIcon, TrashIcon } from 'lucide-react';
+import { PlusIcon, XIcon } from 'lucide-react';
 
 interface Ingredient {
   id: number;
@@ -124,179 +124,183 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-[#0A2645]">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
+        <DialogHeader className="pb-4 border-b border-gray-100">
+          <DialogTitle className="text-xl font-semibold text-gray-900">
             {recipe ? 'Edit Recipe' : 'Add New Recipe'}
           </DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-8 pt-4">
+          {/* Basic Information */}
+          <div className="space-y-4">
             <div>
-              <Label htmlFor="name" className="text-[#0A2645]">Recipe Name</Label>
+              <Label htmlFor="name" className="text-sm font-medium text-gray-700 mb-2 block">
+                Recipe Name
+              </Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="border-[#0A2645]/20 focus:border-[#FAA225]"
+                className="w-full"
+                placeholder="Enter recipe name"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="servings" className="text-[#0A2645]">Servings</Label>
-              <Input
-                id="servings"
-                type="number"
-                min="1"
-                value={formData.servings}
-                onChange={(e) => setFormData(prev => ({ ...prev, servings: parseInt(e.target.value) || 1 }))}
-                className="border-[#0A2645]/20 focus:border-[#FAA225]"
-                required
+              <Label htmlFor="description" className="text-sm font-medium text-gray-700 mb-2 block">
+                Description
+              </Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Brief description of the recipe"
+                rows={2}
               />
             </div>
           </div>
-          
-          <div>
-            <Label htmlFor="description" className="text-[#0A2645]">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="border-[#0A2645]/20 focus:border-[#FAA225]"
-              rows={3}
-            />
-          </div>
-          
-          {/* Timing */}
-          <div className="grid grid-cols-2 gap-4">
+
+          {/* Timing and Servings */}
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="prepTime" className="text-[#0A2645]">Prep Time (minutes)</Label>
+              <Label htmlFor="prepTime" className="text-sm font-medium text-gray-700 mb-2 block">
+                Prep (min)
+              </Label>
               <Input
                 id="prepTime"
                 type="number"
                 min="0"
                 value={formData.prepTime}
                 onChange={(e) => setFormData(prev => ({ ...prev, prepTime: parseInt(e.target.value) || 0 }))}
-                className="border-[#0A2645]/20 focus:border-[#FAA225]"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="cookTime" className="text-[#0A2645]">Cook Time (minutes)</Label>
+              <Label htmlFor="cookTime" className="text-sm font-medium text-gray-700 mb-2 block">
+                Cook (min)
+              </Label>
               <Input
                 id="cookTime"
                 type="number"
                 min="0"
                 value={formData.cookTime}
                 onChange={(e) => setFormData(prev => ({ ...prev, cookTime: parseInt(e.target.value) || 0 }))}
-                className="border-[#0A2645]/20 focus:border-[#FAA225]"
+                required
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="servings" className="text-sm font-medium text-gray-700 mb-2 block">
+                Servings
+              </Label>
+              <Input
+                id="servings"
+                type="number"
+                min="1"
+                value={formData.servings}
+                onChange={(e) => setFormData(prev => ({ ...prev, servings: parseInt(e.target.value) || 1 }))}
                 required
               />
             </div>
           </div>
           
           {/* Ingredients */}
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <Label className="text-[#0A2645] text-lg font-semibold">Ingredients</Label>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-700">Ingredients</Label>
               <Button
                 type="button"
                 onClick={addIngredient}
-                className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+                variant="outline"
                 size="sm"
+                className="text-xs"
               >
-                <PlusIcon className="h-4 w-4 mr-2" />
-                Add Ingredient
+                <PlusIcon className="h-3 w-3 mr-1" />
+                Add
               </Button>
             </div>
             
-            <div className="space-y-3">
-              {ingredients.map((ingredient, index) => (
-                <div key={ingredient.id} className="grid grid-cols-12 gap-2 items-center">
-                  <div className="col-span-5">
-                    <Input
-                      placeholder="Ingredient name"
-                      value={ingredient.name}
-                      onChange={(e) => updateIngredient(ingredient.id, 'name', e.target.value)}
-                      className="border-[#0A2645]/20 focus:border-[#FAA225]"
-                    />
-                  </div>
-                  <div className="col-span-3">
-                    <Input
-                      type="number"
-                      placeholder="Qty"
-                      min="0"
-                      step="0.1"
-                      value={ingredient.quantity || ''}
-                      onChange={(e) => updateIngredient(ingredient.id, 'quantity', parseFloat(e.target.value) || 0)}
-                      className="border-[#0A2645]/20 focus:border-[#FAA225]"
-                    />
-                  </div>
-                  <div className="col-span-3">
-                    <Input
-                      placeholder="Unit"
-                      value={ingredient.unit}
-                      onChange={(e) => updateIngredient(ingredient.id, 'unit', e.target.value)}
-                      className="border-[#0A2645]/20 focus:border-[#FAA225]"
-                    />
-                  </div>
-                  <div className="col-span-1">
-                    {ingredients.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeIngredient(ingredient.id)}
-                        className="text-red-500 hover:bg-red-50"
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
+            <div className="space-y-2">
+              {ingredients.map((ingredient) => (
+                <div key={ingredient.id} className="flex gap-2 items-center">
+                  <Input
+                    placeholder="Ingredient"
+                    value={ingredient.name}
+                    onChange={(e) => updateIngredient(ingredient.id, 'name', e.target.value)}
+                    className="flex-1"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Qty"
+                    min="0"
+                    step="0.1"
+                    value={ingredient.quantity || ''}
+                    onChange={(e) => updateIngredient(ingredient.id, 'quantity', parseFloat(e.target.value) || 0)}
+                    className="w-20"
+                  />
+                  <Input
+                    placeholder="Unit"
+                    value={ingredient.unit}
+                    onChange={(e) => updateIngredient(ingredient.id, 'unit', e.target.value)}
+                    className="w-20"
+                  />
+                  {ingredients.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeIngredient(ingredient.id)}
+                      className="text-gray-400 hover:text-red-500 p-1"
+                    >
+                      <XIcon className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
           </div>
           
           {/* Instructions */}
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <Label className="text-[#0A2645] text-lg font-semibold">Instructions</Label>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-700">Instructions</Label>
               <Button
                 type="button"
                 onClick={addInstruction}
-                className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+                variant="outline"
                 size="sm"
+                className="text-xs"
               >
-                <PlusIcon className="h-4 w-4 mr-2" />
+                <PlusIcon className="h-3 w-3 mr-1" />
                 Add Step
               </Button>
             </div>
             
             <div className="space-y-3">
               {instructions.map((instruction, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <span className="text-[#0A2645] font-semibold min-w-[30px]">{index + 1}.</span>
+                <div key={index} className="flex gap-3 items-start">
+                  <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600 mt-2 flex-shrink-0">
+                    {index + 1}
+                  </div>
                   <Textarea
-                    placeholder="Instruction step"
+                    placeholder="Describe this step..."
                     value={instruction}
                     onChange={(e) => updateInstruction(index, e.target.value)}
-                    className="border-[#0A2645]/20 focus:border-[#FAA225] flex-1"
+                    className="flex-1"
                     rows={2}
                   />
                   {instructions.length > 1 && (
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
+                      size="sm"
                       onClick={() => removeInstruction(index)}
-                      className="text-red-500 hover:bg-red-50"
+                      className="text-gray-400 hover:text-red-500 p-1 mt-2"
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      <XIcon className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
@@ -305,12 +309,11 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
           </div>
           
           {/* Actions */}
-          <div className="flex justify-end space-x-2 pt-4">
+          <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645]/5"
             >
               Cancel
             </Button>
@@ -318,7 +321,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ isOpen, onClose, onSubmit, reci
               type="submit"
               className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
             >
-              {recipe ? 'Update Recipe' : 'Add Recipe'}
+              {recipe ? 'Update Recipe' : 'Save Recipe'}
             </Button>
           </div>
         </form>
