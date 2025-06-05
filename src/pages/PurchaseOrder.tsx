@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useApp } from '@/contexts/AppContext';
+import db from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ShoppingCartIcon } from 'lucide-react';
 import SearchBar from '@/components/Stock/SearchBar';
@@ -29,13 +29,14 @@ interface CartItem {
 }
 
 const PurchaseOrder = () => {
-  const { products } = useApp();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [products, setProducts] = useState<any[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedSupplier, setSelectedSupplier] = useState<string>('');
   const [showSupplierDialog, setShowSupplierDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const suppliers = [
     { id: 'supplier1', name: 'ABC Food Supplies' },
@@ -43,6 +44,28 @@ const PurchaseOrder = () => {
     { id: 'supplier3', name: 'Global Food Partners' },
     { id: 'supplier4', name: 'Premium Ingredients Co.' },
   ];
+
+  // Load products from database on component mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const dbProducts = db.getAllProducts();
+        console.log('Loaded products for purchase order:', dbProducts.length);
+        setProducts(dbProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+        toast({
+          title: "Error loading products",
+          description: "Could not load products from database",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, [toast]);
 
   // Filter products based on search term
   const filteredProducts = products.filter(product =>
@@ -122,6 +145,17 @@ const PurchaseOrder = () => {
     setSelectedSupplier('');
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -142,12 +176,12 @@ const PurchaseOrder = () => {
         </div>
         <div className="flex items-center space-x-4">
           <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
-            <SelectTrigger className="w-64">
+            <SelectTrigger className="w-64 bg-white text-[#0A2645] border-[#0A2645]">
               <SelectValue placeholder="Select Supplier" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white">
               {suppliers.map((supplier) => (
-                <SelectItem key={supplier.id} value={supplier.id}>
+                <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
                   {supplier.name}
                 </SelectItem>
               ))}
@@ -257,19 +291,19 @@ const PurchaseOrder = () => {
 
       {/* Supplier Selection Dialog */}
       <Dialog open={showSupplierDialog} onOpenChange={setShowSupplierDialog}>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Select Supplier</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p>Please select a supplier before adding items to your order.</p>
             <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white text-[#0A2645] border-[#0A2645]">
                 <SelectValue placeholder="Choose a supplier..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white">
                 {suppliers.map((supplier) => (
-                  <SelectItem key={supplier.id} value={supplier.id}>
+                  <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
                     {supplier.name}
                   </SelectItem>
                 ))}
