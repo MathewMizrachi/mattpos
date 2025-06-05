@@ -1,44 +1,88 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeftIcon, UsersIcon, ClockIcon, DollarSignIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ArrowLeftIcon, UsersIcon, ClockIcon, DollarSignIcon, ChefHat, Plus } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
-// Mock table data - in a real app this would come from your database
+// Mock table data with orders
 const mockTables = Array.from({ length: 25 }, (_, i) => {
   const tableNumber = i + 1;
-  const isOccupied = Math.random() > 0.6; // 40% chance of being occupied
+  const isOccupied = Math.random() > 0.6;
+  
+  const mockOrders = isOccupied ? [
+    { id: 1, name: 'Burger & Chips', price: 45, quantity: 2, status: 'pending' },
+    { id: 2, name: 'Coca Cola 330ml', price: 12, quantity: 3, status: 'ready' },
+    { id: 3, name: 'Fish & Chips', price: 55, quantity: 1, status: 'preparing' },
+  ] : [];
   
   return {
     number: tableNumber,
     isOccupied,
-    balance: isOccupied ? Math.random() * 200 + 10 : 0,
+    balance: isOccupied ? mockOrders.reduce((sum, order) => sum + (order.price * order.quantity), 0) : 0,
     peopleCount: isOccupied ? Math.floor(Math.random() * 6) + 1 : 0,
-    timeOccupied: isOccupied ? Math.floor(Math.random() * 180) + 15 : 0, // minutes
+    timeOccupied: isOccupied ? Math.floor(Math.random() * 180) + 15 : 0,
+    orders: mockOrders,
   };
 });
 
 const TableManagement = () => {
   const navigate = useNavigate();
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
   };
 
-  const handleTableClick = (tableNumber: number) => {
-    // In a real app, this would navigate to table details or POS for that table
-    console.log(`Clicked on table ${tableNumber}`);
+  const handleTableClick = (table) => {
+    if (table.isOccupied) {
+      setSelectedTable(table);
+      setShowOrderDialog(true);
+    } else {
+      // Navigate to POS to start taking orders for this table
+      navigate('/pos', { 
+        state: { 
+          selectedTable: table.number, 
+          peopleCount: 0 
+        } 
+      });
+    }
   };
 
-  const formatTime = (minutes: number) => {
+  const handleAddMoreItems = () => {
+    setShowOrderDialog(false);
+    navigate('/pos', { 
+      state: { 
+        selectedTable: selectedTable.number, 
+        peopleCount: selectedTable.peopleCount 
+      } 
+    });
+  };
+
+  const handleViewKitchenOrders = () => {
+    navigate('/kitchen-orders');
+  };
+
+  const formatTime = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (hours > 0) {
       return `${hours}h ${mins}m`;
     }
     return `${mins}m`;
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-500';
+      case 'preparing': return 'bg-blue-500';
+      case 'ready': return 'bg-green-500';
+      default: return 'bg-gray-500';
+    }
   };
 
   return (
@@ -60,6 +104,13 @@ const TableManagement = () => {
               <p className="text-muted-foreground">Cook2Day Restaurant System</p>
             </div>
           </div>
+          <Button
+            onClick={handleViewKitchenOrders}
+            className="bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            <ChefHat className="h-5 w-5 mr-2" />
+            Kitchen Orders
+          </Button>
         </div>
 
         {/* Tables Grid */}
@@ -72,7 +123,7 @@ const TableManagement = () => {
                   ? 'border-orange-500 bg-orange-50 shadow-lg' 
                   : 'border-gray-200 bg-white hover:bg-gray-50'
               }`}
-              onClick={() => handleTableClick(table.number)}
+              onClick={() => handleTableClick(table)}
             >
               <CardHeader className="pb-2">
                 <CardTitle className="text-center">
@@ -120,6 +171,10 @@ const TableManagement = () => {
                       <span className="font-bold text-purple-600">
                         {formatTime(table.timeOccupied)}
                       </span>
+                    </div>
+
+                    <div className="text-xs text-gray-600 mt-2">
+                      {table.orders.length} items ordered
                     </div>
                   </div>
                 </CardContent>
@@ -179,6 +234,79 @@ const TableManagement = () => {
           </Card>
         </div>
       </div>
+
+      {/* Order Details Dialog */}
+      <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              Table {selectedTable?.number} - Order Details
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedTable && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <UsersIcon className="h-4 w-4" />
+                    <span>{selectedTable.peopleCount} people</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ClockIcon className="h-4 w-4" />
+                    <span>{formatTime(selectedTable.timeOccupied)}</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-green-600">
+                    {formatCurrency(selectedTable.balance)}
+                  </div>
+                  <div className="text-sm text-gray-600">Total Bill</div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Current Orders</h3>
+                {selectedTable.orders.map((order) => (
+                  <div key={order.id} className="flex justify-between items-center p-3 border rounded-lg">
+                    <div className="flex-1">
+                      <div className="font-medium">{order.name}</div>
+                      <div className="text-sm text-gray-600">
+                        Qty: {order.quantity} × {formatCurrency(order.price)}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className={`${getStatusColor(order.status)} text-white`}>
+                        {order.status}
+                      </Badge>
+                      <div className="font-bold">
+                        {formatCurrency(order.price * order.quantity)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <Button
+                  onClick={handleAddMoreItems}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add More Items
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowOrderDialog(false)}
+                  className="flex-1"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
