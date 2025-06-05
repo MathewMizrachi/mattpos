@@ -70,7 +70,7 @@ const Dashboard = () => {
   };
   
   const handleManageStock = () => {
-    navigate('/stock');
+    navigate('/stock-management');
   };
 
   const handleManageCustomers = () => {
