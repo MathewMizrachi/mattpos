@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ShoppingCartIcon } from 'lucide-react';
+import SearchBar from '@/components/Stock/SearchBar';
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ const PurchaseOrder = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedSupplier, setSelectedSupplier] = useState<string>('');
   const [showSupplierDialog, setShowSupplierDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const suppliers = [
     { id: 'supplier1', name: 'ABC Food Supplies' },
@@ -41,6 +43,11 @@ const PurchaseOrder = () => {
     { id: 'supplier3', name: 'Global Food Partners' },
     { id: 'supplier4', name: 'Premium Ingredients Co.' },
   ];
+
+  // Filter products based on search term
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const addToCart = (product: any) => {
     if (!selectedSupplier) {
@@ -61,7 +68,7 @@ const PurchaseOrder = () => {
         name: product.name,
         price: product.price,
         quantity: 1,
-        costPrice: product.avgCostIncl ?? product.price * 0.6 // Use cost price or estimate
+        costPrice: (product as any).avgCostIncl ?? product.price * 0.6 // Use cost price or estimate
       }]);
     }
   };
@@ -152,14 +159,17 @@ const PurchaseOrder = () => {
       <div className="flex flex-1 gap-4 p-4">
         {/* Products Grid */}
         <div className="flex-1">
+          {/* Search Bar */}
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
                 <div className="space-y-1 text-sm text-gray-600 mb-3">
                   <p>Sell Price: R{product.price.toFixed(2)}</p>
-                  <p>Cost Price: R{(product.avgCostIncl ?? product.price * 0.6).toFixed(2)}</p>
-                  <p>Stock: {product.stock ?? 0}</p>
+                  <p>Cost Price: R{((product as any).avgCostIncl ?? product.price * 0.6).toFixed(2)}</p>
+                  <p>Stock: {(product as any).stock ?? 0}</p>
                 </div>
                 <Button
                   onClick={() => addToCart(product)}
