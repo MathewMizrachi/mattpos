@@ -1,10 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useApp } from '@/contexts/AppContext';
 import { Product } from '@/types';
 import ProductSearch from '@/components/POS/ProductSearch';
 import ProductGrid from '@/components/POS/ProductGrid';
 import CartPanel from '@/components/POS/CartPanel';
+import MenuCategorySelector from '@/components/POS/MenuCategorySelector';
 
 interface POSContentProps {
   products: Product[];
@@ -38,10 +40,40 @@ const POSContent: React.FC<POSContentProps> = ({
   tableInfo,
 }) => {
   const isMobile = useIsMobile();
+  const { currentMode } = useApp();
+  const [selectedCategory, setSelectedCategory] = useState('all');
   
-  const filteredProducts = products.filter(product => 
+  const getCategoryForProduct = (product: Product) => {
+    const productName = product.name.toLowerCase();
+    
+    // Soft drinks
+    if (productName.includes('coca cola') || productName.includes('sprite') || 
+        productName.includes('fanta') || productName.includes('coke')) {
+      return 'soft-drinks';
+    }
+    
+    // Sides
+    if (productName.includes('french fries') || productName.includes('fries')) {
+      return 'sides';
+    }
+    
+    // Food (everything else)
+    return 'food';
+  };
+  
+  const filterProductsByCategory = (products: Product[]) => {
+    if (selectedCategory === 'all') {
+      return products;
+    }
+    
+    return products.filter(product => getCategoryForProduct(product) === selectedCategory);
+  };
+  
+  const filteredBySearch = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  const filteredProducts = filterProductsByCategory(filteredBySearch);
   
   return (
     <>
@@ -50,9 +82,17 @@ const POSContent: React.FC<POSContentProps> = ({
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
         />
+        
+        {/* Only show category selector in restaurant mode */}
+        {currentMode === 'restaurant' && (
+          <MenuCategorySelector
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+        )}
       </div>
       
-      <div className="flex-1 overflow-hidden relative mt-16">
+      <div className="flex-1 overflow-hidden relative" style={{ marginTop: currentMode === 'restaurant' ? '140px' : '80px' }}>
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
