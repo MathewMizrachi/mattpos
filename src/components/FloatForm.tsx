@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -84,7 +83,10 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
     (denominationValues.notes_200r || 0) * 200.00
   );
 
-  const finalAmount = inputMode === 'denominations' ? calculatedTotal : (totalFloatValue || 0);
+  // Ensure finalAmount is always a valid number
+  const finalAmount = inputMode === 'denominations' 
+    ? calculatedTotal 
+    : (typeof totalFloatValue === 'number' && !isNaN(totalFloatValue) ? totalFloatValue : 0);
 
   const handleSubmit = () => {
     console.log('FloatForm: Form submitted with final amount:', finalAmount);
