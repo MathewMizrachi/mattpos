@@ -23,9 +23,13 @@ const MenuCategorySelector: React.FC<MenuCategorySelectorProps> = ({
       {categories.map((category) => (
         <Button
           key={category.id}
-          variant={selectedCategory === category.id ? 'default' : 'outline'}
+          variant="outline"
           onClick={() => onCategoryChange(category.id)}
-          className="h-12 text-sm font-medium"
+          className={`h-12 text-sm font-medium border-2 transition-colors ${
+            selectedCategory === category.id 
+              ? 'bg-orange-500 text-blue-600 border-orange-500 hover:bg-orange-600' 
+              : 'bg-blue-600 text-orange-500 border-blue-600 hover:bg-blue-700'
+          }`}
         >
           {category.label}
         </Button>
