@@ -89,7 +89,7 @@ const TableManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white p-6 rounded-xl shadow-lg mb-8 border-l-4 border-[#FAA225]">
@@ -111,8 +111,8 @@ const TableManagement = () => {
           </div>
         </div>
 
-        {/* Tables Grid - Smaller cards with 2-3 per row */}
-        <div className="grid gap-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 mb-8">
+        {/* Tables Grid */}
+        <div className="grid gap-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-8">
           {mockTables.map((table) => (
             <Card
               key={table.number}
@@ -123,14 +123,14 @@ const TableManagement = () => {
               }`}
               onClick={() => handleTableClick(table)}
             >
-              <CardHeader className="pb-2 px-4 pt-4">
+              <CardHeader className="pb-3">
                 <CardTitle className="text-center">
-                  <div className={`text-2xl font-bold mb-1 ${
+                  <div className={`text-3xl font-bold mb-1 ${
                     table.isOccupied ? 'text-white' : 'text-[#0A2645]'
                   }`}>
                     Table {table.number}
                   </div>
-                  <div className={`text-xs font-medium ${
+                  <div className={`text-sm font-medium ${
                     table.isOccupied ? 'text-white/90' : 'text-[#0A2645]/60'
                   }`}>
                     {table.isOccupied ? 'Occupied' : 'Available'}
@@ -139,22 +139,22 @@ const TableManagement = () => {
               </CardHeader>
               
               {table.isOccupied && (
-                <CardContent className="pt-0 px-4 pb-4">
-                  <div className="space-y-2">
-                    <div className="bg-white/20 rounded-lg p-2 backdrop-blur-sm">
-                      <div className="flex items-center justify-between text-xs mb-1">
+                <CardContent className="pt-0">
+                  <div className="space-y-3">
+                    <div className="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+                      <div className="flex items-center justify-between text-sm mb-2">
                         <div className="flex items-center text-white">
-                          <DollarSignIcon className="h-3 w-3 mr-1" />
+                          <DollarSignIcon className="h-4 w-4 mr-1" />
                           <span className="font-medium">Bill:</span>
                         </div>
-                        <span className="font-bold text-white text-sm">
+                        <span className="font-bold text-white text-lg">
                           {formatCurrency(table.balance)}
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between text-xs mb-1">
+                      <div className="flex items-center justify-between text-sm mb-2">
                         <div className="flex items-center text-white">
-                          <UsersIcon className="h-3 w-3 mr-1" />
+                          <UsersIcon className="h-4 w-4 mr-1" />
                           <span className="font-medium">People:</span>
                         </div>
                         <span className="font-bold text-white">
@@ -162,9 +162,9 @@ const TableManagement = () => {
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center text-white">
-                          <ClockIcon className="h-3 w-3 mr-1" />
+                          <ClockIcon className="h-4 w-4 mr-1" />
                           <span className="font-medium">Time:</span>
                         </div>
                         <span className="font-bold text-white">
@@ -174,7 +174,7 @@ const TableManagement = () => {
                     </div>
 
                     <div className="text-center">
-                      <span className="text-white/90 text-xs font-medium">
+                      <span className="text-white/90 text-sm font-medium">
                         {table.orders.length} items ordered
                       </span>
                     </div>
@@ -183,9 +183,9 @@ const TableManagement = () => {
               )}
               
               {!table.isOccupied && (
-                <CardContent className="pt-0 text-center px-4 pb-4">
-                  <div className="bg-gray-50 rounded-lg p-3 border-2 border-dashed border-gray-300">
-                    <div className="text-[#0A2645]/60 text-xs font-medium">Click to seat customers</div>
+                <CardContent className="pt-0 text-center">
+                  <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                    <div className="text-[#0A2645]/60 text-sm font-medium">Click to seat customers</div>
                   </div>
                 </CardContent>
               )}
