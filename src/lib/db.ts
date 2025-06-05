@@ -83,7 +83,7 @@ class Database {
   ];
 
   private products: Product[] = [
-    // New till stock products from user's list
+    // Till stock products from user's comprehensive list
     { id: 148571, name: 'ABC STINI AMERICAN BLUE CUBES 25G (1X1)', price: 10, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009605220961', stockCode: '148571', linkCode: '148571-001', avgCostIncl: 0 },
     { id: 100304, name: 'ACE SAMP 1KG (1X1)', price: 24, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001256003108', stockCode: '100304', linkCode: '100304-001', avgCostIncl: 7.18 },
     { id: 101494, name: 'ALWAYS MAXI 8S THICK 3IN1 LONG (1X1)', price: 22, stock: Math.floor(Math.random() * 21) + 10, barcode: '8700216268103', stockCode: '101494', linkCode: '101494-001', avgCostIncl: 0 },
@@ -156,6 +156,19 @@ class Database {
     { id: 116854, name: 'FUSION 1LT PEACH & APRICOT (1X1)', price: 13, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009655973374', stockCode: '116854', linkCode: '116854-001', avgCostIncl: 0 },
     { id: 116855, name: 'FUSION 1LT PINEAPPLE (1X1)', price: 13, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009655973367', stockCode: '116855', linkCode: '116855-001', avgCostIncl: 0 },
     { id: 148542, name: 'FUTURELIFE 500G SMART FOOD ZERO CHOCOLATE (1X1)', price: 60, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009710612828', stockCode: '148542', linkCode: '148542-001', avgCostIncl: 0 },
+    { id: 116973, name: 'G/CLOUD FLOUR 1KG CAKE FLOUR (1X1)', price: 17, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001256000794', stockCode: '116973', linkCode: '116973-001', avgCostIncl: 0 },
+    { id: 116974, name: 'G/CLOUD FLOUR 1KG SELF RAISING (1X1)', price: 28, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001256001951', stockCode: '116974', linkCode: '116974-001', avgCostIncl: 9.3 },
+    { id: 116979, name: 'G/CLOUD FLOUR 2.5KG CAKE FLOUR (1X1)', price: 42, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001256000770', stockCode: '116979', linkCode: '116979-001', avgCostIncl: 0 },
+    { id: 117308, name: 'GAVISCON 10ML LIQ SACHET P/MINT (1X1)', price: 8, stock: Math.floor(Math.random() * 21) + 10, barcode: '96041109', stockCode: '117308', linkCode: '117308-001', avgCostIncl: 0 },
+    { id: 117369, name: 'GENTLE MAGIC SKINCARE 100G SOAP (1X1)', price: 15, stock: Math.floor(Math.random() * 21) + 10, barcode: '6004077104016', stockCode: '117369', linkCode: '117369-001', avgCostIncl: 0 },
+    { id: 117372, name: 'GENTLE MAGIC SKINCARE 125ML LOTION (1X1)', price: 17, stock: Math.floor(Math.random() * 21) + 10, barcode: '6004077102012', stockCode: '117372', linkCode: '117372-001', avgCostIncl: 0 },
+    { id: 148572, name: 'GENTLE MAGIC SKINCARE 50ML CREAM (1X1)', price: 15, stock: Math.floor(Math.random() * 21) + 10, barcode: '6004077000097', stockCode: '148572', linkCode: '148572-001', avgCostIncl: 0 },
+    { id: 117713, name: 'GLEN TEA TAGLESS TEA BAGS 26S POUCH (1X1)', price: 15, stock: Math.floor(Math.random() * 21) + 10, barcode: '8720608603282', stockCode: '117713', linkCode: '117713-001', avgCostIncl: 0 },
+    { id: 117867, name: 'GOLD STAR INST DRY YEAST 10G (1X1)', price: 6, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001323106718', stockCode: '117867', linkCode: '117867-001', avgCostIncl: 0 },
+    { id: 118075, name: 'GOLDEN FRESH JOKER 30G CHOC CREAMS (1X1)', price: 1.5, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009606720002', stockCode: '118075', linkCode: '118075-001', avgCostIncl: 0 },
+    { id: 118079, name: 'GOLDEN FRESH JOKER 30G VANILLA (1X1)', price: 1.5, stock: Math.floor(Math.random() * 21) + 10, barcode: '6009606720408', stockCode: '118079', linkCode: '118079-001', avgCostIncl: 0 },
+    { id: 118323, name: 'GRAND-PA HEADACHE 144S PWD REG (1X1)', price: 4, stock: Math.floor(Math.random() * 21) + 10, barcode: '60099983', stockCode: '118323', linkCode: '118323-001', avgCostIncl: 0 },
+    { id: 118653, name: 'HANDY ANDY 500ML LAVENDER FRESH (1X1)', price: 20, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001087003193', stockCode: '118653', linkCode: '118653-001', avgCostIncl: 0 },
     { id: 148233, name: 'YUM YUM P/BUTTER 250G SMOOTH (1X1)', price: 33, stock: Math.floor(Math.random() * 21) + 10, barcode: '6001069034139', stockCode: '148233', linkCode: '148233-001', avgCostIncl: 0 },
   ];
 
