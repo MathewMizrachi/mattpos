@@ -55,7 +55,7 @@ const Dashboard = () => {
   };
 
   const handleManageTables = () => {
-    navigate('/tables');
+    navigate('/table-management');
   };
   
   const handleFloatSubmit = (amount: number) => {
