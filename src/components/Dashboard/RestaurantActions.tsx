@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Table, FileText, ChefHat, Utensils } from 'lucide-react';
+import { Users, Table, FileText, ChefHat, Utensils, DollarSign } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface RestaurantActionsProps {
@@ -32,6 +32,10 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
 
   const handleRecipes = () => {
     navigate('/recipes');
+  };
+
+  const handleCashup = () => {
+    navigate('/cashup');
   };
 
   return (
@@ -116,6 +120,18 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
           >
             <FileText className="h-8 w-8" />
             View Reports
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={handleCashup}
+            className="w-full h-24 bg-[#0A2645] hover:bg-[#0A2645]/90 text-white text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <DollarSign className="h-8 w-8" />
+            Cashup
           </Button>
         </CardContent>
       </Card>
