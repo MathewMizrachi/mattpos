@@ -33,23 +33,23 @@ const Dashboard = () => {
   };
 
   const handleTakeOrders = () => {
-    // For now, navigate to POS (will be updated later for restaurant-specific flow)
-    navigate('/pos');
+    // In restaurant mode, if there's no active shift, start one first
+    if (!currentShift) {
+      setShowFloatForm(true);
+    } else {
+      navigate('/pos');
+    }
   };
 
   const handleManageTables = () => {
-    // Placeholder for table management - for now show a toast
-    toast({
-      title: "Coming Soon",
-      description: "Table management feature is coming soon!",
-    });
+    navigate('/tables');
   };
   
   const handleFloatSubmit = (amount: number) => {
     if (currentUser) {
       startShift(currentUser.id, amount);
       if (currentMode === 'restaurant') {
-        handleTakeOrders();
+        navigate('/pos');
       } else {
         navigate('/pos');
       }
