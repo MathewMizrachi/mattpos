@@ -71,35 +71,43 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 pt-6 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-          <div className="flex items-center">
-            <Button onClick={onBack} variant="outline" className="mr-4 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
+        <div className="flex items-center space-x-2">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={onBack}
+            className="text-[#0A2645] hover:bg-[#0A2645]/10"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
             <h1 className="text-2xl font-bold text-[#0A2645]">Customer Accounts</h1>
+            <p className="text-sm text-[#0A2645]/70">Manage customer accounts and payments</p>
           </div>
-          
-          <div className="flex gap-2 w-full sm:w-auto">
-            <div className="relative flex-grow">
-              <Search className="absolute left-2 top-3 h-4 w-4 text-[#0A2645]" />
-              <Input
-                placeholder="Search customers..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225]"
-              />
-            </div>
-            
-            <Button 
-              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-bold border-2 border-[#FAA225]"
-              onClick={() => setShowAddCustomer(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Customer
-            </Button>
+        </div>
+        <div className="flex space-x-2">
+          <Button 
+            onClick={() => setShowAddCustomer(true)}
+            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Customer
+          </Button>
+        </div>
+      </header>
+      
+      <div className="p-4">
+        <div className="mb-4">
+          <div className="relative max-w-md">
+            <Search className="absolute left-2 top-3 h-4 w-4 text-[#0A2645]" />
+            <Input
+              placeholder="Search customers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225]"
+            />
           </div>
         </div>
         
