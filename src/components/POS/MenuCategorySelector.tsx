@@ -1,6 +1,12 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface MenuCategorySelectorProps {
   selectedCategory: string;
@@ -18,22 +24,28 @@ const MenuCategorySelector: React.FC<MenuCategorySelectorProps> = ({
     { id: 'sides', label: 'Sides' }
   ];
 
+  const selectedCategoryLabel = categories.find(cat => cat.id === selectedCategory)?.label || 'All Items';
+
   return (
-    <div className="grid grid-cols-4 gap-2 mb-4">
-      {categories.map((category) => (
-        <Button
-          key={category.id}
-          variant="outline"
-          onClick={() => onCategoryChange(category.id)}
-          className={`h-12 text-xs sm:text-sm font-medium border-2 transition-colors ${
-            selectedCategory === category.id 
-              ? 'bg-[#FAA225] text-[#0A2645] border-[#FAA225] hover:bg-[#FAA225]/90' 
-              : 'bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90'
-          }`}
-        >
-          {category.label}
-        </Button>
-      ))}
+    <div className="mb-4">
+      <Select value={selectedCategory} onValueChange={onCategoryChange}>
+        <SelectTrigger className="w-full h-12 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90">
+          <SelectValue placeholder="Select category">
+            {selectedCategoryLabel}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent className="bg-white border-[#0A2645]">
+          {categories.map((category) => (
+            <SelectItem 
+              key={category.id} 
+              value={category.id}
+              className="hover:bg-[#FAA225]/20 focus:bg-[#FAA225]/20"
+            >
+              {category.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };
