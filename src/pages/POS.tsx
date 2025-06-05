@@ -16,10 +16,10 @@ const POS = () => {
     products,
     cart,
     addToCart,
-    updateCartItem,
+    updateCartQuantity,
     removeFromCart,
     clearCart,
-    processPayment,
+    processTransaction,
     processRefund,
     endShift,
     logout,
@@ -68,7 +68,7 @@ const POS = () => {
     currentShift,
     cart,
     calculateTotal,
-    processPayment,
+    processPayment: processTransaction,
     processRefund,
     processWithdrawal,
     endShift
@@ -94,11 +94,8 @@ const POS = () => {
   });
   
   const handleAddToCart = (product: any, quantity: number, customPrice?: number) => {
-    if (customPrice !== undefined && customPrice !== product.price) {
-      addToCart(product, quantity, customPrice);
-    } else {
-      addToCart(product, quantity);
-    }
+    // Use the standard addToCart method which only accepts product and quantity
+    addToCart(product, quantity);
     
     // Check if stock is low after adding to cart
     if (product.stock !== undefined && product.stock <= 5) {
@@ -171,7 +168,7 @@ const POS = () => {
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       onAddToCart={handleAddToCart}
-      onUpdateCartItem={updateCartItem}
+      onUpdateCartItem={updateCartQuantity}
       onRemoveFromCart={removeFromCart}
       onClearCart={clearCart}
       cartExpanded={cartExpanded}
