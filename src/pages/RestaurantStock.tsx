@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
@@ -99,6 +98,7 @@ const RestaurantStock = () => {
         description="Manage restaurant menu items and ingredients"
         onOpenAddProduct={() => setIsAddProductOpen(true)}
         onOpenImportProduct={() => setIsImportProductOpen(true)}
+        showPurchaseOrder={true}
       />
       
       <div className="p-4">

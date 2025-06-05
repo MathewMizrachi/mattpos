@@ -13,6 +13,7 @@ import Reports from '@/pages/Reports';
 import Customers from '@/pages/Customers';
 import Cashup from '@/pages/Cashup';
 import Recipes from '@/pages/Recipes';
+import PurchaseOrder from '@/pages/PurchaseOrder';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/table-management" element={<TableManagement />} />
             <Route path="/stock-management" element={<Stock />} />
             <Route path="/restaurant-stock" element={<RestaurantStock />} />
+            <Route path="/purchase-order" element={<PurchaseOrder />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/cashup" element={<Cashup />} />

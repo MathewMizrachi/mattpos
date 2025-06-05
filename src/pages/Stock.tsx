@@ -170,6 +170,7 @@ const Stock = () => {
         description="Manage till inventory and products"
         onOpenAddProduct={() => setIsAddProductOpen(true)}
         onOpenImportProduct={() => setIsImportProductOpen(true)}
+        showPurchaseOrder={true}
       />
       
       <div className="p-4">
