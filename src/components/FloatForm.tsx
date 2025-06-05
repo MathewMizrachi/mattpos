@@ -17,12 +17,6 @@ import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
 
 const denominationSchema = z.object({
-  coins_1c: z.coerce.number().nonnegative().default(0),
-  coins_2c: z.coerce.number().nonnegative().default(0),
-  coins_5c: z.coerce.number().nonnegative().default(0),
-  coins_10c: z.coerce.number().nonnegative().default(0),
-  coins_20c: z.coerce.number().nonnegative().default(0),
-  coins_50c: z.coerce.number().nonnegative().default(0),
   coins_1r: z.coerce.number().nonnegative().default(0),
   coins_2r: z.coerce.number().nonnegative().default(0),
   coins_5r: z.coerce.number().nonnegative().default(0),
@@ -65,7 +59,6 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   const denominationForm = useForm<DenominationFormValues>({
     resolver: zodResolver(denominationSchema),
     defaultValues: {
-      coins_1c: 0, coins_2c: 0, coins_5c: 0, coins_10c: 0, coins_20c: 0, coins_50c: 0,
       coins_1r: 0, coins_2r: 0, coins_5r: 0,
       notes_10r: 0, notes_20r: 0, notes_50r: 0, notes_100r: 0, notes_200r: 0,
     },
@@ -81,12 +74,6 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
   // Calculate total from denominations
   const calculatedTotal = (
-    (denominationValues.coins_1c || 0) * 0.01 +
-    (denominationValues.coins_2c || 0) * 0.02 +
-    (denominationValues.coins_5c || 0) * 0.05 +
-    (denominationValues.coins_10c || 0) * 0.10 +
-    (denominationValues.coins_20c || 0) * 0.20 +
-    (denominationValues.coins_50c || 0) * 0.50 +
     (denominationValues.coins_1r || 0) * 1.00 +
     (denominationValues.coins_2r || 0) * 2.00 +
     (denominationValues.coins_5r || 0) * 5.00 +
@@ -108,13 +95,8 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
     }
   };
 
+  // Update denominations to exclude cents
   const denominations = [
-    { key: 'coins_1c', label: '1c Coins', value: 0.01 },
-    { key: 'coins_2c', label: '2c Coins', value: 0.02 },
-    { key: 'coins_5c', label: '5c Coins', value: 0.05 },
-    { key: 'coins_10c', label: '10c Coins', value: 0.10 },
-    { key: 'coins_20c', label: '20c Coins', value: 0.20 },
-    { key: 'coins_50c', label: '50c Coins', value: 0.50 },
     { key: 'coins_1r', label: 'R1 Coins', value: 1.00 },
     { key: 'coins_2r', label: 'R2 Coins', value: 2.00 },
     { key: 'coins_5r', label: 'R5 Coins', value: 5.00 },
@@ -203,9 +185,9 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                   <FormControl>
                     <Input 
                       type="number" 
-                      step="0.01" 
+                      step="1" 
                       min="0" 
-                      placeholder="0.00"
+                      placeholder="0"
                       className="bg-white text-black"
                       {...field}
                     />

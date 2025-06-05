@@ -71,17 +71,17 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+      <div className="bg-[#FAA225] rounded-lg p-6 w-full max-w-md mx-4 text-[#0A2645]">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <Scan className="h-5 w-5" />
-            <h2 className="text-lg font-semibold">Barcode Scanner</h2>
+            <Scan className="h-5 w-5 text-[#0A2645]" />
+            <h2 className="text-lg font-semibold text-[#0A2645]">Barcode Scanner</h2>
           </div>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={onClose}
-            className="h-8 w-8"
+            className="h-8 w-8 text-[#0A2645] hover:bg-[#0A2645]/10"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -89,7 +89,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         
         <div className="space-y-4">
           <div>
-            <label htmlFor="barcode" className="block text-sm font-medium mb-2">
+            <label htmlFor="barcode" className="block text-sm font-medium mb-2 text-[#0A2645]">
               Scan or enter barcode
             </label>
             <Input
@@ -100,12 +100,12 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
               value={barcodeInput}
               onChange={(e) => setBarcodeInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="text-lg"
+              className="text-lg bg-white text-[#0A2645] border-[#0A2645] focus:border-[#0A2645] focus:ring-[#0A2645]"
               autoComplete="off"
             />
           </div>
           
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-[#0A2645]/80">
             <p>• Scan a barcode or manually enter product ID</p>
             <p>• Press Enter to search</p>
             <p>• Press Escape to close</p>
@@ -115,13 +115,14 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             <Button 
               onClick={handleManualSubmit}
               disabled={!barcodeInput.trim()}
-              className="flex-1"
+              className="flex-1 bg-[#0A2645] text-white hover:bg-[#0A2645]/90"
             >
               Search Product
             </Button>
             <Button 
               variant="outline" 
               onClick={onClose}
+              className="text-[#0A2645] border-[#0A2645] hover:bg-[#0A2645]/10"
             >
               Cancel
             </Button>
