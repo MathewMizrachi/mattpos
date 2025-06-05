@@ -61,7 +61,7 @@ const PurchaseOrder = () => {
         name: product.name,
         price: product.price,
         quantity: 1,
-        costPrice: product.avgCostIncl || product.price * 0.6 // Use cost price or estimate
+        costPrice: product.avgCostIncl ?? product.price * 0.6 // Use cost price or estimate
       }]);
     }
   };
@@ -158,8 +158,8 @@ const PurchaseOrder = () => {
                 <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
                 <div className="space-y-1 text-sm text-gray-600 mb-3">
                   <p>Sell Price: R{product.price.toFixed(2)}</p>
-                  <p>Cost Price: R{(product.avgCostIncl || product.price * 0.6).toFixed(2)}</p>
-                  <p>Stock: {product.stock}</p>
+                  <p>Cost Price: R{(product.avgCostIncl ?? product.price * 0.6).toFixed(2)}</p>
+                  <p>Stock: {product.stock ?? 0}</p>
                 </div>
                 <Button
                   onClick={() => addToCart(product)}
