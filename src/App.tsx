@@ -1,48 +1,38 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AppProvider } from "@/contexts/AppContext";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import POS from "./pages/POS";
-import Stock from "./pages/Stock";
-import RestaurantStock from "./pages/RestaurantStock";
-import Recipes from "./pages/Recipes";
-import Customers from "./pages/Customers";
-import Reports from "./pages/Reports";
-import TableManagement from "./pages/TableManagement";
-import KitchenOrders from "./pages/KitchenOrders";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from '@/components/ui/toaster';
+import { AppProvider } from '@/contexts/AppContext';
+import Login from '@/pages/Login';
+import Dashboard from '@/pages/Dashboard';
+import POS from '@/pages/POS';
+import KitchenOrders from '@/pages/KitchenOrders';
+import TableManagement from '@/pages/TableManagement';
+import StockManagement from '@/pages/StockManagement';
+import Reports from '@/pages/Reports';
+import Customers from '@/pages/Customers';
+import Cashup from '@/pages/Cashup';
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AppProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+function App() {
+  return (
+    <AppProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-100">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pos" element={<POS />} />
-            <Route path="/stock" element={<Stock />} />
-            <Route path="/restaurant-stock" element={<RestaurantStock />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/tables" element={<TableManagement />} />
             <Route path="/kitchen-orders" element={<KitchenOrders />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/table-management" element={<TableManagement />} />
+            <Route path="/stock-management" element={<StockManagement />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/cashup" element={<Cashup />} />
           </Routes>
-        </BrowserRouter>
-      </AppProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+        </div>
+        <Toaster />
+      </Router>
+    </AppProvider>
+  );
+}
 
 export default App;
