@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -6,6 +5,7 @@ import db from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ShoppingCartIcon } from 'lucide-react';
 import SearchBar from '@/components/Stock/SearchBar';
+import CartItem from '@/components/CartItem';
 import {
   Dialog,
   DialogContent,
@@ -237,44 +237,22 @@ const PurchaseOrder = () => {
             <span className="text-sm text-gray-600">{cart.length} items</span>
           </div>
 
-          <div className="space-y-3 max-h-96 overflow-y-auto mb-4">
+          <div className="space-y-2 max-h-96 overflow-y-auto mb-4">
             {cart.length === 0 ? (
               <p className="text-gray-500 text-center py-8">No items in order</p>
             ) : (
               cart.map((item) => (
-                <div key={item.id} className="flex justify-between items-center p-2 border rounded">
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{item.name}</p>
-                    <p className="text-xs text-gray-600">R{item.costPrice.toFixed(2)} each</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="h-6 w-6 p-0"
-                    >
-                      -
-                    </Button>
-                    <span className="text-sm w-8 text-center">{item.quantity}</span>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="h-6 w-6 p-0"
-                    >
-                      +
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => removeFromCart(item.id)}
-                      className="h-6 w-6 p-0 ml-2"
-                    >
-                      ×
-                    </Button>
-                  </div>
-                </div>
+                <CartItem
+                  key={item.id}
+                  product={{
+                    id: item.id,
+                    name: item.name,
+                    price: item.costPrice // Use cost price for display
+                  }}
+                  quantity={item.quantity}
+                  onUpdateQuantity={(productId, quantity) => updateQuantity(productId, quantity)}
+                  onRemove={(productId) => removeFromCart(productId)}
+                />
               ))
             )}
           </div>
