@@ -1,9 +1,6 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatCurrency } from '@/lib/utils';
 import { Printer, CreditCard, Send } from 'lucide-react';
 
@@ -26,13 +23,10 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
   onSendOrder,
   isMobile
 }) => {
-  const [selectedTable, setSelectedTable] = useState<string>('');
-  const [peopleCount, setPeopleCount] = useState<string>('');
-
   const handleSendOrder = () => {
-    if (selectedTable && peopleCount) {
-      onSendOrder(parseInt(selectedTable), parseInt(peopleCount));
-    }
+    // For now, we'll use default values since table selection happens in the popup
+    // This could be enhanced to store the selected table info in context
+    onSendOrder(1, 1);
   };
 
   return (
@@ -40,40 +34,9 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
       style={{ backgroundColor: '#FAA225' }}
     >
       <div className="space-y-3">
-        {/* Table and People Selection */}
-        <div className="flex space-x-2">
-          <div className="flex-1">
-            <Label className="text-sm font-semibold text-[#0A2645]">Table</Label>
-            <Select value={selectedTable} onValueChange={setSelectedTable}>
-              <SelectTrigger className="h-8 bg-white">
-                <SelectValue placeholder="Select table" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
-                    Table {num}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label className="text-sm font-semibold text-[#0A2645]">People</Label>
-            <Input
-              type="number"
-              min="1"
-              max="20"
-              value={peopleCount}
-              onChange={(e) => setPeopleCount(e.target.value)}
-              className="h-8 bg-white"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
         {/* Total and Actions */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-[#0A2645]">{formatCurrency(total)}</span>
+          <span className="text-2xl font-bold text-[#0A2645]">{formatCurrency(total)}</span>
           
           <div className="flex space-x-2">
             {cartLength > 0 && (
@@ -109,7 +72,7 @@ const RestaurantFooter: React.FC<RestaurantFooterProps> = ({
             
             <Button 
               size="sm"
-              disabled={cartLength === 0 || !selectedTable || !peopleCount}
+              disabled={cartLength === 0}
               onClick={handleSendOrder}
               className="bg-green-600 text-white hover:bg-green-700"
             >

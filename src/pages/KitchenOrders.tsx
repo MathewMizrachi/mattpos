@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -49,7 +48,7 @@ const KitchenOrders = () => {
     navigate('/tables');
   };
 
-  const updateItemStatus = (orderId, itemId, newStatus) => {
+  const updateItemStatus = (orderId: number, itemId: number, newStatus: string) => {
     setOrders(prevOrders =>
       prevOrders.map(order =>
         order.id === orderId
@@ -64,7 +63,7 @@ const KitchenOrders = () => {
     );
   };
 
-  const getTimeSince = (date) => {
+  const getTimeSince = (date: Date) => {
     const minutes = Math.floor((Date.now() - date.getTime()) / 60000);
     if (minutes < 60) {
       return `${minutes}m`;
@@ -74,7 +73,7 @@ const KitchenOrders = () => {
     return `${hours}h ${remainingMinutes}m`;
   };
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'border-red-500 bg-red-50';
       case 'medium': return 'border-yellow-500 bg-yellow-50';
@@ -83,7 +82,7 @@ const KitchenOrders = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': return 'bg-yellow-500';
       case 'preparing': return 'bg-blue-500';
@@ -92,7 +91,7 @@ const KitchenOrders = () => {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending': return <AlertCircle className="h-4 w-4" />;
       case 'preparing': return <Clock className="h-4 w-4" />;
@@ -104,10 +103,10 @@ const KitchenOrders = () => {
   // Sort orders by priority and time
   const sortedOrders = orders.sort((a, b) => {
     const priorityOrder = { high: 3, medium: 2, low: 1 };
-    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    if (priorityOrder[a.priority as keyof typeof priorityOrder] !== priorityOrder[b.priority as keyof typeof priorityOrder]) {
+      return priorityOrder[b.priority as keyof typeof priorityOrder] - priorityOrder[a.priority as keyof typeof priorityOrder];
     }
-    return a.orderTime - b.orderTime; // Older orders first
+    return a.orderTime.getTime() - b.orderTime.getTime(); // Older orders first
   });
 
   return (

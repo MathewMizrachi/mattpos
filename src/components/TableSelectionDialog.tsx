@@ -36,16 +36,16 @@ const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Select Table and Party Size</DialogTitle>
+      <DialogContent className="sm:max-w-md bg-white border-[#0A2645] border-2">
+        <DialogHeader className="bg-[#0A2645] text-white p-4 -m-6 mb-4 rounded-t-lg">
+          <DialogTitle className="text-xl font-bold">Select Table and Party Size</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="table">Table Number</Label>
+        <div className="space-y-6 py-4">
+          <div className="space-y-3">
+            <Label htmlFor="table" className="text-[#0A2645] font-semibold text-base">Table Number</Label>
             <Select value={selectedTable} onValueChange={setSelectedTable}>
-              <SelectTrigger>
+              <SelectTrigger className="border-[#0A2645] border-2 focus:ring-[#FAA225] focus:border-[#FAA225] h-12">
                 <SelectValue placeholder="Select table" />
               </SelectTrigger>
               <SelectContent>
@@ -58,8 +58,8 @@ const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
             </Select>
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="people">Number of People</Label>
+          <div className="space-y-3">
+            <Label htmlFor="people" className="text-[#0A2645] font-semibold text-base">Number of People</Label>
             <Input
               id="people"
               type="number"
@@ -68,17 +68,23 @@ const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
               value={peopleCount}
               onChange={(e) => setPeopleCount(e.target.value)}
               placeholder="Enter number of people"
+              className="border-[#0A2645] border-2 focus:ring-[#FAA225] focus:border-[#FAA225] h-12"
             />
           </div>
         </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
+        <DialogFooter className="bg-gray-50 p-4 -m-6 mt-4 rounded-b-lg border-t border-gray-200">
+          <Button 
+            variant="outline" 
+            onClick={handleCancel}
+            className="border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+          >
             Cancel
           </Button>
           <Button 
             onClick={handleConfirm}
             disabled={!selectedTable || !peopleCount}
+            className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-semibold"
           >
             Start Taking Orders
           </Button>
