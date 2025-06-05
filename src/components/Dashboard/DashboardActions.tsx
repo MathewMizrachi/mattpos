@@ -9,14 +9,27 @@ import {
   Users, 
   Package, 
   LogOut,
-  DollarSign
+  DollarSign,
+  Play
 } from 'lucide-react';
 
 interface DashboardActionsProps {
-  onEndShift: () => void;
+  hasActiveShift: boolean;
+  onStartShift: () => void;
+  onResumeShift: () => void;
+  onManageStock: () => void;
+  onManageCustomers: () => void;
+  onViewReports: () => void;
 }
 
-const DashboardActions: React.FC<DashboardActionsProps> = ({ onEndShift }) => {
+const DashboardActions: React.FC<DashboardActionsProps> = ({ 
+  hasActiveShift,
+  onStartShift,
+  onResumeShift,
+  onManageStock,
+  onManageCustomers,
+  onViewReports
+}) => {
   const navigate = useNavigate();
 
   const quickActions = [
@@ -24,21 +37,21 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({ onEndShift }) => {
       icon: BarChart3,
       label: 'Reports',
       description: 'View sales and analytics',
-      action: () => navigate('/reports'),
+      action: onViewReports,
       color: 'bg-blue-500 hover:bg-blue-600'
     },
     {
       icon: Users,
       label: 'Customers',
       description: 'Manage customer accounts',
-      action: () => navigate('/customers'),
+      action: onManageCustomers,
       color: 'bg-green-500 hover:bg-green-600'
     },
     {
       icon: Package,
       label: 'Stock',
       description: 'Inventory management',
-      action: () => navigate('/stock-management'),
+      action: onManageStock,
       color: 'bg-purple-500 hover:bg-purple-600'
     },
     {
@@ -75,16 +88,25 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({ onEndShift }) => {
         ))}
       </div>
 
-      {/* Management Actions */}
+      {/* Shift Management Actions */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button 
-          variant="destructive" 
-          onClick={onEndShift}
-          className="flex-1 h-12 text-lg font-semibold"
-        >
-          <LogOut className="mr-2 h-5 w-5" />
-          End Shift
-        </Button>
+        {hasActiveShift ? (
+          <Button 
+            onClick={onResumeShift}
+            className="flex-1 h-12 text-lg font-semibold bg-green-600 hover:bg-green-700"
+          >
+            <Play className="mr-2 h-5 w-5" />
+            Resume Shift
+          </Button>
+        ) : (
+          <Button 
+            onClick={onStartShift}
+            className="flex-1 h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700"
+          >
+            <Calculator className="mr-2 h-5 w-5" />
+            Start Shift
+          </Button>
+        )}
       </div>
     </div>
   );

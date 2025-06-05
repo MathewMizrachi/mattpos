@@ -7,7 +7,7 @@ import Dashboard from '@/pages/Dashboard';
 import POS from '@/pages/POS';
 import KitchenOrders from '@/pages/KitchenOrders';
 import TableManagement from '@/pages/TableManagement';
-import StockManagement from '@/pages/StockManagement';
+import Stock from '@/pages/Stock';
 import Reports from '@/pages/Reports';
 import Customers from '@/pages/Customers';
 import Cashup from '@/pages/Cashup';
@@ -23,7 +23,7 @@ function App() {
             <Route path="/pos" element={<POS />} />
             <Route path="/kitchen-orders" element={<KitchenOrders />} />
             <Route path="/table-management" element={<TableManagement />} />
-            <Route path="/stock-management" element={<StockManagement />} />
+            <Route path="/stock-management" element={<Stock />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/cashup" element={<Cashup />} />
