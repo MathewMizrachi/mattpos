@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import db from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ShoppingCartIcon } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SearchBar from '@/components/Stock/SearchBar';
 import CartItem from '@/components/CartItem';
 import {
@@ -61,6 +63,7 @@ const PurchaseOrder = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
+  const [activeTab, setActiveTab] = useState('create');
 
   const suppliers = [
     { id: 'supplier1', name: 'ABC Food Supplies' },
@@ -185,9 +188,10 @@ const PurchaseOrder = () => {
       description: `Order #${newOrder.id} placed with ${supplierName} for R${getTotalCost().toFixed(2)}`,
     });
 
-    // Reset the order
+    // Reset the order and switch to history tab
     setCart([]);
     setSelectedSupplier('');
+    setActiveTab('history');
   };
 
   const updateOrderStatus = (orderId: number, status: PurchaseOrder['status']) => {
@@ -239,172 +243,183 @@ const PurchaseOrder = () => {
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-[#0A2645]">Purchase Order</h1>
-            <p className="text-sm text-[#0A2645]/70">Create purchase orders for stock replenishment</p>
+            <p className="text-sm text-[#0A2645]/70">Create and manage purchase orders for stock replenishment</p>
           </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
-            <SelectTrigger className="w-64 bg-white text-[#0A2645] border-[#0A2645]">
-              <SelectValue placeholder="Select Supplier" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {suppliers.map((supplier) => (
-                <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
-                  {supplier.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </header>
 
-      <div className="flex flex-1 gap-4 p-4">
-        {/* Products Grid */}
-        <div className="flex-1">
-          {/* Search Bar */}
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredProducts.map((product) => {
-              // Calculate display cost price for each product (6-20% lower than selling price)
-              const discountPercentage = 0.06 + (Math.random() * 0.14);
-              const displayCostPrice = product.price * (1 - discountPercentage);
-              
-              return (
-                <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-                  <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
-                  <div className="space-y-1 text-sm text-gray-600 mb-3">
-                    <p>Sell Price: R{product.price.toFixed(2)}</p>
-                    <p>Cost Price: R{displayCostPrice.toFixed(2)}</p>
-                    <p>Stock: {(product as any).stock ?? 0}</p>
-                  </div>
-                  <Button
-                    onClick={() => addToCart(product)}
-                    className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-                    size="sm"
-                  >
-                    Add to Order
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Cart Panel */}
-        <div className="w-80 bg-white rounded-lg shadow p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-[#0A2645] flex items-center">
-              <ShoppingCartIcon className="h-5 w-5 mr-2" />
-              Purchase Order
-            </h2>
-            <span className="text-sm text-gray-600">{cart.length} items</span>
-          </div>
-
-          <div className="space-y-2 max-h-96 overflow-y-auto mb-4">
-            {cart.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No items in order</p>
-            ) : (
-              cart.map((item) => (
-                <CartItem
-                  key={item.id}
-                  product={{
-                    id: item.id,
-                    name: item.name,
-                    price: item.costPrice // Use cost price for display
-                  }}
-                  quantity={item.quantity}
-                  onUpdateQuantity={(productId, quantity) => updateQuantity(productId, quantity)}
-                  onRemove={(productId) => removeFromCart(productId)}
-                />
-              ))
-            )}
-          </div>
-
-          {cart.length > 0 && (
-            <>
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="font-semibold">Total Cost:</span>
-                  <span className="font-bold text-lg">R{getTotalCost().toFixed(2)}</span>
-                </div>
-                <Button
-                  onClick={handlePlaceOrder}
-                  className="w-full bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
-                  disabled={!selectedSupplier}
-                >
-                  Place Order
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Purchase Order History */}
       <div className="p-4">
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-4 border-b">
-            <h2 className="text-xl font-semibold text-[#0A2645]">Purchase Order History</h2>
-            <p className="text-sm text-[#0A2645]/70">View and manage all purchase orders</p>
-          </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="create">Create Order</TabsTrigger>
+            <TabsTrigger value="history">Order History</TabsTrigger>
+          </TabsList>
           
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order #</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Supplier</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead>Total Cost</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {purchaseOrders.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                      No purchase orders found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  purchaseOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">#{order.id}</TableCell>
-                      <TableCell>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
-                      <TableCell>{order.supplier}</TableCell>
-                      <TableCell>{order.items.length} items</TableCell>
-                      <TableCell>R{order.totalCost.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <Select
-                          value={order.status}
-                          onValueChange={(value) => updateOrderStatus(order.id, value as PurchaseOrder['status'])}
+          <TabsContent value="create">
+            <div className="flex flex-1 gap-4">
+              {/* Products Grid */}
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-1 mr-4">
+                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                  </div>
+                  <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
+                    <SelectTrigger className="w-64 bg-white text-[#0A2645] border-[#0A2645]">
+                      <SelectValue placeholder="Select Supplier" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {suppliers.map((supplier) => (
+                        <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
+                          {supplier.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {filteredProducts.map((product) => {
+                    // Calculate display cost price for each product (6-20% lower than selling price)
+                    const discountPercentage = 0.06 + (Math.random() * 0.14);
+                    const displayCostPrice = product.price * (1 - discountPercentage);
+                    
+                    return (
+                      <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+                        <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
+                        <div className="space-y-1 text-sm text-gray-600 mb-3">
+                          <p>Sell Price: R{product.price.toFixed(2)}</p>
+                          <p>Cost Price: R{displayCostPrice.toFixed(2)}</p>
+                          <p>Stock: {(product as any).stock ?? 0}</p>
+                        </div>
+                        <Button
+                          onClick={() => addToCart(product)}
+                          className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+                          size="sm"
                         >
-                          <SelectTrigger className="w-32 bg-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white">
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="ordered">Ordered</SelectItem>
-                            <SelectItem value="received">Received</SelectItem>
-                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                          Add to Order
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Cart Panel */}
+              <div className="w-80 bg-white rounded-lg shadow p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-[#0A2645] flex items-center">
+                    <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                    Purchase Order
+                  </h2>
+                  <span className="text-sm text-gray-600">{cart.length} items</span>
+                </div>
+
+                <div className="space-y-2 max-h-96 overflow-y-auto mb-4">
+                  {cart.length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">No items in order</p>
+                  ) : (
+                    cart.map((item) => (
+                      <CartItem
+                        key={item.id}
+                        product={{
+                          id: item.id,
+                          name: item.name,
+                          price: item.costPrice // Use cost price for display
+                        }}
+                        quantity={item.quantity}
+                        onUpdateQuantity={(productId, quantity) => updateQuantity(productId, quantity)}
+                        onRemove={(productId) => removeFromCart(productId)}
+                      />
+                    ))
+                  )}
+                </div>
+
+                {cart.length > 0 && (
+                  <>
+                    <div className="border-t pt-4">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="font-semibold">Total Cost:</span>
+                        <span className="font-bold text-lg">R{getTotalCost().toFixed(2)}</span>
+                      </div>
+                      <Button
+                        onClick={handlePlaceOrder}
+                        className="w-full bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
+                        disabled={!selectedSupplier}
+                      >
+                        Place Order
+                      </Button>
+                    </div>
+                  </>
                 )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="history">
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-4 border-b">
+                <h2 className="text-xl font-semibold text-[#0A2645]">Purchase Order History</h2>
+                <p className="text-sm text-[#0A2645]/70">View and manage all purchase orders</p>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order #</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Supplier</TableHead>
+                      <TableHead>Items</TableHead>
+                      <TableHead>Total Cost</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {purchaseOrders.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                          No purchase orders found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      purchaseOrders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell className="font-medium">#{order.id}</TableCell>
+                          <TableCell>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
+                          <TableCell>{order.supplier}</TableCell>
+                          <TableCell>{order.items.length} items</TableCell>
+                          <TableCell>R{order.totalCost.toFixed(2)}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={order.status}
+                              onValueChange={(value) => updateOrderStatus(order.id, value as PurchaseOrder['status'])}
+                            >
+                              <SelectTrigger className="w-32 bg-white">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-white">
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="ordered">Ordered</SelectItem>
+                                <SelectItem value="received">Received</SelectItem>
+                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Supplier Selection Dialog */}
