@@ -19,6 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface CartItem {
   id: number;
@@ -26,6 +34,21 @@ interface CartItem {
   price: number;
   quantity: number;
   costPrice: number;
+}
+
+interface PurchaseOrder {
+  id: number;
+  orderDate: Date;
+  supplier: string;
+  items: Array<{
+    productId: number;
+    productName: string;
+    quantity: number;
+    costPrice: number;
+  }>;
+  totalCost: number;
+  status: 'pending' | 'ordered' | 'received' | 'cancelled';
+  notes?: string;
 }
 
 const PurchaseOrder = () => {
@@ -37,6 +60,7 @@ const PurchaseOrder = () => {
   const [showSupplierDialog, setShowSupplierDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
 
   const suppliers = [
     { id: 'supplier1', name: 'ABC Food Supplies' },
@@ -45,18 +69,21 @@ const PurchaseOrder = () => {
     { id: 'supplier4', name: 'Premium Ingredients Co.' },
   ];
 
-  // Load products from database on component mount
+  // Load products and purchase orders from database on component mount
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadData = async () => {
       try {
         const dbProducts = db.getAllProducts();
+        const dbOrders = db.getAllPurchaseOrders();
         console.log('Loaded products for purchase order:', dbProducts.length);
+        console.log('Loaded purchase orders:', dbOrders.length);
         setProducts(dbProducts);
+        setPurchaseOrders(dbOrders);
       } catch (error) {
-        console.error('Error loading products:', error);
+        console.error('Error loading data:', error);
         toast({
-          title: "Error loading products",
-          description: "Could not load products from database",
+          title: "Error loading data",
+          description: "Could not load data from database",
           variant: "destructive"
         });
       } finally {
@@ -64,7 +91,7 @@ const PurchaseOrder = () => {
       }
     };
 
-    loadProducts();
+    loadData();
   }, [toast]);
 
   // Filter products based on search term
@@ -137,11 +164,25 @@ const PurchaseOrder = () => {
       return;
     }
 
-    const supplierName = suppliers.find(s => s.id === selectedSupplier)?.name;
+    const supplierName = suppliers.find(s => s.id === selectedSupplier)?.name || '';
+    
+    // Create purchase order items
+    const orderItems = cart.map(item => ({
+      productId: item.id,
+      productName: item.name,
+      quantity: item.quantity,
+      costPrice: item.costPrice
+    }));
+
+    // Save to database
+    const newOrder = db.createPurchaseOrder(supplierName, orderItems);
+    
+    // Update local state
+    setPurchaseOrders([newOrder, ...purchaseOrders]);
     
     toast({
       title: "Purchase Order Placed",
-      description: `Order placed with ${supplierName} for R${getTotalCost().toFixed(2)}`,
+      description: `Order #${newOrder.id} placed with ${supplierName} for R${getTotalCost().toFixed(2)}`,
     });
 
     // Reset the order
@@ -149,12 +190,35 @@ const PurchaseOrder = () => {
     setSelectedSupplier('');
   };
 
+  const updateOrderStatus = (orderId: number, status: PurchaseOrder['status']) => {
+    const updatedOrder = db.updatePurchaseOrderStatus(orderId, status);
+    if (updatedOrder) {
+      setPurchaseOrders(purchaseOrders.map(order => 
+        order.id === orderId ? updatedOrder : order
+      ));
+      toast({
+        title: "Status Updated",
+        description: `Order #${orderId} status changed to ${status}`,
+      });
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'text-yellow-600 bg-yellow-100';
+      case 'ordered': return 'text-blue-600 bg-blue-100';
+      case 'received': return 'text-green-600 bg-green-100';
+      case 'cancelled': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading products...</p>
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -274,6 +338,72 @@ const PurchaseOrder = () => {
               </div>
             </>
           )}
+        </div>
+      </div>
+
+      {/* Purchase Order History */}
+      <div className="p-4">
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-4 border-b">
+            <h2 className="text-xl font-semibold text-[#0A2645]">Purchase Order History</h2>
+            <p className="text-sm text-[#0A2645]/70">View and manage all purchase orders</p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Order #</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Supplier</TableHead>
+                  <TableHead>Items</TableHead>
+                  <TableHead>Total Cost</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {purchaseOrders.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                      No purchase orders found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  purchaseOrders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="font-medium">#{order.id}</TableCell>
+                      <TableCell>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
+                      <TableCell>{order.supplier}</TableCell>
+                      <TableCell>{order.items.length} items</TableCell>
+                      <TableCell>R{order.totalCost.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={order.status}
+                          onValueChange={(value) => updateOrderStatus(order.id, value as PurchaseOrder['status'])}
+                        >
+                          <SelectTrigger className="w-32 bg-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="ordered">Ordered</SelectItem>
+                            <SelectItem value="received">Received</SelectItem>
+                            <SelectItem value="cancelled">Cancelled</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 
