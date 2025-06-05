@@ -20,6 +20,10 @@ const Reports = () => {
   const [activeTab, setActiveTab] = useState('sales');
   const [fromDate, setFromDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 7)));
   const [toDate, setToDate] = useState<Date>(new Date());
+  const [inventorySearchTerm, setInventorySearchTerm] = useState('');
+  const [inventorySortBy, setInventorySortBy] = useState<'problematic' | 'popular' | 'restocked' | 'status'>('problematic');
+  const [profitPlusSearchTerm, setProfitPlusSearchTerm] = useState('');
+  const [profitPlusSortBy, setProfitPlusSortBy] = useState<'name' | 'count' | 'value' | 'commission'>('name');
   const isMobile = useIsMobile();
   
   useEffect(() => {
@@ -40,7 +44,8 @@ const Reports = () => {
     productName: product.name,
     currentStock: product.stock !== undefined ? product.stock : 0,
     reorderLevel: Math.max(10, Math.floor((product.stock || 0) * 0.2)), // 20% of current stock as reorder level
-    lastRestocked: '2025-04-01' // Sample data as we don't have real restock dates
+    lastRestocked: '2025-04-01', // Sample data as we don't have real restock dates
+    isProblematic: (product.stock || 0) < Math.max(10, Math.floor((product.stock || 0) * 0.2))
   }));
   
   const paymentMethodsData = [
@@ -98,7 +103,13 @@ const Reports = () => {
             )}
             
             {activeTab === 'inventory' && (
-              <InventoryStatusTab inventoryData={inventoryData} />
+              <InventoryStatusTab 
+                inventoryData={inventoryData}
+                searchTerm={inventorySearchTerm}
+                setSearchTerm={setInventorySearchTerm}
+                sortBy={inventorySortBy}
+                setSortBy={setInventorySortBy}
+              />
             )}
             
             {activeTab === 'payment' && (
@@ -118,6 +129,10 @@ const Reports = () => {
                 setFromDate={setFromDate}
                 setToDate={setToDate}
                 profitPlusData={profitPlusData}
+                searchTerm={profitPlusSearchTerm}
+                setSearchTerm={setProfitPlusSearchTerm}
+                sortBy={profitPlusSortBy}
+                setSortBy={setProfitPlusSortBy}
               />
             )}
           </CardContent>

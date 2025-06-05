@@ -19,7 +19,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout })
             className="h-12 w-auto object-contain mr-3"
           />
           <div>
-            <h1 className="text-4xl font-bold text-primary">MiniPOS</h1>
+            <h1 className="text-4xl font-bold text-primary">Till2Day</h1>
             <p className="text-muted-foreground">Welcome, {userName}</p>
           </div>
         </div>
