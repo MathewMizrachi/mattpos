@@ -27,8 +27,8 @@ const MenuCategorySelector: React.FC<MenuCategorySelectorProps> = ({
           onClick={() => onCategoryChange(category.id)}
           className={`h-12 text-sm font-medium border-2 transition-colors ${
             selectedCategory === category.id 
-              ? 'bg-orange-500 text-blue-600 border-orange-500 hover:bg-orange-600' 
-              : 'bg-blue-600 text-orange-500 border-blue-600 hover:bg-blue-700'
+              ? 'bg-[#FAA225] text-[#0A2645] border-[#FAA225] hover:bg-[#FAA225]/90' 
+              : 'bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90'
           }`}
         >
           {category.label}
