@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -70,8 +69,9 @@ const POS = () => {
       return processTransaction(splitPayments);
     }
     // For other payment methods, create a simple payment details array
+    // Exclude 'split' from the method type for SplitPaymentDetails
     const paymentDetails = [{
-      method,
+      method: method as 'cash' | 'card' | 'shop2shop' | 'account',
       amount,
       customerName,
       customerPhone
