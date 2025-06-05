@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/table';
 import { formatCurrency } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from '@/hooks/use-toast';
+import CustomerForm from './CustomerForm';
 
 interface CustomerListProps {
   onBack: () => void;
@@ -21,8 +23,9 @@ interface CustomerListProps {
 }
 
 const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer }) => {
-  const { customers } = useApp();
+  const { customers, addCustomer } = useApp();
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [showAddCustomer, setShowAddCustomer] = React.useState(false);
   const isMobile = useIsMobile();
   
   const filteredCustomers = customers.filter(customer => 
@@ -36,8 +39,30 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
     }
   };
   
-  // Mock function to get a random amount owed for each customer
-  // In a real application, this would come from the actual customer data
+  const handleAddCustomer = (customerData: any) => {
+    const success = addCustomer(customerData);
+    if (success) {
+      toast({
+        title: "Customer added successfully",
+        description: `${customerData.name} has been added to the system`,
+      });
+    } else {
+      toast({
+        title: "Failed to add customer",
+        description: "Please try again",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  // Mock function to get total purchases for each customer
+  const getTotalPurchases = (customerId: number) => {
+    // Generate a consistent amount based on customer ID
+    const baseAmount = (customerId * 150) + ((customerId % 7) * 75);
+    return baseAmount;
+  };
+  
+  // Mock function to get amount owed for each customer
   const getAmountOwed = (customerId: number) => {
     // Generate a consistent random amount based on customer ID
     const baseAmount = customerId * 100;
@@ -50,11 +75,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div className="flex items-center">
-            <Button onClick={onBack} variant="outline" className="mr-4 text-white">
+            <Button onClick={onBack} variant="outline" className="mr-4 bg-[#0A2645] text-white border-[#0A2645] hover:bg-[#0A2645]/90">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-2xl font-bold">Customers</h1>
+            <h1 className="text-2xl font-bold text-[#0A2645]">Customer Accounts</h1>
           </div>
           
           <div className="flex gap-2 w-full sm:w-auto">
@@ -64,32 +89,36 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                 placeholder="Search customers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 bg-white text-[#0A2645] border-gray-300"
+                className="pl-8 bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225]"
               />
             </div>
             
-            <Button className="bg-[#0A2645] text-white">
+            <Button 
+              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-bold border-2 border-[#FAA225]"
+              onClick={() => setShowAddCustomer(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
-              New Customer
+              Add Customer
             </Button>
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
+        <div className="bg-white rounded-lg shadow overflow-x-auto border-2 border-gray-200">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className={isMobile ? "text-xs p-2" : ""}>Name</TableHead>
-                {!isMobile && <TableHead>Phone</TableHead>}
-                <TableHead className={isMobile ? "text-xs p-2" : ""}>Total Outstanding</TableHead>
-                <TableHead className={isMobile ? "text-xs p-2" : ""}>Status</TableHead>
-                <TableHead className={isMobile ? "text-xs p-2" : ""}>Actions</TableHead>
+              <TableRow className="bg-[#0A2645]">
+                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Name</TableHead>
+                {!isMobile && <TableHead className="text-white font-bold">Phone</TableHead>}
+                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Total Purchases</TableHead>
+                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Owing</TableHead>
+                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Status</TableHead>
+                <TableHead className={`text-white font-bold ${isMobile ? "text-xs p-2" : ""}`}>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredCustomers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={isMobile ? 4 : 5} className="text-center py-4 text-gray-500">
+                  <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-4 text-gray-500">
                     No customers found
                   </TableCell>
                 </TableRow>
@@ -97,14 +126,15 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                 filteredCustomers.map((customer) => (
                   <TableRow 
                     key={customer.id} 
-                    className={`cursor-pointer hover:bg-gray-50 ${isMobile ? 'text-xs' : ''}`}
+                    className={`cursor-pointer hover:bg-gray-50 border-b ${isMobile ? 'text-xs' : ''}`}
                     onClick={() => handleCustomerClick(customer.id)}
                   >
-                    <TableCell className={`font-medium ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
-                    {!isMobile && <TableCell>{customer.phone}</TableCell>}
-                    <TableCell className={isMobile ? 'p-2' : ''}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
+                    <TableCell className={`font-medium text-[#0A2645] ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
+                    {!isMobile && <TableCell className="text-[#0A2645]">{customer.phone}</TableCell>}
+                    <TableCell className={`text-[#0A2645] font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getTotalPurchases(customer.id))}</TableCell>
+                    <TableCell className={`text-red-600 font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
                     <TableCell className={isMobile ? 'p-2' : ''}>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }`}>
                         {customer.isPaid ? "Paid" : "Outstanding"}
@@ -115,7 +145,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                         <Button 
                           variant="outline" 
                           size="sm"
-                          className={`text-white ${isMobile ? 'text-xs px-2 py-1' : ''}`}
+                          className={`bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 border-[#FAA225] font-bold ${isMobile ? 'text-xs px-2 py-1' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCustomerClick(customer.id);
@@ -132,9 +162,14 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           </Table>
         </div>
       </div>
+      
+      <CustomerForm
+        isOpen={showAddCustomer}
+        onClose={() => setShowAddCustomer(false)}
+        onSubmit={handleAddCustomer}
+      />
     </div>
   );
 };
 
 export default CustomerList;
-

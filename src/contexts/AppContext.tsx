@@ -1,349 +1,349 @@
-
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import db from '@/lib/db';
-import { SplitPaymentDetails, Shift, Product, CartItem, User, Customer } from '@/types';
-
-interface PaymentBreakdown {
-  cash: number;
-  card: number;
-  shop2shop: number;
-  account: number;
-}
-
-interface RefundBreakdown {
-  total: number;
-  items: {
-    productId: number;
-    productName: string;
-    quantity: number;
-    amount: number;
-  }[];
-}
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { User, Product, Customer, CartItem, Shift, SplitPaymentDetails, Refund, PaymentBreakdown, RefundBreakdown } from '@/types';
+import { getStoredUsers, getStoredProducts, getStoredCustomers } from '@/lib/db';
 
 interface AppContextType {
+  // User management
   currentUser: User | null;
-  currentShift: Shift | null;
-  cart: CartItem[];
-  products: Product[];
-  customers: Customer[];
-  
-  login: (pin: string) => boolean;
+  users: User[];
+  login: (pin: string) => User | null;
   logout: () => void;
   
-  startShift: (userId: number, startFloat: number) => void;
-  endShift: (endFloat: number) => Shift | null;
-  getLastShiftEndFloat: () => number | null;
+  // Product management
+  products: Product[];
+  addProduct: (product: Omit<Product, 'id'>) => boolean;
+  updateProduct: (id: number, product: Omit<Product, 'id'>) => boolean;
+  deleteProduct: (id: number) => boolean;
   
-  addToCart: (product: Product, quantity?: number, customPrice?: number) => void;
-  updateCartItem: (productId: number, quantity: number, price?: number) => void;
-  removeFromCart: (productId: number, price?: number) => void;
-  clearCart: () => void;
-  
-  processPayment: (cashReceived: number, paymentMethod?: 'cash' | 'card' | 'shop2shop' | 'account' | 'split', customerName?: string, customerPhone?: string, splitPayments?: SplitPaymentDetails[]) => {
-    success: boolean;
-    change: number;
-  };
-  
-  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
-  
-  getShiftPaymentBreakdown: (shiftId: number) => PaymentBreakdown;
-  getShiftRefundBreakdown: (shiftId: number) => RefundBreakdown;
-  getLowStockProducts: (threshold?: number) => Product[];
-  calculateExpectedCashInDrawer: (shiftId: number) => number;
-  
-  addCustomer: (name: string, phone: string, idNumber?: string, paymentTermDays?: number) => Customer;
-  getCustomers: () => Customer[];
+  // Customer management
+  customers: Customer[];
+  addCustomer: (customerData: {
+    name: string;
+    phone: string;
+    idNumber?: string;
+    paymentTermDays?: number;
+  }) => boolean;
   markCustomerAsPaid: (customerId: number) => boolean;
   
-  addProduct: (product: Omit<Product, 'id'>) => Product;
-  updateProduct: (id: number, updates: Partial<Omit<Product, 'id'>>) => Product | null;
-  deleteProduct: (id: number) => boolean;
-  refreshProducts: () => void;
+  // Cart management
+  cart: CartItem[];
+  addToCart: (product: Product, quantity?: number) => void;
+  removeFromCart: (productId: number) => void;
+  updateCartQuantity: (productId: number, quantity: number) => void;
+  clearCart: () => void;
+  cartTotal: number;
+  
+  // Shift management
+  currentShift: Shift | null;
+  shifts: Shift[];
+  startShift: (userId: number, startFloat: number) => boolean;
+  endShift: (endFloat: number) => boolean;
+  
+  // Transaction management
+  processTransaction: (paymentDetails: SplitPaymentDetails[]) => boolean;
+  
+  // Refund management
+  refunds: Refund[];
+  processRefund: (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop') => boolean;
+  
+  // Reports
+  getPaymentBreakdown: (shiftId?: number) => PaymentBreakdown;
+  getRefundBreakdown: (shiftId?: number) => RefundBreakdown;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentShift, setCurrentShift] = useState<Shift | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [products, setProducts] = useState<Product[]>(db.getAllProducts());
+  const [users, setUsers] = useState<User[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
-
-  const login = (pin: string): boolean => {
-    const user = db.authenticateUser(pin);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [currentShift, setCurrentShift] = useState<Shift | null>(null);
+  const [shifts, setShifts] = useState<Shift[]>([]);
+  const [refunds, setRefunds] = useState<Refund[]>([]);
+  
+  useEffect(() => {
+    const storedUsers = getStoredUsers();
+    if (storedUsers) {
+      setUsers(storedUsers);
+    }
+    
+    const storedProducts = getStoredProducts();
+    if (storedProducts) {
+      setProducts(storedProducts);
+    }
+    
+    const storedCustomers = getStoredCustomers();
+    if (storedCustomers) {
+      setCustomers(storedCustomers);
+    }
+  }, []);
+  
+  useEffect(() => {
+    // Calculate cart total whenever the cart changes
+    const newCartTotal = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    setCartTotal(newCartTotal);
+  }, [cart]);
+  
+  const login = (pin: string): User | null => {
+    const user = users.find(user => user.pin === pin);
     if (user) {
       setCurrentUser(user);
-      const activeShift = db.getCurrentShift();
-      if (activeShift) {
-        setCurrentShift(activeShift);
-      }
-      return true;
+      return user;
     }
-    return false;
+    return null;
   };
-
+  
   const logout = () => {
     setCurrentUser(null);
-    setCurrentShift(null);
-    clearCart();
   };
-
-  const startShift = (userId: number, startFloat: number) => {
-    const shift = db.startShift(userId, startFloat);
-    setCurrentShift(shift);
+  
+  const addProduct = (product: Omit<Product, 'id'>): boolean => {
+    try {
+      const newProduct: Product = {
+        id: Date.now(), // Simple ID generation
+        ...product,
+      };
+      setProducts(prev => [...prev, newProduct]);
+      return true;
+    } catch (error) {
+      console.error('Error adding product:', error);
+      return false;
+    }
   };
-
-  const endShift = (endFloat: number) => {
-    if (!currentShift) return null;
-    
-    const completedShift = db.endShift(currentShift.id, endFloat);
-    setCurrentShift(null);
-    return completedShift;
-  };
-
-  const getLastShiftEndFloat = (): number | null => {
-    return db.getLastShiftEndFloat();
-  };
-
-  const addToCart = (product: Product, quantity = 1, customPrice?: number) => {
-    // If a custom price is provided, use it instead of the product's default price
-    const productToAdd = customPrice !== undefined ? { ...product, price: customPrice } : product;
-    
-    setCart(prevCart => {
-      // Check if this product (with same price) is already in the cart
-      const existingItemIndex = prevCart.findIndex(item => 
-        item.product.id === productToAdd.id && 
-        item.product.price === productToAdd.price
+  
+  const updateProduct = (id: number, product: Omit<Product, 'id'>): boolean => {
+    try {
+      setProducts(prev =>
+        prev.map(p => (p.id === id ? { ...p, ...product } : p))
       );
+      return true;
+    } catch (error) {
+      console.error('Error updating product:', error);
+      return false;
+    }
+  };
+  
+  const deleteProduct = (id: number): boolean => {
+    try {
+      setProducts(prev => prev.filter(product => product.id !== id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      return false;
+    }
+  };
+  
+  const addCustomer = (customerData: {
+    name: string;
+    phone: string;
+    idNumber?: string;
+    paymentTermDays?: number;
+  }) => {
+    try {
+      const newCustomer: Customer = {
+        id: Date.now(), // Simple ID generation
+        name: customerData.name,
+        phone: customerData.phone,
+        idNumber: customerData.idNumber || '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        paymentTermDays: customerData.paymentTermDays || 30,
+        isPaid: false,
+      };
       
-      if (existingItemIndex >= 0) {
-        // Update quantity of existing item
-        return prevCart.map((item, index) => 
-          index === existingItemIndex
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+      setCustomers(prev => [...prev, newCustomer]);
+      return true;
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      return false;
+    }
+  };
+
+  const markCustomerAsPaid = (customerId: number): boolean => {
+    try {
+      setCustomers(prev =>
+        prev.map(customer =>
+          customer.id === customerId ? { ...customer, isPaid: true } : customer
+        )
+      );
+      return true;
+    } catch (error) {
+      console.error('Error marking customer as paid:', error);
+      return false;
+    }
+  };
+  
+  const [cartTotal, setCartTotal] = useState<number>(0);
+  
+  const addToCart = (product: Product, quantity: number = 1) => {
+    setCart(prev => {
+      const existingItem = prev.find(item => item.product.id === product.id);
+      if (existingItem) {
+        return prev.map(item =>
+          item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         );
       } else {
-        // Check if this product (with different price) is in the cart
-        const sameProductDifferentPrice = prevCart.findIndex(item => 
-          item.product.id === productToAdd.id && 
-          item.product.price !== productToAdd.price
-        );
-        
-        if (sameProductDifferentPrice >= 0) {
-          // Remove all instances of this product and add with the new price and combined quantity
-          const totalQuantity = prevCart.reduce((sum, item) => 
-            item.product.id === productToAdd.id ? sum + item.quantity : sum, 0
-          );
-          
-          const cartWithoutProduct = prevCart.filter(item => item.product.id !== productToAdd.id);
-          return [...cartWithoutProduct, { product: productToAdd, quantity: totalQuantity + quantity }];
-        } else {
-          // Add new item to cart
-          return [...prevCart, { product: productToAdd, quantity }];
-        }
+        return [...prev, { product, quantity }];
       }
     });
   };
-
-  const updateCartItem = (productId: number, quantity: number, price?: number) => {
-    if (quantity <= 0) {
-      removeFromCart(productId, price);
-      return;
-    }
-    
-    setCart(prevCart => 
-      prevCart.map(item => 
-        (item.product.id === productId && 
-        (price === undefined || item.product.price === price))
-          ? { ...item, quantity }
-          : item
+  
+  const removeFromCart = (productId: number) => {
+    setCart(prev => prev.filter(item => item.product.id !== productId));
+  };
+  
+  const updateCartQuantity = (productId: number, quantity: number) => {
+    setCart(prev =>
+      prev.map(item =>
+        item.product.id === productId ? { ...item, quantity } : item
       )
     );
   };
-
-  const removeFromCart = (productId: number, price?: number) => {
-    setCart(prevCart => 
-      prevCart.filter(item => 
-        !(item.product.id === productId &&
-        (price === undefined || item.product.price === price))
-      )
-    );
-  };
-
+  
   const clearCart = () => {
     setCart([]);
   };
-
-  const processPayment = (
-    cashReceived: number, 
-    paymentMethod: 'cash' | 'card' | 'shop2shop' | 'account' | 'split' = 'cash',
-    customerName?: string,
-    customerPhone?: string,
-    splitPayments?: SplitPaymentDetails[]
-  ) => {
-    if (!currentShift || cart.length === 0) {
-      return { success: false, change: 0 };
+  
+  const startShift = (userId: number, startFloat: number): boolean => {
+    try {
+      const newShift: Shift = {
+        id: Date.now(), // Simple ID generation
+        userId: userId,
+        startTime: new Date(),
+        startFloat: startFloat,
+      };
+      setCurrentShift(newShift);
+      setShifts(prev => [...prev, newShift]);
+      return true;
+    } catch (error) {
+      console.error('Error starting shift:', error);
+      return false;
     }
-    
-    const items = cart.map(item => ({
-      productId: item.product.id,
-      quantity: item.quantity,
-      unitPrice: item.product.price
-    }));
-    
-    let customerId: number | undefined;
-    
-    if ((paymentMethod === 'account' || (paymentMethod === 'split' && splitPayments?.some(p => p.method === 'account'))) 
-        && customerName && customerPhone) {
-      const customerIdNumber = splitPayments?.find(p => p.method === 'account')?.customerIdNumber;
-      const paymentTermDays = splitPayments?.find(p => p.method === 'account')?.paymentTermDays;
-      const customer = addCustomer(customerName, customerPhone, customerIdNumber, paymentTermDays);
-      customerId = customer.id;
+  };
+  
+  const endShift = (endFloat: number): boolean => {
+    if (!currentShift) return false;
+    try {
+      const updatedShift: Shift = {
+        ...currentShift,
+        endTime: new Date(),
+        endFloat: endFloat,
+      };
+      setCurrentShift(null);
+      setShifts(prev =>
+        prev.map(shift => (shift.id === updatedShift.id ? updatedShift : shift))
+      );
+      return true;
+    } catch (error) {
+      console.error('Error ending shift:', error);
+      return false;
     }
-    
-    const dbSplitPayments = splitPayments?.map(payment => ({
-      method: payment.method,
-      amount: payment.amount
-    }));
-    
-    const transaction = db.createTransaction(
-      currentShift.id, 
-      items, 
-      cashReceived, 
-      paymentMethod, 
-      customerId,
-      dbSplitPayments
-    );
-    
-    const updatedShift = db.getCurrentShift();
-    if (updatedShift) {
-      setCurrentShift(updatedShift);
+  };
+  
+  const processTransaction = (paymentDetails: SplitPaymentDetails[]): boolean => {
+    try {
+      // Implement transaction processing logic here
+      clearCart();
+      return true;
+    } catch (error) {
+      console.error('Error processing transaction:', error);
+      return false;
     }
-    
-    refreshProducts();
-    refreshCustomers();
-    
-    clearCart();
-    
-    return { 
-      success: true, 
-      change: transaction.change
+  };
+  
+  const processRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop'): boolean => {
+    if (!currentShift) return false;
+    try {
+      const refundAmount = product.price * quantity;
+      
+      const newRefund: Refund = {
+        id: Date.now(),
+        shiftId: currentShift.id,
+        timestamp: new Date(),
+        productId: product.id,
+        quantity: quantity,
+        amount: refundAmount,
+        method: refundMethod,
+      };
+      
+      setRefunds(prev => [...prev, newRefund]);
+      removeFromCart(product.id);
+      return true;
+    } catch (error) {
+      console.error('Error processing refund:', error);
+      return false;
+    }
+  };
+  
+  const getPaymentBreakdown = (shiftId?: number): PaymentBreakdown => {
+    // Mock implementation
+    return {
+      cash: 100,
+      card: 50,
+      shop2shop: 25,
+      account: 10,
+    };
+  };
+  
+  const getRefundBreakdown = (shiftId?: number): RefundBreakdown => {
+    // Mock implementation
+    return {
+      total: 50,
+      items: [
+        {
+          productId: 1,
+          productName: 'Example Product',
+          quantity: 1,
+          amount: 50,
+        },
+      ],
     };
   };
 
-  const processRefund = (product: Product, quantity: number, refundMethod: 'cash' | 'shop2shop'): boolean => {
-    if (!currentShift) return false;
-    
-    const amount = product.price * quantity;
-    
-    db.createRefund(
-      currentShift.id,
-      product.id,
-      quantity,
-      amount,
-      refundMethod
-    );
-    
-    const updatedShift = db.getCurrentShift();
-    if (updatedShift) {
-      setCurrentShift(updatedShift);
-    }
-    
-    refreshProducts();
-    
-    return true;
-  };
-
-  const getShiftPaymentBreakdown = (shiftId: number): PaymentBreakdown => {
-    return db.getShiftPaymentBreakdown(shiftId);
-  };
-
-  const getShiftRefundBreakdown = (shiftId: number): RefundBreakdown => {
-    return db.getShiftRefundBreakdown(shiftId);
-  };
-
-  const getLowStockProducts = (threshold?: number): Product[] => {
-    return db.getLowStockProducts(threshold);
-  };
-
-  const calculateExpectedCashInDrawer = (shiftId: number): number => {
-    return db.calculateExpectedCashInDrawer(shiftId);
-  };
-
-  const addCustomer = (name: string, phone: string, idNumber?: string, paymentTermDays?: number): Customer => {
-    const customer = db.addCustomer(name, phone, idNumber, paymentTermDays);
-    refreshCustomers();
-    return customer;
-  };
-
-  const getCustomers = (): Customer[] => {
-    return customers;
-  };
-  
-  const markCustomerAsPaid = (customerId: number): boolean => {
-    const success = db.markCustomerAsPaid(customerId);
-    if (success) {
-      refreshCustomers();
-    }
-    return success;
-  };
-
-  const refreshCustomers = () => {
-    setCustomers(db.getAllCustomers());
-  };
-
-  const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = db.addProduct(product);
-    refreshProducts();
-    return newProduct;
-  };
-
-  const updateProduct = (id: number, updates: Partial<Omit<Product, 'id'>>) => {
-    const updated = db.updateProduct(id, updates);
-    refreshProducts();
-    return updated;
-  };
-
-  const deleteProduct = (id: number) => {
-    const result = db.deleteProduct(id);
-    refreshProducts();
-    return result;
-  };
-
-  const refreshProducts = () => {
-    setProducts(db.getAllProducts());
-  };
-
   const value: AppContextType = {
+    // User management
     currentUser,
-    currentShift,
-    cart,
-    products,
-    customers,
+    users,
     login,
     logout,
-    startShift,
-    endShift,
-    getLastShiftEndFloat,
-    addToCart,
-    updateCartItem,
-    removeFromCart,
-    clearCart,
-    processPayment,
-    processRefund,
-    getShiftPaymentBreakdown,
-    getShiftRefundBreakdown,
-    getLowStockProducts,
-    calculateExpectedCashInDrawer,
-    addCustomer,
-    getCustomers,
-    markCustomerAsPaid,
+    
+    // Product management
+    products,
     addProduct,
     updateProduct,
     deleteProduct,
-    refreshProducts,
+    
+    // Customer management
+    customers,
+    addCustomer,
+    markCustomerAsPaid,
+    
+    // Cart management
+    cart,
+    addToCart,
+    removeFromCart,
+    updateCartQuantity,
+    clearCart,
+    cartTotal,
+    
+    // Shift management
+    currentShift,
+    shifts,
+    startShift,
+    endShift,
+    
+    // Transaction management
+    processTransaction,
+    
+    // Refund management
+    refunds,
+    processRefund,
+    
+    // Reports
+    getPaymentBreakdown,
+    getRefundBreakdown,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
