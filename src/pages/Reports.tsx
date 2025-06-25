@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -32,6 +30,9 @@ const Reports = () => {
       navigate('/');
     }
   }, [currentUser, navigate]);
+
+  // Debug logging to see what products we have
+  console.log('All products for inventory:', products.length, products.map(p => ({ id: p.id, name: p.name, stock: p.stock })));
   
   // Sample data - this would typically come from API calls
   const salesData = [
@@ -41,7 +42,7 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  // Generate inventory data from all products in the database
+  // Generate inventory data from ALL products in the database
   const inventoryData = products.map(product => {
     const currentStock = product.stock !== undefined ? product.stock : 0;
     const reorderLevel = Math.max(5, Math.floor(currentStock * 0.3)); // 30% of current stock as reorder level, minimum 5
@@ -54,6 +55,8 @@ const Reports = () => {
       isProblematic: currentStock < reorderLevel
     };
   });
+
+  console.log('Generated inventory data:', inventoryData.length, inventoryData.slice(0, 5));
   
   const paymentMethodsData = [
     { method: 'Shop2Shop', amount: 587.25, percentage: 12.2 },
@@ -150,4 +153,3 @@ const Reports = () => {
 };
 
 export default Reports;
-
