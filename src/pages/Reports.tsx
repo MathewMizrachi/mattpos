@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -40,13 +41,19 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  const inventoryData = products.map(product => ({
-    productName: product.name,
-    currentStock: product.stock !== undefined ? product.stock : 0,
-    reorderLevel: Math.max(10, Math.floor((product.stock || 0) * 0.2)), // 20% of current stock as reorder level
-    lastRestocked: '2025-04-01', // Sample data as we don't have real restock dates
-    isProblematic: (product.stock || 0) < Math.max(10, Math.floor((product.stock || 0) * 0.2))
-  }));
+  // Generate inventory data from all products in the database
+  const inventoryData = products.map(product => {
+    const currentStock = product.stock !== undefined ? product.stock : 0;
+    const reorderLevel = Math.max(5, Math.floor(currentStock * 0.3)); // 30% of current stock as reorder level, minimum 5
+    
+    return {
+      productName: product.name,
+      currentStock: currentStock,
+      reorderLevel: reorderLevel,
+      lastRestocked: '2025-04-01', // Sample data as we don't have real restock dates
+      isProblematic: currentStock < reorderLevel
+    };
+  });
   
   const paymentMethodsData = [
     { method: 'Shop2Shop', amount: 587.25, percentage: 12.2 },
@@ -143,3 +150,4 @@ const Reports = () => {
 };
 
 export default Reports;
+
