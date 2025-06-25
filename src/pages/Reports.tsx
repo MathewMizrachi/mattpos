@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
+import db from '@/lib/db';
 
 // Import refactored components
 import { ReportHeader } from '@/components/Reports/ReportHeader';
@@ -14,7 +16,7 @@ import { ProfitPlusTab } from '@/components/Reports/ProfitPlusTab';
 import { ReportTypeSelector } from '@/components/Reports/ReportTypeSelector';
 
 const Reports = () => {
-  const { currentUser, getShiftPaymentBreakdown, products } = useApp();
+  const { currentUser, getShiftPaymentBreakdown } = useApp();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('sales');
   const [fromDate, setFromDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 7)));
@@ -31,15 +33,11 @@ const Reports = () => {
     }
   }, [currentUser, navigate]);
 
-  // Enhanced debug logging to understand the data issue
+  // Get ALL products from the database instead of AppContext
+  const allProducts = db.getAllProducts();
   console.log('=== INVENTORY DEBUG INFO ===');
-  console.log('Total products from context:', products.length);
-  console.log('All products details:', products);
-  console.log('AppContext products sample:', products.slice(0, 5));
-  
-  // Check if there are additional products in localStorage or other sources
-  const allProducts = products || [];
-  console.log('Products being used for inventory:', allProducts.length);
+  console.log('Total products from database:', allProducts.length);
+  console.log('Database products sample:', allProducts.slice(0, 5));
   
   // Sample data - this would typically come from API calls
   const salesData = [
@@ -49,12 +47,10 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  // Generate inventory data from ALL available products
+  // Generate inventory data from ALL available products in the database
   const inventoryData = allProducts.map(product => {
     const currentStock = product.stock !== undefined ? product.stock : 0;
     const reorderLevel = Math.max(5, Math.floor(currentStock * 0.3)); // 30% of current stock as reorder level, minimum 5
-    
-    console.log(`Processing product: ${product.name}, Stock: ${currentStock}, ID: ${product.id}`);
     
     return {
       productName: product.name,
@@ -65,7 +61,7 @@ const Reports = () => {
     };
   });
 
-  console.log('Final inventory data for display:', inventoryData.length, inventoryData);
+  console.log('Final inventory data for display:', inventoryData.length);
   console.log('=== END DEBUG INFO ===');
   
   const paymentMethodsData = [
