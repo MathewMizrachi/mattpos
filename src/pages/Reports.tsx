@@ -31,8 +31,15 @@ const Reports = () => {
     }
   }, [currentUser, navigate]);
 
-  // Debug logging to see what products we have
-  console.log('All products for inventory:', products.length, products.map(p => ({ id: p.id, name: p.name, stock: p.stock })));
+  // Enhanced debug logging to understand the data issue
+  console.log('=== INVENTORY DEBUG INFO ===');
+  console.log('Total products from context:', products.length);
+  console.log('All products details:', products);
+  console.log('AppContext products sample:', products.slice(0, 5));
+  
+  // Check if there are additional products in localStorage or other sources
+  const allProducts = products || [];
+  console.log('Products being used for inventory:', allProducts.length);
   
   // Sample data - this would typically come from API calls
   const salesData = [
@@ -42,10 +49,12 @@ const Reports = () => {
     { date: '2025-04-03', total: 1105.00, transactions: 39, avgSale: 28.33 },
   ];
   
-  // Generate inventory data from ALL products in the database
-  const inventoryData = products.map(product => {
+  // Generate inventory data from ALL available products
+  const inventoryData = allProducts.map(product => {
     const currentStock = product.stock !== undefined ? product.stock : 0;
     const reorderLevel = Math.max(5, Math.floor(currentStock * 0.3)); // 30% of current stock as reorder level, minimum 5
+    
+    console.log(`Processing product: ${product.name}, Stock: ${currentStock}, ID: ${product.id}`);
     
     return {
       productName: product.name,
@@ -56,7 +65,8 @@ const Reports = () => {
     };
   });
 
-  console.log('Generated inventory data:', inventoryData.length, inventoryData.slice(0, 5));
+  console.log('Final inventory data for display:', inventoryData.length, inventoryData);
+  console.log('=== END DEBUG INFO ===');
   
   const paymentMethodsData = [
     { method: 'Shop2Shop', amount: 587.25, percentage: 12.2 },
