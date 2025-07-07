@@ -97,6 +97,8 @@ class Database {
   private users: User[] = [
     { id: 1, name: 'Owner', pin: '55', role: 'manager' },
     { id: 2, name: 'Staff 1', pin: '55', role: 'staff' },
+    { id: 3, name: 'John Smith', pin: '1234', role: 'staff' },
+    { id: 4, name: 'Sarah Johnson', pin: '5678', role: 'staff' },
   ];
 
   private products: Product[] = [
@@ -162,8 +164,57 @@ class Database {
   ];
 
   private customers: Customer[] = [];
-  private shifts: Shift[] = [];
-  private transactions: Transaction[] = [];
+  
+  // Add 3 active shifts with transactions for cashup demo
+  private shifts: Shift[] = [
+    {
+      id: 1,
+      userId: 2,
+      startTime: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
+      startFloat: 200,
+      salesTotal: 1250.50,
+      transactionCount: 18,
+    },
+    {
+      id: 2,
+      userId: 3,
+      startTime: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+      startFloat: 150,
+      salesTotal: 890.25,
+      transactionCount: 12,
+    },
+    {
+      id: 3,
+      userId: 4,
+      startTime: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+      startFloat: 100,
+      salesTotal: 567.75,
+      transactionCount: 8,
+    }
+  ];
+
+  // Add sample transactions for the 3 active shifts
+  private transactions: Transaction[] = [
+    // Till 1 transactions (mixed payment methods)
+    { id: 1, shiftId: 1, timestamp: new Date(Date.now() - 7 * 60 * 60 * 1000), total: 85.50, items: [{ productId: 108784, quantity: 2, unitPrice: 20 }, { productId: 148555, quantity: 1, unitPrice: 45.50 }], cashReceived: 90, change: 4.50, paymentMethod: 'cash' },
+    { id: 2, shiftId: 1, timestamp: new Date(Date.now() - 6.5 * 60 * 60 * 1000), total: 156.00, items: [{ productId: 102939, quantity: 3, unitPrice: 38 }, { productId: 103080, quantity: 2, unitPrice: 27 }], cashReceived: 156, change: 0, paymentMethod: 'card' },
+    { id: 3, shiftId: 1, timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), total: 75.00, items: [{ productId: 106659, quantity: 2, unitPrice: 37.50 }], cashReceived: 75, change: 0, paymentMethod: 'shop2shop' },
+    { id: 4, shiftId: 1, timestamp: new Date(Date.now() - 5.5 * 60 * 60 * 1000), total: 125.50, items: [{ productId: 148561, quantity: 1, unitPrice: 125.50 }], cashReceived: 0, change: 0, paymentMethod: 'account' },
+    { id: 5, shiftId: 1, timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), total: 95.25, items: [{ productId: 108925, quantity: 2, unitPrice: 29 }, { productId: 108937, quantity: 2, unitPrice: 18.625 }], cashReceived: 100, change: 4.75, paymentMethod: 'cash' },
+    
+    // Till 2 transactions (card heavy)
+    { id: 6, shiftId: 2, timestamp: new Date(Date.now() - 5.5 * 60 * 60 * 1000), total: 124.00, items: [{ productId: 103042, quantity: 2, unitPrice: 38 }, { productId: 148569, quantity: 1, unitPrice: 48 }], cashReceived: 124, change: 0, paymentMethod: 'card' },
+    { id: 7, shiftId: 2, timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), total: 67.50, items: [{ productId: 110925, quantity: 1, unitPrice: 25 }, { productId: 111618, quantity: 1, unitPrice: 18 }, { productId: 103088, quantity: 2, unitPrice: 12.25 }], cashReceived: 70, change: 2.50, paymentMethod: 'cash' },
+    { id: 8, shiftId: 2, timestamp: new Date(Date.now() - 4.5 * 60 * 60 * 1000), total: 198.75, items: [{ productId: 148561, quantity: 1, unitPrice: 170 }, { productId: 108937, quantity: 1, unitPrice: 17 }, { productId: 111832, quantity: 3, unitPrice: 3.92 }], cashReceived: 198.75, change: 0, paymentMethod: 'card' },
+    { id: 9, shiftId: 2, timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000), total: 89.00, items: [{ productId: 108784, quantity: 3, unitPrice: 20 }, { productId: 108808, quantity: 3, unitPrice: 9.67 }], cashReceived: 89, change: 0, paymentMethod: 'shop2shop' },
+    
+    // Till 3 transactions (cash heavy)
+    { id: 10, shiftId: 3, timestamp: new Date(Date.now() - 3.5 * 60 * 60 * 1000), total: 156.75, items: [{ productId: 148555, quantity: 3, unitPrice: 45 }, { productId: 109460, quantity: 1, unitPrice: 21.75 }], cashReceived: 160, change: 3.25, paymentMethod: 'cash' },
+    { id: 11, shiftId: 3, timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), total: 78.50, items: [{ productId: 102939, quantity: 2, unitPrice: 38 }, { productId: 111832, quantity: 1, unitPrice: 2.50 }], cashReceived: 80, change: 1.50, paymentMethod: 'cash' },
+    { id: 12, shiftId: 3, timestamp: new Date(Date.now() - 2.5 * 60 * 60 * 1000), total: 145.25, items: [{ productId: 110937, quantity: 3, unitPrice: 30 }, { productId: 148553, quantity: 3, unitPrice: 18.42 }], cashReceived: 145.25, change: 0, paymentMethod: 'card' },
+    { id: 13, shiftId: 3, timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), total: 67.25, items: [{ productId: 108826, quantity: 4, unitPrice: 14 }, { productId: 106164, quantity: 2, unitPrice: 5.625 }], cashReceived: 70, change: 2.75, paymentMethod: 'cash' }
+  ];
+
   private refunds: Refund[] = [];
   private purchaseOrders: PurchaseOrder[] = [
     // Sample purchase orders for demonstration
@@ -203,8 +254,8 @@ class Database {
   ];
 
   private currentId = {
-    shift: 1,
-    transaction: 1,
+    shift: 4,
+    transaction: 14,
     product: 200000,
     customer: 1,
     refund: 1,
