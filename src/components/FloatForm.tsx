@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -116,21 +115,21 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
-      <Card className="w-full max-w-2xl bg-white shadow-2xl">
+      <Card className="w-full max-w-2xl bg-[#0A2645] border-2 border-[#FAA225] shadow-2xl">
         <CardHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
             <div className="bg-[#FAA225] p-3 rounded-full">
               <Calculator className="h-8 w-8 text-[#0A2645]" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-[#0A2645]">Starting Float</CardTitle>
-          <p className="text-gray-600 mt-2">
+          <CardTitle className="text-2xl font-bold text-white">Starting Float</CardTitle>
+          <p className="text-gray-300 mt-2">
             Enter the amount of cash in the drawer at the start of this shift
           </p>
           {previousFloat !== null && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
-              <p className="text-blue-800 text-sm">
-                Previous shift ended with <span className="font-semibold">R{previousFloat.toFixed(2)}</span> in the drawer
+            <div className="bg-[#FAA225] border border-[#FAA225] rounded-lg p-3 mt-3">
+              <p className="text-[#0A2645] text-sm font-medium">
+                Previous shift ended with <span className="font-bold">R{previousFloat.toFixed(2)}</span> in the drawer
               </p>
             </div>
           )}
@@ -138,7 +137,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
         <CardContent className="space-y-6">
           {/* Input Mode Selection */}
-          <Card className="bg-gray-50">
+          <Card className="bg-[#0A2645] border-2 border-[#FAA225]">
             <CardContent className="p-4">
               <RadioGroup
                 value={inputMode}
@@ -146,15 +145,15 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                 className="flex justify-center space-x-8"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="denominations" id="denominations" />
-                  <label htmlFor="denominations" className="text-[#0A2645] font-medium cursor-pointer flex items-center gap-2">
+                  <RadioGroupItem value="denominations" id="denominations" className="border-white text-[#FAA225]" />
+                  <label htmlFor="denominations" className="text-white font-medium cursor-pointer flex items-center gap-2">
                     <Calculator className="h-4 w-4" />
                     Count Denominations
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="total" id="total" />
-                  <label htmlFor="total" className="text-[#0A2645] font-medium cursor-pointer flex items-center gap-2">
+                  <RadioGroupItem value="total" id="total" className="border-white text-[#FAA225]" />
+                  <label htmlFor="total" className="text-white font-medium cursor-pointer flex items-center gap-2">
                     <DollarSign className="h-4 w-4" />
                     Total Amount
                   </label>
@@ -164,9 +163,9 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
           </Card>
 
           {inputMode === 'denominations' ? (
-            <Card>
+            <Card className="bg-[#0A2645] border-2 border-[#FAA225]">
               <CardHeader>
-                <CardTitle className="text-lg text-[#0A2645]">Count Your Cash</CardTitle>
+                <CardTitle className="text-lg text-white">Count Your Cash</CardTitle>
               </CardHeader>
               <CardContent>
                 <Form {...denominationForm}>
@@ -179,7 +178,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                           name={denom.key as keyof DenominationFormValues}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#0A2645] font-medium">{denom.label}</FormLabel>
+                              <FormLabel className="text-white font-medium">{denom.label}</FormLabel>
                               <FormControl>
                                 <Input 
                                   type="number" 
@@ -200,9 +199,9 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
               </CardContent>
             </Card>
           ) : (
-            <Card>
+            <Card className="bg-[#0A2645] border-2 border-[#FAA225]">
               <CardHeader>
-                <CardTitle className="text-lg text-[#0A2645]">Enter Total Amount</CardTitle>
+                <CardTitle className="text-lg text-white">Enter Total Amount</CardTitle>
               </CardHeader>
               <CardContent>
                 <Form {...totalFloatForm}>
@@ -212,7 +211,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                       name="totalAmount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#0A2645] font-medium">Total Float Amount (R)</FormLabel>
+                          <FormLabel className="text-white font-medium">Total Float Amount (R)</FormLabel>
                           <FormControl>
                             <Input 
                               type="number" 
@@ -234,7 +233,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
           )}
 
           {/* Total Display */}
-          <Card className="bg-[#FAA225] text-[#0A2645]">
+          <Card className="bg-[#FAA225] text-[#0A2645] border-2 border-[#FAA225]">
             <CardContent className="p-6">
               <div className="text-center">
                 <p className="text-sm font-medium opacity-80">Total Float Amount</p>
@@ -248,7 +247,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
             <Button 
               type="button" 
               variant="outline" 
-              className="text-[#0A2645] border-[#0A2645] hover:bg-[#0A2645] hover:text-white" 
+              className="text-white border-white hover:bg-white hover:text-[#0A2645]" 
               onClick={() => {
                 console.log('FloatForm: Cancel button clicked');
                 onCancel();
