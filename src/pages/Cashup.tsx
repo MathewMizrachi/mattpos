@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeftIcon, DollarSignIcon, ClockIcon, UsersIcon, Calculator, CreditCard, Banknote, Smartphone, Receipt } from 'lucide-react';
+import { ArrowLeftIcon, DollarSignIcon, ClockIcon, UsersIcon, Calculator, CreditCard, Banknote, Smartphone, Receipt, FileText, CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import db from '@/lib/db';
 
@@ -14,6 +14,7 @@ const Cashup = () => {
   const navigate = useNavigate();
   const [selectedTill, setSelectedTill] = useState(null);
   const [showCashupDialog, setShowCashupDialog] = useState(false);
+  const [showEndOfDayDialog, setShowEndOfDayDialog] = useState(false);
   const [actualCash, setActualCash] = useState('');
   const [shifts, setShifts] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState({
@@ -58,9 +59,39 @@ const Cashup = () => {
   const handleSubmitCashup = () => {
     const difference = parseFloat(actualCash) - db.calculateExpectedCashInDrawer(selectedTill.id);
     console.log(`Shift ${selectedTill.id} cashup completed. Difference: ${formatCurrency(difference)}`);
+    
+    // Update the shift as completed
+    const updatedShifts = shifts.map(shift => 
+      shift.id === selectedTill.id 
+        ? { ...shift, endTime: new Date().toISOString(), cashupAmount: parseFloat(actualCash) }
+        : shift
+    );
+    setShifts(updatedShifts);
+    
     setShowCashupDialog(false);
     setSelectedTill(null);
     setActualCash('');
+  };
+
+  const handleEndOfDay = () => {
+    setShowEndOfDayDialog(true);
+  };
+
+  const handleAutoCompleteCashups = () => {
+    const updatedShifts = shifts.map(shift => {
+      if (!shift.endTime) {
+        const expectedCash = db.calculateExpectedCashInDrawer(shift.id);
+        return {
+          ...shift,
+          endTime: new Date().toISOString(),
+          cashupAmount: expectedCash
+        };
+      }
+      return shift;
+    });
+    
+    setShifts(updatedShifts);
+    console.log('All active tills have been auto-cashed up');
   };
 
   const formatTime = (date) => {
@@ -86,6 +117,17 @@ const Cashup = () => {
 
   const getActiveTillsCount = () => {
     return shifts.filter(shift => !shift.endTime).length;
+  };
+
+  const getCompletedTillsCount = () => {
+    return shifts.filter(shift => shift.endTime).length;
+  };
+
+  const getDayStartTime = () => {
+    const earliestShift = shifts.reduce((earliest, shift) => 
+      !earliest || new Date(shift.startTime) < new Date(earliest.startTime) ? shift : earliest
+    , null);
+    return earliestShift ? formatTime(earliestShift.startTime) : 'N/A';
   };
 
   const getPaymentMethodIcon = (method) => {
@@ -117,6 +159,15 @@ const Cashup = () => {
                 <h1 className="text-3xl font-bold text-[#0A2645] mb-1">End of Day Cashup</h1>
                 <p className="text-[#0A2645]/70">Till2Day Restaurant System</p>
               </div>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={handleEndOfDay}
+                className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 hover:from-[#0A2645]/90 hover:to-[#0A2645] text-white font-semibold px-6 py-2 flex items-center gap-2"
+              >
+                <FileText className="h-5 w-5" />
+                End of Day Report
+              </Button>
             </div>
           </div>
         </div>
@@ -498,6 +549,132 @@ const Cashup = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* End of Day Dialog */}
+      <Dialog open={showEndOfDayDialog} onOpenChange={setShowEndOfDayDialog}>
+        <DialogContent className="max-w-4xl bg-white border-2 border-[#0A2645] rounded-xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 text-white p-6 -m-6 mb-6 rounded-t-xl">
+            <DialogTitle className="text-2xl flex items-center gap-2">
+              <FileText className="h-6 w-6" />
+              End of Day Report - {new Date().toLocaleDateString()}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Day Summary */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <div className="text-sm text-blue-600 mb-1">Day Started</div>
+                <div className="font-bold text-blue-800">{getDayStartTime()}</div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                <div className="text-sm text-green-600 mb-1">Total Tills</div>
+                <div className="font-bold text-green-800">{shifts.length}</div>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                <div className="text-sm text-orange-600 mb-1">Completed</div>
+                <div className="font-bold text-orange-800">{getCompletedTillsCount()}</div>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                <div className="text-sm text-red-600 mb-1">Still Active</div>
+                <div className="font-bold text-red-800">{getActiveTillsCount()}</div>
+              </div>
+            </div>
+
+            {/* Financial Summary */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-[#0A2645]">Financial Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <div className="text-sm text-gray-600 mb-1">Total Sales</div>
+                    <div className="text-2xl font-bold text-[#0A2645]">{formatCurrency(getTotalSales())}</div>
+                  </div>
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <div className="text-sm text-gray-600 mb-1">Total Transactions</div>
+                    <div className="text-2xl font-bold text-[#0A2645]">{getTotalTransactions()}</div>
+                  </div>
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <div className="text-sm text-gray-600 mb-1">Average Sale</div>
+                    <div className="text-2xl font-bold text-[#0A2645]">
+                      {formatCurrency(getTotalTransactions() > 0 ? getTotalSales() / getTotalTransactions() : 0)}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Till by Till Summary */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-[#0A2645]">Till Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Till</TableHead>
+                        <TableHead>Operator</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Sales</TableHead>
+                        <TableHead className="text-right">Transactions</TableHead>
+                        <TableHead className="text-right">Hours</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {shifts.map((shift) => {
+                        const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
+                        const isActive = !shift.endTime;
+                        
+                        return (
+                          <TableRow key={shift.id}>
+                            <TableCell className="font-medium">Till #{shift.id}</TableCell>
+                            <TableCell>{user?.name || `User ${shift.userId}`}</TableCell>
+                            <TableCell>
+                              <Badge variant={isActive ? 'destructive' : 'default'}>
+                                {isActive ? 'Active' : 'Completed'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right">{formatCurrency(shift.salesTotal || 0)}</TableCell>
+                            <TableCell className="text-right">{shift.transactionCount || 0}</TableCell>
+                            <TableCell className="text-right">{getHoursWorked(shift.startTime, shift.endTime)}h</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Actions */}
+            <div className="flex gap-4 justify-end pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={() => setShowEndOfDayDialog(false)}
+                className="border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+              >
+                Close Report
+              </Button>
+              {getActiveTillsCount() > 0 && (
+                <Button
+                  onClick={() => {
+                    handleAutoCompleteCashups();
+                    setShowEndOfDayDialog(false);
+                  }}
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold flex items-center gap-2"
+                >
+                  <CheckCircle className="h-4 w-4" />
+                  Auto-Complete All Cashups
+                </Button>
+              )}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
