@@ -8,24 +8,24 @@ export const ReportHeader: React.FC = () => {
   const navigate = useNavigate();
   
   return (
-    <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg mb-6">
-      <div className="flex items-center space-x-2">
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center space-x-4">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={() => navigate('/dashboard')}
-          className="text-[#0A2645] hover:bg-[#0A2645]/10"
+          className="text-white hover:bg-white/10 border border-white/20"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-[#0A2645] flex items-center">
-            <ChartBarIcon className="mr-2 h-6 w-6" />
+          <h1 className="text-3xl font-bold text-white flex items-center">
+            <ChartBarIcon className="mr-3 h-8 w-8" />
             Reports & Analytics
           </h1>
-          <p className="text-sm text-[#0A2645]/70">View and analyze business performance</p>
+          <p className="text-blue-100 mt-1">View and analyze business performance</p>
         </div>
       </div>
-    </header>
+    </div>
   );
 };

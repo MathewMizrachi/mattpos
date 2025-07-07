@@ -86,73 +86,97 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] to-[#1e3a5f] p-4">
+      <div className="max-w-7xl mx-auto">
         <ReportHeader />
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Report Dashboard</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#0A2645] to-[#1e3a5f] text-white p-6">
+            <h2 className="text-2xl font-bold mb-2">Business Analytics Dashboard</h2>
+            <p className="text-blue-100">Comprehensive insights into your business performance</p>
+          </div>
+          
+          <div className="p-6">
             {isMobile ? (
               <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
             ) : (
               <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                <TabsList className="w-full justify-start mb-6 bg-[#FAA225] text-[#0A2645]" scrollable>
-                  <TabsTrigger value="sales" className="data-[state=active]:bg-white whitespace-nowrap">Sales Report</TabsTrigger>
-                  <TabsTrigger value="inventory" className="data-[state=active]:bg-white whitespace-nowrap">Inventory Status</TabsTrigger>
-                  <TabsTrigger value="payment" className="data-[state=active]:bg-white whitespace-nowrap">Payment Methods</TabsTrigger>
-                  <TabsTrigger value="profitplus" className="data-[state=active]:bg-white whitespace-nowrap">Profit+</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
+                  <TabsTrigger 
+                    value="sales" 
+                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                  >
+                    Sales Report
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="inventory" 
+                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                  >
+                    Inventory Status
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="payment" 
+                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                  >
+                    Payment Methods
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="profitplus" 
+                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                  >
+                    Profit+
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             )}
             
-            {activeTab === 'sales' && (
-              <SalesReportTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                salesData={salesData}
-              />
-            )}
-            
-            {activeTab === 'inventory' && (
-              <InventoryStatusTab 
-                inventoryData={inventoryData}
-                searchTerm={inventorySearchTerm}
-                setSearchTerm={setInventorySearchTerm}
-                sortBy={inventorySortBy}
-                setSortBy={setInventorySortBy}
-              />
-            )}
-            
-            {activeTab === 'payment' && (
-              <PaymentMethodsTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                paymentMethodsData={paymentMethodsData}
-              />
-            )}
-            
-            {activeTab === 'profitplus' && (
-              <ProfitPlusTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                profitPlusData={profitPlusData}
-                searchTerm={profitPlusSearchTerm}
-                setSearchTerm={setProfitPlusSearchTerm}
-                sortBy={profitPlusSortBy}
-                setSortBy={setProfitPlusSortBy}
-              />
-            )}
-          </CardContent>
-        </Card>
+            <div className="bg-gray-50 rounded-lg p-6">
+              {activeTab === 'sales' && (
+                <SalesReportTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  salesData={salesData}
+                />
+              )}
+              
+              {activeTab === 'inventory' && (
+                <InventoryStatusTab 
+                  inventoryData={inventoryData}
+                  searchTerm={inventorySearchTerm}
+                  setSearchTerm={setInventorySearchTerm}
+                  sortBy={inventorySortBy}
+                  setSortBy={setInventorySortBy}
+                />
+              )}
+              
+              {activeTab === 'payment' && (
+                <PaymentMethodsTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  paymentMethodsData={paymentMethodsData}
+                />
+              )}
+              
+              {activeTab === 'profitplus' && (
+                <ProfitPlusTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  profitPlusData={profitPlusData}
+                  searchTerm={profitPlusSearchTerm}
+                  setSearchTerm={setProfitPlusSearchTerm}
+                  sortBy={profitPlusSortBy}
+                  setSortBy={setProfitPlusSortBy}
+                />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
