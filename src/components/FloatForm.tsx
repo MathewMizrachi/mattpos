@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,6 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
+import { Calculator, DollarSign } from 'lucide-react';
 
 const denominationSchema = z.object({
   coins_1r: z.coerce.number().nonnegative().default(0),
@@ -112,123 +115,157 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
   console.log('FloatForm: Rendering component');
 
   return (
-    <div className="w-full max-w-md mx-auto bg-[#0A2645] text-white p-6 rounded-lg max-h-[80vh] overflow-y-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Enter Starting Float</h2>
-        <p className="text-gray-300 mt-1">
-          Please enter the amount of cash in the drawer at the start of this shift.
-        </p>
-        {previousFloat !== null && (
-          <p className="text-gray-300 mt-2">
-            Previous shift ended with R{previousFloat.toFixed(2)} in the drawer.
-          </p>
-        )}
-      </div>
-
-      <div className="mb-6">
-        <RadioGroup
-          value={inputMode}
-          onValueChange={(value: 'denominations' | 'total') => setInputMode(value)}
-          className="flex space-x-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="denominations" id="denominations" />
-            <label htmlFor="denominations" className="text-white cursor-pointer">
-              Count Denominations
-            </label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="total" id="total" />
-            <label htmlFor="total" className="text-white cursor-pointer">
-              Total Amount
-            </label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      {inputMode === 'denominations' ? (
-        <Form {...denominationForm}>
-          <form className="space-y-4">
-            <div className="grid grid-cols-2 gap-3 max-h-60 overflow-y-auto">
-              {denominations.map((denom) => (
-                <FormField
-                  key={denom.key}
-                  control={denominationForm.control}
-                  name={denom.key as keyof DenominationFormValues}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white text-xs">{denom.label}</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          min="0" 
-                          placeholder="0"
-                          className="bg-white text-black h-8 text-sm"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
+    <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
+      <Card className="w-full max-w-2xl bg-white shadow-2xl">
+        <CardHeader className="text-center pb-4">
+          <div className="flex justify-center mb-4">
+            <div className="bg-[#FAA225] p-3 rounded-full">
+              <Calculator className="h-8 w-8 text-[#0A2645]" />
             </div>
-          </form>
-        </Form>
-      ) : (
-        <Form {...totalFloatForm}>
-          <form className="space-y-6">
-            <FormField
-              control={totalFloatForm.control}
-              name="totalAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Total Float Amount (R)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      step="1" 
-                      min="0" 
-                      placeholder="0"
-                      className="bg-white text-black"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
-      )}
+          </div>
+          <CardTitle className="text-2xl font-bold text-[#0A2645]">Starting Float</CardTitle>
+          <p className="text-gray-600 mt-2">
+            Enter the amount of cash in the drawer at the start of this shift
+          </p>
+          {previousFloat !== null && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+              <p className="text-blue-800 text-sm">
+                Previous shift ended with <span className="font-semibold">R{previousFloat.toFixed(2)}</span> in the drawer
+              </p>
+            </div>
+          )}
+        </CardHeader>
 
-      <div className="bg-white/10 p-3 rounded-lg mt-6">
-        <div className="text-center">
-          <p className="text-sm text-gray-300">Total Float Amount</p>
-          <p className="text-xl font-bold text-white">R{finalAmount.toFixed(2)}</p>
-        </div>
-      </div>
-      
-      <div className="flex justify-end space-x-4 mt-6">
-        <Button 
-          type="button" 
-          variant="outline" 
-          className="text-white border-white hover:bg-white/20" 
-          onClick={() => {
-            console.log('FloatForm: Cancel button clicked');
-            onCancel();
-          }}
-        >
-          Cancel
-        </Button>
-        <Button 
-          type="button" 
-          className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
-          onClick={handleSubmit}
-        >
-          Open Till
-        </Button>
-      </div>
+        <CardContent className="space-y-6">
+          {/* Input Mode Selection */}
+          <Card className="bg-gray-50">
+            <CardContent className="p-4">
+              <RadioGroup
+                value={inputMode}
+                onValueChange={(value: 'denominations' | 'total') => setInputMode(value)}
+                className="flex justify-center space-x-8"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="denominations" id="denominations" />
+                  <label htmlFor="denominations" className="text-[#0A2645] font-medium cursor-pointer flex items-center gap-2">
+                    <Calculator className="h-4 w-4" />
+                    Count Denominations
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="total" id="total" />
+                  <label htmlFor="total" className="text-[#0A2645] font-medium cursor-pointer flex items-center gap-2">
+                    <DollarSign className="h-4 w-4" />
+                    Total Amount
+                  </label>
+                </div>
+              </RadioGroup>
+            </CardContent>
+          </Card>
+
+          {inputMode === 'denominations' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-[#0A2645]">Count Your Cash</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Form {...denominationForm}>
+                  <form className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 max-h-80 overflow-y-auto">
+                      {denominations.map((denom) => (
+                        <FormField
+                          key={denom.key}
+                          control={denominationForm.control}
+                          name={denom.key as keyof DenominationFormValues}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#0A2645] font-medium">{denom.label}</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  type="number" 
+                                  min="0" 
+                                  placeholder="0"
+                                  className="text-center font-medium"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-[#0A2645]">Enter Total Amount</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Form {...totalFloatForm}>
+                  <form className="space-y-6">
+                    <FormField
+                      control={totalFloatForm.control}
+                      name="totalAmount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#0A2645] font-medium">Total Float Amount (R)</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              step="1" 
+                              min="0" 
+                              placeholder="0"
+                              className="text-xl text-center font-bold"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Total Display */}
+          <Card className="bg-[#FAA225] text-[#0A2645]">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-sm font-medium opacity-80">Total Float Amount</p>
+                <p className="text-3xl font-bold">R{finalAmount.toFixed(2)}</p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-4 pt-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="text-[#0A2645] border-[#0A2645] hover:bg-[#0A2645] hover:text-white" 
+              onClick={() => {
+                console.log('FloatForm: Cancel button clicked');
+                onCancel();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="button" 
+              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 px-8"
+              onClick={handleSubmit}
+            >
+              Open Till
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
