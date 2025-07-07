@@ -1,69 +1,63 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeftIcon, DollarSignIcon, ClockIcon, UsersIcon, Calculator } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ArrowLeftIcon, DollarSignIcon, ClockIcon, UsersIcon, Calculator, CreditCard, Banknote, Smartphone, Receipt } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
-
-// Mock data for active tills
-const mockTills = [
-  {
-    id: 1,
-    tillNumber: 'TILL-001',
-    user: 'John Doe',
-    startTime: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
-    startFloat: 100,
-    currentSales: 1250.75,
-    transactionCount: 45,
-    expectedCash: 350.25,
-    status: 'active'
-  },
-  {
-    id: 2,
-    tillNumber: 'TILL-002',
-    user: 'Jane Smith',
-    startTime: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-    startFloat: 150,
-    currentSales: 890.50,
-    transactionCount: 32,
-    expectedCash: 425.75,
-    status: 'active'
-  },
-  {
-    id: 3,
-    tillNumber: 'TILL-003',
-    user: 'Mike Johnson',
-    startTime: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
-    startFloat: 100,
-    currentSales: 0,
-    transactionCount: 0,
-    expectedCash: 100,
-    status: 'idle'
-  }
-];
+import db from '@/lib/db';
 
 const Cashup = () => {
   const navigate = useNavigate();
   const [selectedTill, setSelectedTill] = useState(null);
   const [showCashupDialog, setShowCashupDialog] = useState(false);
   const [actualCash, setActualCash] = useState('');
+  const [shifts, setShifts] = useState([]);
+  const [paymentSummary, setPaymentSummary] = useState({
+    cash: 0,
+    card: 0,
+    shop2shop: 0,
+    account: 0,
+    total: 0
+  });
+
+  useEffect(() => {
+    // Get all shifts for today (in a real app, you'd filter by date)
+    const allShifts = db.getAllShifts ? db.getAllShifts() : [];
+    setShifts(allShifts);
+    
+    // Calculate total payment summary for the day
+    let totalPayments = { cash: 0, card: 0, shop2shop: 0, account: 0, total: 0 };
+    
+    allShifts.forEach(shift => {
+      const breakdown = db.getShiftPaymentBreakdown(shift.id);
+      totalPayments.cash += breakdown.cash;
+      totalPayments.card += breakdown.card;
+      totalPayments.shop2shop += breakdown.shop2shop;
+      totalPayments.account += breakdown.account;
+    });
+    
+    totalPayments.total = totalPayments.cash + totalPayments.card + totalPayments.shop2shop + totalPayments.account;
+    setPaymentSummary(totalPayments);
+  }, []);
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
   };
 
-  const handleTillCashup = (till) => {
-    setSelectedTill(till);
-    setActualCash(till.expectedCash.toString());
+  const handleTillCashup = (shift) => {
+    setSelectedTill(shift);
+    const expectedCash = db.calculateExpectedCashInDrawer(shift.id);
+    setActualCash(expectedCash.toString());
     setShowCashupDialog(true);
   };
 
   const handleSubmitCashup = () => {
-    const difference = parseFloat(actualCash) - selectedTill.expectedCash;
-    console.log(`Till ${selectedTill.tillNumber} cashup completed. Difference: ${formatCurrency(difference)}`);
+    const difference = parseFloat(actualCash) - db.calculateExpectedCashInDrawer(selectedTill.id);
+    console.log(`Shift ${selectedTill.id} cashup completed. Difference: ${formatCurrency(difference)}`);
     setShowCashupDialog(false);
     setSelectedTill(null);
     setActualCash('');
@@ -76,21 +70,32 @@ const Cashup = () => {
     });
   };
 
-  const getHoursWorked = (startTime) => {
-    const hours = (Date.now() - new Date(startTime).getTime()) / (1000 * 60 * 60);
-    return Math.floor(hours * 10) / 10; // Round to 1 decimal place
+  const getHoursWorked = (startTime, endTime) => {
+    const endTimeValue = endTime ? new Date(endTime).getTime() : Date.now();
+    const hours = (endTimeValue - new Date(startTime).getTime()) / (1000 * 60 * 60);
+    return Math.floor(hours * 10) / 10;
   };
 
   const getTotalSales = () => {
-    return mockTills.reduce((sum, till) => sum + till.currentSales, 0);
+    return shifts.reduce((sum, shift) => sum + (shift.salesTotal || 0), 0);
   };
 
   const getTotalTransactions = () => {
-    return mockTills.reduce((sum, till) => sum + till.transactionCount, 0);
+    return shifts.reduce((sum, shift) => sum + (shift.transactionCount || 0), 0);
   };
 
   const getActiveTillsCount = () => {
-    return mockTills.filter(till => till.status === 'active').length;
+    return shifts.filter(shift => !shift.endTime).length;
+  };
+
+  const getPaymentMethodIcon = (method) => {
+    switch (method) {
+      case 'cash': return <Banknote className="h-4 w-4" />;
+      case 'card': return <CreditCard className="h-4 w-4" />;
+      case 'shop2shop': return <Smartphone className="h-4 w-4" />;
+      case 'account': return <Receipt className="h-4 w-4" />;
+      default: return <Calculator className="h-4 w-4" />;
+    }
   };
 
   return (
@@ -132,7 +137,7 @@ const Cashup = () => {
                 {getActiveTillsCount()}
               </div>
               <div className="text-sm text-[#0A2645]/70">
-                out of {mockTills.length} total
+                out of {shifts.length} total
               </div>
             </CardContent>
           </Card>
@@ -195,86 +200,224 @@ const Cashup = () => {
           </Card>
         </div>
 
+        {/* Daily Payment Summary */}
+        <Card className="bg-white shadow-lg mb-6">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl text-[#0A2645] flex items-center">
+              <CreditCard className="h-5 w-5 mr-2" />
+              Daily Payment Methods Summary
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                <div className="flex items-center mb-2">
+                  <Banknote className="h-4 w-4 text-green-600 mr-2" />
+                  <span className="font-medium text-green-800">Cash</span>
+                </div>
+                <div className="text-2xl font-bold text-green-700">
+                  {formatCurrency(paymentSummary.cash)}
+                </div>
+                <div className="text-sm text-green-600">
+                  {paymentSummary.total > 0 ? ((paymentSummary.cash / paymentSummary.total) * 100).toFixed(1) : 0}%
+                </div>
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <div className="flex items-center mb-2">
+                  <CreditCard className="h-4 w-4 text-blue-600 mr-2" />
+                  <span className="font-medium text-blue-800">Card</span>
+                </div>
+                <div className="text-2xl font-bold text-blue-700">
+                  {formatCurrency(paymentSummary.card)}
+                </div>
+                <div className="text-sm text-blue-600">
+                  {paymentSummary.total > 0 ? ((paymentSummary.card / paymentSummary.total) * 100).toFixed(1) : 0}%
+                </div>
+              </div>
+
+              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                <div className="flex items-center mb-2">
+                  <Smartphone className="h-4 w-4 text-orange-600 mr-2" />
+                  <span className="font-medium text-orange-800">Shop2Shop</span>
+                </div>
+                <div className="text-2xl font-bold text-orange-700">
+                  {formatCurrency(paymentSummary.shop2shop)}
+                </div>
+                <div className="text-sm text-orange-600">
+                  {paymentSummary.total > 0 ? ((paymentSummary.shop2shop / paymentSummary.total) * 100).toFixed(1) : 0}%
+                </div>
+              </div>
+
+              <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                <div className="flex items-center mb-2">
+                  <Receipt className="h-4 w-4 text-purple-600 mr-2" />
+                  <span className="font-medium text-purple-800">Account</span>
+                </div>
+                <div className="text-2xl font-bold text-purple-700">
+                  {formatCurrency(paymentSummary.account)}
+                </div>
+                <div className="text-sm text-purple-600">
+                  {paymentSummary.total > 0 ? ((paymentSummary.account / paymentSummary.total) * 100).toFixed(1) : 0}%
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Per-Till Payment Breakdown */}
+        <Card className="bg-white shadow-lg mb-6">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl text-[#0A2645]">Payment Methods by Till</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Till</TableHead>
+                    <TableHead>Operator</TableHead>
+                    <TableHead className="text-right">Cash</TableHead>
+                    <TableHead className="text-right">Card</TableHead>
+                    <TableHead className="text-right">Shop2Shop</TableHead>
+                    <TableHead className="text-right">Account</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {shifts.map((shift) => {
+                    const breakdown = db.getShiftPaymentBreakdown(shift.id);
+                    const total = breakdown.cash + breakdown.card + breakdown.shop2shop + breakdown.account;
+                    const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
+                    
+                    return (
+                      <TableRow key={shift.id}>
+                        <TableCell className="font-medium">Till #{shift.id}</TableCell>
+                        <TableCell>{user?.name || `User ${shift.userId}`}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(breakdown.cash)}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(breakdown.card)}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(breakdown.shop2shop)}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(breakdown.account)}</TableCell>
+                        <TableCell className="text-right font-bold">{formatCurrency(total)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Till Cards */}
         <div className="grid gap-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 grid-cols-1">
-          {mockTills.map((till) => (
-            <Card
-              key={till.id}
-              className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-                till.status === 'active' 
-                  ? 'bg-white border-[#FAA225] shadow-lg border-2' 
-                  : 'bg-gray-50 border-gray-200 shadow-md'
-              }`}
-            >
-              <CardHeader className="pb-3 p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className={`text-xl font-bold mb-1 ${
-                      till.status === 'active' ? 'text-[#0A2645]' : 'text-gray-500'
-                    }`}>
-                      {till.tillNumber}
-                    </CardTitle>
-                    <p className={`text-sm ${
-                      till.status === 'active' ? 'text-[#0A2645]/70' : 'text-gray-400'
-                    }`}>
-                      Operator: {till.user}
-                    </p>
+          {shifts.map((shift) => {
+            const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
+            const expectedCash = db.calculateExpectedCashInDrawer(shift.id);
+            const breakdown = db.getShiftPaymentBreakdown(shift.id);
+            const isActive = !shift.endTime;
+            
+            return (
+              <Card
+                key={shift.id}
+                className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+                  isActive 
+                    ? 'bg-white border-[#FAA225] shadow-lg border-2' 
+                    : 'bg-gray-50 border-gray-200 shadow-md'
+                }`}
+              >
+                <CardHeader className="pb-3 p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className={`text-xl font-bold mb-1 ${
+                        isActive ? 'text-[#0A2645]' : 'text-gray-500'
+                      }`}>
+                        TILL-{shift.id.toString().padStart(3, '0')}
+                      </CardTitle>
+                      <p className={`text-sm ${
+                        isActive ? 'text-[#0A2645]/70' : 'text-gray-400'
+                      }`}>
+                        Operator: {user?.name || `User ${shift.userId}`}
+                      </p>
+                    </div>
+                    <Badge variant={isActive ? 'default' : 'secondary'}>
+                      {isActive ? 'active' : 'completed'}
+                    </Badge>
                   </div>
-                  <Badge variant={till.status === 'active' ? 'default' : 'secondary'}>
-                    {till.status}
-                  </Badge>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="pt-0 p-4">
-                <div className="space-y-3">
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <div className="text-gray-600 mb-1">Start Time</div>
-                        <div className="font-semibold">{formatTime(till.startTime)}</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-600 mb-1">Hours Worked</div>
-                        <div className="font-semibold">{getHoursWorked(till.startTime)}h</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-600 mb-1">Start Float</div>
-                        <div className="font-semibold">{formatCurrency(till.startFloat)}</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-600 mb-1">Transactions</div>
-                        <div className="font-semibold">{till.transactionCount}</div>
+                </CardHeader>
+                
+                <CardContent className="pt-0 p-4">
+                  <div className="space-y-3">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <div className="text-gray-600 mb-1">Start Time</div>
+                          <div className="font-semibold">{formatTime(shift.startTime)}</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600 mb-1">Hours Worked</div>
+                          <div className="font-semibold">{getHoursWorked(shift.startTime, shift.endTime)}h</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600 mb-1">Start Float</div>
+                          <div className="font-semibold">{formatCurrency(shift.startFloat)}</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600 mb-1">Transactions</div>
+                          <div className="font-semibold">{shift.transactionCount || 0}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-green-800">Sales Total</span>
-                      <span className="text-lg font-bold text-green-700">
-                        {formatCurrency(till.currentSales)}
-                      </span>
+                    {/* Payment Method Breakdown for this till */}
+                    <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-500">
+                      <div className="text-sm font-medium text-blue-800 mb-2">Payment Methods</div>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="flex justify-between">
+                          <span>Cash:</span>
+                          <span className="font-semibold">{formatCurrency(breakdown.cash)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Card:</span>
+                          <span className="font-semibold">{formatCurrency(breakdown.card)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Shop2Shop:</span>
+                          <span className="font-semibold">{formatCurrency(breakdown.shop2shop)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Account:</span>
+                          <span className="font-semibold">{formatCurrency(breakdown.account)}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-green-800">Expected Cash</span>
-                      <span className="text-lg font-bold text-green-700">
-                        {formatCurrency(till.expectedCash)}
-                      </span>
-                    </div>
-                  </div>
 
-                  <Button
-                    onClick={() => handleTillCashup(till)}
-                    disabled={till.status === 'idle'}
-                    className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
-                  >
-                    {till.status === 'active' ? 'Cashup Till' : 'No Activity'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                    <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-green-800">Sales Total</span>
+                        <span className="text-lg font-bold text-green-700">
+                          {formatCurrency(shift.salesTotal || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-green-800">Expected Cash</span>
+                        <span className="text-lg font-bold text-green-700">
+                          {formatCurrency(expectedCash)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => handleTillCashup(shift)}
+                      disabled={!isActive}
+                      className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
+                    >
+                      {isActive ? 'Cashup Till' : 'Completed'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
@@ -283,7 +426,7 @@ const Cashup = () => {
         <DialogContent className="max-w-md bg-white border-2 border-[#0A2645] rounded-xl">
           <DialogHeader className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 text-white p-6 -m-6 mb-6 rounded-t-xl">
             <DialogTitle className="text-xl">
-              Cashup {selectedTill?.tillNumber}
+              Cashup {selectedTill?.id ? `TILL-${selectedTill.id.toString().padStart(3, '0')}` : ''}
             </DialogTitle>
           </DialogHeader>
           
@@ -292,11 +435,11 @@ const Cashup = () => {
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Expected Cash:</span>
-                  <span className="font-bold">{formatCurrency(selectedTill.expectedCash)}</span>
+                  <span className="font-bold">{formatCurrency(db.calculateExpectedCashInDrawer(selectedTill.id))}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b">
                   <span className="font-medium">Sales Total:</span>
-                  <span>{formatCurrency(selectedTill.currentSales)}</span>
+                  <span>{formatCurrency(selectedTill.salesTotal || 0)}</span>
                 </div>
                 <div className="flex justify-between py-2">
                   <span className="font-medium">Start Float:</span>
@@ -320,18 +463,18 @@ const Cashup = () => {
 
               {actualCash && (
                 <div className={`bg-gray-50 rounded-lg p-3 ${
-                  parseFloat(actualCash) - selectedTill.expectedCash === 0 
+                  parseFloat(actualCash) - db.calculateExpectedCashInDrawer(selectedTill.id) === 0 
                     ? 'border-l-4 border-green-500' 
                     : 'border-l-4 border-red-500'
                 }`}>
                   <div className="flex justify-between">
                     <span className="font-medium">Difference:</span>
                     <span className={`font-bold ${
-                      parseFloat(actualCash) - selectedTill.expectedCash >= 0 
+                      parseFloat(actualCash) - db.calculateExpectedCashInDrawer(selectedTill.id) >= 0 
                         ? 'text-green-600' 
                         : 'text-red-600'
                     }`}>
-                      {formatCurrency(parseFloat(actualCash) - selectedTill.expectedCash)}
+                      {formatCurrency(parseFloat(actualCash) - db.calculateExpectedCashInDrawer(selectedTill.id))}
                     </span>
                   </div>
                 </div>

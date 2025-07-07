@@ -216,6 +216,10 @@ class Database {
     return this.users.find(user => user.pin === pin) || null;
   }
 
+  getUser(id: number): User | undefined {
+    return this.users.find(user => user.id === id);
+  }
+
   // Product methods
   getAllProducts(): Product[] {
     return [...this.products];
@@ -314,6 +318,10 @@ class Database {
     };
     this.shifts.push(newShift);
     return newShift;
+  }
+
+  getAllShifts(): Shift[] {
+    return [...this.shifts];
   }
 
   getCurrentShift(): Shift | null {
