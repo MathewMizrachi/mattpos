@@ -185,7 +185,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                                   type="number" 
                                   min="0" 
                                   placeholder="0"
-                                  className="text-center font-medium bg-white text-[#0A2645] border-gray-300"
+                                  className="text-center font-medium bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225]"
                                   {...field}
                                 />
                               </FormControl>
@@ -219,7 +219,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
                               step="1" 
                               min="0" 
                               placeholder="0"
-                              className="text-xl text-center font-bold bg-white text-[#0A2645] border-gray-300"
+                              className="text-xl text-center font-bold bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225]"
                               {...field}
                             />
                           </FormControl>
