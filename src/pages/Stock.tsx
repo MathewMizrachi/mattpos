@@ -154,17 +154,17 @@ const Stock = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A2645] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading till stock...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FAA225] mx-auto mb-4"></div>
+          <p className="text-white">Loading till stock...</p>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#0A2645] flex flex-col">
       <StockHeader 
         title="Till Stock"
         description="Manage till inventory and products"
@@ -176,7 +176,7 @@ const Stock = () => {
       <div className="p-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-[#0A2645] border-2 border-[#FAA225] rounded-lg shadow">
           <ProductTable 
             products={filteredProducts} 
             onEdit={openEditModal} 

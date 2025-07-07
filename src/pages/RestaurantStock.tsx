@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
@@ -92,7 +93,7 @@ const RestaurantStock = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#0A2645] flex flex-col">
       <StockHeader 
         title="Restaurant Stock"
         description="Manage restaurant menu items and ingredients"
@@ -104,7 +105,7 @@ const RestaurantStock = () => {
       <div className="p-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-[#0A2645] border-2 border-[#FAA225] rounded-lg shadow">
           <ProductTable 
             products={filteredProducts} 
             onEdit={openEditModal} 

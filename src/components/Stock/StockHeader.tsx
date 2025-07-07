@@ -34,19 +34,19 @@ const StockHeader: React.FC<StockHeaderProps> = ({
   };
 
   return (
-    <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
+    <header className="bg-[#0A2645] border-2 border-[#FAA225] p-4 shadow-sm flex justify-between items-center rounded-lg m-4 mb-6">
       <div className="flex items-center space-x-2">
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => navigate('/dashboard')}
-          className="text-[#0A2645] hover:bg-[#0A2645]/10"
+          className="text-white hover:bg-white/10"
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-[#0A2645]">{title}</h1>
-          <p className="text-sm text-[#0A2645]/70">{description}</p>
+          <h1 className="text-2xl font-bold text-white">{title}</h1>
+          <p className="text-sm text-white/70">{description}</p>
         </div>
       </div>
       <div className="flex space-x-2">
@@ -54,26 +54,26 @@ const StockHeader: React.FC<StockHeaderProps> = ({
           // Mobile view - show dropdown menu with white button
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="bg-white text-[#0A2645] border-[#0A2645]">
+              <Button variant="outline" size="icon" className="bg-white text-[#0A2645] border-[#FAA225]">
                 <MoreVerticalIcon className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")}>
+            <DropdownMenuContent align="end" className="bg-[#0A2645] border-[#FAA225]">
+              <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")} className="text-white hover:bg-white/10">
                 <PackageIcon className="h-4 w-4 mr-2" />
                 Global Stock Master
               </DropdownMenuItem>
               {showPurchaseOrder && (
-                <DropdownMenuItem onClick={handlePurchaseOrder}>
+                <DropdownMenuItem onClick={handlePurchaseOrder} className="text-white hover:bg-white/10">
                   <ShoppingCartIcon className="h-4 w-4 mr-2" />
                   Purchase Order
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem onClick={onOpenImportProduct}>
+              <DropdownMenuItem onClick={onOpenImportProduct} className="text-white hover:bg-white/10">
                 <ImportIcon className="h-4 w-4 mr-2" />
                 Import Products
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onOpenAddProduct}>
+              <DropdownMenuItem onClick={onOpenAddProduct} className="text-white hover:bg-white/10">
                 <PlusIcon className="h-4 w-4 mr-2" />
                 Add Product
               </DropdownMenuItem>
@@ -84,7 +84,7 @@ const StockHeader: React.FC<StockHeaderProps> = ({
           <>
             <Button 
               variant="outline" 
-              className="bg-white text-[#0A2645] border-[#0A2645]"
+              className="bg-white text-[#0A2645] border-[#FAA225]"
               onClick={() => console.log("Global Stock Master clicked")}
             >
               <PackageIcon className="h-4 w-4 mr-2" />
@@ -93,7 +93,7 @@ const StockHeader: React.FC<StockHeaderProps> = ({
             {showPurchaseOrder && (
               <Button 
                 onClick={handlePurchaseOrder} 
-                className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
+                className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
               >
                 <ShoppingCartIcon className="h-4 w-4 mr-2" />
                 Purchase Order
@@ -106,7 +106,10 @@ const StockHeader: React.FC<StockHeaderProps> = ({
               <ImportIcon className="h-4 w-4 mr-2" />
               Import Products
             </Button>
-            <Button onClick={onOpenAddProduct}>
+            <Button 
+              onClick={onOpenAddProduct}
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+            >
               <PlusIcon className="h-4 w-4 mr-2" />
               Add Product
             </Button>

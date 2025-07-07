@@ -45,31 +45,37 @@ const Customers = () => {
     if (!customer) return null;
     
     return (
-      <CustomerPaymentProcessor 
-        customerId={selectedCustomerId}
-        customerName={customer.name}
-        onClose={handleBack}
-      />
+      <div className="min-h-screen bg-[#0A2645]">
+        <CustomerPaymentProcessor 
+          customerId={selectedCustomerId}
+          customerName={customer.name}
+          onClose={handleBack}
+        />
+      </div>
     );
   }
   
   // If a customer is selected, show their profile
   if (selectedCustomerId !== null) {
     return (
-      <CustomerProfile 
-        customerId={selectedCustomerId}
-        onBack={handleBack}
-        onMakePayment={handleMakePayment}
-      />
+      <div className="min-h-screen bg-[#0A2645]">
+        <CustomerProfile 
+          customerId={selectedCustomerId}
+          onBack={handleBack}
+          onMakePayment={handleMakePayment}
+        />
+      </div>
     );
   }
   
   // Otherwise show the customer list
   return (
-    <CustomerList 
-      onBack={() => navigate('/dashboard')} 
-      onSelectCustomer={handleCustomerSelect}
-    />
+    <div className="min-h-screen bg-[#0A2645]">
+      <CustomerList 
+        onBack={() => navigate('/dashboard')} 
+        onSelectCustomer={handleCustomerSelect}
+      />
+    </div>
   );
 };
 
