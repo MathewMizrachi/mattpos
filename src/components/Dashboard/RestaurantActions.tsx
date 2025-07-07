@@ -112,18 +112,6 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
         </CardContent>
       </Card>
 
-      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
-        <CardContent className="p-6">
-          <Button
-            onClick={onViewReports}
-            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
-          >
-            <FileText className="h-8 w-8" />
-            View Reports
-          </Button>
-        </CardContent>
-      </Card>
-
       <Card className="bg-white border-2 border-[#0A2645] hover:shadow-lg transition-all">
         <CardContent className="p-6">
           <Button
@@ -132,6 +120,18 @@ const RestaurantActions: React.FC<RestaurantActionsProps> = ({
           >
             <DollarSign className="h-8 w-8" />
             Cashup
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-6">
+          <Button
+            onClick={onViewReports}
+            className="w-full h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-lg font-semibold flex flex-col items-center justify-center gap-2"
+          >
+            <FileText className="h-8 w-8" />
+            View Reports
           </Button>
         </CardContent>
       </Card>
