@@ -209,104 +209,139 @@ const PurchaseOrder = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'ordered': return 'text-blue-600 bg-blue-100';
-      case 'received': return 'text-green-600 bg-green-100';
-      case 'cancelled': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'pending': return 'text-amber-700 bg-gradient-to-r from-amber-100 to-amber-200 border border-amber-300';
+      case 'ordered': return 'text-blue-700 bg-gradient-to-r from-blue-100 to-blue-200 border border-blue-300';
+      case 'received': return 'text-green-700 bg-gradient-to-r from-green-100 to-green-200 border border-green-300';
+      case 'cancelled': return 'text-red-700 bg-gradient-to-r from-red-100 to-red-200 border border-red-300';
+      default: return 'text-gray-700 bg-gradient-to-r from-gray-100 to-gray-200 border border-gray-300';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-[#FAA225] to-[#e8940f] rounded-full flex items-center justify-center shadow-2xl mx-auto animate-pulse">
+            <ShoppingCartIcon className="h-8 w-8 text-white" />
+          </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#FAA225] border-t-transparent mx-auto"></div>
+          <p className="text-[#0A2645] font-semibold text-lg">🛒 Loading purchase orders...</p>
+          <p className="text-[#0A2645]/70 text-sm">Please wait while we fetch your data</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate('/stock-management')}
-            className="text-[#0A2645] hover:bg-[#0A2645]/10"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-[#0A2645]">Purchase Order</h1>
-            <p className="text-sm text-[#0A2645]/70">Create and manage purchase orders for stock replenishment</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FAA225]/20 via-[#FAA225]/10 to-transparent opacity-50"></div>
+        <header className="relative bg-white/95 backdrop-blur-sm p-6 shadow-2xl border-b-4 border-[#FAA225] rounded-xl m-6 mb-8 transition-all duration-300 hover:shadow-3xl">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => navigate('/stock-management')}
+                className="text-[#0A2645] hover:bg-[#0A2645]/10 transition-all duration-200 hover:scale-105"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center space-x-3">
+                <div className="p-3 bg-gradient-to-br from-[#FAA225] to-[#e8940f] rounded-lg shadow-lg">
+                  <ShoppingCartIcon className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-[#0A2645] bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] bg-clip-text">
+                    🛒 Purchase Orders
+                  </h1>
+                  <p className="text-sm text-[#0A2645]/70 mt-1">📋 Create and manage purchase orders for stock replenishment</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
-      <div className="p-4">
+      <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-200">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-gradient-to-r from-gray-100 to-gray-200 p-1 rounded-xl shadow-lg">
             <TabsTrigger 
               value="create" 
-              className="bg-[#0A2645] text-[#FAA225] data-[state=active]:bg-[#FAA225] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90"
+              className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] text-[#FAA225] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#FAA225] data-[state=active]:to-[#e8940f] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90 transition-all duration-200 rounded-lg font-semibold shadow-md"
             >
-              Create Order
+              ➕ Create Order
             </TabsTrigger>
             <TabsTrigger 
               value="history"
-              className="bg-[#0A2645] text-[#FAA225] data-[state=active]:bg-[#FAA225] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90"
+              className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] text-[#FAA225] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#FAA225] data-[state=active]:to-[#e8940f] data-[state=active]:text-[#0A2645] hover:bg-[#0A2645]/90 transition-all duration-200 rounded-lg font-semibold shadow-md"
             >
-              Order History
+              📊 Order History
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="create">
-            <div className="flex flex-1 gap-4">
-              {/* Products Grid */}
+          <TabsContent value="create" className="space-y-6">
+            <div className="flex flex-1 gap-6">
+              {/* Enhanced Products Grid */}
               <div className="flex-1">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex-1 mr-4">
+                <div className="flex justify-between items-center mb-6 gap-4">
+                  <div className="flex-1">
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                   </div>
-                  <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
-                    <SelectTrigger className="w-64 bg-white text-[#0A2645] border-[#0A2645]">
-                      <SelectValue placeholder="Select Supplier" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      {suppliers.map((supplier) => (
-                        <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
-                          {supplier.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 transition-all duration-300 hover:bg-white/15">
+                    <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
+                      <SelectTrigger className="w-64 bg-white/20 backdrop-blur-sm text-[#0A2645] border-[#0A2645]/30 focus:border-[#FAA225] focus:ring-[#FAA225]/20 transition-all duration-200">
+                        <SelectValue placeholder="🏢 Select Supplier" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-2xl">
+                        {suppliers.map((supplier) => (
+                          <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645] hover:bg-[#FAA225]/10 transition-colors duration-200">
+                            🏢 {supplier.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {filteredProducts.map((product) => {
                     // Calculate display cost price for each product (6-20% lower than selling price)
                     const discountPercentage = 0.06 + (Math.random() * 0.14);
                     const displayCostPrice = product.price * (1 - discountPercentage);
                     
                     return (
-                      <div key={product.id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-                        <h3 className="font-semibold text-[#0A2645] mb-2">{product.name}</h3>
-                        <div className="space-y-1 text-sm text-gray-600 mb-3">
-                          <p>Sell Price: R{product.price.toFixed(2)}</p>
-                          <p>Cost Price: R{displayCostPrice.toFixed(2)}</p>
-                          <p>Stock: {(product as any).stock ?? 0}</p>
+                      <div key={product.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20">
+                        <h3 className="font-bold text-[#0A2645] mb-4 text-lg">📦 {product.name}</h3>
+                        <div className="space-y-2 text-sm mb-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">💰 Sell Price:</span>
+                            <span className="font-semibold text-green-600">R{product.price.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">💵 Cost Price:</span>
+                            <span className="font-semibold text-blue-600">R{displayCostPrice.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">📊 Stock:</span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                              (product as any).stock > 10 
+                                ? 'bg-green-100 text-green-800' 
+                                : (product as any).stock > 0 
+                                ? 'bg-yellow-100 text-yellow-800' 
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {(product as any).stock ?? 0}
+                            </span>
+                          </div>
                         </div>
                         <Button
                           onClick={() => addToCart(product)}
-                          className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+                          className="w-full bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-[#0A2645] font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                           size="sm"
                         >
-                          Add to Order
+                          ➕ Add to Order
                         </Button>
                       </div>
                     );
@@ -314,19 +349,27 @@ const PurchaseOrder = () => {
                 </div>
               </div>
 
-              {/* Cart Panel */}
-              <div className="w-80 bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-[#0A2645] flex items-center">
-                    <ShoppingCartIcon className="h-5 w-5 mr-2" />
-                    Purchase Order
+              {/* Enhanced Cart Panel */}
+              <div className="w-80 bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-6 border border-white/20">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-[#0A2645] flex items-center">
+                    <ShoppingCartIcon className="h-6 w-6 mr-3 text-[#FAA225]" />
+                    🛒 Purchase Order
                   </h2>
-                  <span className="text-sm text-gray-600">{cart.length} items</span>
+                  <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full font-medium">
+                    📦 {cart.length} items
+                  </span>
                 </div>
 
-                <div className="space-y-2 max-h-96 overflow-y-auto mb-4">
+                <div className="space-y-3 max-h-96 overflow-y-auto mb-6 pr-2">
                   {cart.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No items in order</p>
+                    <div className="text-center py-12 space-y-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                        <ShoppingCartIcon className="h-8 w-8 text-gray-500" />
+                      </div>
+                      <p className="text-gray-500 font-semibold">🛒 No items in order</p>
+                      <p className="text-gray-400 text-sm">Add products to start building your order</p>
+                    </div>
                   ) : (
                     cart.map((item) => (
                       <CartItem
@@ -345,63 +388,78 @@ const PurchaseOrder = () => {
                 </div>
 
                 {cart.length > 0 && (
-                  <>
-                    <div className="border-t pt-4">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="font-semibold">Total Cost:</span>
-                        <span className="font-bold text-lg">R{getTotalCost().toFixed(2)}</span>
-                      </div>
-                      <Button
-                        onClick={handlePlaceOrder}
-                        className="w-full bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
-                        disabled={!selectedSupplier}
-                      >
-                        Place Order
-                      </Button>
+                  <div className="border-t pt-6 space-y-4">
+                    <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                      <span className="font-bold text-[#0A2645]">💰 Total Cost:</span>
+                      <span className="font-bold text-2xl text-green-600">R{getTotalCost().toFixed(2)}</span>
                     </div>
-                  </>
+                    <Button
+                      onClick={handlePlaceOrder}
+                      className="w-full bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-white font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl py-3"
+                      disabled={!selectedSupplier}
+                    >
+                      🚀 Place Order
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
           </TabsContent>
           
           <TabsContent value="history">
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-4 border-b">
-                <h2 className="text-xl font-semibold text-[#0A2645]">Purchase Order History</h2>
-                <p className="text-sm text-[#0A2645]/70">View and manage all purchase orders</p>
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border border-white/20 overflow-hidden">
+              <div className="p-6 bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] text-white">
+                <h2 className="text-2xl font-bold flex items-center">
+                  📊 Purchase Order History
+                </h2>
+                <p className="text-[#FAA225] mt-2">📋 View and manage all purchase orders</p>
               </div>
               
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Order #</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Supplier</TableHead>
-                      <TableHead>Items</TableHead>
-                      <TableHead>Total Cost</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
+                    <TableRow className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+                      <TableHead className="font-bold text-[#0A2645]">🔢 Order #</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">📅 Date</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">🏢 Supplier</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">📦 Items</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">💰 Total Cost</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">📊 Status</TableHead>
+                      <TableHead className="font-bold text-[#0A2645]">⚡ Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {purchaseOrders.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                          No purchase orders found
+                        <TableCell colSpan={7} className="text-center py-12">
+                          <div className="space-y-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                              <ShoppingCartIcon className="h-8 w-8 text-gray-500" />
+                            </div>
+                            <p className="text-gray-500 font-semibold">📋 No purchase orders found</p>
+                            <p className="text-gray-400 text-sm">Create your first purchase order to see it here</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      purchaseOrders.map((order) => (
-                        <TableRow key={order.id}>
-                          <TableCell className="font-medium">#{order.id}</TableCell>
-                          <TableCell>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
-                          <TableCell>{order.supplier}</TableCell>
-                          <TableCell>{order.items.length} items</TableCell>
-                          <TableCell>R{order.totalCost.toFixed(2)}</TableCell>
+                      purchaseOrders.map((order, index) => (
+                        <TableRow 
+                          key={order.id}
+                          className={`hover:bg-gradient-to-r hover:from-[#FAA225]/5 hover:to-[#FAA225]/10 transition-all duration-200 ${
+                            index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                          }`}
+                        >
+                          <TableCell className="font-bold text-[#0A2645]">#{order.id}</TableCell>
+                          <TableCell className="text-[#0A2645]">{new Date(order.orderDate).toLocaleDateString()}</TableCell>
+                          <TableCell className="text-[#0A2645] font-medium">{order.supplier}</TableCell>
+                          <TableCell className="text-[#0A2645]">
+                            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                              {order.items.length} items
+                            </span>
+                          </TableCell>
+                          <TableCell className="font-bold text-green-600">R{order.totalCost.toFixed(2)}</TableCell>
                           <TableCell>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
                               {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </span>
                           </TableCell>
@@ -410,14 +468,14 @@ const PurchaseOrder = () => {
                               value={order.status}
                               onValueChange={(value) => updateOrderStatus(order.id, value as PurchaseOrder['status'])}
                             >
-                              <SelectTrigger className="w-32 bg-white">
+                              <SelectTrigger className="w-32 bg-white border-[#0A2645]/20 hover:border-[#FAA225] transition-colors duration-200">
                                 <SelectValue />
                               </SelectTrigger>
-                              <SelectContent className="bg-white">
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="ordered">Ordered</SelectItem>
-                                <SelectItem value="received">Received</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                              <SelectContent className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+                                <SelectItem value="pending" className="hover:bg-amber-50">⏳ Pending</SelectItem>
+                                <SelectItem value="ordered" className="hover:bg-blue-50">📋 Ordered</SelectItem>
+                                <SelectItem value="received" className="hover:bg-green-50">✅ Received</SelectItem>
+                                <SelectItem value="cancelled" className="hover:bg-red-50">❌ Cancelled</SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>
@@ -432,32 +490,34 @@ const PurchaseOrder = () => {
         </Tabs>
       </div>
 
-      {/* Supplier Selection Dialog */}
+      {/* Enhanced Supplier Selection Dialog */}
       <Dialog open={showSupplierDialog} onOpenChange={setShowSupplierDialog}>
-        <DialogContent className="bg-white">
+        <DialogContent className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-2xl">
           <DialogHeader>
-            <DialogTitle>Select Supplier</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-[#0A2645] flex items-center">
+              🏢 Select Supplier
+            </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <p>Please select a supplier before adding items to your order.</p>
+          <div className="space-y-6">
+            <p className="text-[#0A2645]/70">📋 Please select a supplier before adding items to your order.</p>
             <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
-              <SelectTrigger className="bg-white text-[#0A2645] border-[#0A2645]">
-                <SelectValue placeholder="Choose a supplier..." />
+              <SelectTrigger className="bg-white/20 backdrop-blur-sm text-[#0A2645] border-[#0A2645]/30 focus:border-[#FAA225] focus:ring-[#FAA225]/20 transition-all duration-200">
+                <SelectValue placeholder="🏢 Choose a supplier..." />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-2xl">
                 {suppliers.map((supplier) => (
-                  <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645]">
-                    {supplier.name}
+                  <SelectItem key={supplier.id} value={supplier.id} className="text-[#0A2645] hover:bg-[#FAA225]/10 transition-colors duration-200">
+                    🏢 {supplier.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Button 
               onClick={() => setShowSupplierDialog(false)}
-              className="w-full"
+              className="w-full bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-white font-bold shadow-lg transition-all duration-200 hover:scale-105"
               disabled={!selectedSupplier}
             >
-              Continue
+              ✅ Continue
             </Button>
           </div>
         </DialogContent>
