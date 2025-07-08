@@ -3,7 +3,7 @@ import React from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Plus, Search } from 'lucide-react';
+import { ArrowLeft, Plus, Search, Users } from 'lucide-react';
 import { 
   Table,
   TableBody,
@@ -71,103 +71,150 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
   };
   
   return (
-    <div className="min-h-screen bg-[#0A2645] flex flex-col">
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={onBack}
-            className="text-[#0A2645] hover:bg-[#0A2645]/10"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-[#0A2645]">Customer Accounts</h1>
-            <p className="text-sm text-[#0A2645]/70">Manage customer accounts and payments</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5f] flex flex-col">
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FAA225]/20 via-[#FAA225]/10 to-transparent opacity-50"></div>
+        <header className="relative bg-white/95 backdrop-blur-sm p-6 shadow-lg border-b-4 border-[#FAA225] rounded-xl m-6 mb-8 transition-all duration-300 hover:shadow-xl">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={onBack}
+                className="text-[#0A2645] hover:bg-[#0A2645]/10 transition-all duration-200 hover:scale-105"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-br from-[#FAA225] to-[#e8940f] rounded-lg shadow-lg">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-[#0A2645] bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] bg-clip-text">
+                    👥 Customer Accounts
+                  </h1>
+                  <p className="text-sm text-[#0A2645]/70 mt-1">Manage customer accounts and payment records</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <Button 
+                onClick={() => setShowAddCustomer(true)}
+                className="bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Customer
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex space-x-2">
-          <Button 
-            onClick={() => setShowAddCustomer(true)}
-            className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Customer
-          </Button>
-        </div>
-      </header>
+        </header>
+      </div>
       
-      <div className="p-4">
-        <div className="mb-4">
+      <div className="flex-1 px-6 pb-6 space-y-6">
+        {/* Enhanced Search Bar */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
           <div className="relative max-w-md">
-            <Search className="absolute left-2 top-3 h-4 w-4 text-[#0A2645]" />
+            <Search className="absolute left-3 top-3.5 h-4 w-4 text-white/70" />
             <Input
-              placeholder="Search customers..."
+              placeholder="🔍 Search customers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225]"
+              className="pl-10 bg-white/20 backdrop-blur-sm text-white placeholder:text-white/70 border-white/30 focus:border-[#FAA225] focus:ring-[#FAA225]/20 transition-all duration-200"
             />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow overflow-x-auto border-2 border-gray-200">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#0A2645]">
-                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Name</TableHead>
-                {!isMobile && <TableHead className="text-[#FAA225] font-bold">Phone</TableHead>}
-                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Total Purchases</TableHead>
-                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Owing</TableHead>
-                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Status</TableHead>
-                <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCustomers.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-4 text-gray-500">
-                    No customers found
-                  </TableCell>
+        {/* Enhanced Table Container */}
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-white/20 transition-all duration-300 hover:shadow-3xl">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] border-none">
+                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                    👤 Name
+                  </TableHead>
+                  {!isMobile && (
+                    <TableHead className="text-[#FAA225] font-bold text-sm p-4">
+                      📱 Phone
+                    </TableHead>
+                  )}
+                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                    💰 Total Purchases
+                  </TableHead>
+                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                    🔴 Owing
+                  </TableHead>
+                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                    📊 Status
+                  </TableHead>
+                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                    ⚡ Actions
+                  </TableHead>
                 </TableRow>
-              ) : (
-                filteredCustomers.map((customer) => (
-                  <TableRow 
-                    key={customer.id} 
-                    className={`cursor-pointer hover:bg-gray-50 border-b ${isMobile ? 'text-xs' : ''}`}
-                    onClick={() => handleCustomerClick(customer.id)}
-                  >
-                    <TableCell className={`font-medium text-[#0A2645] ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
-                    {!isMobile && <TableCell className="text-[#0A2645]">{customer.phone}</TableCell>}
-                    <TableCell className={`text-[#0A2645] font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getTotalPurchases(customer.id))}</TableCell>
-                    <TableCell className={`text-red-600 font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
-                    <TableCell className={isMobile ? 'p-2' : ''}>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}>
-                        {customer.isPaid ? "Paid" : "Outstanding"}
-                      </span>
+              </TableHeader>
+              <TableBody>
+                {filteredCustomers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-12">
+                      <div className="flex flex-col items-center space-y-3">
+                        <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
+                          <Users className="h-8 w-8 text-gray-500" />
+                        </div>
+                        <p className="text-gray-500 font-medium">No customers found</p>
+                        <p className="text-gray-400 text-sm">Try adjusting your search terms</p>
+                      </div>
                     </TableCell>
-                    <TableCell className={isMobile ? 'p-2' : ''}>
-                      <div className="flex items-center space-x-2">
+                  </TableRow>
+                ) : (
+                  filteredCustomers.map((customer, index) => (
+                    <TableRow 
+                      key={customer.id} 
+                      className={`cursor-pointer hover:bg-gradient-to-r hover:from-[#FAA225]/5 hover:to-[#FAA225]/10 border-b border-gray-100 transition-all duration-200 hover:shadow-lg ${isMobile ? 'text-xs' : ''} ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                      onClick={() => handleCustomerClick(customer.id)}
+                    >
+                      <TableCell className={`font-semibold text-[#0A2645] ${isMobile ? 'p-3' : 'p-4'}`}>
+                        {customer.name}
+                      </TableCell>
+                      {!isMobile && (
+                        <TableCell className="text-[#0A2645]/80 p-4">
+                          {customer.phone}
+                        </TableCell>
+                      )}
+                      <TableCell className={`text-[#0A2645] font-semibold ${isMobile ? 'p-3' : 'p-4'}`}>
+                        {formatCurrency(getTotalPurchases(customer.id))}
+                      </TableCell>
+                      <TableCell className={`text-red-600 font-bold ${isMobile ? 'p-3' : 'p-4'}`}>
+                        {formatCurrency(getAmountOwed(customer.id))}
+                      </TableCell>
+                      <TableCell className={isMobile ? 'p-3' : 'p-4'}>
+                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm transition-all duration-200 ${
+                          customer.isPaid 
+                            ? "bg-gradient-to-r from-green-100 to-green-200 text-green-800 border border-green-200" 
+                            : "bg-gradient-to-r from-red-100 to-red-200 text-red-800 border border-red-200"
+                        }`}>
+                          {customer.isPaid ? "✅ Paid" : "⏳ Outstanding"}
+                        </span>
+                      </TableCell>
+                      <TableCell className={isMobile ? 'p-3' : 'p-4'}>
                         <Button 
                           variant="outline" 
                           size="sm"
-                          className={`bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 border-[#FAA225] font-bold ${isMobile ? 'text-xs px-2 py-1' : ''}`}
+                          className={`bg-gradient-to-r from-[#FAA225] to-[#e8940f] text-white hover:from-[#e8940f] hover:to-[#FAA225] border-none font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl ${isMobile ? 'text-xs px-2 py-1' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCustomerClick(customer.id);
                           }}
                         >
-                          View
+                          👁️ View
                         </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
       
