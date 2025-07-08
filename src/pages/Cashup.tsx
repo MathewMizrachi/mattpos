@@ -141,7 +141,7 @@ const Cashup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
