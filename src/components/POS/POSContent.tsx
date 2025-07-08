@@ -92,7 +92,7 @@ const POSContent: React.FC<POSContentProps> = ({
         )}
       </div>
       
-      <div className="flex-1 overflow-hidden relative" style={{ marginTop: currentMode === 'restaurant' ? '140px' : '80px' }}>
+      <div className="flex-1 overflow-hidden relative bg-[#0A2645]" style={{ marginTop: currentMode === 'restaurant' ? '140px' : '80px' }}>
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto px-3 pb-36">
             <ProductGrid 
