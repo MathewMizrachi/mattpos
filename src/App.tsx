@@ -21,7 +21,7 @@ function App() {
     <ThemeProvider>
       <AppProvider>
         <Router>
-          <div className="min-h-screen bg-gray-100">
+          <div className="min-h-screen">
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />

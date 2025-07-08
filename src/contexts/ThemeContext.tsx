@@ -47,7 +47,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const theme = {
-    background: isDarkMode ? '#0A2645' : '#FFFFFF',
+    background: isDarkMode ? '#0A2645' : '#F9FAFB',
     border: isDarkMode ? '#FAA225' : '#E5E7EB',
     text: isDarkMode ? '#FFFFFF' : '#1F2937',
     textSecondary: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : '#6B7280',
