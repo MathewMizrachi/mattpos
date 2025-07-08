@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -89,10 +88,10 @@ const TableManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/40 p-4 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100/50 to-blue-200/40 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header */}
-        <header className="bg-gradient-to-r from-white via-blue-50/50 to-indigo-50/30 p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#FAA225]/20 rounded-xl mb-8 backdrop-blur-sm">
+        <header className="bg-gradient-to-r from-white via-blue-50/80 to-blue-100/60 p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-[#FAA225]/20 rounded-xl mb-8 backdrop-blur-sm">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <Button 
@@ -131,8 +130,8 @@ const TableManagement = () => {
               key={table.number}
               className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-translate-y-1 group ${
                 table.isOccupied 
-                  ? 'bg-gradient-to-br from-[#FAA225] via-[#FAA225]/90 to-[#FAA225]/80 border-2 border-[#FAA225] shadow-xl transform animate-pulse' 
-                  : 'bg-gradient-to-br from-white via-gray-50/50 to-blue-50/30 border-2 border-gray-200 hover:border-[#0A2645]/30 shadow-lg hover:shadow-xl'
+                  ? 'bg-gradient-to-br from-[#FAA225] via-[#FAA225]/90 to-[#FAA225]/80 border-2 border-[#FAA225] shadow-xl' 
+                  : 'bg-gradient-to-br from-white via-blue-50/80 to-blue-100/60 border-2 border-blue-200 hover:border-[#0A2645]/30 shadow-lg hover:shadow-xl'
               }`}
               onClick={() => handleTableClick(table)}
             >
@@ -147,7 +146,7 @@ const TableManagement = () => {
                   <div className={`text-xs font-semibold px-3 py-1 rounded-full inline-block ${
                     table.isOccupied 
                       ? 'bg-white/20 text-white backdrop-blur-sm' 
-                      : 'bg-gray-100 text-[#0A2645]/70'
+                      : 'bg-blue-100 text-[#0A2645]/70'
                   }`}>
                     {table.isOccupied ? '🔴 Occupied' : '🟢 Available'}
                   </div>
@@ -202,7 +201,7 @@ const TableManagement = () => {
               
               {!table.isOccupied && (
                 <CardContent className="pt-0 text-center p-4">
-                  <div className="bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-xl p-4 border-2 border-dashed border-gray-300 group-hover:border-[#0A2645]/40 transition-all duration-300">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/80 rounded-xl p-4 border-2 border-dashed border-blue-300 group-hover:border-[#0A2645]/40 transition-all duration-300">
                     <div className="text-[#0A2645]/70 text-sm font-semibold flex items-center justify-center gap-2">
                       <Coffee className="h-4 w-4" />
                       Click to seat customers
@@ -216,7 +215,7 @@ const TableManagement = () => {
 
         {/* Enhanced Summary Stats */}
         <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
-          <Card className="bg-gradient-to-br from-white via-orange-50/30 to-yellow-50/20 border-l-4 border-[#FAA225] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="bg-gradient-to-br from-white via-orange-50/50 to-yellow-50/40 border-l-4 border-[#FAA225] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <CardHeader className="pb-3 p-6">
               <CardTitle className="text-lg text-[#0A2645] flex items-center">
                 <div className="bg-gradient-to-br from-[#FAA225] to-[#FAA225]/80 p-3 rounded-xl mr-4 shadow-lg">
@@ -245,7 +244,7 @@ const TableManagement = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-white via-green-50/30 to-emerald-50/20 border-l-4 border-green-500 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="bg-gradient-to-br from-white via-green-50/50 to-emerald-50/40 border-l-4 border-green-500 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <CardHeader className="pb-3 p-6">
               <CardTitle className="text-lg text-[#0A2645] flex items-center">
                 <div className="bg-gradient-to-br from-green-500 to-green-600 p-3 rounded-xl mr-4 shadow-lg">
@@ -274,7 +273,7 @@ const TableManagement = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/20 border-l-4 border-[#0A2645] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="bg-gradient-to-br from-white via-blue-50/50 to-blue-100/40 border-l-4 border-[#0A2645] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <CardHeader className="pb-3 p-6">
               <CardTitle className="text-lg text-[#0A2645] flex items-center">
                 <div className="bg-gradient-to-br from-[#0A2645] to-[#0A2645]/80 p-3 rounded-xl mr-4 shadow-lg">
@@ -307,7 +306,7 @@ const TableManagement = () => {
 
       {/* Enhanced Order Details Dialog */}
       <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
-        <DialogContent className="max-w-3xl bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/20 border-2 border-[#0A2645] rounded-2xl shadow-2xl">
+        <DialogContent className="max-w-3xl bg-gradient-to-br from-white via-blue-50/50 to-blue-100/40 border-2 border-[#0A2645] rounded-2xl shadow-2xl">
           <DialogHeader className="bg-gradient-to-r from-[#0A2645] via-[#0A2645]/95 to-[#0A2645]/90 text-white p-8 -m-6 mb-8 rounded-t-2xl shadow-lg">
             <DialogTitle className="text-2xl font-bold flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
