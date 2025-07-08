@@ -101,23 +101,23 @@ const CustomerPaymentProcessor: React.FC<CustomerPaymentProcessorProps> = ({
   }
   
   return (
-    <div className="min-h-screen bg-[#0A2645] pt-6 px-4 flex items-center justify-center">
-      <div className="max-w-md w-full bg-[#0A2645] border-2 border-[#FAA225] rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Select Payment Method</h2>
-        <p className="mb-4 text-white">Process payment for {customerName}</p>
+    <div className="min-h-screen bg-gray-50 pt-6 px-4 flex items-center justify-center">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-bold mb-4">Select Payment Method</h2>
+        <p className="mb-4">Process payment for {customerName}</p>
         
         <RadioGroup value={paymentMethod} onValueChange={(value: 'cash' | 'card' | 'shop2shop') => setPaymentMethod(value)} className="mb-6">
           <div className="flex items-center space-x-2 mb-2">
             <RadioGroupItem value="cash" id="customer-cash" />
-            <Label htmlFor="customer-cash" className="text-white">Cash</Label>
+            <Label htmlFor="customer-cash">Cash</Label>
           </div>
           <div className="flex items-center space-x-2 mb-2">
             <RadioGroupItem value="card" id="customer-card" />
-            <Label htmlFor="customer-card" className="text-white">Card</Label>
+            <Label htmlFor="customer-card">Card</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="shop2shop" id="customer-shop2shop" />
-            <Label htmlFor="customer-shop2shop" className="text-white">Shop2Shop</Label>
+            <Label htmlFor="customer-shop2shop">Shop2Shop</Label>
           </div>
         </RadioGroup>
         
@@ -125,7 +125,7 @@ const CustomerPaymentProcessor: React.FC<CustomerPaymentProcessorProps> = ({
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="flex-1 bg-[#0A2645] text-white border-[#FAA225] hover:bg-white/10"
+            className="flex-1 text-white"
           >
             Cancel
           </Button>

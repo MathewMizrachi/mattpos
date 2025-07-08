@@ -71,20 +71,20 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
   };
   
   return (
-    <div className="min-h-screen bg-[#0A2645] flex flex-col">
-      <header className="bg-[#0A2645] p-4 shadow-sm flex justify-between items-center border-2 border-[#FAA225] rounded-lg m-4 mb-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
         <div className="flex items-center space-x-2">
           <Button 
             variant="ghost" 
             size="icon"
             onClick={onBack}
-            className="text-white hover:bg-white/10"
+            className="text-[#0A2645] hover:bg-[#0A2645]/10"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Customer Accounts</h1>
-            <p className="text-sm text-white/70">Manage customer accounts and payments</p>
+            <h1 className="text-2xl font-bold text-[#0A2645]">Customer Accounts</h1>
+            <p className="text-sm text-[#0A2645]/70">Manage customer accounts and payments</p>
           </div>
         </div>
         <div className="flex space-x-2">
@@ -101,20 +101,20 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
       <div className="p-4">
         <div className="mb-4">
           <div className="relative max-w-md">
-            <Search className="absolute left-2 top-3 h-4 w-4 text-white/70" />
+            <Search className="absolute left-2 top-3 h-4 w-4 text-[#0A2645]" />
             <Input
               placeholder="Search customers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 bg-[#0A2645] text-white border-2 border-[#FAA225] focus:border-[#FAA225] placeholder:text-white/50"
+              className="pl-8 bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225]"
             />
           </div>
         </div>
         
-        <div className="bg-[#0A2645] rounded-lg shadow overflow-x-auto border-2 border-[#FAA225]">
+        <div className="bg-white rounded-lg shadow overflow-x-auto border-2 border-gray-200">
           <Table>
             <TableHeader>
-              <TableRow className="bg-[#0A2645] border-[#FAA225]">
+              <TableRow className="bg-[#0A2645]">
                 <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Name</TableHead>
                 {!isMobile && <TableHead className="text-[#FAA225] font-bold">Phone</TableHead>}
                 <TableHead className={`text-[#FAA225] font-bold ${isMobile ? "text-xs p-2" : ""}`}>Total Purchases</TableHead>
@@ -126,7 +126,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
             <TableBody>
               {filteredCustomers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-4 text-white/70">
+                  <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-4 text-gray-500">
                     No customers found
                   </TableCell>
                 </TableRow>
@@ -134,13 +134,13 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                 filteredCustomers.map((customer) => (
                   <TableRow 
                     key={customer.id} 
-                    className={`cursor-pointer hover:bg-white/5 border-b border-[#FAA225]/30 ${isMobile ? 'text-xs' : ''}`}
+                    className={`cursor-pointer hover:bg-gray-50 border-b ${isMobile ? 'text-xs' : ''}`}
                     onClick={() => handleCustomerClick(customer.id)}
                   >
-                    <TableCell className={`font-medium text-white ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
-                    {!isMobile && <TableCell className="text-white">{customer.phone}</TableCell>}
-                    <TableCell className={`text-white font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getTotalPurchases(customer.id))}</TableCell>
-                    <TableCell className={`text-red-400 font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
+                    <TableCell className={`font-medium text-[#0A2645] ${isMobile ? 'p-2' : ''}`}>{customer.name}</TableCell>
+                    {!isMobile && <TableCell className="text-[#0A2645]">{customer.phone}</TableCell>}
+                    <TableCell className={`text-[#0A2645] font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getTotalPurchases(customer.id))}</TableCell>
+                    <TableCell className={`text-red-600 font-semibold ${isMobile ? 'p-2' : ''}`}>{formatCurrency(getAmountOwed(customer.id))}</TableCell>
                     <TableCell className={isMobile ? 'p-2' : ''}>
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"

@@ -2,105 +2,116 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plus, Upload, ShoppingCart } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
-import ThemeToggle from '@/components/ThemeToggle';
+import { ArrowLeftIcon, ImportIcon, PlusIcon, PackageIcon, MoreVerticalIcon, ShoppingCartIcon } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface StockHeaderProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   onOpenAddProduct: () => void;
   onOpenImportProduct: () => void;
   showPurchaseOrder?: boolean;
 }
 
-const StockHeader: React.FC<StockHeaderProps> = ({
-  title,
-  description,
-  onOpenAddProduct,
+const StockHeader: React.FC<StockHeaderProps> = ({ 
+  title = "Manage Stock",
+  description = "Add, edit, and remove products",
+  onOpenAddProduct, 
   onOpenImportProduct,
   showPurchaseOrder = false
 }) => {
-  const { theme } = useTheme();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+
+  const handlePurchaseOrder = () => {
+    navigate('/purchase-order');
+  };
 
   return (
-    <header 
-      className="p-4 shadow-sm flex justify-between items-center border-2 rounded-lg m-4 mb-6"
-      style={{
-        backgroundColor: theme.card,
-        borderColor: theme.border
-      }}
-    >
+    <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
       <div className="flex items-center space-x-2">
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => navigate('/dashboard')}
-          style={{
-            color: theme.text,
-            backgroundColor: 'transparent'
-          }}
-          className="hover:bg-white/10"
+          className="text-[#0A2645] hover:bg-[#0A2645]/10"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeftIcon className="h-5 w-5" />
         </Button>
         <div>
-          <h1 
-            className="text-2xl font-bold"
-            style={{ color: theme.text }}
-          >
-            {title}
-          </h1>
-          <p 
-            className="text-sm"
-            style={{ color: theme.textSecondary }}
-          >
-            {description}
-          </p>
+          <h1 className="text-2xl font-bold text-[#0A2645]">{title}</h1>
+          <p className="text-sm text-[#0A2645]/70">{description}</p>
         </div>
       </div>
       <div className="flex space-x-2">
-        <ThemeToggle />
-        {showPurchaseOrder && (
-          <Button 
-            onClick={() => navigate('/purchase-order')}
-            className="border-2"
-            style={{
-              backgroundColor: theme.button,
-              color: theme.buttonText,
-              borderColor: theme.accent
-            }}
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Purchase Order
-          </Button>
+        {isMobile ? (
+          // Mobile view - show dropdown menu with white button
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" className="bg-white text-[#0A2645] border-[#0A2645]">
+                <MoreVerticalIcon className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")}>
+                <PackageIcon className="h-4 w-4 mr-2" />
+                Global Stock Master
+              </DropdownMenuItem>
+              {showPurchaseOrder && (
+                <DropdownMenuItem onClick={handlePurchaseOrder}>
+                  <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                  Purchase Order
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem onClick={onOpenImportProduct}>
+                <ImportIcon className="h-4 w-4 mr-2" />
+                Import Products
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onOpenAddProduct}>
+                <PlusIcon className="h-4 w-4 mr-2" />
+                Add Product
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          // Desktop view - show all buttons
+          <>
+            <Button 
+              variant="outline" 
+              className="bg-white text-[#0A2645] border-[#0A2645]"
+              onClick={() => console.log("Global Stock Master clicked")}
+            >
+              <PackageIcon className="h-4 w-4 mr-2" />
+              Global Stock Master
+            </Button>
+            {showPurchaseOrder && (
+              <Button 
+                onClick={handlePurchaseOrder} 
+                className="bg-[#0A2645] hover:bg-[#0A2645]/90 text-white"
+              >
+                <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                Purchase Order
+              </Button>
+            )}
+            <Button 
+              onClick={onOpenImportProduct} 
+              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+            >
+              <ImportIcon className="h-4 w-4 mr-2" />
+              Import Products
+            </Button>
+            <Button onClick={onOpenAddProduct}>
+              <PlusIcon className="h-4 w-4 mr-2" />
+              Add Product
+            </Button>
+          </>
         )}
-        <Button 
-          onClick={onOpenImportProduct}
-          variant="outline"
-          className="border-2"
-          style={{
-            backgroundColor: theme.background,
-            borderColor: theme.border,
-            color: theme.text
-          }}
-        >
-          <Upload className="h-4 w-4 mr-2" />
-          Import
-        </Button>
-        <Button 
-          onClick={onOpenAddProduct}
-          className="border-2"
-          style={{
-            backgroundColor: theme.button,
-            color: theme.buttonText,
-            borderColor: theme.accent
-          }}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Product
-        </Button>
       </div>
     </header>
   );
