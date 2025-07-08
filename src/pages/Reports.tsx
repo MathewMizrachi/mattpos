@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -86,109 +87,115 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center space-x-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate('/dashboard')}
-            className="text-white hover:bg-white/10 border border-white/20"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold text-white flex items-center">
-              <ChartBarIcon className="mr-3 h-8 w-8" />
-              Reports & Analytics
-            </h1>
-            <p className="text-blue-100 mt-1">Comprehensive insights into your business performance</p>
+    <div className="min-h-screen bg-[#0A2645]">
+      {/* Header Section */}
+      <div className="bg-[#0A2645] p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center mb-6">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate('/dashboard')} 
+              className="mr-4 text-white hover:bg-white/10"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="text-center flex-1 pr-9">
+              <h1 className="text-3xl font-bold text-white flex items-center justify-center">
+                <ChartBarIcon className="mr-3 h-8 w-8" />
+                Reports & Analytics
+              </h1>
+              <p className="text-blue-100 mt-2">Comprehensive insights into your business performance</p>
+            </div>
           </div>
         </div>
-        
-        {/* Main Content */}
-        <Card className="bg-white shadow-lg">
-          <CardContent className="p-6">
-            {isMobile ? (
-              <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
-            ) : (
-              <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
-                  <TabsTrigger 
-                    value="sales" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Sales Report
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="inventory" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Inventory Status
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="payment" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Payment Methods
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="profitplus" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Profit+
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            )}
-            
-            {/* Content Area */}
-            {activeTab === 'sales' && (
-              <SalesReportTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                salesData={salesData}
-              />
-            )}
-            
-            {activeTab === 'inventory' && (
-              <InventoryStatusTab 
-                inventoryData={inventoryData}
-                searchTerm={inventorySearchTerm}
-                setSearchTerm={setInventorySearchTerm}
-                sortBy={inventorySortBy}
-                setSortBy={setInventorySortBy}
-              />
-            )}
-            
-            {activeTab === 'payment' && (
-              <PaymentMethodsTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                paymentMethodsData={paymentMethodsData}
-              />
-            )}
-            
-            {activeTab === 'profitplus' && (
-              <ProfitPlusTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                profitPlusData={profitPlusData}
-                searchTerm={profitPlusSearchTerm}
-                setSearchTerm={setProfitPlusSearchTerm}
-                sortBy={profitPlusSortBy}
-                setSortBy={setProfitPlusSortBy}
-              />
-            )}
-          </CardContent>
-        </Card>
+      </div>
+
+      {/* Main Content */}
+      <div className="p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-white shadow-lg">
+            <CardContent className="p-6">
+              {isMobile ? (
+                <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
+              ) : (
+                <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
+                  <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
+                    <TabsTrigger 
+                      value="sales" 
+                      className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
+                    >
+                      Sales Report
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="inventory" 
+                      className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
+                    >
+                      Inventory Status
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="payment" 
+                      className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
+                    >
+                      Payment Methods
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="profitplus" 
+                      className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
+                    >
+                      Profit+
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              )}
+              
+              {/* Content Area */}
+              {activeTab === 'sales' && (
+                <SalesReportTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  salesData={salesData}
+                />
+              )}
+              
+              {activeTab === 'inventory' && (
+                <InventoryStatusTab 
+                  inventoryData={inventoryData}
+                  searchTerm={inventorySearchTerm}
+                  setSearchTerm={setInventorySearchTerm}
+                  sortBy={inventorySortBy}
+                  setSortBy={setInventorySortBy}
+                />
+              )}
+              
+              {activeTab === 'payment' && (
+                <PaymentMethodsTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  paymentMethodsData={paymentMethodsData}
+                />
+              )}
+              
+              {activeTab === 'profitplus' && (
+                <ProfitPlusTab 
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  profitPlusData={profitPlusData}
+                  searchTerm={profitPlusSearchTerm}
+                  setSearchTerm={setProfitPlusSearchTerm}
+                  sortBy={profitPlusSortBy}
+                  setSortBy={setProfitPlusSortBy}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
