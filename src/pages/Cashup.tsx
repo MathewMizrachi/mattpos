@@ -141,226 +141,265 @@ const Cashup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
+        {/* Enhanced Header with Gradient */}
+        <div className="bg-gradient-to-r from-white to-gray-50 p-6 rounded-2xl shadow-xl mb-8 border border-gray-200 backdrop-blur-sm">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleBackToDashboard}
-                className="mr-4 bg-white border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+                className="mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <ArrowLeftIcon className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-3xl font-bold text-[#0A2645] mb-1">End of Day Cashup</h1>
-                <p className="text-[#0A2645]/70">Till2Day Restaurant System</p>
+                <div className="flex items-center mb-2">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
+                    <Calculator className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent">
+                      💰 End of Day Cashup
+                    </h1>
+                    <p className="text-lg text-gray-600 font-medium">Till2Day Restaurant System</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                  <span className="flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    Live Till Status
+                  </span>
+                  <span>Multi-Till Management</span>
+                </div>
               </div>
             </div>
             <div className="flex gap-3">
               <Button
                 onClick={handleEndOfDay}
-                className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 hover:from-[#0A2645]/90 hover:to-[#0A2645] text-white font-semibold px-6 py-2 flex items-center gap-2"
+                className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] hover:from-[#1a3a5c] hover:to-[#0A2645] text-white font-semibold px-6 py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
               >
                 <FileText className="h-5 w-5" />
-                End of Day Report
+                📊 End of Day Report
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Summary Stats */}
-        <div className="grid gap-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mb-6">
-          <Card className="bg-white border-l-4 border-[#FAA225] shadow-lg">
-            <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-base text-[#0A2645] flex items-center">
-                <div className="bg-[#FAA225] p-2 rounded-lg mr-3">
-                  <Calculator className="h-4 w-4 text-white" />
+        {/* Enhanced Summary Stats */}
+        <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mb-8">
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-[#FAA225] to-[#ff9500] h-2"></div>
+            <CardHeader className="pb-2 p-6">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-gradient-to-r from-[#FAA225] to-[#ff9500] p-3 rounded-xl mr-3 shadow-lg">
+                  <Calculator className="h-5 w-5 text-white" />
                 </div>
-                Active Tills
+                🔥 Active Tills
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className="text-3xl font-bold text-[#FAA225] mb-1">
+            <CardContent className="p-6 pt-0">
+              <div className="text-4xl font-bold bg-gradient-to-r from-[#FAA225] to-[#ff9500] bg-clip-text text-transparent mb-2">
                 {getActiveTillsCount()}
               </div>
-              <div className="text-sm text-[#0A2645]/70">
-                out of {shifts.length} total
+              <div className="text-sm text-[#0A2645]/70 font-medium">
+                out of {shifts.length} total tills
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-l-4 border-green-500 shadow-lg">
-            <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-base text-[#0A2645] flex items-center">
-                <div className="bg-green-500 p-2 rounded-lg mr-3">
-                  <DollarSignIcon className="h-4 w-4 text-white" />
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-green-500 to-green-600 h-2"></div>
+            <CardHeader className="pb-2 p-6">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 p-3 rounded-xl mr-3 shadow-lg">
+                  <DollarSignIcon className="h-5 w-5 text-white" />
                 </div>
-                Total Sales
+                💸 Total Sales
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className="text-3xl font-bold text-green-600 mb-1">
+            <CardContent className="p-6 pt-0">
+              <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">
                 {formatCurrency(getTotalSales())}
               </div>
-              <div className="text-sm text-[#0A2645]/70">
-                across all tills
+              <div className="text-sm text-[#0A2645]/70 font-medium">
+                across all tills today
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-l-4 border-blue-500 shadow-lg">
-            <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-base text-[#0A2645] flex items-center">
-                <div className="bg-blue-500 p-2 rounded-lg mr-3">
-                  <UsersIcon className="h-4 w-4 text-white" />
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2"></div>
+            <CardHeader className="pb-2 p-6">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-3 rounded-xl mr-3 shadow-lg">
+                  <UsersIcon className="h-5 w-5 text-white" />
                 </div>
-                Transactions
+                🛒 Transactions
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className="text-3xl font-bold text-blue-600 mb-1">
+            <CardContent className="p-6 pt-0">
+              <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
                 {getTotalTransactions()}
               </div>
-              <div className="text-sm text-[#0A2645]/70">
-                total today
+              <div className="text-sm text-[#0A2645]/70 font-medium">
+                total transactions today
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-l-4 border-purple-500 shadow-lg">
-            <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-base text-[#0A2645] flex items-center">
-                <div className="bg-purple-500 p-2 rounded-lg mr-3">
-                  <ClockIcon className="h-4 w-4 text-white" />
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 h-2"></div>
+            <CardHeader className="pb-2 p-6">
+              <CardTitle className="text-lg text-[#0A2645] flex items-center">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-3 rounded-xl mr-3 shadow-lg">
+                  <ClockIcon className="h-5 w-5 text-white" />
                 </div>
-                Avg Transaction
+                📊 Avg Transaction
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className="text-3xl font-bold text-purple-600 mb-1">
+            <CardContent className="p-6 pt-0">
+              <div className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent mb-2">
                 {formatCurrency(getTotalTransactions() > 0 ? getTotalSales() / getTotalTransactions() : 0)}
               </div>
-              <div className="text-sm text-[#0A2645]/70">
-                per sale
+              <div className="text-sm text-[#0A2645]/70 font-medium">
+                average per sale
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Daily Payment Summary */}
-        <Card className="bg-white shadow-lg mb-6">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl text-[#0A2645] flex items-center">
-              <CreditCard className="h-5 w-5 mr-2" />
-              Daily Payment Methods Summary
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                <div className="flex items-center mb-2">
-                  <Banknote className="h-4 w-4 text-green-600 mr-2" />
-                  <span className="font-medium text-green-800">Cash</span>
-                </div>
-                <div className="text-2xl font-bold text-green-700">
-                  {formatCurrency(paymentSummary.cash)}
-                </div>
-                <div className="text-sm text-green-600">
-                  {paymentSummary.total > 0 ? ((paymentSummary.cash / paymentSummary.total) * 100).toFixed(1) : 0}%
-                </div>
-              </div>
+        {/* Enhanced Daily Payment Summary */}
+        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 rounded-2xl overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-1">
+            <div className="bg-white rounded-t-2xl">
+              <CardHeader className="pb-6 p-8">
+                <CardTitle className="text-2xl text-[#0A2645] flex items-center">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
+                    <CreditCard className="h-6 w-6 text-white" />
+                  </div>
+                  💳 Daily Payment Methods Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8 pt-0">
+                <div className="bg-gradient-to-br from-gray-50/50 to-white p-6 rounded-2xl shadow-inner border border-gray-100">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border-l-4 border-green-500 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <div className="flex items-center mb-3">
+                        <Banknote className="h-5 w-5 text-green-600 mr-3" />
+                        <span className="font-bold text-green-800">💵 Cash</span>
+                      </div>
+                      <div className="text-3xl font-bold text-green-700 mb-2">
+                        {formatCurrency(paymentSummary.cash)}
+                      </div>
+                      <div className="text-sm text-green-600 font-medium">
+                        {paymentSummary.total > 0 ? ((paymentSummary.cash / paymentSummary.total) * 100).toFixed(1) : 0}% of total
+                      </div>
+                    </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                <div className="flex items-center mb-2">
-                  <CreditCard className="h-4 w-4 text-blue-600 mr-2" />
-                  <span className="font-medium text-blue-800">Card</span>
-                </div>
-                <div className="text-2xl font-bold text-blue-700">
-                  {formatCurrency(paymentSummary.card)}
-                </div>
-                <div className="text-sm text-blue-600">
-                  {paymentSummary.total > 0 ? ((paymentSummary.card / paymentSummary.total) * 100).toFixed(1) : 0}%
-                </div>
-              </div>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-l-4 border-blue-500 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <div className="flex items-center mb-3">
+                        <CreditCard className="h-5 w-5 text-blue-600 mr-3" />
+                        <span className="font-bold text-blue-800">💳 Card</span>
+                      </div>
+                      <div className="text-3xl font-bold text-blue-700 mb-2">
+                        {formatCurrency(paymentSummary.card)}
+                      </div>
+                      <div className="text-sm text-blue-600 font-medium">
+                        {paymentSummary.total > 0 ? ((paymentSummary.card / paymentSummary.total) * 100).toFixed(1) : 0}% of total
+                      </div>
+                    </div>
 
-              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
-                <div className="flex items-center mb-2">
-                  <Smartphone className="h-4 w-4 text-orange-600 mr-2" />
-                  <span className="font-medium text-orange-800">Shop2Shop</span>
-                </div>
-                <div className="text-2xl font-bold text-orange-700">
-                  {formatCurrency(paymentSummary.shop2shop)}
-                </div>
-                <div className="text-sm text-orange-600">
-                  {paymentSummary.total > 0 ? ((paymentSummary.shop2shop / paymentSummary.total) * 100).toFixed(1) : 0}%
-                </div>
-              </div>
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border-l-4 border-orange-500 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <div className="flex items-center mb-3">
+                        <Smartphone className="h-5 w-5 text-orange-600 mr-3" />
+                        <span className="font-bold text-orange-800">📱 Shop2Shop</span>
+                      </div>
+                      <div className="text-3xl font-bold text-orange-700 mb-2">
+                        {formatCurrency(paymentSummary.shop2shop)}
+                      </div>
+                      <div className="text-sm text-orange-600 font-medium">
+                        {paymentSummary.total > 0 ? ((paymentSummary.shop2shop / paymentSummary.total) * 100).toFixed(1) : 0}% of total
+                      </div>
+                    </div>
 
-              <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
-                <div className="flex items-center mb-2">
-                  <Receipt className="h-4 w-4 text-purple-600 mr-2" />
-                  <span className="font-medium text-purple-800">Account</span>
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border-l-4 border-purple-500 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <div className="flex items-center mb-3">
+                        <Receipt className="h-5 w-5 text-purple-600 mr-3" />
+                        <span className="font-bold text-purple-800">🏪 Account</span>
+                      </div>
+                      <div className="text-3xl font-bold text-purple-700 mb-2">
+                        {formatCurrency(paymentSummary.account)}
+                      </div>
+                      <div className="text-sm text-purple-600 font-medium">
+                        {paymentSummary.total > 0 ? ((paymentSummary.account / paymentSummary.total) * 100).toFixed(1) : 0}% of total
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-purple-700">
-                  {formatCurrency(paymentSummary.account)}
-                </div>
-                <div className="text-sm text-purple-600">
-                  {paymentSummary.total > 0 ? ((paymentSummary.account / paymentSummary.total) * 100).toFixed(1) : 0}%
-                </div>
-              </div>
+              </CardContent>
             </div>
-          </CardContent>
+          </div>
         </Card>
 
-        {/* Per-Till Payment Breakdown */}
-        <Card className="bg-white shadow-lg mb-6">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl text-[#0A2645]">Payment Methods by Till</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Till</TableHead>
-                    <TableHead>Operator</TableHead>
-                    <TableHead className="text-right">Cash</TableHead>
-                    <TableHead className="text-right">Card</TableHead>
-                    <TableHead className="text-right">Shop2Shop</TableHead>
-                    <TableHead className="text-right">Account</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {shifts.map((shift) => {
-                    const breakdown = db.getShiftPaymentBreakdown(shift.id);
-                    const total = breakdown.cash + breakdown.card + breakdown.shop2shop + breakdown.account;
-                    const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
-                    
-                    return (
-                      <TableRow key={shift.id}>
-                        <TableCell className="font-medium">Till #{shift.id}</TableCell>
-                        <TableCell>{user?.name || `User ${shift.userId}`}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(breakdown.cash)}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(breakdown.card)}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(breakdown.shop2shop)}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(breakdown.account)}</TableCell>
-                        <TableCell className="text-right font-bold">{formatCurrency(total)}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+        {/* Enhanced Per-Till Payment Breakdown */}
+        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 rounded-2xl overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-1">
+            <div className="bg-white rounded-t-2xl">
+              <CardHeader className="pb-4 p-8">
+                <CardTitle className="text-2xl text-[#0A2645] flex items-center">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
+                    <Calculator className="h-6 w-6 text-white" />
+                  </div>
+                  🏪 Payment Methods by Till
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8 pt-0">
+                <div className="bg-gradient-to-br from-gray-50/50 to-white p-6 rounded-2xl shadow-inner border border-gray-100">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="border-b-2 border-gray-200">
+                          <TableHead className="font-bold text-[#0A2645]">Till</TableHead>
+                          <TableHead className="font-bold text-[#0A2645]">Operator</TableHead>
+                          <TableHead className="text-right font-bold text-[#0A2645]">Cash</TableHead>
+                          <TableHead className="text-right font-bold text-[#0A2645]">Card</TableHead>
+                          <TableHead className="text-right font-bold text-[#0A2645]">Shop2Shop</TableHead>
+                          <TableHead className="text-right font-bold text-[#0A2645]">Account</TableHead>
+                          <TableHead className="text-right font-bold text-[#0A2645]">Total</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {shifts.map((shift) => {
+                          const breakdown = db.getShiftPaymentBreakdown(shift.id);
+                          const total = breakdown.cash + breakdown.card + breakdown.shop2shop + breakdown.account;
+                          const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
+                          
+                          return (
+                            <TableRow key={shift.id} className="hover:bg-gray-50/80 transition-colors duration-200">
+                              <TableCell className="font-medium text-[#0A2645]">🏪 Till #{shift.id}</TableCell>
+                              <TableCell className="text-[#0A2645]">{user?.name || `User ${shift.userId}`}</TableCell>
+                              <TableCell className="text-right font-medium">{formatCurrency(breakdown.cash)}</TableCell>
+                              <TableCell className="text-right font-medium">{formatCurrency(breakdown.card)}</TableCell>
+                              <TableCell className="text-right font-medium">{formatCurrency(breakdown.shop2shop)}</TableCell>
+                              <TableCell className="text-right font-medium">{formatCurrency(breakdown.account)}</TableCell>
+                              <TableCell className="text-right font-bold text-lg text-[#0A2645]">{formatCurrency(total)}</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              </CardContent>
             </div>
-          </CardContent>
+          </div>
         </Card>
 
-        {/* Till Cards */}
-        <div className="grid gap-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 grid-cols-1">
+        {/* Enhanced Till Cards */}
+        <div className="grid gap-6 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 grid-cols-1">
           {shifts.map((shift) => {
             const user = db.getUser ? db.getUser(shift.userId) : { name: `User ${shift.userId}` };
             const expectedCash = db.calculateExpectedCashInDrawer(shift.id);
@@ -370,88 +409,100 @@ const Cashup = () => {
             return (
               <Card
                 key={shift.id}
-                className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+                className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl rounded-2xl overflow-hidden border-0 ${
                   isActive 
-                    ? 'bg-white border-[#FAA225] shadow-lg border-2' 
-                    : 'bg-gray-50 border-gray-200 shadow-md'
+                    ? 'bg-gradient-to-br from-white to-gray-50 shadow-xl border-2 border-[#FAA225]' 
+                    : 'bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg'
                 }`}
               >
-                <CardHeader className="pb-3 p-4">
+                <div className={`h-2 ${isActive ? 'bg-gradient-to-r from-[#FAA225] to-[#ff9500]' : 'bg-gradient-to-r from-gray-400 to-gray-500'}`}></div>
+                <CardHeader className="pb-3 p-6">
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className={`text-xl font-bold mb-1 ${
+                      <CardTitle className={`text-2xl font-bold mb-2 ${
                         isActive ? 'text-[#0A2645]' : 'text-gray-500'
                       }`}>
-                        TILL-{shift.id.toString().padStart(3, '0')}
+                        🏪 TILL-{shift.id.toString().padStart(3, '0')}
                       </CardTitle>
-                      <p className={`text-sm ${
+                      <p className={`text-sm font-medium ${
                         isActive ? 'text-[#0A2645]/70' : 'text-gray-400'
                       }`}>
-                        Operator: {user?.name || `User ${shift.userId}`}
+                        👤 Operator: {user?.name || `User ${shift.userId}`}
                       </p>
                     </div>
-                    <Badge variant={isActive ? 'default' : 'secondary'}>
-                      {isActive ? 'active' : 'completed'}
+                    <Badge variant={isActive ? 'default' : 'secondary'} className={`${
+                      isActive ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : ''
+                    } px-3 py-1 text-sm font-semibold rounded-full`}>
+                      {isActive ? '🟢 active' : '✅ completed'}
                     </Badge>
                   </div>
                 </CardHeader>
                 
-                <CardContent className="pt-0 p-4">
-                  <div className="space-y-3">
-                    <div className="bg-gray-50 rounded-lg p-3">
+                <CardContent className="pt-0 p-6">
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 shadow-inner">
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <div className="text-gray-600 mb-1">Start Time</div>
-                          <div className="font-semibold">{formatTime(shift.startTime)}</div>
+                          <div className="text-gray-600 mb-1 font-medium">⏰ Start Time</div>
+                          <div className="font-bold text-[#0A2645]">{formatTime(shift.startTime)}</div>
                         </div>
                         <div>
-                          <div className="text-gray-600 mb-1">Hours Worked</div>
-                          <div className="font-semibold">{getHoursWorked(shift.startTime, shift.endTime)}h</div>
+                          <div className="text-gray-600 mb-1 font-medium">⏱️ Hours Worked</div>
+                          <div className="font-bold text-[#0A2645]">{getHoursWorked(shift.startTime, shift.endTime)}h</div>
                         </div>
                         <div>
-                          <div className="text-gray-600 mb-1">Start Float</div>
-                          <div className="font-semibold">{formatCurrency(shift.startFloat)}</div>
+                          <div className="text-gray-600 mb-1 font-medium">💰 Start Float</div>
+                          <div className="font-bold text-[#0A2645]">{formatCurrency(shift.startFloat)}</div>
                         </div>
                         <div>
-                          <div className="text-gray-600 mb-1">Transactions</div>
-                          <div className="font-semibold">{shift.transactionCount || 0}</div>
+                          <div className="text-gray-600 mb-1 font-medium">🛒 Transactions</div>
+                          <div className="font-bold text-[#0A2645]">{shift.transactionCount || 0}</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Payment Method Breakdown for this till */}
-                    <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-500">
-                      <div className="text-sm font-medium text-blue-800 mb-2">Payment Methods</div>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border-l-4 border-blue-500 shadow-lg">
+                      <div className="text-sm font-bold text-blue-800 mb-3 flex items-center">
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        💳 Payment Methods
+                      </div>
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div className="flex justify-between">
-                          <span>Cash:</span>
-                          <span className="font-semibold">{formatCurrency(breakdown.cash)}</span>
+                          <span className="font-medium">💵 Cash:</span>
+                          <span className="font-bold">{formatCurrency(breakdown.cash)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Card:</span>
-                          <span className="font-semibold">{formatCurrency(breakdown.card)}</span>
+                          <span className="font-medium">💳 Card:</span>
+                          <span className="font-bold">{formatCurrency(breakdown.card)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Shop2Shop:</span>
-                          <span className="font-semibold">{formatCurrency(breakdown.shop2shop)}</span>
+                          <span className="font-medium">📱 Shop2Shop:</span>
+                          <span className="font-bold">{formatCurrency(breakdown.shop2shop)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Account:</span>
-                          <span className="font-semibold">{formatCurrency(breakdown.account)}</span>
+                          <span className="font-medium">🏪 Account:</span>
+                          <span className="font-bold">{formatCurrency(breakdown.account)}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border-l-4 border-green-500 shadow-lg">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium text-green-800">Sales Total</span>
-                        <span className="text-lg font-bold text-green-700">
+                        <span className="text-sm font-bold text-green-800 flex items-center">
+                          <DollarSignIcon className="h-4 w-4 mr-2" />
+                          💸 Sales Total
+                        </span>
+                        <span className="text-xl font-bold text-green-700">
                           {formatCurrency(shift.salesTotal || 0)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-green-800">Expected Cash</span>
-                        <span className="text-lg font-bold text-green-700">
+                        <span className="text-sm font-bold text-green-800 flex items-center">
+                          <Calculator className="h-4 w-4 mr-2" />
+                          💰 Expected Cash
+                        </span>
+                        <span className="text-xl font-bold text-green-700">
                           {formatCurrency(expectedCash)}
                         </span>
                       </div>
@@ -460,9 +511,13 @@ const Cashup = () => {
                     <Button
                       onClick={() => handleTillCashup(shift)}
                       disabled={!isActive}
-                      className="w-full bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] font-semibold"
+                      className={`w-full font-bold py-3 rounded-xl transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-gradient-to-r from-[#FAA225] to-[#ff9500] hover:from-[#ff9500] hover:to-[#FAA225] text-[#0A2645] shadow-lg hover:shadow-xl' 
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
                     >
-                      {isActive ? 'Cashup Till' : 'Completed'}
+                      {isActive ? '💰 Cashup Till' : '✅ Completed'}
                     </Button>
                   </div>
                 </CardContent>
