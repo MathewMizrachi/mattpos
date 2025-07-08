@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -89,31 +88,28 @@ const Reports = () => {
   return (
     <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Single Combined Header */}
-        <Card className="bg-white border-2 border-[#FAA225]">
-          <CardHeader className="pb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => navigate('/dashboard')}
-                  className="text-[#0A2645] hover:bg-[#0A2645]/10"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-                <div>
-                  <CardTitle className="text-2xl font-bold text-[#0A2645] flex items-center">
-                    <ChartBarIcon className="mr-3 h-8 w-8" />
-                    Reports & Analytics
-                  </CardTitle>
-                  <p className="text-gray-600 mt-1">Comprehensive insights into your business performance</p>
-                </div>
-              </div>
-            </div>
-          </CardHeader>
-          
-          <CardContent className="pt-0">
+        {/* Header */}
+        <div className="flex items-center space-x-4">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate('/dashboard')}
+            className="text-white hover:bg-white/10 border border-white/20"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center">
+              <ChartBarIcon className="mr-3 h-8 w-8" />
+              Reports & Analytics
+            </h1>
+            <p className="text-blue-100 mt-1">Comprehensive insights into your business performance</p>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        <Card className="bg-white shadow-lg">
+          <CardContent className="p-6">
             {isMobile ? (
               <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
             ) : (
