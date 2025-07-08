@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { ChartBarIcon, ArrowLeft } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import db from '@/lib/db';
 
 // Import refactored components
-import { ReportHeader } from '@/components/Reports/ReportHeader';
 import { SalesReportTab } from '@/components/Reports/SalesReportTab';
 import { InventoryStatusTab } from '@/components/Reports/InventoryStatusTab';
 import { PaymentMethodsTab } from '@/components/Reports/PaymentMethodsTab';
@@ -88,19 +89,31 @@ const Reports = () => {
   return (
     <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        <ReportHeader />
-        
-        {/* Header Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-[#0A2645] mb-2">Business Analytics Dashboard</h2>
-            <p className="text-gray-600">Comprehensive insights into your business performance</p>
-          </div>
-        </div>
-        
-        {/* Tabs Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6">
+        {/* Single Combined Header */}
+        <Card className="bg-white border-2 border-[#FAA225]">
+          <CardHeader className="pb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => navigate('/dashboard')}
+                  className="text-[#0A2645] hover:bg-[#0A2645]/10"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div>
+                  <CardTitle className="text-2xl font-bold text-[#0A2645] flex items-center">
+                    <ChartBarIcon className="mr-3 h-8 w-8" />
+                    Reports & Analytics
+                  </CardTitle>
+                  <p className="text-gray-600 mt-1">Comprehensive insights into your business performance</p>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="pt-0">
             {isMobile ? (
               <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
             ) : (
@@ -178,8 +191,8 @@ const Reports = () => {
                 setSortBy={setProfitPlusSortBy}
               />
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
