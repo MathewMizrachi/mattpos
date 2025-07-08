@@ -4,10 +4,12 @@ import CustomerList from '@/components/CustomerList';
 import CustomerProfile from '@/components/CustomerProfile';
 import CustomerPaymentProcessor from '@/components/CustomerPaymentProcessor';
 import { useApp } from '@/contexts/AppContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Customers = () => {
   const navigate = useNavigate();
   const { currentUser, customers } = useApp();
+  const { theme } = useTheme();
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [showPaymentProcessor, setShowPaymentProcessor] = useState(false);
   
@@ -45,7 +47,10 @@ const Customers = () => {
     if (!customer) return null;
     
     return (
-      <div className="min-h-screen bg-[#0A2645]">
+      <div 
+        className="min-h-screen"
+        style={{ backgroundColor: theme.background }}
+      >
         <CustomerPaymentProcessor 
           customerId={selectedCustomerId}
           customerName={customer.name}
@@ -58,7 +63,10 @@ const Customers = () => {
   // If a customer is selected, show their profile
   if (selectedCustomerId !== null) {
     return (
-      <div className="min-h-screen bg-[#0A2645]">
+      <div 
+        className="min-h-screen"
+        style={{ backgroundColor: theme.background }}
+      >
         <CustomerProfile 
           customerId={selectedCustomerId}
           onBack={handleBack}
@@ -70,7 +78,10 @@ const Customers = () => {
   
   // Otherwise show the customer list
   return (
-    <div className="min-h-screen bg-[#0A2645]">
+    <div 
+      className="min-h-screen"
+      style={{ backgroundColor: theme.background }}
+    >
       <CustomerList 
         onBack={() => navigate('/dashboard')} 
         onSelectCustomer={handleCustomerSelect}

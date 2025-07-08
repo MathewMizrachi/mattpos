@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -17,6 +17,7 @@ import { ReportTypeSelector } from '@/components/Reports/ReportTypeSelector';
 
 const Reports = () => {
   const { currentUser, getShiftPaymentBreakdown } = useApp();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('sales');
   const [fromDate, setFromDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 7)));
@@ -86,14 +87,28 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] to-[#1e3a5f] p-4">
+    <div 
+      className="min-h-screen p-4"
+      style={{ 
+        background: `linear-gradient(to bottom right, ${theme.background}, ${theme.background})`
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         <ReportHeader />
         
-        <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[#0A2645] to-[#1e3a5f] text-white p-6">
+        <div 
+          className="rounded-xl shadow-2xl overflow-hidden"
+          style={{ backgroundColor: theme.card }}
+        >
+          <div 
+            className="p-6"
+            style={{ 
+              background: `linear-gradient(to right, ${theme.background}, ${theme.background})`,
+              color: theme.text
+            }}
+          >
             <h2 className="text-2xl font-bold mb-2">Business Analytics Dashboard</h2>
-            <p className="text-blue-100">Comprehensive insights into your business performance</p>
+            <p style={{ color: theme.textSecondary }}>Comprehensive insights into your business performance</p>
           </div>
           
           <div className="p-6">
@@ -101,28 +116,47 @@ const Reports = () => {
               <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
             ) : (
               <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
+                <TabsList 
+                  className="grid w-full grid-cols-4 p-1 rounded-lg mb-6"
+                  style={{ backgroundColor: theme.background }}
+                >
                   <TabsTrigger 
                     value="sales" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="font-medium"
+                    style={{ 
+                      color: activeTab === 'sales' ? theme.buttonText : theme.text,
+                      backgroundColor: activeTab === 'sales' ? theme.button : 'transparent'
+                    }}
                   >
                     Sales Report
                   </TabsTrigger>
                   <TabsTrigger 
                     value="inventory" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="font-medium"
+                    style={{ 
+                      color: activeTab === 'inventory' ? theme.buttonText : theme.text,
+                      backgroundColor: activeTab === 'inventory' ? theme.button : 'transparent'
+                    }}
                   >
                     Inventory Status
                   </TabsTrigger>
                   <TabsTrigger 
                     value="payment" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="font-medium"
+                    style={{ 
+                      color: activeTab === 'payment' ? theme.buttonText : theme.text,
+                      backgroundColor: activeTab === 'payment' ? theme.button : 'transparent'
+                    }}
                   >
                     Payment Methods
                   </TabsTrigger>
                   <TabsTrigger 
                     value="profitplus" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="font-medium"
+                    style={{ 
+                      color: activeTab === 'profitplus' ? theme.buttonText : theme.text,
+                      backgroundColor: activeTab === 'profitplus' ? theme.button : 'transparent'
+                    }}
                   >
                     Profit+
                   </TabsTrigger>
@@ -130,7 +164,10 @@ const Reports = () => {
               </Tabs>
             )}
             
-            <div className="bg-gray-50 rounded-lg p-6">
+            <div 
+              className="rounded-lg p-6"
+              style={{ backgroundColor: theme.background }}
+            >
               {activeTab === 'sales' && (
                 <SalesReportTab 
                   fromDate={fromDate}

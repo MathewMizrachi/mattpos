@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import db from '@/lib/db';
 import ProductForm from '@/components/ProductForm';
 import ProductImportModal from '@/components/ProductImportModal';
@@ -11,6 +12,7 @@ import DeleteProductDialog from '@/components/Stock/DeleteProductDialog';
 
 const Stock = () => {
   const { currentUser, addProduct, updateProduct, deleteProduct } = useApp();
+  const { theme } = useTheme();
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -154,17 +156,26 @@ const Stock = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A2645] flex items-center justify-center">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: theme.background }}
+      >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FAA225] mx-auto mb-4"></div>
-          <p className="text-white">Loading till stock...</p>
+          <div 
+            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
+            style={{ borderColor: theme.accent }}
+          ></div>
+          <p style={{ color: theme.text }}>Loading till stock...</p>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-[#0A2645] flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: theme.background }}
+    >
       <StockHeader 
         title="Till Stock"
         description="Manage till inventory and products"
@@ -176,7 +187,13 @@ const Stock = () => {
       <div className="p-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         
-        <div className="bg-[#0A2645] border-2 border-[#FAA225] rounded-lg shadow">
+        <div 
+          className="rounded-lg shadow border-2"
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.border
+          }}
+        >
           <ProductTable 
             products={filteredProducts} 
             onEdit={openEditModal} 

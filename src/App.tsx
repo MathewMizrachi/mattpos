@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AppProvider } from '@/contexts/AppContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
 import POS from '@/pages/POS';
@@ -17,27 +18,29 @@ import PurchaseOrder from '@/pages/PurchaseOrder';
 
 function App() {
   return (
-    <AppProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-100">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/pos" element={<POS />} />
-            <Route path="/kitchen-orders" element={<KitchenOrders />} />
-            <Route path="/table-management" element={<TableManagement />} />
-            <Route path="/stock-management" element={<Stock />} />
-            <Route path="/restaurant-stock" element={<RestaurantStock />} />
-            <Route path="/purchase-order" element={<PurchaseOrder />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/cashup" element={<Cashup />} />
-            <Route path="/recipes" element={<Recipes />} />
-          </Routes>
-        </div>
-        <Toaster />
-      </Router>
-    </AppProvider>
+    <ThemeProvider>
+      <AppProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-100">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/pos" element={<POS />} />
+              <Route path="/kitchen-orders" element={<KitchenOrders />} />
+              <Route path="/table-management" element={<TableManagement />} />
+              <Route path="/stock-management" element={<Stock />} />
+              <Route path="/restaurant-stock" element={<RestaurantStock />} />
+              <Route path="/purchase-order" element={<PurchaseOrder />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/cashup" element={<Cashup />} />
+              <Route path="/recipes" element={<Recipes />} />
+            </Routes>
+          </div>
+          <Toaster />
+        </Router>
+      </AppProvider>
+    </ThemeProvider>
   );
 }
 

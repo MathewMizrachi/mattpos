@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOutIcon } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { LogOut } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface DashboardHeaderProps {
   userName: string;
@@ -10,37 +11,49 @@ interface DashboardHeaderProps {
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout }) => {
-  const { currentMode, toggleMode } = useApp();
-  
+  const { theme } = useTheme();
+
   return (
-    <header className="bg-white p-4 rounded-lg shadow-sm mb-6 flex justify-between items-center">
-      <div className="flex items-center">
-        <div className="flex items-center">
-          <img 
-            src="/lovable-uploads/fd658335-de63-4813-b0d9-355f4313e4a5.png" 
-            alt="Shop2Shop Logo" 
-            className="h-12 w-auto object-contain mr-3"
-          />
-          <div>
-            <h1 
-              className="text-4xl font-bold text-primary cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={toggleMode}
-              title={`Switch to ${currentMode === 'till' ? 'Cook2Day' : 'Till2Day'}`}
-            >
-              {currentMode === 'till' ? 'Till2Day' : 'Cook2Day'}
-            </h1>
-            <p className="text-muted-foreground">Welcome, {userName}</p>
-          </div>
+    <div 
+      className="rounded-lg shadow-sm p-6 mb-8 border-2"
+      style={{
+        backgroundColor: theme.card,
+        borderColor: theme.border
+      }}
+    >
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 
+            className="text-3xl font-bold mb-2"
+            style={{ color: theme.text }}
+          >
+            Welcome, {userName}
+          </h1>
+          <p 
+            className="text-lg"
+            style={{ color: theme.textSecondary }}
+          >
+            Dashboard
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
+          <ThemeToggle />
+          <Button 
+            variant="outline" 
+            onClick={onLogout}
+            className="border-2"
+            style={{
+              backgroundColor: theme.background,
+              borderColor: theme.border,
+              color: theme.text
+            }}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
         </div>
       </div>
-      <Button 
-        variant="secondary" 
-        size="icon" 
-        onClick={onLogout}
-      >
-        <LogOutIcon className="h-5 w-5" />
-      </Button>
-    </header>
+    </div>
   );
 };
 

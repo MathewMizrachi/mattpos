@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/AppContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import FloatForm from '@/components/FloatForm';
 import EndShiftForm from '@/components/EndShiftForm';
 import DashboardHeader from '@/components/Dashboard/DashboardHeader';
@@ -11,6 +12,7 @@ import TableSelectionDialog from '@/components/TableSelectionDialog';
 
 const Dashboard = () => {
   const { currentUser, currentShift, currentMode, logout, startShift } = useApp();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -99,7 +101,10 @@ const Dashboard = () => {
   
   if (showFloatForm) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+      <div 
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ backgroundColor: theme.background }}
+      >
         <FloatForm 
           onSubmit={handleFloatSubmit}
           onCancel={() => setShowFloatForm(false)}
@@ -110,7 +115,10 @@ const Dashboard = () => {
   
   if (showEndShiftForm) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A2645] p-4">
+      <div 
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ backgroundColor: theme.background }}
+      >
         <EndShiftForm 
           onSubmit={handleSubmitEndShift}
           onCancel={() => setShowEndShiftForm(false)}
@@ -122,7 +130,10 @@ const Dashboard = () => {
   }
   
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
+    <div 
+      className="min-h-screen p-4"
+      style={{ backgroundColor: theme.background }}
+    >
       <div className="max-w-4xl mx-auto">
         <DashboardHeader 
           userName={currentUser?.name || ''} 
