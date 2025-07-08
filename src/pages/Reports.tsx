@@ -103,29 +103,108 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645]">
-      {/* Header */}
-      <div className="bg-[#0A2645] text-white p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center mb-6">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/dashboard')}
-              className="mr-4 bg-white/10 border-white/20 text-white hover:bg-white/20"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold mb-1">Reports & Analytics</h1>
-              <p className="text-white/70">Till2Day Restaurant System</p>
+    <div className="min-h-screen bg-[#0A2645] p-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate('/dashboard')}
+                className="mr-4 bg-white border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-3xl font-bold text-[#0A2645] mb-1">Reports & Analytics</h1>
+                <p className="text-[#0A2645]/70">Till2Day Restaurant System</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-6">
+        {/* Summary Stats */}
+        <div className="grid gap-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mb-6">
+          <Card className="bg-white border-l-4 border-green-500 shadow-lg">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
+                <div className="bg-green-500 p-2 rounded-lg mr-3">
+                  <DollarSignIcon className="h-4 w-4 text-white" />
+                </div>
+                Total Sales
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-green-600 mb-1">
+                {formatCurrency(getTotalSales())}
+              </div>
+              <div className="text-sm text-[#0A2645]/70">
+                last 7 days
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-l-4 border-blue-500 shadow-lg">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
+                <div className="bg-blue-500 p-2 rounded-lg mr-3">
+                  <UsersIcon className="h-4 w-4 text-white" />
+                </div>
+                Transactions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-blue-600 mb-1">
+                {getTotalTransactions()}
+              </div>
+              <div className="text-sm text-[#0A2645]/70">
+                total transactions
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-l-4 border-purple-500 shadow-lg">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
+                <div className="bg-purple-500 p-2 rounded-lg mr-3">
+                  <TrendingUpIcon className="h-4 w-4 text-white" />
+                </div>
+                Avg Transaction
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-purple-600 mb-1">
+                {formatCurrency(getAverageTransaction())}
+              </div>
+              <div className="text-sm text-[#0A2645]/70">
+                per sale
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-l-4 border-[#FAA225] shadow-lg">
+            <CardHeader className="pb-2 p-4">
+              <CardTitle className="text-base text-[#0A2645] flex items-center">
+                <div className="bg-[#FAA225] p-2 rounded-lg mr-3">
+                  <BarChart3Icon className="h-4 w-4 text-white" />
+                </div>
+                Low Stock Items
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-3xl font-bold text-[#FAA225] mb-1">
+                {getProblematicItems()}
+              </div>
+              <div className="text-sm text-[#0A2645]/70">
+                need restocking
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
         <Card className="bg-white shadow-lg">
           <CardContent className="p-6">
             {isMobile ? (
