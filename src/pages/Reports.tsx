@@ -103,7 +103,7 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645]">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-[#0A2645] text-white p-6">
         <div className="max-w-7xl mx-auto">
