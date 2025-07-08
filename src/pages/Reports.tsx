@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -86,12 +85,12 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] to-[#1e3a5f] p-4">
+    <div className="min-h-screen bg-[#0A2645] p-4">
       <div className="max-w-7xl mx-auto">
         <ReportHeader />
         
-        <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[#0A2645] to-[#1e3a5f] text-white p-6">
+        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-l-4 border-[#FAA225]">
+          <div className="bg-gradient-to-r from-[#0A2645] to-[#0A2645]/90 text-white p-6">
             <h2 className="text-2xl font-bold mb-2">Business Analytics Dashboard</h2>
             <p className="text-blue-100">Comprehensive insights into your business performance</p>
           </div>
@@ -101,28 +100,28 @@ const Reports = () => {
               <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
             ) : (
               <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
+                <TabsList className="grid w-full grid-cols-4 bg-[#FAA225] p-1 rounded-lg mb-6">
                   <TabsTrigger 
                     value="sales" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="data-[state=active]:bg-white data-[state=active]:text-[#0A2645] text-[#0A2645] font-medium"
                   >
                     Sales Report
                   </TabsTrigger>
                   <TabsTrigger 
                     value="inventory" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="data-[state=active]:bg-white data-[state=active]:text-[#0A2645] text-[#0A2645] font-medium"
                   >
                     Inventory Status
                   </TabsTrigger>
                   <TabsTrigger 
                     value="payment" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="data-[state=active]:bg-white data-[state=active]:text-[#0A2645] text-[#0A2645] font-medium"
                   >
                     Payment Methods
                   </TabsTrigger>
                   <TabsTrigger 
                     value="profitplus" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white font-medium"
+                    className="data-[state=active]:bg-white data-[state=active]:text-[#0A2645] text-[#0A2645] font-medium"
                   >
                     Profit+
                   </TabsTrigger>
@@ -130,7 +129,7 @@ const Reports = () => {
               </Tabs>
             )}
             
-            <div className="bg-gray-50 rounded-lg p-6">
+            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
               {activeTab === 'sales' && (
                 <SalesReportTab 
                   fromDate={fromDate}
