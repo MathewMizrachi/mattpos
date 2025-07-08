@@ -101,7 +101,7 @@ const CustomerPaymentProcessor: React.FC<CustomerPaymentProcessorProps> = ({
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 pt-6 px-4 flex items-center justify-center">
+    <div className="min-h-screen bg-[#0A2645] pt-6 px-4 flex items-center justify-center">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-bold mb-4">Select Payment Method</h2>
         <p className="mb-4">Process payment for {customerName}</p>
@@ -125,7 +125,7 @@ const CustomerPaymentProcessor: React.FC<CustomerPaymentProcessorProps> = ({
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="flex-1 text-white"
+            className="flex-1"
           >
             Cancel
           </Button>

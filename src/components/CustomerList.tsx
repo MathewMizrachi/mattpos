@@ -71,7 +71,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#0A2645] flex flex-col">
       <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
         <div className="flex items-center space-x-2">
           <Button 

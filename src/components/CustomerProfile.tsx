@@ -35,14 +35,14 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
   
   if (!customer) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-6 px-4">
+      <div className="min-h-screen bg-[#0A2645] pt-6 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center mb-6">
-            <Button onClick={onBack} variant="outline" className="mr-4 text-white">
+            <Button onClick={onBack} variant="outline" className="mr-4 text-white border-white hover:bg-white/10">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-2xl font-bold">Customer Not Found</h1>
+            <h1 className="text-2xl font-bold text-white">Customer Not Found</h1>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
   // If showing payment options modal
   if (showPaymentOptions) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-6 px-4 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A2645] pt-6 px-4 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Select Payment Method</h2>
           <p className="mb-4">Process payment for {customer.name}</p>
@@ -126,7 +126,7 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
             <Button 
               variant="outline" 
               onClick={() => setShowPaymentOptions(false)}
-              className="flex-1 text-white"
+              className="flex-1"
             >
               Cancel
             </Button>
@@ -143,14 +143,14 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 pt-6 px-4">
+    <div className="min-h-screen bg-[#0A2645] pt-6 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center mb-6">
-          <Button onClick={onBack} variant="outline" className="mr-4 text-white">
+          <Button onClick={onBack} variant="outline" className="mr-4 text-white border-white hover:bg-white/10">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-          <h1 className="text-2xl font-bold">Customer Profile</h1>
+          <h1 className="text-2xl font-bold text-white">Customer Profile</h1>
         </div>
         
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
