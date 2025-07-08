@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -126,45 +125,54 @@ const Recipes = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center border-b-2 border-[#FAA225] rounded-lg m-4 mb-6">
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate('/dashboard')}
-            className="text-[#0A2645] hover:bg-[#0A2645]/10"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-[#0A2645]">Recipes</h1>
-            <p className="text-sm text-[#0A2645]/70">Create and manage your menu recipes with cost tracking</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100/50 to-blue-200/40">
+      {/* Enhanced Header */}
+      <header className="bg-gradient-to-r from-white via-blue-50/80 to-blue-100/60 p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-[#FAA225]/20 rounded-xl m-4 mb-6 backdrop-blur-sm">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate('/dashboard')}
+              className="text-[#0A2645] hover:bg-[#0A2645]/10 hover:scale-110 transition-all duration-200 rounded-xl"
+            >
+              <ArrowLeftIcon className="h-6 w-6" />
+            </Button>
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-br from-[#FAA225] to-[#FAA225]/80 p-3 rounded-xl shadow-lg">
+                <ChefHatIcon className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-[#0A2645] to-[#0A2645]/80 bg-clip-text text-transparent">
+                  👨‍🍳 Recipe Manager
+                </h1>
+                <p className="text-sm text-[#0A2645]/70 font-medium">Create and manage your menu recipes with cost tracking</p>
+              </div>
+            </div>
           </div>
+          <Button 
+            onClick={() => setIsAddRecipeOpen(true)}
+            className="bg-gradient-to-r from-[#FAA225] to-[#FAA225]/80 hover:from-[#FAA225]/90 hover:to-[#FAA225] text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
+          >
+            <PlusIcon className="h-5 w-5 mr-2" />
+            ➕ Add Recipe
+          </Button>
         </div>
-        <Button 
-          onClick={() => setIsAddRecipeOpen(true)}
-          className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
-        >
-          <PlusIcon className="h-4 w-4 mr-2" />
-          Add Recipe
-        </Button>
       </header>
       
       {/* Recipes Grid */}
       <div className="p-4">
         {recipes.length === 0 ? (
-          <div className="text-center py-16">
-            <ChefHatIcon className="h-16 w-16 mx-auto text-[#0A2645]/20 mb-4" />
-            <h3 className="text-xl font-semibold text-[#0A2645] mb-2">No recipes yet</h3>
-            <p className="text-[#0A2645]/70 mb-4">Start by creating your first recipe</p>
+          <div className="text-center py-16 bg-gradient-to-br from-white via-blue-50/50 to-blue-100/40 rounded-2xl shadow-xl border-2 border-blue-200">
+            <div className="text-6xl mb-4">👨‍🍳</div>
+            <h3 className="text-2xl font-bold text-[#0A2645] mb-3">No recipes yet</h3>
+            <p className="text-[#0A2645]/70 mb-4 text-lg">Start by creating your first delicious recipe! 🍽️</p>
             <Button 
               onClick={() => setIsAddRecipeOpen(true)}
-              className="bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645]"
+              className="bg-gradient-to-r from-[#FAA225] to-[#FAA225]/80 hover:from-[#FAA225]/90 hover:to-[#FAA225] text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
             >
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Add Recipe
+              <PlusIcon className="h-5 w-5 mr-2" />
+              ➕ Add Recipe
             </Button>
           </div>
         ) : (
@@ -172,19 +180,21 @@ const Recipes = () => {
             {recipes.map((recipe) => {
               const costInfo = calculateRecipeCost(recipe);
               return (
-                <Card key={recipe.id} className="bg-white border-2 border-[#0A2645]/10 hover:border-[#FAA225] transition-all">
-                  <CardHeader className="pb-4">
+                <Card key={recipe.id} className="bg-gradient-to-br from-white via-blue-50/50 to-blue-100/40 border-2 border-blue-200/50 hover:border-[#FAA225] transition-all duration-300 hover:shadow-xl hover:scale-[1.02] rounded-xl overflow-hidden">
+                  <CardHeader className="pb-4 bg-gradient-to-r from-[#0A2645] via-[#0A2645]/95 to-[#0A2645]/90 text-white rounded-t-xl">
                     <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-[#0A2645] text-lg">{recipe.name}</CardTitle>
-                        <p className="text-[#0A2645]/70 text-sm mt-1">{recipe.description}</p>
+                      <div className="flex-1">
+                        <CardTitle className="text-white text-xl font-bold mb-2 flex items-center gap-2">
+                          🍽️ {recipe.name}
+                        </CardTitle>
+                        <p className="text-white/80 text-sm">{recipe.description}</p>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-2 ml-3">
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => openEditModal(recipe)}
-                          className="text-[#0A2645] hover:bg-[#FAA225]/10"
+                          className="text-white hover:bg-white/20 hover:scale-110 transition-all duration-200 rounded-lg"
                         >
                           <EditIcon className="h-4 w-4" />
                         </Button>
@@ -192,7 +202,7 @@ const Recipes = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => openDeleteDialog(recipe)}
-                          className="text-red-500 hover:bg-red-50"
+                          className="text-red-300 hover:text-red-200 hover:bg-red-500/20 hover:scale-110 transition-all duration-200 rounded-lg"
                         >
                           <TrashIcon className="h-4 w-4" />
                         </Button>
@@ -200,49 +210,55 @@ const Recipes = () => {
                     </div>
                   </CardHeader>
                   
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#0A2645]/70">Prep: {recipe.prepTime}min</span>
-                        <span className="text-[#0A2645]/70">Cook: {recipe.cookTime}min</span>
-                        <span className="text-[#0A2645]/70">Serves: {recipe.servings}</span>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between text-sm bg-blue-50/50 p-3 rounded-lg">
+                        <span className="text-[#0A2645]/70 font-medium">⏱️ Prep: {recipe.prepTime}min</span>
+                        <span className="text-[#0A2645]/70 font-medium">🔥 Cook: {recipe.cookTime}min</span>
+                        <span className="text-[#0A2645]/70 font-medium">👥 Serves: {recipe.servings}</span>
                       </div>
                       
-                      {/* Cost Information */}
-                      <div className="bg-[#FAA225]/10 p-3 rounded-lg border border-[#FAA225]/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <DollarSignIcon className="h-4 w-4 text-[#FAA225]" />
-                          <span className="font-semibold text-[#0A2645] text-sm">Recipe Cost</span>
+                      {/* Enhanced Cost Information */}
+                      <div className="bg-gradient-to-r from-[#FAA225]/10 via-orange-50/50 to-yellow-50/40 p-4 rounded-xl border-2 border-[#FAA225]/30 shadow-lg">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="bg-[#FAA225]/20 p-2 rounded-lg">
+                            <DollarSignIcon className="h-4 w-4 text-[#FAA225]" />
+                          </div>
+                          <span className="font-bold text-[#0A2645] text-sm">💰 Recipe Cost</span>
                           {recipe.isManualCost && (
-                            <span className="text-xs bg-[#0A2645] text-white px-2 py-0.5 rounded">Manual</span>
+                            <span className="text-xs bg-gradient-to-r from-[#0A2645] to-[#0A2645]/80 text-white px-2 py-1 rounded-full font-bold">Manual</span>
                           )}
                         </div>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div>
-                            <span className="text-[#0A2645]/70">Total: </span>
-                            <span className="font-medium text-[#0A2645]">R{costInfo.totalCost.toFixed(2)}</span>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div className="bg-white/80 p-2 rounded-lg text-center">
+                            <span className="text-[#0A2645]/70 text-xs block">Total Cost</span>
+                            <span className="font-bold text-[#0A2645] text-lg">R{costInfo.totalCost.toFixed(2)}</span>
                           </div>
-                          <div>
-                            <span className="text-[#0A2645]/70">Per serving: </span>
-                            <span className="font-medium text-[#0A2645]">R{costInfo.costPerServing.toFixed(2)}</span>
+                          <div className="bg-white/80 p-2 rounded-lg text-center">
+                            <span className="text-[#0A2645]/70 text-xs block">Per Serving</span>
+                            <span className="font-bold text-[#0A2645] text-lg">R{costInfo.costPerServing.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
                       
                       <div>
-                        <h4 className="font-semibold text-[#0A2645] text-sm mb-2">Ingredients:</h4>
-                        <ul className="text-sm text-[#0A2645]/70 space-y-1">
+                        <h4 className="font-bold text-[#0A2645] text-sm mb-3 flex items-center gap-2">
+                          🥘 Ingredients:
+                        </h4>
+                        <ul className="text-sm text-[#0A2645]/70 space-y-2">
                           {recipe.ingredients.slice(0, 3).map((ingredient) => (
-                            <li key={ingredient.id}>
-                              {ingredient.quantity} {ingredient.unit} {ingredient.name}
-                              <span className="text-[#FAA225] ml-1">
-                                (R{(ingredient.costPerUnit * ingredient.quantity).toFixed(2)})
+                            <li key={ingredient.id} className="bg-white/60 p-2 rounded-lg flex justify-between items-center">
+                              <span className="font-medium">
+                                {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                              </span>
+                              <span className="text-[#FAA225] font-bold text-xs bg-[#FAA225]/10 px-2 py-1 rounded">
+                                R{(ingredient.costPerUnit * ingredient.quantity).toFixed(2)}
                               </span>
                             </li>
                           ))}
                           {recipe.ingredients.length > 3 && (
-                            <li className="text-[#FAA225] font-medium">
-                              +{recipe.ingredients.length - 3} more
+                            <li className="text-[#FAA225] font-bold text-center p-2 bg-[#FAA225]/10 rounded-lg">
+                              +{recipe.ingredients.length - 3} more ingredients
                             </li>
                           )}
                         </ul>
