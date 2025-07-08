@@ -103,109 +103,135 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border-l-4 border-[#FAA225]">
+        {/* Enhanced Header with Gradient */}
+        <div className="bg-gradient-to-r from-white to-gray-50 p-6 rounded-2xl shadow-xl mb-8 border border-gray-200 backdrop-blur-sm">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => navigate('/dashboard')}
-                className="mr-4 bg-white border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white"
+                className="mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-3xl font-bold text-[#0A2645] mb-1">Reports & Analytics</h1>
-                <p className="text-[#0A2645]/70">Till2Day Restaurant System</p>
+                <div className="flex items-center mb-2">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
+                    <ChartBarIcon className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent">
+                      Reports & Analytics
+                    </h1>
+                    <p className="text-lg text-gray-600 font-medium">Business Intelligence Dashboard</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                  <span className="flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    Live Data
+                  </span>
+                  <span>Till2Day Restaurant System</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <Card className="bg-white shadow-lg">
-          <CardContent className="p-6">
-            {isMobile ? (
-              <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
-            ) : (
-              <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-lg mb-6">
-                  <TabsTrigger 
-                    value="sales" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Sales Report
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="inventory" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Inventory Status
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="payment" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Payment Methods
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="profitplus" 
-                    className="data-[state=active]:bg-[#0A2645] data-[state=active]:text-white text-gray-600 font-medium"
-                  >
-                    Profit+
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            )}
-            
-            {/* Content Area */}
-            {activeTab === 'sales' && (
-              <SalesReportTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                salesData={salesData}
-              />
-            )}
-            
-            {activeTab === 'inventory' && (
-              <InventoryStatusTab 
-                inventoryData={inventoryData}
-                searchTerm={inventorySearchTerm}
-                setSearchTerm={setInventorySearchTerm}
-                sortBy={inventorySortBy}
-                setSortBy={setInventorySortBy}
-              />
-            )}
-            
-            {activeTab === 'payment' && (
-              <PaymentMethodsTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                paymentMethodsData={paymentMethodsData}
-              />
-            )}
-            
-            {activeTab === 'profitplus' && (
-              <ProfitPlusTab 
-                fromDate={fromDate}
-                toDate={toDate}
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                profitPlusData={profitPlusData}
-                searchTerm={profitPlusSearchTerm}
-                setSearchTerm={setProfitPlusSearchTerm}
-                sortBy={profitPlusSortBy}
-                setSortBy={setProfitPlusSortBy}
-              />
-            )}
-          </CardContent>
+        {/* Enhanced Main Content Card */}
+        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 rounded-2xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-1">
+            <div className="bg-white rounded-t-2xl">
+              <CardContent className="p-8">
+                {isMobile ? (
+                  <div className="mb-8">
+                    <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
+                  </div>
+                ) : (
+                  <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-2 rounded-2xl mb-8 shadow-inner">
+                      <TabsList className="grid w-full grid-cols-4 bg-transparent p-1 rounded-xl">
+                        <TabsTrigger 
+                          value="sales" 
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                        >
+                          📊 Sales Report
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="inventory" 
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                        >
+                          📦 Inventory Status
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="payment" 
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                        >
+                          💳 Payment Methods
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="profitplus" 
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                        >
+                          💰 Profit+
+                        </TabsTrigger>
+                      </TabsList>
+                    </div>
+                  </Tabs>
+                )}
+                
+                {/* Content Area with Enhanced Styling */}
+                <div className="bg-gradient-to-br from-gray-50/50 to-white p-6 rounded-2xl shadow-inner border border-gray-100">
+                  {activeTab === 'sales' && (
+                    <SalesReportTab 
+                      fromDate={fromDate}
+                      toDate={toDate}
+                      setFromDate={setFromDate}
+                      setToDate={setToDate}
+                      salesData={salesData}
+                    />
+                  )}
+                  
+                  {activeTab === 'inventory' && (
+                    <InventoryStatusTab 
+                      inventoryData={inventoryData}
+                      searchTerm={inventorySearchTerm}
+                      setSearchTerm={setInventorySearchTerm}
+                      sortBy={inventorySortBy}
+                      setSortBy={setInventorySortBy}
+                    />
+                  )}
+                  
+                  {activeTab === 'payment' && (
+                    <PaymentMethodsTab 
+                      fromDate={fromDate}
+                      toDate={toDate}
+                      setFromDate={setFromDate}
+                      setToDate={setToDate}
+                      paymentMethodsData={paymentMethodsData}
+                    />
+                  )}
+                  
+                  {activeTab === 'profitplus' && (
+                    <ProfitPlusTab 
+                      fromDate={fromDate}
+                      toDate={toDate}
+                      setFromDate={setFromDate}
+                      setToDate={setToDate}
+                      profitPlusData={profitPlusData}
+                      searchTerm={profitPlusSearchTerm}
+                      setSearchTerm={setProfitPlusSearchTerm}
+                      sortBy={profitPlusSortBy}
+                      setSortBy={setProfitPlusSortBy}
+                    />
+                  )}
+                </div>
+              </CardContent>
+            </div>
+          </div>
         </Card>
       </div>
     </div>
