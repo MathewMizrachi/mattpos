@@ -20,7 +20,7 @@ interface StockHeaderProps {
 }
 
 const StockHeader: React.FC<StockHeaderProps> = ({ 
-  title = "📦 Manage Stock",
+  title = "Manage Stock",
   description = "Add, edit, and remove products",
   onOpenAddProduct, 
   onOpenImportProduct,
@@ -71,21 +71,21 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                 <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-sm border-white/20 shadow-2xl">
                   <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")} className="hover:bg-[#FAA225]/10">
                     <PackageIcon className="h-4 w-4 mr-2" />
-                    📊 Global Stock Master
+                    Global Stock Master
                   </DropdownMenuItem>
                   {showPurchaseOrder && (
                     <DropdownMenuItem onClick={handlePurchaseOrder} className="hover:bg-[#FAA225]/10">
                       <ShoppingCartIcon className="h-4 w-4 mr-2" />
-                      🛒 Purchase Order
+                      Purchase Order
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onClick={onOpenImportProduct} className="hover:bg-[#FAA225]/10">
                     <ImportIcon className="h-4 w-4 mr-2" />
-                    📤 Import Products
+                    Import Products
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={onOpenAddProduct} className="hover:bg-[#FAA225]/10">
                     <PlusIcon className="h-4 w-4 mr-2" />
-                    ➕ Add Product
+                    Add Product
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -98,7 +98,7 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                   onClick={() => console.log("Global Stock Master clicked")}
                 >
                   <PackageIcon className="h-4 w-4 mr-2" />
-                  📊 Global Stock Master
+                  Global Stock Master
                 </Button>
                 {showPurchaseOrder && (
                   <Button 
@@ -106,7 +106,7 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                     className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                   >
                     <ShoppingCartIcon className="h-4 w-4 mr-2" />
-                    🛒 Purchase Order
+                    Purchase Order
                   </Button>
                 )}
                 <Button 
@@ -114,14 +114,14 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                   className="bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-white font-semibold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                 >
                   <ImportIcon className="h-4 w-4 mr-2" />
-                  📤 Import Products
+                  Import Products
                 </Button>
                 <Button 
                   onClick={onOpenAddProduct}
                   className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-[#FAA225] font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                 >
                   <PlusIcon className="h-4 w-4 mr-2" />
-                  ➕ Add Product
+                  Add Product
                 </Button>
               </>
             )}
