@@ -156,15 +156,20 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Button onClick={onBack} variant="outline" size="sm" className="text-[#0A2645] border-[#0A2645]">
-                  <ArrowLeft className="h-4 w-4 mr-1" />
+              <div className="flex items-center space-x-4">
+                <Button 
+                  onClick={onBack} 
+                  variant="outline" 
+                  size="lg"
+                  className="bg-white text-[#0A2645] border-2 border-[#0A2645] hover:bg-[#0A2645] hover:text-white font-semibold px-4 py-2"
+                >
+                  <ArrowLeft className="h-5 w-5 mr-2" />
                   Back
                 </Button>
-                <h1 className="text-xl font-bold text-[#0A2645]">Customer Profile</h1>
+                <h1 className="text-2xl font-bold text-[#0A2645]">Customer Profile</h1>
               </div>
               <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                <span className={`px-4 py-2 rounded-full text-sm font-medium ${
                   customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                 }`}>
                   {customer.isPaid ? "Paid" : "Outstanding"}
