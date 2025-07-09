@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeftIcon, PlusIcon, EditIcon, TrashIcon, ChefHatIcon, DollarSignIcon } from 'lucide-react';
+import { ArrowLeftIcon, PlusIcon, EditIcon, TrashIcon, ChefHatIcon, DollarSignIcon, Calculator } from 'lucide-react';
 import RecipeForm from '@/components/RecipeForm';
 import DeleteRecipeDialog from '@/components/DeleteRecipeDialog';
+import BulkOrderCalculator from '@/components/BulkOrderCalculator';
 import { Recipe } from '@/types';
 
 const Recipes = () => {
@@ -61,7 +62,20 @@ const Recipes = () => {
   const [isAddRecipeOpen, setIsAddRecipeOpen] = useState(false);
   const [isEditRecipeOpen, setIsEditRecipeOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isBulkOrderOpen, setIsBulkOrderOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+  // Mock current stock for demo - in real app this would come from your stock system
+  const currentStock = [
+    { name: 'Beef Patty', stock: 20 },
+    { name: 'Burger Bun', stock: 15 },
+    { name: 'Lettuce', stock: 50 },
+    { name: 'Tomato', stock: 30 },
+    { name: 'Onion', stock: 25 },
+    { name: 'Potatoes', stock: 5 },
+    { name: 'Oil', stock: 2000 },
+    { name: 'Salt', stock: 100 },
+  ];
   
   const calculateRecipeCost = (recipe: Recipe) => {
     if (recipe.isManualCost && recipe.totalCost) {
@@ -114,6 +128,15 @@ const Recipes = () => {
     }
   };
   
+  const handleCreatePurchaseOrder = (ingredients: any[]) => {
+    console.log('Creating purchase order for:', ingredients);
+    // Here you would integrate with your purchase order system
+    toast({
+      title: "Purchase order ready",
+      description: `Purchase order created for ${ingredients.length} ingredients totaling R${ingredients.reduce((sum, item) => sum + item.totalCost, 0).toFixed(2)}`,
+    });
+  };
+  
   const openEditModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
     setIsEditRecipeOpen(true);
@@ -150,13 +173,22 @@ const Recipes = () => {
               </div>
             </div>
           </div>
-          <Button 
-            onClick={() => setIsAddRecipeOpen(true)}
-            className="bg-gradient-to-r from-[#FAA225] to-[#FAA225]/80 hover:from-[#FAA225]/90 hover:to-[#FAA225] text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
-          >
-            <PlusIcon className="h-5 w-5 mr-2" />
-            ➕ Add Recipe
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => setIsBulkOrderOpen(true)}
+              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
+            >
+              <Calculator className="h-5 w-5 mr-2" />
+              🧮 Bulk Order
+            </Button>
+            <Button 
+              onClick={() => setIsAddRecipeOpen(true)}
+              className="bg-gradient-to-r from-[#FAA225] to-[#FAA225]/80 hover:from-[#FAA225]/90 hover:to-[#FAA225] text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
+            >
+              <PlusIcon className="h-5 w-5 mr-2" />
+              ➕ Add Recipe
+            </Button>
+          </div>
         </div>
       </header>
       
@@ -293,6 +325,14 @@ const Recipes = () => {
         onOpenChange={setIsDeleteDialogOpen}
         recipe={selectedRecipe}
         onDelete={handleDeleteRecipe}
+      />
+
+      <BulkOrderCalculator
+        isOpen={isBulkOrderOpen}
+        onClose={() => setIsBulkOrderOpen(false)}
+        recipes={recipes}
+        currentStock={currentStock}
+        onCreatePurchaseOrder={handleCreatePurchaseOrder}
       />
     </div>
   );
