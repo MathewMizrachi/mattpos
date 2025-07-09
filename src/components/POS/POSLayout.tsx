@@ -67,7 +67,6 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         onEndShift={onEndShift}
         onLogout={onLogout}
         options={[]}
-        onShowBarcodeScanner={onShowBarcodeScanner}
       />
       
       {children}
