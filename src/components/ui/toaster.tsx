@@ -18,9 +18,9 @@ export function Toaster() {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
-              {title && <ToastTitle className="text-white font-bold text-lg">{title}</ToastTitle>}
+              {title && <ToastTitle className="text-[#FAA225] font-bold text-xl">{title}</ToastTitle>}
               {description && (
-                <ToastDescription className="text-white/90 text-base font-medium">{description}</ToastDescription>
+                <ToastDescription className="text-[#FAA225]/90 text-lg font-medium">{description}</ToastDescription>
               )}
             </div>
             {action}
