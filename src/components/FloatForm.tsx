@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -116,7 +115,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
-      <Card className="w-full max-w-3xl bg-white shadow-2xl">
+      <Card className="w-full max-w-xl bg-white shadow-2xl">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-2">
             <div className="bg-[#FAA225] p-3 rounded-full">
@@ -163,87 +162,85 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {inputMode === 'denominations' ? (
-              <Card className="lg:col-span-2">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg text-[#0A2645]">Count Your Cash</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Form {...denominationForm}>
-                    <form className="space-y-2">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        {denominations.map((denom) => (
-                          <FormField
-                            key={denom.key}
-                            control={denominationForm.control}
-                            name={denom.key as keyof DenominationFormValues}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-[#0A2645] font-medium text-sm">{denom.label}</FormLabel>
-                                <FormControl>
-                                  <Input 
-                                    type="number" 
-                                    min="0" 
-                                    placeholder="0"
-                                    className="text-center font-medium bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225] h-9"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        ))}
-                      </div>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="lg:col-span-2">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg text-[#0A2645]">Enter Total Amount</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Form {...totalFloatForm}>
-                    <form className="space-y-3">
-                      <FormField
-                        control={totalFloatForm.control}
-                        name="totalAmount"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[#0A2645] font-medium">Total Float Amount (R)</FormLabel>
-                            <FormControl>
-                              <Input 
-                                type="number" 
-                                step="1" 
-                                min="0" 
-                                placeholder="0"
-                                className="text-xl text-center font-bold bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225]"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Total Display */}
-            <Card className="bg-[#FAA225] text-[#0A2645] lg:col-span-2">
-              <CardContent className="p-3">
-                <div className="text-center">
-                  <p className="text-sm font-medium opacity-80">Total Float Amount</p>
-                  <p className="text-3xl font-bold">R{finalAmount.toFixed(2)}</p>
-                </div>
+          {inputMode === 'denominations' ? (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg text-[#0A2645]">Count Your Cash</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Form {...denominationForm}>
+                  <form className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      {denominations.map((denom) => (
+                        <FormField
+                          key={denom.key}
+                          control={denominationForm.control}
+                          name={denom.key as keyof DenominationFormValues}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#0A2645] font-medium text-sm">{denom.label}</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  type="number" 
+                                  min="0" 
+                                  placeholder="0"
+                                  className="text-center font-medium bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225] h-9"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </form>
+                </Form>
               </CardContent>
             </Card>
-          </div>
+          ) : (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg text-[#0A2645]">Enter Total Amount</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Form {...totalFloatForm}>
+                  <form className="space-y-3">
+                    <FormField
+                      control={totalFloatForm.control}
+                      name="totalAmount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#0A2645] font-medium">Total Float Amount (R)</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              step="1" 
+                              min="0" 
+                              placeholder="0"
+                              className="text-xl text-center font-bold bg-white text-[#0A2645] border-2 border-gray-300 focus:border-[#FAA225] focus:ring-[#FAA225]"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Total Display */}
+          <Card className="bg-[#FAA225] text-[#0A2645]">
+            <CardContent className="p-3">
+              <div className="text-center">
+                <p className="text-sm font-medium opacity-80">Total Float Amount</p>
+                <p className="text-3xl font-bold">R{finalAmount.toFixed(2)}</p>
+              </div>
+            </CardContent>
+          </Card>
           
           {/* Action Buttons */}
           <div className="flex justify-end space-x-4 pt-1">
