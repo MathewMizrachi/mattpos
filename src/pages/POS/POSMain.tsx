@@ -115,6 +115,7 @@ const POSMain: React.FC<POSMainProps> = ({
           onRemoveFromCart={onRemoveFromCart}
           cartExpanded={cartExpanded}
           toggleCartExpand={toggleCartExpand}
+          onShowBarcodeScanner={() => setShowBarcodeScanner(true)}
           tableInfo={tableInfo}
         />
       </POSLayout>

@@ -18,6 +18,7 @@ interface POSContentProps {
   onRemoveFromCart: (productId: number, price?: number) => void;
   cartExpanded: boolean;
   toggleCartExpand: () => void;
+  onShowBarcodeScanner?: () => void;
   tableInfo?: {
     selectedTable?: number;
     peopleCount?: number;
@@ -37,6 +38,7 @@ const POSContent: React.FC<POSContentProps> = ({
   onRemoveFromCart,
   cartExpanded,
   toggleCartExpand,
+  onShowBarcodeScanner,
   tableInfo,
 }) => {
   const isMobile = useIsMobile();
@@ -81,6 +83,7 @@ const POSContent: React.FC<POSContentProps> = ({
         <ProductSearch 
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
+          onShowBarcodeScanner={onShowBarcodeScanner}
         />
         
         {/* Only show category selector in restaurant mode */}

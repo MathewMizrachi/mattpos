@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, Scan, ArrowLeft } from 'lucide-react';
+import { LogOut, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ interface POSHeaderProps {
   onEndShift: () => void;
   onLogout: () => void;
   options: any[];
-  onShowBarcodeScanner?: () => void;
 }
 
 const POSHeader: React.FC<POSHeaderProps> = ({
@@ -20,7 +19,6 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   onEndShift,
   onLogout,
   options,
-  onShowBarcodeScanner
 }) => {
   const navigate = useNavigate();
 
@@ -36,18 +34,6 @@ const POSHeader: React.FC<POSHeaderProps> = ({
       </div>
       
       <div className="flex items-center space-x-2">
-        {onShowBarcodeScanner && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onShowBarcodeScanner}
-            className="text-white border-white hover:bg-white/20"
-          >
-            <Scan className="h-4 w-4 mr-1" />
-            Scan
-          </Button>
-        )}
-        
         <Button
           variant="outline"
           size="sm"
