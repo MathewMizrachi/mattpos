@@ -116,9 +116,9 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
-      <Card className="w-full max-w-4xl bg-white shadow-2xl">
-        <CardHeader className="text-center pb-3">
-          <div className="flex justify-center mb-3">
+      <Card className="w-full max-w-3xl bg-white shadow-2xl">
+        <CardHeader className="text-center pb-2">
+          <div className="flex justify-center mb-2">
             <div className="bg-[#FAA225] p-3 rounded-full">
               <Calculator className="h-8 w-8 text-[#0A2645]" />
             </div>
@@ -136,10 +136,10 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
           )}
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           {/* Input Mode Selection */}
           <Card className="bg-gray-50">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <RadioGroup
                 value={inputMode}
                 onValueChange={(value: 'denominations' | 'total') => setInputMode(value)}
@@ -163,16 +163,16 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {inputMode === 'denominations' ? (
               <Card className="lg:col-span-2">
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-2">
                   <CardTitle className="text-lg text-[#0A2645]">Count Your Cash</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Form {...denominationForm}>
-                    <form className="space-y-3">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <form className="space-y-2">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {denominations.map((denom) => (
                           <FormField
                             key={denom.key}
@@ -202,12 +202,12 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
               </Card>
             ) : (
               <Card className="lg:col-span-2">
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-2">
                   <CardTitle className="text-lg text-[#0A2645]">Enter Total Amount</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Form {...totalFloatForm}>
-                    <form className="space-y-4">
+                    <form className="space-y-3">
                       <FormField
                         control={totalFloatForm.control}
                         name="totalAmount"
@@ -236,7 +236,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
 
             {/* Total Display */}
             <Card className="bg-[#FAA225] text-[#0A2645] lg:col-span-2">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="text-center">
                   <p className="text-sm font-medium opacity-80">Total Float Amount</p>
                   <p className="text-3xl font-bold">R{finalAmount.toFixed(2)}</p>
@@ -246,7 +246,7 @@ const FloatForm: React.FC<FloatFormProps> = ({ onSubmit, onCancel }) => {
           </div>
           
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 pt-2">
+          <div className="flex justify-end space-x-4 pt-1">
             <Button 
               type="button" 
               variant="outline" 
