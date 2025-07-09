@@ -92,7 +92,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-[#0A2645] bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] bg-clip-text">
-                    👥 Customer Accounts
+                    Customer Accounts
                   </h1>
                   <p className="text-sm text-[#0A2645]/70 mt-1">Manage customer accounts and payment records</p>
                 </div>
@@ -117,7 +117,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-3.5 h-4 w-4 text-white/70" />
             <Input
-              placeholder="🔍 Search customers..."
+              placeholder="Search customers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-white/20 backdrop-blur-sm text-white placeholder:text-white/70 border-white/30 focus:border-[#FAA225] focus:ring-[#FAA225]/20 transition-all duration-200"
@@ -132,24 +132,24 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
               <TableHeader>
                 <TableRow className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] border-none">
                   <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
-                    👤 Name
+                    Name
                   </TableHead>
                   {!isMobile && (
                     <TableHead className="text-[#FAA225] font-bold text-sm p-4">
-                      📱 Phone
+                      Phone
                     </TableHead>
                   )}
                   <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
-                    💰 Total Purchases
+                    Total Purchases
                   </TableHead>
                   <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
-                    🔴 Owing
+                    Owing
                   </TableHead>
                   <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
-                    📊 Status
+                    Status
                   </TableHead>
                   <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
-                    ⚡ Actions
+                    Actions
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -193,7 +193,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                             ? "bg-gradient-to-r from-green-100 to-green-200 text-green-800 border border-green-200" 
                             : "bg-gradient-to-r from-red-100 to-red-200 text-red-800 border border-red-200"
                         }`}>
-                          {customer.isPaid ? "✅ Paid" : "⏳ Outstanding"}
+                          {customer.isPaid ? "Paid" : "Outstanding"}
                         </span>
                       </TableCell>
                       <TableCell className={isMobile ? 'p-3' : 'p-4'}>
@@ -206,7 +206,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                             handleCustomerClick(customer.id);
                           }}
                         >
-                          👁️ View
+                          View
                         </Button>
                       </TableCell>
                     </TableRow>
