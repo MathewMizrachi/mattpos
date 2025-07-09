@@ -35,10 +35,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName, onLogout })
       </div>
       <Button 
         variant="secondary" 
-        size="icon" 
         onClick={onLogout}
+        className="flex items-center space-x-2"
       >
         <LogOutIcon className="h-5 w-5" />
+        <span>Logout</span>
       </Button>
     </header>
   );
