@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { User, Phone, CreditCard, Calendar, Plus } from 'lucide-react';
+import { User, Phone, CreditCard, Calendar, Plus, X } from 'lucide-react';
 
 const customerSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -162,8 +162,10 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ isOpen, onClose, onSubmit }
                 type="button" 
                 variant="outline" 
                 onClick={onClose} 
-                className="h-12 px-6 border-2 border-gray-300 text-[#0A2645] hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 rounded-lg font-medium"
+                size="lg"
+                className="h-12 px-6 bg-white border-3 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white font-bold transition-all duration-200 rounded-lg shadow-md hover:shadow-lg"
               >
+                <X className="h-5 w-5 mr-2" />
                 Cancel
               </Button>
               <Button 
