@@ -59,7 +59,8 @@ const POSHeader: React.FC<POSHeaderProps> = ({
           onClick={onLogout}
           className="text-white hover:bg-white/20"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-4 w-4 mr-1" />
+          Logout
         </Button>
       </div>
     </div>
