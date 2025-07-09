@@ -139,7 +139,7 @@ const KitchenOrders = () => {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-[#0A2645] to-[#0A2645]/80 bg-clip-text text-transparent">
-                    👨‍🍳 Kitchen Orders
+                    Kitchen Orders
                   </h1>
                   <p className="text-sm text-[#0A2645]/70 font-medium">Cook2Day Restaurant System</p>
                 </div>
@@ -150,7 +150,7 @@ const KitchenOrders = () => {
                 {orders.length}
               </div>
               <div className="text-white/90 text-sm font-medium flex items-center justify-center gap-1">
-                🔥 Active Orders
+                Active Orders
               </div>
             </div>
           </div>
@@ -165,7 +165,7 @@ const KitchenOrders = () => {
                   <div className="flex items-center gap-4">
                     <div className="bg-gradient-to-br from-[#0A2645] to-[#0A2645]/80 text-white px-4 py-2 rounded-xl shadow-lg">
                       <div className="text-2xl font-bold flex items-center gap-2">
-                        🍽️ Table {order.tableNumber}
+                        Table {order.tableNumber}
                       </div>
                     </div>
                     <Badge 
@@ -178,9 +178,6 @@ const KitchenOrders = () => {
                           : 'bg-gradient-to-r from-green-500 to-green-600 text-white border-green-500 shadow-lg px-4 py-2 text-base font-bold'
                       }
                     >
-                      {order.priority === 'high' && '🚨'} 
-                      {order.priority === 'medium' && '⚡'} 
-                      {order.priority === 'low' && '🟢'} 
                       {order.priority} priority
                     </Badge>
                   </div>
@@ -188,7 +185,7 @@ const KitchenOrders = () => {
                     <div className="bg-[#FAA225]/20 p-2 rounded-lg">
                       <Clock className="h-5 w-5 text-[#0A2645]" />
                     </div>
-                    <span className="font-bold text-lg">⏰ {getTimeSince(order.orderTime)} ago</span>
+                    <span className="font-bold text-lg">{getTimeSince(order.orderTime)} ago</span>
                   </div>
                 </div>
               </CardHeader>
@@ -199,16 +196,16 @@ const KitchenOrders = () => {
                     <div key={item.id} className="flex justify-between items-center p-4 bg-gradient-to-r from-white via-blue-50/50 to-blue-100/30 rounded-xl border-2 border-blue-200/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.01]">
                       <div className="flex-1">
                         <div className="font-bold text-[#0A2645] text-xl mb-2 flex items-center gap-2">
-                          🍽️ {item.name}
+                          {item.name}
                         </div>
                         <div className="text-[#0A2645]/80 text-base mb-2 flex items-center gap-2">
                           <span className="bg-blue-100 px-3 py-1 rounded-lg font-semibold">
-                            📦 Qty: {item.quantity}
+                            Qty: {item.quantity}
                           </span>
                         </div>
                         {item.notes && (
                           <div className="bg-gradient-to-r from-[#FAA225]/10 to-[#FAA225]/5 text-[#0A2645] font-semibold px-3 py-2 rounded-lg text-sm inline-block border-2 border-[#FAA225]/30 shadow-md">
-                            📝 Note: {item.notes}
+                            Note: {item.notes}
                           </div>
                         )}
                       </div>
@@ -226,7 +223,7 @@ const KitchenOrders = () => {
                               onClick={() => updateItemStatus(order.id, item.id, 'preparing')}
                               className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                             >
-                              🔥 Start Cooking
+                              Start Cooking
                             </Button>
                           )}
                           {item.status === 'preparing' && (
@@ -235,7 +232,7 @@ const KitchenOrders = () => {
                               onClick={() => updateItemStatus(order.id, item.id, 'ready')}
                               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                             >
-                              ✅ Ready to Serve
+                              Ready to Serve
                             </Button>
                           )}
                         </div>
@@ -250,9 +247,11 @@ const KitchenOrders = () => {
 
         {orders.length === 0 && (
           <div className="text-center py-16 bg-gradient-to-br from-white via-blue-50/50 to-blue-100/40 rounded-2xl shadow-xl border-2 border-blue-200">
-            <div className="text-6xl mb-4">👨‍🍳</div>
+            <div className="text-6xl mb-4">
+              <ChefHat className="h-16 w-16 mx-auto text-gray-400" />
+            </div>
             <div className="text-[#0A2645] text-2xl mb-3 font-bold">No active orders</div>
-            <div className="text-[#0A2645]/70 text-lg">All caught up! Time for a break! 🎉</div>
+            <div className="text-[#0A2645]/70 text-lg">All caught up! Time for a break!</div>
           </div>
         )}
       </div>

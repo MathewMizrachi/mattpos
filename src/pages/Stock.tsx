@@ -56,13 +56,13 @@ const Stock = () => {
       // Also add to context for POS
       addProduct(data);
       toast({
-        title: "✅ Till item added",
+        title: "Till item added",
         description: `${data.name} has been added to your till stock.`,
       });
     } catch (error) {
       console.error('Error adding product:', error);
       toast({
-        title: "❌ Error",
+        title: "Error",
         description: "Could not add product",
         variant: "destructive"
       });
@@ -78,14 +78,14 @@ const Stock = () => {
           // Also update in context
           updateProduct(selectedProduct.id, data);
           toast({
-            title: "✅ Till item updated",
+            title: "Till item updated",
             description: `${data.name} has been updated.`,
           });
         }
       } catch (error) {
         console.error('Error updating product:', error);
         toast({
-          title: "❌ Error",
+          title: "Error",
           description: "Could not update product",
           variant: "destructive"
         });
@@ -102,7 +102,7 @@ const Stock = () => {
           // Also delete from context
           deleteProduct(selectedProduct.id);
           toast({
-            title: "🗑️ Till item deleted",
+            title: "Till item deleted",
             description: `${selectedProduct.name} has been removed from your till stock.`,
           });
           setIsDeleteDialogOpen(false);
@@ -110,7 +110,7 @@ const Stock = () => {
       } catch (error) {
         console.error('Error deleting product:', error);
         toast({
-          title: "❌ Error",
+          title: "Error",
           description: "Could not delete product",
           variant: "destructive"
         });
@@ -139,14 +139,14 @@ const Stock = () => {
       }
       setProducts(prev => [...prev, ...addedProducts]);
       toast({
-        title: "📦 Till items imported",
+        title: "Till items imported",
         description: `${products.length} items have been imported to your till stock.`,
       });
       setIsImportProductOpen(false);
     } catch (error) {
       console.error('Error importing products:', error);
       toast({
-        title: "❌ Error",
+        title: "Error",
         description: "Could not import products",
         variant: "destructive"
       });
@@ -159,7 +159,7 @@ const Stock = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#FAA225] border-t-transparent mx-auto mb-6 shadow-lg"></div>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-            <p className="text-white text-lg font-semibold">📦 Loading till stock...</p>
+            <p className="text-white text-lg font-semibold">Loading till stock...</p>
             <p className="text-white/70 text-sm mt-2">Please wait while we fetch your inventory</p>
           </div>
         </div>
@@ -170,7 +170,7 @@ const Stock = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5f] flex flex-col">
       <StockHeader 
-        title="📦 Till Stock"
+        title="Till Stock"
         description="Manage till inventory and products with ease"
         onOpenAddProduct={() => setIsAddProductOpen(true)}
         onOpenImportProduct={() => setIsImportProductOpen(true)}

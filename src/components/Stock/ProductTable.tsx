@@ -38,7 +38,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
             <Package2Icon className="h-10 w-10 text-gray-500" />
           </div>
           <div>
-            <p className="text-gray-500 font-semibold text-lg">📦 No products found</p>
+            <p className="text-gray-500 font-semibold text-lg">No products found</p>
             <p className="text-gray-400 text-sm mt-1">Try adjusting your search terms or add new products</p>
           </div>
         </div>
@@ -51,14 +51,14 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
       <Table>
         <TableHeader>
           <TableRow className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] border-none hover:bg-gradient-to-r hover:from-[#1a3a5f] hover:to-[#0A2645]">
-            <TableHead className="text-[#FAA225] font-bold text-sm">🏷️ BarCode</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">📋 StockCode</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">🔗 LinkCode</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">📝 Description</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">📦 Units</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">💰 AvgCostIncl</TableHead>
-            <TableHead className="text-[#FAA225] font-bold text-sm">💵 Selling</TableHead>
-            <TableHead className="text-right text-[#FAA225] font-bold text-sm">⚡ Actions</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">BarCode</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">StockCode</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">LinkCode</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">Description</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">Units</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">AvgCostIncl</TableHead>
+            <TableHead className="text-[#FAA225] font-bold text-sm">Selling</TableHead>
+            <TableHead className="text-right text-[#FAA225] font-bold text-sm">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
