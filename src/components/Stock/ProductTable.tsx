@@ -65,37 +65,37 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
           {products.map((product, index) => (
             <TableRow 
               key={product.id}
-              className={`cursor-pointer hover:bg-gradient-to-r hover:from-[#FAA225]/5 hover:to-[#FAA225]/10 border-b border-gray-100 transition-all duration-200 hover:shadow-lg ${
+              className={`cursor-pointer hover:bg-gradient-to-r hover:from-[#0A2645] hover:to-[#1a3a5f] border-b border-gray-100 transition-all duration-200 hover:shadow-lg group ${
                 index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
               }`}
             >
-              <TableCell className="font-mono text-xs text-[#0A2645]">
+              <TableCell className="font-mono text-xs text-[#0A2645] group-hover:text-white">
                 {product.barcode || 'N/A'}
               </TableCell>
-              <TableCell className="text-[#0A2645] font-medium">
+              <TableCell className="text-[#0A2645] font-medium group-hover:text-white">
                 {product.stockCode || 'N/A'}
               </TableCell>
-              <TableCell className="text-[#0A2645]">
+              <TableCell className="text-[#0A2645] group-hover:text-white">
                 {product.linkCode || 'N/A'}
               </TableCell>
-              <TableCell className="font-semibold max-w-xs truncate text-[#0A2645]" title={product.name}>
+              <TableCell className="font-semibold max-w-xs truncate text-[#0A2645] group-hover:text-white" title={product.name}>
                 {product.name}
               </TableCell>
-              <TableCell className="text-[#0A2645]">
+              <TableCell className="text-[#0A2645] group-hover:text-white">
                 <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                   (product.stock ?? 0) > 10 
-                    ? 'bg-green-100 text-green-800' 
+                    ? 'bg-green-100 text-green-800 group-hover:bg-green-200 group-hover:text-green-900' 
                     : (product.stock ?? 0) > 0 
-                    ? 'bg-yellow-100 text-yellow-800' 
-                    : 'bg-red-100 text-red-800'
+                    ? 'bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200 group-hover:text-yellow-900' 
+                    : 'bg-red-100 text-red-800 group-hover:bg-red-200 group-hover:text-red-900'
                 }`}>
                   {product.stock !== undefined ? product.stock : 'N/A'}
                 </span>
               </TableCell>
-              <TableCell className="text-[#0A2645] font-semibold">
+              <TableCell className="text-[#0A2645] font-semibold group-hover:text-white">
                 {product.avgCostIncl !== undefined ? formatCurrency(product.avgCostIncl) : 'N/A'}
               </TableCell>
-              <TableCell className="font-bold text-green-600 text-lg">
+              <TableCell className="font-bold text-green-600 text-lg group-hover:text-green-300">
                 {formatCurrency(product.price)}
               </TableCell>
               <TableCell className="text-right">
@@ -104,7 +104,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                     variant="ghost"
                     size="icon"
                     onClick={() => onEdit(product)}
-                    className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 transition-all duration-200 hover:scale-110"
+                    className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 transition-all duration-200 hover:scale-110 group-hover:text-blue-300 group-hover:hover:text-blue-100"
                   >
                     <EditIcon className="h-4 w-4" />
                   </Button>
@@ -112,7 +112,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                     variant="ghost"
                     size="icon"
                     onClick={() => onDelete(product)}
-                    className="text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-200 hover:scale-110"
+                    className="text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-200 hover:scale-110 group-hover:text-red-300 group-hover:hover:text-red-100"
                   >
                     <TrashIcon className="h-4 w-4" />
                   </Button>
