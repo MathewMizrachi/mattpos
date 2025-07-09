@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
@@ -7,6 +8,8 @@ import StockHeader from '@/components/Stock/StockHeader';
 import SearchBar from '@/components/Stock/SearchBar';
 import ProductTable from '@/components/Stock/ProductTable';
 import DeleteProductDialog from '@/components/Stock/DeleteProductDialog';
+import RawGoodsSection from '@/components/Stock/RawGoodsSection';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const RestaurantStock = () => {
   const { currentUser, addProduct, updateProduct, deleteProduct } = useApp();
@@ -101,16 +104,29 @@ const RestaurantStock = () => {
         showPurchaseOrder={true}
       />
       
-      <div className="p-4">
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        
-        <div className="bg-white rounded-lg shadow">
-          <ProductTable 
-            products={filteredProducts} 
-            onEdit={openEditModal} 
-            onDelete={openDeleteDialog} 
-          />
-        </div>
+      <div className="p-4 flex-1">
+        <Tabs defaultValue="menu-items" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="menu-items" className="text-base font-semibold">Menu Items</TabsTrigger>
+            <TabsTrigger value="raw-goods" className="text-base font-semibold">Raw Goods & Ingredients</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="menu-items" className="space-y-4">
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            
+            <div className="bg-white rounded-lg shadow">
+              <ProductTable 
+                products={filteredProducts} 
+                onEdit={openEditModal} 
+                onDelete={openDeleteDialog} 
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="raw-goods">
+            <RawGoodsSection />
+          </TabsContent>
+        </Tabs>
       </div>
       
       <ProductForm
