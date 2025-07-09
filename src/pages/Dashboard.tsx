@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -7,6 +8,10 @@ import EndShiftForm from '@/components/EndShiftForm';
 import DashboardHeader from '@/components/Dashboard/DashboardHeader';
 import DashboardActions from '@/components/Dashboard/DashboardActions';
 import RestaurantActions from '@/components/Dashboard/RestaurantActions';
+import DashboardStats from '@/components/Dashboard/DashboardStats';
+import RecentActivity from '@/components/Dashboard/RecentActivity';
+import QuickInfo from '@/components/Dashboard/QuickInfo';
+import NotificationCenter from '@/components/Dashboard/NotificationCenter';
 import TableSelectionDialog from '@/components/TableSelectionDialog';
 
 const Dashboard = () => {
@@ -123,30 +128,50 @@ const Dashboard = () => {
   
   return (
     <div className="min-h-screen bg-[#0A2645] p-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <DashboardHeader 
           userName={currentUser?.name || ''} 
           onLogout={handleLogout}
         />
         
-        {currentMode === 'restaurant' ? (
-          <RestaurantActions 
-            onTakeOrders={handleTakeOrders}
-            onManageTables={handleManageTables}
-            onManageStock={handleManageStock}
-            onManageCustomers={handleManageCustomers}
-            onViewReports={handleViewReports}
-          />
-        ) : (
-          <DashboardActions 
-            hasActiveShift={!!currentShift}
-            onStartShift={handleStartShift}
-            onResumeShift={handleResumeShift}
-            onManageStock={handleManageStock}
-            onManageCustomers={handleManageCustomers}
-            onViewReports={handleViewReports}
-          />
-        )}
+        {/* Stats Overview */}
+        <DashboardStats mode={currentMode} />
+        
+        {/* Quick Info & Weather */}
+        <QuickInfo mode={currentMode} />
+        
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Main Actions - Takes up 2 columns */}
+          <div className="lg:col-span-2">
+            {currentMode === 'restaurant' ? (
+              <RestaurantActions 
+                onTakeOrders={handleTakeOrders}
+                onManageTables={handleManageTables}
+                onManageStock={handleManageStock}
+                onManageCustomers={handleManageCustomers}
+                onViewReports={handleViewReports}
+              />
+            ) : (
+              <DashboardActions 
+                hasActiveShift={!!currentShift}
+                onStartShift={handleStartShift}
+                onResumeShift={handleResumeShift}
+                onManageStock={handleManageStock}
+                onManageCustomers={handleManageCustomers}
+                onViewReports={handleViewReports}
+              />
+            )}
+          </div>
+          
+          {/* Side Panel - Takes up 1 column */}
+          <div className="space-y-6">
+            {/* Notifications */}
+            <NotificationCenter mode={currentMode} />
+            
+            {/* Recent Activity */}
+            <RecentActivity mode={currentMode} />
+          </div>
+        </div>
       </div>
       
       <TableSelectionDialog
