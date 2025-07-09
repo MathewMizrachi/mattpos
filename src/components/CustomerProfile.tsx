@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Check } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Check, User, Phone, CreditCard, Calendar, Clock } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { 
   Table,
@@ -15,6 +16,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface CustomerProfileProps {
   customerId: number;
@@ -35,16 +37,18 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
   
   if (!customer) {
     return (
-      <div className="min-h-screen bg-[#0A2645] pt-6 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center mb-6">
-            <Button onClick={onBack} variant="outline" className="mr-4 text-white border-white hover:bg-white/10">
+      <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-[#0A2645]">Customer Not Found</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <Button onClick={onBack} variant="outline" className="text-[#0A2645] border-[#0A2645]">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              Back to Customer List
             </Button>
-            <h1 className="text-2xl font-bold text-white">Customer Not Found</h1>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -99,150 +103,198 @@ const CustomerProfile: React.FC<CustomerProfileProps> = ({
     }
   ];
   
-  // If showing payment options modal
+  // Payment options modal
   if (showPaymentOptions) {
     return (
-      <div className="min-h-screen bg-[#0A2645] pt-6 px-4 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Select Payment Method</h2>
-          <p className="mb-4">Process payment for {customer.name}</p>
-          
-          <RadioGroup value={paymentMethod} onValueChange={(value: 'cash' | 'card' | 'shop2shop') => setPaymentMethod(value)} className="mb-6">
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="cash" id="customer-cash" />
-              <Label htmlFor="customer-cash">Cash</Label>
+      <div className="min-h-screen bg-[#0A2645] p-4 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-[#0A2645]">Select Payment Method</CardTitle>
+            <p className="text-gray-600 mt-2">Process payment for {customer.name}</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <RadioGroup value={paymentMethod} onValueChange={(value: 'cash' | 'card' | 'shop2shop') => setPaymentMethod(value)}>
+              <div className="flex items-center space-x-2 p-2 rounded border">
+                <RadioGroupItem value="cash" id="customer-cash" />
+                <Label htmlFor="customer-cash" className="flex-1 cursor-pointer">Cash Payment</Label>
+              </div>
+              <div className="flex items-center space-x-2 p-2 rounded border">
+                <RadioGroupItem value="card" id="customer-card" />
+                <Label htmlFor="customer-card" className="flex-1 cursor-pointer">Card Payment</Label>
+              </div>
+              <div className="flex items-center space-x-2 p-2 rounded border">
+                <RadioGroupItem value="shop2shop" id="customer-shop2shop" />
+                <Label htmlFor="customer-shop2shop" className="flex-1 cursor-pointer">Shop2Shop</Label>
+              </div>
+            </RadioGroup>
+            
+            <div className="flex gap-3 pt-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowPaymentOptions(false)}
+                className="flex-1 text-[#0A2645] border-[#0A2645]"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleProcessPayment}
+                className="flex-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90"
+              >
+                Process Payment
+              </Button>
             </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="card" id="customer-card" />
-              <Label htmlFor="customer-card">Card</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="shop2shop" id="customer-shop2shop" />
-              <Label htmlFor="customer-shop2shop">Shop2Shop</Label>
-            </div>
-          </RadioGroup>
-          
-          <div className="flex gap-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setShowPaymentOptions(false)}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleProcessPayment}
-              className="flex-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645]"
-            >
-              Process Payment
-            </Button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-[#0A2645] pt-6 px-4">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex items-center mb-6">
-          <Button onClick={onBack} variant="outline" className="mr-4 text-white border-white hover:bg-white/10">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-          <h1 className="text-2xl font-bold text-white">Customer Profile</h1>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">{customer.name}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-gray-600">Phone: {customer.phone}</p>
-              {customer.idNumber && <p className="text-gray-600">ID/Passport: {customer.idNumber}</p>}
-              <p className="text-gray-600">Created: {formatDate(customer.createdAt)}</p>
-              <p className="text-gray-600">Payment Terms: {customer.paymentTermDays ? `${customer.paymentTermDays} days` : 'None'}</p>
-            </div>
-            <div className="flex flex-col justify-end items-end">
-              <p className="text-lg font-bold mb-2">
-                Status: <span className={customer.isPaid ? "text-green-600" : "text-red-600"}>
+    <div className="min-h-screen bg-[#0A2645] p-4">
+      <div className="max-w-4xl mx-auto space-y-4">
+        {/* Header */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Button onClick={onBack} variant="outline" size="sm" className="text-[#0A2645] border-[#0A2645]">
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  Back
+                </Button>
+                <h1 className="text-xl font-bold text-[#0A2645]">Customer Profile</h1>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  customer.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                }`}>
                   {customer.isPaid ? "Paid" : "Outstanding"}
                 </span>
-              </p>
-              <div className="flex space-x-2">
-                {!customer.isPaid && (
-                  <>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => onMakePayment(customer.id)}
-                      className="flex items-center gap-1 bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
-                    >
-                      <Check className="h-4 w-4" />
-                      Make Payment
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={handleMarkAsPaid}
-                      className="bg-green-600 text-white hover:bg-green-700 border-green-600"
-                    >
-                      Mark Paid
-                    </Button>
-                  </>
-                )}
               </div>
             </div>
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
-          {transactions.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {transactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell>{formatDate(transaction.date)}</TableCell>
-                    <TableCell>{transaction.description}</TableCell>
-                    <TableCell>{formatCurrency(transaction.amount)}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        transaction.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}>
-                        {transaction.isPaid ? "Paid" : "Outstanding"}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      {!transaction.isPaid && (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={handleMarkAsPaid}
-                          className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 hover:text-[#0A2645] border-[#FAA225]"
-                        >
-                          Pay
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="text-center py-4 text-gray-500">
-              {customer.isPaid ? "All accounts have been settled" : "No transaction history available"}
+          </CardContent>
+        </Card>
+
+        {/* Customer Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-[#0A2645] flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Customer Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[#0A2645]">
+                  <User className="h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Name:</span>
+                  <span>{customer.name}</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#0A2645]">
+                  <Phone className="h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Phone:</span>
+                  <span>{customer.phone}</span>
+                </div>
+                {customer.idNumber && (
+                  <div className="flex items-center gap-2 text-[#0A2645]">
+                    <CreditCard className="h-4 w-4 text-gray-500" />
+                    <span className="font-medium">ID/Passport:</span>
+                    <span>{customer.idNumber}</span>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[#0A2645]">
+                  <Calendar className="h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Created:</span>
+                  <span>{formatDate(customer.createdAt)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#0A2645]">
+                  <Clock className="h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Payment Terms:</span>
+                  <span>{customer.paymentTermDays ? `${customer.paymentTermDays} days` : 'None'}</span>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
+            
+            {!customer.isPaid && (
+              <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t">
+                <Button 
+                  size="sm"
+                  onClick={() => onMakePayment(customer.id)}
+                  className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90"
+                >
+                  <Check className="h-4 w-4 mr-1" />
+                  Make Payment
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleMarkAsPaid}
+                  className="bg-green-600 text-white hover:bg-green-700 border-green-600"
+                >
+                  Mark Paid
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        
+        {/* Transaction History */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-[#0A2645]">Transaction History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {transactions.length > 0 ? (
+              <ScrollArea className="h-[300px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {transactions.map((transaction) => (
+                      <TableRow key={transaction.id}>
+                        <TableCell className="text-[#0A2645]">{formatDate(transaction.date)}</TableCell>
+                        <TableCell className="text-[#0A2645]">{transaction.description}</TableCell>
+                        <TableCell className="text-[#0A2645] font-medium">{formatCurrency(transaction.amount)}</TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            transaction.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                          }`}>
+                            {transaction.isPaid ? "Paid" : "Outstanding"}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {!transaction.isPaid && (
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={handleMarkAsPaid}
+                              className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 border-[#FAA225]"
+                            >
+                              Pay
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>{customer.isPaid ? "All accounts have been settled" : "No transaction history available"}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
