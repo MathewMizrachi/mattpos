@@ -25,15 +25,6 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#0A2645] text-white p-3 flex justify-between items-center z-20">
       <div className="flex items-center space-x-4">
-        <div>
-          <h2 className="text-lg font-semibold">{currentUser?.name}</h2>
-          <p className="text-xs text-gray-300">
-            Shift: {currentShift?.id} | Float: {formatCurrency(currentShift?.startFloat || 0)}
-          </p>
-        </div>
-      </div>
-      
-      <div className="flex items-center space-x-2">
         <Button
           variant="outline"
           size="sm"
@@ -44,11 +35,20 @@ const POSHeader: React.FC<POSHeaderProps> = ({
           Dashboard
         </Button>
         
+        <div>
+          <h2 className="text-lg font-semibold">{currentUser?.name}</h2>
+          <p className="text-xs text-gray-300">
+            Shift: {currentShift?.id} | Float: {formatCurrency(currentShift?.startFloat || 0)}
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex items-center space-x-2">
         <Button
-          variant="outline"
+          variant="default"
           size="sm"
           onClick={onEndShift}
-          className="text-white border-white hover:bg-white/20"
+          className="bg-[#FAA225] text-[#0A2645] hover:bg-[#FAA225]/90 font-semibold border-2 border-[#FAA225] shadow-lg"
         >
           End Shift
         </Button>
