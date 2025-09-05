@@ -499,20 +499,21 @@ const POS = () => {
             {/* Action Buttons */}
             <div className="flex gap-3 pt-2">
               <Button 
-                onClick={handleNewProductConfirm}
-                disabled={!newProductData.brand || !newProductData.description || !newProductData.price}
-                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
-                size="lg"
-              >
-                Create Product
-              </Button>
-              <Button 
                 variant="outline" 
                 onClick={() => setShowNewProductDialog(false)}
                 className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
                 size="lg"
               >
                 Cancel
+              </Button>
+              <Button 
+                onClick={handleNewProductConfirm}
+                disabled={!newProductData.brand || !newProductData.description || !newProductData.price}
+                className="flex-1 text-white"
+                style={{ backgroundColor: '#FAA225' }}
+                size="lg"
+              >
+                Create Product
               </Button>
             </div>
           </div>
