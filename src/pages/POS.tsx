@@ -395,20 +395,20 @@ const POS = () => {
             {/* Action Buttons */}
             <div className="flex gap-3 pt-2">
               <Button 
-                onClick={handleGlobalProductConfirm}
-                disabled={!sellingPrice}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                size="lg"
-              >
-                Add to Inventory
-              </Button>
-              <Button 
                 variant="outline" 
                 onClick={() => setShowGlobalFoundDialog(false)}
                 className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
                 size="lg"
               >
                 Cancel
+              </Button>
+              <Button 
+                onClick={handleGlobalProductConfirm}
+                disabled={!sellingPrice}
+                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
+                size="lg"
+              >
+                Add to Inventory
               </Button>
             </div>
           </div>
