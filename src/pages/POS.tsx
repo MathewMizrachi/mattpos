@@ -8,6 +8,11 @@ import { usePOSState } from './POS/usePOSState';
 import { usePaymentStates } from './POS/usePaymentStates';
 import { usePaymentHandlers } from './POS/usePaymentHandlers';
 import PaymentOptions from '@/components/PaymentOptions';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Database, Plus } from 'lucide-react';
 import db from '@/lib/db';
 
 // Restaurant stock items for restaurant mode
@@ -153,20 +158,66 @@ const POS = () => {
     // Navigate back to table management after sending order
     navigate('/tables');
   };
+  
+  // State for simulation dialogs
+  const [showGlobalFoundDialog, setShowGlobalFoundDialog] = React.useState(false);
+  const [showNewProductDialog, setShowNewProductDialog] = React.useState(false);
+  const [sellingPrice, setSellingPrice] = React.useState('');
+  const [newProductData, setNewProductData] = React.useState({
+    brand: '',
+    description: '',
+    packSize: '',
+    price: ''
+  });
 
+  // Mock global database
+  const mockGlobalProduct = {
+    barcode: '999001',
+    brand: 'Coca-Cola',
+    description: 'Coca-Cola Classic',
+    packSize: '330ml Can',
+    category: 'Beverages'
+  };
+  
   // Simulation handlers for barcode scanner testing
   const handleSimulateGlobalFound = () => {
-    toast({
-      title: "Simulation: Global Found",
-      description: "Simulating finding a product in global database",
-    });
+    setShowGlobalFoundDialog(true);
   };
 
   const handleSimulateNotFound = () => {
-    toast({
-      title: "Simulation: Not Found",
-      description: "Simulating product not found anywhere",
+    setNewProductData({
+      brand: '',
+      description: '',
+      packSize: '',
+      price: ''
     });
+    setShowNewProductDialog(true);
+  };
+
+  // Handle global product confirmation
+  const handleGlobalProductConfirm = () => {
+    if (sellingPrice) {
+      toast({
+        title: "Product added!",
+        description: `${mockGlobalProduct.brand} ${mockGlobalProduct.description} has been added to your inventory`,
+      });
+      
+      setShowGlobalFoundDialog(false);
+      setSellingPrice('');
+    }
+  };
+
+  // Handle new product creation
+  const handleNewProductConfirm = () => {
+    if (newProductData.brand && newProductData.description && newProductData.price) {
+      toast({
+        title: "Product created!",
+        description: `${newProductData.brand} ${newProductData.description} has been created and added to your inventory`,
+      });
+      
+      setShowNewProductDialog(false);
+      setNewProductData({ brand: '', description: '', packSize: '', price: '' });
+    }
   };
   
   useEffect(() => {
@@ -253,35 +304,169 @@ const POS = () => {
   }
   
   return (
-    <POSMain
-      currentUser={currentUser}
-      currentShift={currentShift}
-      products={sortedProducts}
-      cart={cart}
-      searchTerm={searchTerm}
-      onSearchChange={setSearchTerm}
-      onAddToCart={handleAddToCart}
-      onUpdateCartItem={updateCartQuantity}
-      onRemoveFromCart={removeFromCart}
-      onClearCart={clearCart}
-      cartExpanded={cartExpanded}
-      toggleCartExpand={toggleCartExpand}
-      calculateTotal={calculateTotal}
-      onEndShift={paymentHandlers.handleEndShift}
-      onLogout={logout}
-      onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
-      onShowRefundScreen={() => currentMode === 'till' && paymentStates.setShowRefundScreen(true)}
-      onShowProfitPlusScreen={() => currentMode === 'till' && paymentStates.setShowProfitPlusScreen(true)}
-      onShowWithdrawalScreen={() => currentMode === 'till' && paymentStates.setShowWithdrawalScreen(true)}
-      onCashPayment={() => paymentStates.setShowPaymentForm(true)}
-      onCardPayment={() => paymentStates.setShowCardPayment(true)}
-      onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
-      onPrintReceipt={handlePrintReceipt}
-      onSendOrder={handleSendOrder}
-      onSimulateGlobalFound={handleSimulateGlobalFound}
-      onSimulateNotFound={handleSimulateNotFound}
-      tableInfo={tableInfo}
-    />
+    <>
+      <POSMain
+        currentUser={currentUser}
+        currentShift={currentShift}
+        products={sortedProducts}
+        cart={cart}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        onAddToCart={handleAddToCart}
+        onUpdateCartItem={updateCartQuantity}
+        onRemoveFromCart={removeFromCart}
+        onClearCart={clearCart}
+        cartExpanded={cartExpanded}
+        toggleCartExpand={toggleCartExpand}
+        calculateTotal={calculateTotal}
+        onEndShift={paymentHandlers.handleEndShift}
+        onLogout={logout}
+        onShowPaymentForm={paymentHandlers.handleShowPaymentForm}
+        onShowRefundScreen={() => currentMode === 'till' && paymentStates.setShowRefundScreen(true)}
+        onShowProfitPlusScreen={() => currentMode === 'till' && paymentStates.setShowProfitPlusScreen(true)}
+        onShowWithdrawalScreen={() => currentMode === 'till' && paymentStates.setShowWithdrawalScreen(true)}
+        onCashPayment={() => paymentStates.setShowPaymentForm(true)}
+        onCardPayment={() => paymentStates.setShowCardPayment(true)}
+        onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
+        onPrintReceipt={handlePrintReceipt}
+        onSendOrder={handleSendOrder}
+        onSimulateGlobalFound={handleSimulateGlobalFound}
+        onSimulateNotFound={handleSimulateNotFound}
+        tableInfo={tableInfo}
+      />
+
+      {/* Global Product Found Dialog */}
+      <Dialog open={showGlobalFoundDialog} onOpenChange={setShowGlobalFoundDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Database className="h-5 w-5 text-blue-600" />
+              <span>Product Found in Global Database</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <h3 className="font-semibold text-lg">{mockGlobalProduct.brand} {mockGlobalProduct.description}</h3>
+              <p className="text-sm text-gray-600">Pack Size: {mockGlobalProduct.packSize}</p>
+              <p className="text-sm text-gray-600">Category: {mockGlobalProduct.category}</p>
+              <p className="text-sm text-gray-600">Barcode: {mockGlobalProduct.barcode}</p>
+            </div>
+            
+            <div>
+              <Label htmlFor="selling-price">Set Your Selling Price</Label>
+              <Input
+                id="selling-price"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={sellingPrice}
+                onChange={(e) => setSellingPrice(e.target.value)}
+                className="mt-1"
+              />
+            </div>
+            
+            <div className="flex space-x-2">
+              <Button 
+                onClick={handleGlobalProductConfirm}
+                disabled={!sellingPrice}
+                className="flex-1"
+              >
+                Add to Inventory
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowGlobalFoundDialog(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* New Product Creation Dialog */}
+      <Dialog open={showNewProductDialog} onOpenChange={setShowNewProductDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Plus className="h-5 w-5 text-orange-600" />
+              <span>Create New Product</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-orange-50 rounded-lg p-3">
+              <p className="text-sm text-orange-800">
+                Product not found anywhere. Please provide details to create a new product.
+              </p>
+            </div>
+            
+            <div>
+              <Label htmlFor="brand">Brand</Label>
+              <Input
+                id="brand"
+                placeholder="e.g., Coca-Cola"
+                value={newProductData.brand}
+                onChange={(e) => setNewProductData({...newProductData, brand: e.target.value})}
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                placeholder="e.g., Classic Cola Drink"
+                value={newProductData.description}
+                onChange={(e) => setNewProductData({...newProductData, description: e.target.value})}
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="pack-size">Pack Size</Label>
+              <Input
+                id="pack-size"
+                placeholder="e.g., 330ml Can"
+                value={newProductData.packSize}
+                onChange={(e) => setNewProductData({...newProductData, packSize: e.target.value})}
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="price">Selling Price</Label>
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={newProductData.price}
+                onChange={(e) => setNewProductData({...newProductData, price: e.target.value})}
+                className="mt-1"
+              />
+            </div>
+            
+            <div className="flex space-x-2">
+              <Button 
+                onClick={handleNewProductConfirm}
+                disabled={!newProductData.brand || !newProductData.description || !newProductData.price}
+                className="flex-1"
+              >
+                Create Product
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowNewProductDialog(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
