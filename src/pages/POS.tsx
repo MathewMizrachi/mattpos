@@ -153,6 +153,21 @@ const POS = () => {
     // Navigate back to table management after sending order
     navigate('/tables');
   };
+
+  // Simulation handlers for barcode scanner testing
+  const handleSimulateGlobalFound = () => {
+    toast({
+      title: "Simulation: Global Found",
+      description: "Simulating finding a product in global database",
+    });
+  };
+
+  const handleSimulateNotFound = () => {
+    toast({
+      title: "Simulation: Not Found",
+      description: "Simulating product not found anywhere",
+    });
+  };
   
   useEffect(() => {
     if (!currentUser) {
@@ -263,6 +278,8 @@ const POS = () => {
       onShop2ShopPayment={() => paymentStates.setShowShop2ShopScreen(true)}
       onPrintReceipt={handlePrintReceipt}
       onSendOrder={handleSendOrder}
+      onSimulateGlobalFound={handleSimulateGlobalFound}
+      onSimulateNotFound={handleSimulateNotFound}
       tableInfo={tableInfo}
     />
   );
