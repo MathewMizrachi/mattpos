@@ -337,11 +337,11 @@ const POS = () => {
 
       {/* Global Product Found Dialog */}
       <Dialog open={showGlobalFoundDialog} onOpenChange={setShowGlobalFoundDialog}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg bg-white">
           <DialogHeader className="pb-4">
-            <DialogTitle className="flex items-center gap-3 text-xl">
-              <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
-                <Database className="h-5 w-5 text-primary" />
+            <DialogTitle className="flex items-center gap-3 text-xl text-gray-900">
+              <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <Database className="h-5 w-5 text-blue-600" />
               </div>
               <span>Product Found in Global Database</span>
             </DialogTitle>
@@ -349,37 +349,37 @@ const POS = () => {
           
           <div className="space-y-6">
             {/* Product Information Card */}
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-muted/50 px-4 py-3 border-b">
-                <h3 className="text-lg font-semibold text-foreground">
+            <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">
                   {mockGlobalProduct.brand} {mockGlobalProduct.description}
                 </h3>
               </div>
-              <div className="p-4 space-y-3">
+              <div className="p-4 space-y-3 bg-white">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Pack Size</p>
-                    <p className="text-sm font-semibold">{mockGlobalProduct.packSize}</p>
+                    <p className="text-sm font-medium text-gray-600">Pack Size</p>
+                    <p className="text-sm font-semibold text-gray-900">{mockGlobalProduct.packSize}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Category</p>
-                    <p className="text-sm font-semibold">{mockGlobalProduct.category}</p>
+                    <p className="text-sm font-medium text-gray-600">Category</p>
+                    <p className="text-sm font-semibold text-gray-900">{mockGlobalProduct.category}</p>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Barcode</p>
-                  <p className="text-sm font-mono bg-muted px-2 py-1 rounded inline-block">{mockGlobalProduct.barcode}</p>
+                  <p className="text-sm font-medium text-gray-600">Barcode</p>
+                  <p className="text-sm font-mono bg-gray-100 text-gray-900 px-2 py-1 rounded inline-block">{mockGlobalProduct.barcode}</p>
                 </div>
               </div>
             </div>
             
             {/* Price Input */}
             <div className="space-y-2">
-              <Label htmlFor="selling-price" className="text-sm font-medium">
+              <Label htmlFor="selling-price" className="text-sm font-medium text-gray-700">
                 Set Your Selling Price (R)
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">R</span>
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R</span>
                 <Input
                   id="selling-price"
                   type="number"
@@ -387,7 +387,7 @@ const POS = () => {
                   placeholder="0.00"
                   value={sellingPrice}
                   onChange={(e) => setSellingPrice(e.target.value)}
-                  className="pl-8 text-lg font-semibold"
+                  className="pl-8 text-lg font-semibold bg-white border-gray-300 text-gray-900"
                 />
               </div>
             </div>
@@ -397,7 +397,7 @@ const POS = () => {
               <Button 
                 onClick={handleGlobalProductConfirm}
                 disabled={!sellingPrice}
-                className="flex-1"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                 size="lg"
               >
                 Add to Inventory
@@ -405,7 +405,7 @@ const POS = () => {
               <Button 
                 variant="outline" 
                 onClick={() => setShowGlobalFoundDialog(false)}
-                className="flex-1"
+                className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
                 size="lg"
               >
                 Cancel
@@ -417,10 +417,10 @@ const POS = () => {
 
       {/* New Product Creation Dialog */}
       <Dialog open={showNewProductDialog} onOpenChange={setShowNewProductDialog}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg bg-white">
           <DialogHeader className="pb-4">
-            <DialogTitle className="flex items-center gap-3 text-xl">
-              <div className="h-10 w-10 bg-orange-500/10 rounded-full flex items-center justify-center">
+            <DialogTitle className="flex items-center gap-3 text-xl text-gray-900">
+              <div className="h-10 w-10 bg-orange-100 rounded-full flex items-center justify-center">
                 <Plus className="h-5 w-5 text-orange-600" />
               </div>
               <span>Create New Product</span>
@@ -438,7 +438,7 @@ const POS = () => {
             {/* Form Fields */}
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="brand" className="text-sm font-medium">
+                <Label htmlFor="brand" className="text-sm font-medium text-gray-700">
                   Brand
                 </Label>
                 <Input
@@ -446,12 +446,12 @@ const POS = () => {
                   placeholder="e.g., Coca-Cola"
                   value={newProductData.brand}
                   onChange={(e) => setNewProductData({...newProductData, brand: e.target.value})}
-                  className="text-base"
+                  className="text-base bg-white border-gray-300 text-gray-900"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-medium">
+                <Label htmlFor="description" className="text-sm font-medium text-gray-700">
                   Description
                 </Label>
                 <Input
@@ -459,12 +459,12 @@ const POS = () => {
                   placeholder="e.g., Classic Cola Drink"
                   value={newProductData.description}
                   onChange={(e) => setNewProductData({...newProductData, description: e.target.value})}
-                  className="text-base"
+                  className="text-base bg-white border-gray-300 text-gray-900"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="pack-size" className="text-sm font-medium">
+                <Label htmlFor="pack-size" className="text-sm font-medium text-gray-700">
                   Pack Size
                 </Label>
                 <Input
@@ -472,16 +472,16 @@ const POS = () => {
                   placeholder="e.g., 330ml Can"
                   value={newProductData.packSize}
                   onChange={(e) => setNewProductData({...newProductData, packSize: e.target.value})}
-                  className="text-base"
+                  className="text-base bg-white border-gray-300 text-gray-900"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="price" className="text-sm font-medium">
+                <Label htmlFor="price" className="text-sm font-medium text-gray-700">
                   Selling Price (R)
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">R</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R</span>
                   <Input
                     id="price"
                     type="number"
@@ -489,7 +489,7 @@ const POS = () => {
                     placeholder="0.00"
                     value={newProductData.price}
                     onChange={(e) => setNewProductData({...newProductData, price: e.target.value})}
-                    className="pl-8 text-base font-semibold"
+                    className="pl-8 text-base font-semibold bg-white border-gray-300 text-gray-900"
                   />
                 </div>
               </div>
@@ -500,7 +500,7 @@ const POS = () => {
               <Button 
                 onClick={handleNewProductConfirm}
                 disabled={!newProductData.brand || !newProductData.description || !newProductData.price}
-                className="flex-1"
+                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
                 size="lg"
               >
                 Create Product
@@ -508,7 +508,7 @@ const POS = () => {
               <Button 
                 variant="outline" 
                 onClick={() => setShowNewProductDialog(false)}
-                className="flex-1"
+                className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
                 size="lg"
               >
                 Cancel
