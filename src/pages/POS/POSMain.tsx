@@ -73,6 +73,12 @@ const POSMain: React.FC<POSMainProps> = ({
     setShowBarcodeScanner(false);
   };
 
+  const handleAddNewProduct = (product: Omit<Product, 'id'>) => {
+    // In a real app, this would call an API to add the product
+    console.log('Adding new product:', product);
+    setShowBarcodeScanner(false);
+  };
+
   // Enhanced send order handler to use table info
   const handleSendOrder = () => {
     if (tableInfo?.selectedTable && tableInfo?.peopleCount !== undefined) {
@@ -124,6 +130,7 @@ const POSMain: React.FC<POSMainProps> = ({
         <BarcodeScanner
           products={products}
           onProductFound={handleBarcodeProductFound}
+          onAddNewProduct={handleAddNewProduct}
           onClose={() => setShowBarcodeScanner(false)}
         />
       )}

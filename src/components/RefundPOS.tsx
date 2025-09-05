@@ -99,6 +99,11 @@ const RefundPOS: React.FC<RefundPOSProps> = ({
     setShowBarcodeScanner(false);
   };
 
+  const handleAddNewProduct = (product: Omit<Product, 'id'>) => {
+    console.log('Adding new product to refund context:', product);
+    setShowBarcodeScanner(false);
+  };
+
   // Custom header with red theme for refunds
   const RefundHeader = () => (
     <div className="fixed top-0 left-0 right-0 bg-red-600 text-white p-3 flex justify-between items-center z-20">
@@ -186,6 +191,7 @@ const RefundPOS: React.FC<RefundPOSProps> = ({
         <BarcodeScanner
           products={products}
           onProductFound={handleBarcodeProductFound}
+          onAddNewProduct={handleAddNewProduct}
           onClose={() => setShowBarcodeScanner(false)}
         />
       )}
