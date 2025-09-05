@@ -405,7 +405,8 @@ const POS = () => {
               <Button 
                 onClick={handleGlobalProductConfirm}
                 disabled={!sellingPrice}
-                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
+                className="flex-1 text-white"
+                style={{ backgroundColor: '#FAA225' }}
                 size="lg"
               >
                 Add to Inventory
