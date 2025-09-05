@@ -30,6 +30,8 @@ interface POSMainProps {
   onShop2ShopPayment: () => void;
   onPrintReceipt?: () => void;
   onSendOrder?: (tableNumber: number, peopleCount: number) => void;
+  onSimulateGlobalFound?: () => void;
+  onSimulateNotFound?: () => void;
   tableInfo?: {
     selectedTable?: number;
     peopleCount?: number;
@@ -64,6 +66,8 @@ const POSMain: React.FC<POSMainProps> = ({
   onShop2ShopPayment,
   onPrintReceipt,
   onSendOrder,
+  onSimulateGlobalFound,
+  onSimulateNotFound,
   tableInfo,
 }) => {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
@@ -76,6 +80,16 @@ const POSMain: React.FC<POSMainProps> = ({
   const handleAddNewProduct = (product: Omit<Product, 'id'>) => {
     // In a real app, this would call an API to add the product
     console.log('Adding new product:', product);
+    setShowBarcodeScanner(false);
+  };
+
+  const handleSimulateGlobalFound = () => {
+    onSimulateGlobalFound?.();
+    setShowBarcodeScanner(false);
+  };
+
+  const handleSimulateNotFound = () => {
+    onSimulateNotFound?.();
     setShowBarcodeScanner(false);
   };
 
@@ -109,6 +123,8 @@ const POSMain: React.FC<POSMainProps> = ({
         onShowBarcodeScanner={() => setShowBarcodeScanner(true)}
         onPrintReceipt={onPrintReceipt}
         onSendOrder={handleSendOrder}
+        onSimulateGlobalFound={onSimulateGlobalFound}
+        onSimulateNotFound={onSimulateNotFound}
         tableInfo={tableInfo}
       >
         <POSContent
@@ -132,6 +148,8 @@ const POSMain: React.FC<POSMainProps> = ({
           onProductFound={handleBarcodeProductFound}
           onAddNewProduct={handleAddNewProduct}
           onClose={() => setShowBarcodeScanner(false)}
+          onSimulateGlobalFound={handleSimulateGlobalFound}
+          onSimulateNotFound={handleSimulateNotFound}
         />
       )}
     </>

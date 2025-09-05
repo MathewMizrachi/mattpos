@@ -21,13 +21,17 @@ interface BarcodeScannerProps {
   onProductFound: (product: Product) => void;
   onAddNewProduct: (product: Omit<Product, 'id'>) => void;
   onClose: () => void;
+  onSimulateGlobalFound?: () => void;
+  onSimulateNotFound?: () => void;
 }
 
 const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
   products,
   onProductFound,
   onAddNewProduct,
-  onClose
+  onClose,
+  onSimulateGlobalFound,
+  onSimulateNotFound
 }) => {
   const [barcodeInput, setBarcodeInput] = useState('');
   const [showGlobalFoundDialog, setShowGlobalFoundDialog] = useState(false);
@@ -143,19 +147,27 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
   };
 
   const simulateGlobalFound = () => {
-    const sampleGlobal = mockGlobalDatabase[0];
-    setGlobalProduct(sampleGlobal);
-    setShowGlobalFoundDialog(true);
+    if (onSimulateGlobalFound) {
+      onSimulateGlobalFound();
+    } else {
+      const sampleGlobal = mockGlobalDatabase[0];
+      setGlobalProduct(sampleGlobal);
+      setShowGlobalFoundDialog(true);
+    }
   };
 
   const simulateNotFound = () => {
-    setNewProductData({
-      brand: '',
-      description: '',
-      packSize: '',
-      price: ''
-    });
-    setShowNewProductDialog(true);
+    if (onSimulateNotFound) {
+      onSimulateNotFound();
+    } else {
+      setNewProductData({
+        brand: '',
+        description: '',
+        packSize: '',
+        price: ''
+      });
+      setShowNewProductDialog(true);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -232,28 +244,6 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
               </Button>
             </div>
 
-            {/* Simulation Buttons */}
-            <div className="border-t pt-4 mt-4">
-              <p className="text-sm font-medium mb-2 text-[#0A2645]">Testing Simulations:</p>
-              <div className="flex space-x-2">
-                <Button 
-                  onClick={simulateGlobalFound}
-                  size="sm"
-                  className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
-                >
-                  <Database className="h-3 w-3 mr-1" />
-                  Simulate Found in Global
-                </Button>
-                <Button 
-                  onClick={simulateNotFound}
-                  size="sm"
-                  className="flex-1 bg-orange-600 text-white hover:bg-orange-700"
-                >
-                  <Plus className="h-3 w-3 mr-1" />
-                  Simulate Not Found
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

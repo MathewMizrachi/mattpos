@@ -26,6 +26,8 @@ interface POSLayoutProps {
   onShowBarcodeScanner: () => void;
   onPrintReceipt?: () => void;
   onSendOrder?: () => void;
+  onSimulateGlobalFound?: () => void;
+  onSimulateNotFound?: () => void;
   tableInfo?: {
     selectedTable?: number;
     peopleCount?: number;
@@ -54,6 +56,8 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   onShowBarcodeScanner,
   onPrintReceipt = () => {},
   onSendOrder = () => {},
+  onSimulateGlobalFound,
+  onSimulateNotFound,
   tableInfo,
 }) => {
   const isMobile = useIsMobile();
@@ -67,6 +71,8 @@ const POSLayout: React.FC<POSLayoutProps> = ({
         onEndShift={onEndShift}
         onLogout={onLogout}
         options={[]}
+        onSimulateGlobalFound={onSimulateGlobalFound}
+        onSimulateNotFound={onSimulateNotFound}
       />
       
       {children}

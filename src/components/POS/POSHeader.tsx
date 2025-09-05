@@ -11,6 +11,8 @@ interface POSHeaderProps {
   onEndShift: () => void;
   onLogout: () => void;
   options: any[];
+  onSimulateGlobalFound?: () => void;
+  onSimulateNotFound?: () => void;
 }
 
 const POSHeader: React.FC<POSHeaderProps> = ({
@@ -19,6 +21,8 @@ const POSHeader: React.FC<POSHeaderProps> = ({
   onEndShift,
   onLogout,
   options,
+  onSimulateGlobalFound,
+  onSimulateNotFound,
 }) => {
   const navigate = useNavigate();
 
@@ -44,6 +48,27 @@ const POSHeader: React.FC<POSHeaderProps> = ({
       </div>
       
       <div className="flex items-center space-x-2">
+        {onSimulateGlobalFound && onSimulateNotFound && (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onSimulateGlobalFound}
+              className="text-green-400 border-green-400 hover:bg-green-400/20 text-xs"
+            >
+              Sim: Found
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onSimulateNotFound}
+              className="text-red-400 border-red-400 hover:bg-red-400/20 text-xs"
+            >
+              Sim: Not Found
+            </Button>
+          </>
+        )}
+        
         <Button
           variant="default"
           size="sm"
