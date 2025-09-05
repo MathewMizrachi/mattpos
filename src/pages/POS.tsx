@@ -337,39 +337,68 @@ const POS = () => {
 
       {/* Global Product Found Dialog */}
       <Dialog open={showGlobalFoundDialog} onOpenChange={setShowGlobalFoundDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center space-x-2">
-              <Database className="h-5 w-5 text-blue-600" />
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader className="pb-4">
+            <DialogTitle className="flex items-center gap-3 text-xl">
+              <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <Database className="h-5 w-5 text-primary" />
+              </div>
               <span>Product Found in Global Database</span>
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="bg-blue-50 rounded-lg p-4">
-              <h3 className="font-semibold text-lg">{mockGlobalProduct.brand} {mockGlobalProduct.description}</h3>
-              <p className="text-sm text-gray-600">Pack Size: {mockGlobalProduct.packSize}</p>
-              <p className="text-sm text-gray-600">Category: {mockGlobalProduct.category}</p>
-              <p className="text-sm text-gray-600">Barcode: {mockGlobalProduct.barcode}</p>
+          
+          <div className="space-y-6">
+            {/* Product Information Card */}
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-muted/50 px-4 py-3 border-b">
+                <h3 className="text-lg font-semibold text-foreground">
+                  {mockGlobalProduct.brand} {mockGlobalProduct.description}
+                </h3>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Pack Size</p>
+                    <p className="text-sm font-semibold">{mockGlobalProduct.packSize}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Category</p>
+                    <p className="text-sm font-semibold">{mockGlobalProduct.category}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Barcode</p>
+                  <p className="text-sm font-mono bg-muted px-2 py-1 rounded inline-block">{mockGlobalProduct.barcode}</p>
+                </div>
+              </div>
             </div>
             
-            <div>
-              <Label htmlFor="selling-price">Set Your Selling Price</Label>
-              <Input
-                id="selling-price"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={sellingPrice}
-                onChange={(e) => setSellingPrice(e.target.value)}
-                className="mt-1"
-              />
+            {/* Price Input */}
+            <div className="space-y-2">
+              <Label htmlFor="selling-price" className="text-sm font-medium">
+                Set Your Selling Price (R)
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">R</span>
+                <Input
+                  id="selling-price"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={sellingPrice}
+                  onChange={(e) => setSellingPrice(e.target.value)}
+                  className="pl-8 text-lg font-semibold"
+                />
+              </div>
             </div>
             
-            <div className="flex space-x-2">
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-2">
               <Button 
                 onClick={handleGlobalProductConfirm}
                 disabled={!sellingPrice}
                 className="flex-1"
+                size="lg"
               >
                 Add to Inventory
               </Button>
@@ -377,6 +406,7 @@ const POS = () => {
                 variant="outline" 
                 onClick={() => setShowGlobalFoundDialog(false)}
                 className="flex-1"
+                size="lg"
               >
                 Cancel
               </Button>
