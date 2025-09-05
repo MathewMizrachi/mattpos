@@ -417,71 +417,91 @@ const POS = () => {
 
       {/* New Product Creation Dialog */}
       <Dialog open={showNewProductDialog} onOpenChange={setShowNewProductDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center space-x-2">
-              <Plus className="h-5 w-5 text-orange-600" />
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader className="pb-4">
+            <DialogTitle className="flex items-center gap-3 text-xl">
+              <div className="h-10 w-10 bg-orange-500/10 rounded-full flex items-center justify-center">
+                <Plus className="h-5 w-5 text-orange-600" />
+              </div>
               <span>Create New Product</span>
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="bg-orange-50 rounded-lg p-3">
-              <p className="text-sm text-orange-800">
+          
+          <div className="space-y-6">
+            {/* Alert Message */}
+            <div className="border border-orange-200 bg-orange-50 rounded-lg p-4">
+              <p className="text-sm text-orange-800 font-medium">
                 Product not found anywhere. Please provide details to create a new product.
               </p>
             </div>
             
-            <div>
-              <Label htmlFor="brand">Brand</Label>
-              <Input
-                id="brand"
-                placeholder="e.g., Coca-Cola"
-                value={newProductData.brand}
-                onChange={(e) => setNewProductData({...newProductData, brand: e.target.value})}
-                className="mt-1"
-              />
+            {/* Form Fields */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="brand" className="text-sm font-medium">
+                  Brand
+                </Label>
+                <Input
+                  id="brand"
+                  placeholder="e.g., Coca-Cola"
+                  value={newProductData.brand}
+                  onChange={(e) => setNewProductData({...newProductData, brand: e.target.value})}
+                  className="text-base"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-sm font-medium">
+                  Description
+                </Label>
+                <Input
+                  id="description"
+                  placeholder="e.g., Classic Cola Drink"
+                  value={newProductData.description}
+                  onChange={(e) => setNewProductData({...newProductData, description: e.target.value})}
+                  className="text-base"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="pack-size" className="text-sm font-medium">
+                  Pack Size
+                </Label>
+                <Input
+                  id="pack-size"
+                  placeholder="e.g., 330ml Can"
+                  value={newProductData.packSize}
+                  onChange={(e) => setNewProductData({...newProductData, packSize: e.target.value})}
+                  className="text-base"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="price" className="text-sm font-medium">
+                  Selling Price (R)
+                </Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">R</span>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={newProductData.price}
+                    onChange={(e) => setNewProductData({...newProductData, price: e.target.value})}
+                    className="pl-8 text-base font-semibold"
+                  />
+                </div>
+              </div>
             </div>
             
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <Input
-                id="description"
-                placeholder="e.g., Classic Cola Drink"
-                value={newProductData.description}
-                onChange={(e) => setNewProductData({...newProductData, description: e.target.value})}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="pack-size">Pack Size</Label>
-              <Input
-                id="pack-size"
-                placeholder="e.g., 330ml Can"
-                value={newProductData.packSize}
-                onChange={(e) => setNewProductData({...newProductData, packSize: e.target.value})}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="price">Selling Price</Label>
-              <Input
-                id="price"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={newProductData.price}
-                onChange={(e) => setNewProductData({...newProductData, price: e.target.value})}
-                className="mt-1"
-              />
-            </div>
-            
-            <div className="flex space-x-2">
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-2">
               <Button 
                 onClick={handleNewProductConfirm}
                 disabled={!newProductData.brand || !newProductData.description || !newProductData.price}
                 className="flex-1"
+                size="lg"
               >
                 Create Product
               </Button>
@@ -489,6 +509,7 @@ const POS = () => {
                 variant="outline" 
                 onClick={() => setShowNewProductDialog(false)}
                 className="flex-1"
+                size="lg"
               >
                 Cancel
               </Button>
