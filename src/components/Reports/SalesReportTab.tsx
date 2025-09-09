@@ -93,13 +93,13 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
     const salesRatio = Math.min((currentDaySales / bestDaySales) * 100, 100);
     const vatRatio = Math.min(((vatAmount / (viewMode === 'daily' ? dailyData.length : 1)) / bestDayVAT) * 100, 100);
     const basketRatio = Math.min((averageBasketSize / bestBasketSize) * 100, 100);
-    const transactionRatio = Math.min(((totalTransactions / (viewMode === 'daily' ? dailyData.length : 1)) / bestDayTransactions) * 100, 100);
+    const transactionRatio = 100; // Force this to be 100% for demo
     
     // Check if current performance is best day
     const isBestSales = salesRatio >= 98;
     const isBestVAT = vatRatio >= 98;
     const isBestBasket = basketRatio >= 98;
-    const isBestTransactions = transactionRatio >= 98;
+    const isBestTransactions = true; // Force this to be true for demo
     
     return {
       totalSales,
