@@ -27,7 +27,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
   setToDate,
   salesData
 }) => {
-  const [viewMode, setViewMode] = React.useState<'hourly' | 'daily'>('hourly');
+  // Automatically determine view mode based on date range
+  const isSingleDay = fromDate.toDateString() === toDate.toDateString();
+  const viewMode = isSingleDay ? 'hourly' : 'daily';
 
   // Generate hourly cumulative sales data for the selected date (from date)
   const hourlyData = React.useMemo(() => {
@@ -120,27 +122,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       
       {/* Sales Chart */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium">
-            {viewMode === 'hourly' ? "Today's Hourly Sales" : "Daily Sales Trends"}
-          </h3>
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === 'hourly' ? 'default' : 'outline'}
-              onClick={() => setViewMode('hourly')}
-              size="sm"
-            >
-              Hourly
-            </Button>
-            <Button
-              variant={viewMode === 'daily' ? 'default' : 'outline'}
-              onClick={() => setViewMode('daily')}
-              size="sm"
-            >
-              Daily
-            </Button>
-          </div>
-        </div>
+        <h3 className="text-lg font-medium mb-4">
+          {viewMode === 'hourly' ? "Cumulative Sales Throughout the Day" : "Daily Sales Trends"}
+        </h3>
         <div className="bg-white p-4 rounded-lg border">
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={viewMode === 'hourly' ? hourlyData : dailyData}>
