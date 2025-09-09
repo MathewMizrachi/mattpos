@@ -95,6 +95,12 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
     const basketRatio = Math.min((averageBasketSize / bestBasketSize) * 100, 100);
     const transactionRatio = Math.min(((totalTransactions / (viewMode === 'daily' ? dailyData.length : 1)) / bestDayTransactions) * 100, 100);
     
+    // Check if current performance is best day
+    const isBestSales = salesRatio >= 98;
+    const isBestVAT = vatRatio >= 98;
+    const isBestBasket = basketRatio >= 98;
+    const isBestTransactions = transactionRatio >= 98;
+    
     return {
       totalSales,
       totalTransactions,
@@ -106,7 +112,11 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       salesRatio,
       vatRatio,
       basketRatio,
-      transactionRatio
+      transactionRatio,
+      isBestSales,
+      isBestVAT,
+      isBestBasket,
+      isBestTransactions
     };
   }, [hourlyData, dailyData, viewMode]);
 
@@ -190,7 +200,12 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       {/* Key Metrics Grid */}
       <h3 className="text-lg font-medium mb-4">Key Metrics</h3>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30">
+        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestSales ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
+          {selectedPeriodTotals.isBestSales && (
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+              🎉 BEST!
+            </div>
+          )}
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Turnover</div>
@@ -201,7 +216,12 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           </div>
         </div>
         
-        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.1s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestVAT ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.1s'}}>
+          {selectedPeriodTotals.isBestVAT && (
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+              🎉 BEST!
+            </div>
+          )}
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">VAT (15%)</div>
@@ -212,7 +232,12 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           </div>
         </div>
         
-        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.2s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestBasket ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.2s'}}>
+          {selectedPeriodTotals.isBestBasket && (
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+              🎉 BEST!
+            </div>
+          )}
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Avg. Basket Size</div>
@@ -223,7 +248,12 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           </div>
         </div>
         
-        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.3s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestTransactions ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.3s'}}>
+          {selectedPeriodTotals.isBestTransactions && (
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+              🎉 BEST!
+            </div>
+          )}
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">{selectedPeriodTotals.totalTransactions}</div>
             <div className="text-sm text-muted-foreground">Number of Sales</div>
