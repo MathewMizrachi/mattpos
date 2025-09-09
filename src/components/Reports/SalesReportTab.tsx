@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { format } from 'date-fns';
 import { formatCurrency } from '@/lib/utils';
 import { DateRangePicker } from './DateRangePicker';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface SalesReportTabProps {
   fromDate: Date;
@@ -25,6 +26,25 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
   setToDate,
   salesData
 }) => {
+  // Generate hourly sales data for today
+  const hourlyData = React.useMemo(() => {
+    const hours = [];
+    for (let i = 6; i <= 22; i++) {
+      const hour = i.toString().padStart(2, '0') + ':00';
+      const sales = Math.floor(Math.random() * 2000) + 300; // Random sales between R300-R2300
+      hours.push({
+        time: hour,
+        sales: sales,
+        displayTime: i <= 12 ? `${i}:00 AM` : `${i - 12}:00 PM`
+      });
+    }
+    return hours;
+  }, []);
+
+  const formatTooltipValue = (value: number) => {
+    return [`R${value.toFixed(2)}`, 'Sales'];
+  };
+
   return (
     <div>
       <DateRangePicker 
@@ -33,6 +53,44 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
         setFromDate={setFromDate} 
         setToDate={setToDate} 
       />
+      
+      {/* Hourly Sales Chart */}
+      <div className="mb-8">
+        <h3 className="text-lg font-medium mb-4">Today's Hourly Sales</h3>
+        <div className="bg-white p-4 rounded-lg border">
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={hourlyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="time" 
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis 
+                tick={{ fontSize: 12 }}
+                tickFormatter={(value) => `R${value}`}
+              />
+              <Tooltip 
+                formatter={formatTooltipValue}
+                labelStyle={{ color: '#374151' }}
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="sales" 
+                stroke="#3b82f6" 
+                strokeWidth={2}
+                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       <h3 className="text-lg font-medium mb-4">Daily Sales Overview</h3>
       <div className="overflow-x-auto">
         <Table>
