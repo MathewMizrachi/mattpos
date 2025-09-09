@@ -29,7 +29,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
 }) => {
   const [viewMode, setViewMode] = React.useState<'hourly' | 'daily'>('hourly');
 
-  // Generate hourly sales data for today
+  // Generate hourly sales data for the selected date (from date)
   const hourlyData = React.useMemo(() => {
     const hours = [];
     for (let i = 6; i <= 22; i++) {
@@ -38,39 +38,45 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       hours.push({
         time: hour,
         sales: sales,
-        displayTime: i <= 12 ? `${i}:00 AM` : `${i - 12}:00 PM`
+        displayTime: i <= 12 ? `${i}:00 AM` : `${i - 12}:00 PM`,
+        date: format(fromDate, 'yyyy-MM-dd')
       });
     }
     return hours;
-  }, []);
+  }, [fromDate]);
 
-  // Generate daily sales data for the week
+  // Generate daily sales data for the selected date range
   const dailyData = React.useMemo(() => {
     const days = [];
-    const today = new Date();
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
+    const startDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    for (let i = 0; i <= diffDays; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
       const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
       const sales = Math.floor(Math.random() * 15000) + 5000; // Random sales between R5000-R20000
       days.push({
-        time: dayName,
+        time: `${dayName} ${format(date, 'MM/dd')}`,
         sales: sales,
-        date: date.toLocaleDateString()
+        date: format(date, 'yyyy-MM-dd')
       });
     }
     return days;
-  }, []);
+  }, [fromDate, toDate]);
 
-  // Calculate today's totals
-  const todaysTotals = React.useMemo(() => {
-    const totalSales = hourlyData.reduce((sum, hour) => sum + hour.sales, 0);
+  // Calculate totals based on current view mode and selected data
+  const selectedPeriodTotals = React.useMemo(() => {
+    const currentData = viewMode === 'hourly' ? hourlyData : dailyData;
+    const totalSales = currentData.reduce((sum, item) => sum + item.sales, 0);
     const totalTransactions = Math.floor(totalSales / 45); // Average transaction ~R45
     return {
       totalSales,
       totalTransactions
     };
-  }, [hourlyData]);
+  }, [hourlyData, dailyData, viewMode]);
 
   const formatTooltipValue = (value: number) => {
     return [`R${value.toFixed(2)}`, 'Sales'];
@@ -88,14 +94,19 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       {/* Today's Total Sales Summary */}
       <div className="mb-6">
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 rounded-lg text-white shadow-lg">
-          <h3 className="text-xl font-bold mb-4">Today's Sales Summary</h3>
+          <h3 className="text-xl font-bold mb-4">
+            {viewMode === 'hourly' 
+              ? `Sales for ${format(fromDate, 'PPP')}` 
+              : `Sales from ${format(fromDate, 'MMM dd')} to ${format(toDate, 'MMM dd')}`
+            }
+          </h3>
           <div className="grid grid-cols-2 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold">R{todaysTotals.totalSales.toFixed(2)}</div>
+              <div className="text-3xl font-bold">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
               <div className="text-blue-100 text-sm">Total Sales</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold">{todaysTotals.totalTransactions}</div>
+              <div className="text-3xl font-bold">{selectedPeriodTotals.totalTransactions}</div>
               <div className="text-blue-100 text-sm">Transactions</div>
             </div>
           </div>
