@@ -29,15 +29,20 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
 }) => {
   const [viewMode, setViewMode] = React.useState<'hourly' | 'daily'>('hourly');
 
-  // Generate hourly sales data for the selected date (from date)
+  // Generate hourly cumulative sales data for the selected date (from date)
   const hourlyData = React.useMemo(() => {
     const hours = [];
-    for (let i = 6; i <= 22; i++) {
+    let cumulativeSales = 0;
+    
+    for (let i = 8; i <= 22; i++) { // Start from 8 AM to 10 PM
       const hour = i.toString().padStart(2, '0') + ':00';
-      const sales = Math.floor(Math.random() * 2000) + 300; // Random sales between R300-R2300
+      // Generate hourly increment (random between R500-R3000)
+      const hourlySales = i === 8 ? 0 : Math.floor(Math.random() * 2500) + 500;
+      cumulativeSales += hourlySales;
+      
       hours.push({
         time: hour,
-        sales: sales,
+        sales: cumulativeSales,
         displayTime: i <= 12 ? `${i}:00 AM` : `${i - 12}:00 PM`,
         date: format(fromDate, 'yyyy-MM-dd')
       });
