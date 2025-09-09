@@ -157,10 +157,10 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
               <Line 
                 type="monotone" 
                 dataKey="sales" 
-                stroke="#0A2645" 
-                strokeWidth={2}
-                dot={{ fill: '#0A2645', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: '#0A2645', strokeWidth: 2, fill: '#FAA225' }}
+                stroke="#FAA225" 
+                strokeWidth={3}
+                dot={{ fill: '#FAA225', strokeWidth: 2, r: 5 }}
+                activeDot={{ r: 8, stroke: '#FAA225', strokeWidth: 2, fill: '#0A2645' }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -170,31 +170,43 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       {/* Key Metrics Grid */}
       <h3 className="text-lg font-medium mb-4">Key Metrics</h3>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-card p-6 rounded-lg border shadow-sm">
+        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30">
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground mt-1">Turnover</div>
+            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground">Turnover</div>
+            <div className="w-full h-1 bg-secondary/20 rounded-full mt-3">
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-4/5 animate-pulse"></div>
+            </div>
           </div>
         </div>
         
-        <div className="bg-card p-6 rounded-lg border shadow-sm">
+        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.1s'}}>
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground mt-1">VAT (15%)</div>
+            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground">VAT (15%)</div>
+            <div className="w-full h-1 bg-secondary/20 rounded-full mt-3">
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-3/5 animate-pulse"></div>
+            </div>
           </div>
         </div>
         
-        <div className="bg-card p-6 rounded-lg border shadow-sm">
+        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.2s'}}>
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground mt-1">Avg. Basket Size</div>
+            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground">Avg. Basket Size</div>
+            <div className="w-full h-1 bg-secondary/20 rounded-full mt-3">
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-2/3 animate-pulse"></div>
+            </div>
           </div>
         </div>
         
-        <div className="bg-card p-6 rounded-lg border shadow-sm">
+        <div className="bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30" style={{animationDelay: '0.3s'}}>
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground">{selectedPeriodTotals.totalTransactions}</div>
-            <div className="text-sm text-muted-foreground mt-1">Number of Sales</div>
+            <div className="text-2xl font-bold text-card-foreground mb-1">{selectedPeriodTotals.totalTransactions}</div>
+            <div className="text-sm text-muted-foreground">Number of Sales</div>
+            <div className="w-full h-1 bg-secondary/20 rounded-full mt-3">
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-5/6 animate-pulse"></div>
+            </div>
           </div>
         </div>
       </div>
