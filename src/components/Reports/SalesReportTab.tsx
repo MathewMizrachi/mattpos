@@ -41,6 +41,16 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
     return hours;
   }, []);
 
+  // Calculate today's totals
+  const todaysTotals = React.useMemo(() => {
+    const totalSales = hourlyData.reduce((sum, hour) => sum + hour.sales, 0);
+    const totalTransactions = Math.floor(totalSales / 45); // Average transaction ~R45
+    return {
+      totalSales,
+      totalTransactions
+    };
+  }, [hourlyData]);
+
   const formatTooltipValue = (value: number) => {
     return [`R${value.toFixed(2)}`, 'Sales'];
   };
@@ -53,6 +63,23 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
         setFromDate={setFromDate} 
         setToDate={setToDate} 
       />
+      
+      {/* Today's Total Sales Summary */}
+      <div className="mb-6">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 rounded-lg text-white shadow-lg">
+          <h3 className="text-xl font-bold mb-4">Today's Sales Summary</h3>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold">R{todaysTotals.totalSales.toFixed(2)}</div>
+              <div className="text-blue-100 text-sm">Total Sales</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold">{todaysTotals.totalTransactions}</div>
+              <div className="text-blue-100 text-sm">Transactions</div>
+            </div>
+          </div>
+        </div>
+      </div>
       
       {/* Hourly Sales Chart */}
       <div className="mb-8">
