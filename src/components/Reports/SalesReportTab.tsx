@@ -105,7 +105,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       
       {/* Today's Total Sales Summary */}
       <div className="mb-6">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 rounded-lg text-white shadow-lg">
+        <div className="bg-gradient-to-r from-primary to-primary/80 p-6 rounded-lg text-primary-foreground shadow-lg">
           <h3 className="text-xl font-bold mb-4">
             {viewMode === 'hourly' 
               ? `Sales for ${format(fromDate, 'PPP')}` 
@@ -115,11 +115,11 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="grid grid-cols-2 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
-              <div className="text-blue-100 text-sm">Total Sales</div>
+              <div className="text-primary-foreground/80 text-sm">Total Sales</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold">{selectedPeriodTotals.totalTransactions}</div>
-              <div className="text-blue-100 text-sm">Transactions</div>
+              <div className="text-primary-foreground/80 text-sm">Transactions</div>
             </div>
           </div>
         </div>
@@ -130,34 +130,37 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
         <h3 className="text-lg font-medium mb-4">
           {viewMode === 'hourly' ? "Cumulative Sales Throughout the Day" : "Daily Sales Trends"}
         </h3>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-card p-4 rounded-lg border shadow-sm">
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={viewMode === 'hourly' ? hourlyData : dailyData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 dataKey="time" 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                axisLine={{ stroke: 'hsl(var(--border))' }}
               />
               <YAxis 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
                 tickFormatter={(value) => `R${value}`}
+                axisLine={{ stroke: 'hsl(var(--border))' }}
               />
               <Tooltip 
                 formatter={formatTooltipValue}
-                labelStyle={{ color: '#374151' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
                 contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px'
+                  backgroundColor: 'hsl(var(--card))', 
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '6px',
+                  color: 'hsl(var(--card-foreground))'
                 }}
               />
               <Line 
                 type="monotone" 
                 dataKey="sales" 
-                stroke="#3b82f6" 
+                stroke="#0A2645" 
                 strokeWidth={2}
-                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
+                dot={{ fill: '#0A2645', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#0A2645', strokeWidth: 2, fill: '#FAA225' }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -167,31 +170,31 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       {/* Key Metrics Grid */}
       <h3 className="text-lg font-medium mb-4">Key Metrics</h3>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-6 rounded-lg border shadow-sm">
+        <div className="bg-card p-6 rounded-lg border shadow-sm">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
-            <div className="text-sm text-gray-500 mt-1">Turnover</div>
+            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground mt-1">Turnover</div>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border shadow-sm">
+        <div className="bg-card p-6 rounded-lg border shadow-sm">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
-            <div className="text-sm text-gray-500 mt-1">VAT (15%)</div>
+            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground mt-1">VAT (15%)</div>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border shadow-sm">
+        <div className="bg-card p-6 rounded-lg border shadow-sm">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
-            <div className="text-sm text-gray-500 mt-1">Avg. Basket Size</div>
+            <div className="text-2xl font-bold text-card-foreground">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground mt-1">Avg. Basket Size</div>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border shadow-sm">
+        <div className="bg-card p-6 rounded-lg border shadow-sm">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{selectedPeriodTotals.totalTransactions}</div>
-            <div className="text-sm text-gray-500 mt-1">Number of Sales</div>
+            <div className="text-2xl font-bold text-card-foreground">{selectedPeriodTotals.totalTransactions}</div>
+            <div className="text-sm text-muted-foreground mt-1">Number of Sales</div>
           </div>
         </div>
       </div>
