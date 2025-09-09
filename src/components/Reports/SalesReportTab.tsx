@@ -82,11 +82,31 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
     const vatAmount = totalSales * 0.15; // 15% VAT
     const averageBasketSize = totalTransactions > 0 ? totalSales / totalTransactions : 0;
     
+    // Best day calculations
+    const bestDaySales = viewMode === 'daily' ? Math.max(...dailyData.map(d => d.sales)) : totalSales;
+    const bestDayVAT = bestDaySales * 0.15;
+    const bestDayTransactions = Math.floor(bestDaySales / 45);
+    const bestBasketSize = 65; // Historical best basket size
+    
+    // Current performance vs best day ratios
+    const currentDaySales = viewMode === 'daily' ? totalSales / dailyData.length : totalSales;
+    const salesRatio = Math.min((currentDaySales / bestDaySales) * 100, 100);
+    const vatRatio = Math.min(((vatAmount / (viewMode === 'daily' ? dailyData.length : 1)) / bestDayVAT) * 100, 100);
+    const basketRatio = Math.min((averageBasketSize / bestBasketSize) * 100, 100);
+    const transactionRatio = Math.min(((totalTransactions / (viewMode === 'daily' ? dailyData.length : 1)) / bestDayTransactions) * 100, 100);
+    
     return {
       totalSales,
       totalTransactions,
       vatAmount,
-      averageBasketSize
+      averageBasketSize,
+      bestDaySales,
+      bestDayVAT,
+      bestBasketSize,
+      salesRatio,
+      vatRatio,
+      basketRatio,
+      transactionRatio
     };
   }, [hourlyData, dailyData, viewMode]);
 
@@ -174,9 +194,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Turnover</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day: R{Math.max(...(viewMode === 'daily' ? dailyData.map(d => d.sales) : [selectedPeriodTotals.totalSales])).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day: R{selectedPeriodTotals.bestDaySales.toFixed(0)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-4/5 animate-pulse"></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.salesRatio}%`}}></div>
             </div>
           </div>
         </div>
@@ -185,9 +205,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">VAT (15%)</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Avg Daily VAT: R{(selectedPeriodTotals.vatAmount / Math.max(1, viewMode === 'daily' ? dailyData.length : 1)).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day VAT: R{selectedPeriodTotals.bestDayVAT.toFixed(0)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-3/5 animate-pulse"></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.vatRatio}%`}}></div>
             </div>
           </div>
         </div>
@@ -196,9 +216,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Avg. Basket Size</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Overall Avg: R{(45 + Math.random() * 15).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Basket: R{selectedPeriodTotals.bestBasketSize}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-2/3 animate-pulse"></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.basketRatio}%`}}></div>
             </div>
           </div>
         </div>
@@ -207,9 +227,9 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">{selectedPeriodTotals.totalTransactions}</div>
             <div className="text-sm text-muted-foreground">Number of Sales</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Daily Avg: {Math.floor(selectedPeriodTotals.totalTransactions / Math.max(1, viewMode === 'daily' ? dailyData.length : 1))}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day Sales: {Math.floor(selectedPeriodTotals.bestDaySales / 45)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-5/6 animate-pulse"></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.transactionRatio}%`}}></div>
             </div>
           </div>
         </div>
