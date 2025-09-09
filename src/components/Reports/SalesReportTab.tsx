@@ -74,14 +74,19 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
     return days;
   }, [fromDate, toDate]);
 
-  // Calculate totals based on current view mode and selected data
+  // Calculate totals and metrics based on current view mode and selected data
   const selectedPeriodTotals = React.useMemo(() => {
     const currentData = viewMode === 'hourly' ? hourlyData : dailyData;
     const totalSales = currentData.reduce((sum, item) => sum + item.sales, 0);
     const totalTransactions = Math.floor(totalSales / 45); // Average transaction ~R45
+    const vatAmount = totalSales * 0.15; // 15% VAT
+    const averageBasketSize = totalTransactions > 0 ? totalSales / totalTransactions : 0;
+    
     return {
       totalSales,
-      totalTransactions
+      totalTransactions,
+      vatAmount,
+      averageBasketSize
     };
   }, [hourlyData, dailyData, viewMode]);
 
@@ -159,36 +164,36 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
         </div>
       </div>
 
-      <h3 className="text-lg font-medium mb-4">Daily Sales Overview</h3>
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Revenue</TableHead>
-              <TableHead>Sales</TableHead>
-              <TableHead>Avg. Sale</TableHead>
-              <TableHead>Gross Profit</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {salesData.map((row) => (
-              <TableRow key={row.date}>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{formatCurrency(row.total)}</TableCell>
-                <TableCell>{row.transactions}</TableCell>
-                <TableCell>{formatCurrency(row.avgSale)}</TableCell>
-                <TableCell>{formatCurrency(row.total * 0.25)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="mt-4 bg-gray-50 p-4 rounded-md">
-        <h4 className="font-medium mb-2">Summary</h4>
-        <p>Total Revenue for Period: <strong>{formatCurrency(salesData.reduce((sum, item) => sum + item.total, 0))}</strong></p>
-        <p>Total Sales: <strong>{salesData.reduce((sum, item) => sum + item.transactions, 0)}</strong></p>
-        <p>Total Gross Profit: <strong>{formatCurrency(salesData.reduce((sum, item) => sum + item.total, 0) * 0.25)}</strong></p>
+      {/* Key Metrics Grid */}
+      <h3 className="text-lg font-medium mb-4">Key Metrics</h3>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg border shadow-sm">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
+            <div className="text-sm text-gray-500 mt-1">Turnover</div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg border shadow-sm">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
+            <div className="text-sm text-gray-500 mt-1">VAT (15%)</div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg border shadow-sm">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
+            <div className="text-sm text-gray-500 mt-1">Avg. Basket Size</div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg border shadow-sm">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900">{selectedPeriodTotals.totalTransactions}</div>
+            <div className="text-sm text-gray-500 mt-1">Number of Sales</div>
+          </div>
+        </div>
       </div>
     </div>
   );
