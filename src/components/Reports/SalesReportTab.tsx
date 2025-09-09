@@ -174,7 +174,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Turnover</div>
-            <div className="text-xs text-muted-foreground/70 mt-1 mb-2">Best Day: R{Math.max(...(viewMode === 'daily' ? dailyData.map(d => d.sales) : [selectedPeriodTotals.totalSales])).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day: R{Math.max(...(viewMode === 'daily' ? dailyData.map(d => d.sales) : [selectedPeriodTotals.totalSales])).toFixed(0)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
               <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-4/5 animate-pulse"></div>
             </div>
@@ -185,7 +185,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">VAT (15%)</div>
-            <div className="text-xs text-muted-foreground/70 mt-1 mb-2">Avg Daily VAT: R{(selectedPeriodTotals.vatAmount / Math.max(1, viewMode === 'daily' ? dailyData.length : 1)).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Avg Daily VAT: R{(selectedPeriodTotals.vatAmount / Math.max(1, viewMode === 'daily' ? dailyData.length : 1)).toFixed(0)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
               <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-3/5 animate-pulse"></div>
             </div>
@@ -196,7 +196,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground">Avg. Basket Size</div>
-            <div className="text-xs text-muted-foreground/70 mt-1 mb-2">Overall Avg: R{(45 + Math.random() * 15).toFixed(0)}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Overall Avg: R{(45 + Math.random() * 15).toFixed(0)}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
               <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-2/3 animate-pulse"></div>
             </div>
@@ -207,7 +207,7 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
           <div className="text-center">
             <div className="text-2xl font-bold text-card-foreground mb-1">{selectedPeriodTotals.totalTransactions}</div>
             <div className="text-sm text-muted-foreground">Number of Sales</div>
-            <div className="text-xs text-muted-foreground/70 mt-1 mb-2">Daily Avg: {Math.floor(selectedPeriodTotals.totalTransactions / Math.max(1, viewMode === 'daily' ? dailyData.length : 1))}</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">Daily Avg: {Math.floor(selectedPeriodTotals.totalTransactions / Math.max(1, viewMode === 'daily' ? dailyData.length : 1))}</div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
               <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full w-5/6 animate-pulse"></div>
             </div>
