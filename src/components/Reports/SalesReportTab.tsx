@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { formatCurrency } from '@/lib/utils';
 import { DateRangePicker } from './DateRangePicker';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Button } from "@/components/ui/button";
 
 interface SalesReportTabProps {
   fromDate: Date;
@@ -26,6 +27,8 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
   setToDate,
   salesData
 }) => {
+  const [viewMode, setViewMode] = React.useState<'hourly' | 'daily'>('hourly');
+
   // Generate hourly sales data for today
   const hourlyData = React.useMemo(() => {
     const hours = [];
@@ -39,6 +42,24 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       });
     }
     return hours;
+  }, []);
+
+  // Generate daily sales data for the week
+  const dailyData = React.useMemo(() => {
+    const days = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+      const sales = Math.floor(Math.random() * 15000) + 5000; // Random sales between R5000-R20000
+      days.push({
+        time: dayName,
+        sales: sales,
+        date: date.toLocaleDateString()
+      });
+    }
+    return days;
   }, []);
 
   // Calculate today's totals
@@ -81,12 +102,32 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
         </div>
       </div>
       
-      {/* Hourly Sales Chart */}
+      {/* Sales Chart */}
       <div className="mb-8">
-        <h3 className="text-lg font-medium mb-4">Today's Hourly Sales</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium">
+            {viewMode === 'hourly' ? "Today's Hourly Sales" : "Daily Sales Trends"}
+          </h3>
+          <div className="flex gap-2">
+            <Button
+              variant={viewMode === 'hourly' ? 'default' : 'outline'}
+              onClick={() => setViewMode('hourly')}
+              size="sm"
+            >
+              Hourly
+            </Button>
+            <Button
+              variant={viewMode === 'daily' ? 'default' : 'outline'}
+              onClick={() => setViewMode('daily')}
+              size="sm"
+            >
+              Daily
+            </Button>
+          </div>
+        </div>
         <div className="bg-white p-4 rounded-lg border">
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={hourlyData}>
+            <LineChart data={viewMode === 'hourly' ? hourlyData : dailyData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="time" 
