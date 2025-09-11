@@ -125,54 +125,62 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
   };
 
   return (
-    <div>
-      <DateRangePicker 
-        fromDate={fromDate} 
-        toDate={toDate} 
-        setFromDate={setFromDate} 
-        setToDate={setToDate} 
-      />
+    <div className="p-2 sm:p-4 max-w-full overflow-hidden">
+      <div className="mb-4">
+        <DateRangePicker 
+          fromDate={fromDate} 
+          toDate={toDate} 
+          setFromDate={setFromDate} 
+          setToDate={setToDate} 
+        />
+      </div>
       
       {/* Today's Total Sales Summary */}
-      <div className="mb-6">
-        <div className="bg-gradient-to-r from-primary to-primary/80 p-6 rounded-lg text-primary-foreground shadow-lg">
-          <h3 className="text-xl font-bold mb-4">
+      <div className="mb-4 sm:mb-6">
+        <div className="bg-gradient-to-r from-primary to-primary/80 p-3 sm:p-6 rounded-lg text-primary-foreground shadow-lg">
+          <h3 className="text-sm sm:text-lg lg:text-xl font-bold mb-2 sm:mb-4 leading-tight">
             {viewMode === 'hourly' 
-              ? `Sales for ${format(fromDate, 'PPP')}` 
+              ? `Sales for ${format(fromDate, 'MMM dd')}`
               : `Sales from ${format(fromDate, 'MMM dd')} to ${format(toDate, 'MMM dd')}`
             }
           </h3>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
-              <div className="text-primary-foreground/80 text-sm">Total Sales</div>
+              <div className="text-lg sm:text-2xl lg:text-3xl font-bold break-all">
+                {formatCurrency(selectedPeriodTotals.totalSales)}
+              </div>
+              <div className="text-primary-foreground/80 text-xs sm:text-sm">Total Sales</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold">{selectedPeriodTotals.totalTransactions}</div>
-              <div className="text-primary-foreground/80 text-sm">Transactions</div>
+              <div className="text-lg sm:text-2xl lg:text-3xl font-bold">
+                {selectedPeriodTotals.totalTransactions}
+              </div>
+              <div className="text-primary-foreground/80 text-xs sm:text-sm">Transactions</div>
             </div>
           </div>
         </div>
       </div>
       
       {/* Sales Chart */}
-      <div className="mb-8">
-        <h3 className="text-lg font-medium mb-4">
-          {viewMode === 'hourly' ? "Cumulative Sales Throughout the Day" : "Daily Sales Trends"}
+      <div className="mb-4 sm:mb-8">
+        <h3 className="text-sm sm:text-base lg:text-lg font-medium mb-2 sm:mb-4">
+          {viewMode === 'hourly' ? "Daily Sales Trends" : "Daily Sales Trends"}
         </h3>
-        <div className="bg-card p-4 rounded-lg border shadow-sm">
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-card p-2 sm:p-4 rounded-lg border shadow-sm overflow-hidden">
+          <ResponsiveContainer width="100%" height={250}>
             <LineChart data={viewMode === 'hourly' ? hourlyData : dailyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 dataKey="time" 
-                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
                 axisLine={{ stroke: 'hsl(var(--border))' }}
+                interval="preserveStartEnd"
               />
               <YAxis 
-                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-                tickFormatter={(value) => `R${value}`}
+                tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                tickFormatter={(value) => `R${Math.round(value/1000)}k`}
                 axisLine={{ stroke: 'hsl(var(--border))' }}
+                width={50}
               />
               <Tooltip 
                 formatter={formatTooltipValue}
@@ -198,68 +206,84 @@ export const SalesReportTab: React.FC<SalesReportTabProps> = ({
       </div>
 
       {/* Key Metrics Grid */}
-      <h3 className="text-lg font-medium mb-4">Key Metrics</h3>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestSales ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
+      <h3 className="text-sm sm:text-base lg:text-lg font-medium mb-2 sm:mb-4">Key Metrics</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+        <div className={`bg-gradient-to-br from-card to-card/80 p-3 sm:p-6 rounded-lg border shadow-lg transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestSales ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
           {selectedPeriodTotals.isBestSales && (
-            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold">
               🎉 BEST!
             </div>
           )}
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.totalSales.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground">Turnover</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day: R{selectedPeriodTotals.bestDaySales.toFixed(0)}</div>
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-card-foreground mb-1 break-all">
+              {formatCurrency(selectedPeriodTotals.totalSales)}
+            </div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Turnover</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">
+              Best Day: {formatCurrency(selectedPeriodTotals.bestDaySales)}
+            </div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.salesRatio}%`}}></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full transition-all duration-1000" style={{width: `${selectedPeriodTotals.salesRatio}%`}}></div>
             </div>
           </div>
         </div>
         
-        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestVAT ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.1s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-3 sm:p-6 rounded-lg border shadow-lg transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestVAT ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
           {selectedPeriodTotals.isBestVAT && (
-            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold">
               🎉 BEST!
             </div>
           )}
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.vatAmount.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground">VAT (15%)</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day VAT: R{selectedPeriodTotals.bestDayVAT.toFixed(0)}</div>
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-card-foreground mb-1 break-all">
+              {formatCurrency(selectedPeriodTotals.vatAmount)}
+            </div>
+            <div className="text-xs sm:text-sm text-muted-foreground">VAT (15%)</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">
+              Best Day VAT: {formatCurrency(selectedPeriodTotals.bestDayVAT)}
+            </div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.vatRatio}%`}}></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full transition-all duration-1000" style={{width: `${selectedPeriodTotals.vatRatio}%`}}></div>
             </div>
           </div>
         </div>
         
-        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestBasket ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.2s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-3 sm:p-6 rounded-lg border shadow-lg transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestBasket ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
           {selectedPeriodTotals.isBestBasket && (
-            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold">
               🎉 BEST!
             </div>
           )}
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground mb-1">R{selectedPeriodTotals.averageBasketSize.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground">Avg. Basket Size</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Basket: R{selectedPeriodTotals.bestBasketSize}</div>
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-card-foreground mb-1 break-all">
+              {formatCurrency(selectedPeriodTotals.averageBasketSize)}
+            </div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Avg. Basket Size</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">
+              Best Basket: {formatCurrency(selectedPeriodTotals.bestBasketSize)}
+            </div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.basketRatio}%`}}></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full transition-all duration-1000" style={{width: `${selectedPeriodTotals.basketRatio}%`}}></div>
             </div>
           </div>
         </div>
         
-        <div className={`bg-gradient-to-br from-card to-card/80 p-6 rounded-lg border shadow-lg hover-scale animate-fade-in transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestTransactions ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`} style={{animationDelay: '0.3s'}}>
+        <div className={`bg-gradient-to-br from-card to-card/80 p-3 sm:p-6 rounded-lg border shadow-lg transition-all duration-300 hover:shadow-xl hover:border-secondary/30 ${selectedPeriodTotals.isBestTransactions ? 'ring-2 ring-secondary border-secondary bg-gradient-to-br from-secondary/10 to-secondary/5' : ''} relative`}>
           {selectedPeriodTotals.isBestTransactions && (
-            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+            <div className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-bold">
               🎉 BEST!
             </div>
           )}
           <div className="text-center">
-            <div className="text-2xl font-bold text-card-foreground mb-1">{selectedPeriodTotals.totalTransactions}</div>
-            <div className="text-sm text-muted-foreground">Number of Sales</div>
-            <div className="text-xs text-primary font-medium mt-1 mb-2">Best Day Sales: {Math.floor(selectedPeriodTotals.bestDaySales / 45)}</div>
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-card-foreground mb-1">
+              {selectedPeriodTotals.totalTransactions}
+            </div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Number of Sales</div>
+            <div className="text-xs text-primary font-medium mt-1 mb-2">
+              Best Day Sales: {Math.floor(selectedPeriodTotals.bestDaySales / 45)}
+            </div>
             <div className="w-full h-1 bg-secondary/20 rounded-full">
-              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full animate-pulse transition-all duration-1000" style={{width: `${selectedPeriodTotals.transactionRatio}%`}}></div>
+              <div className="h-full bg-gradient-to-r from-secondary to-secondary/70 rounded-full transition-all duration-1000" style={{width: `${selectedPeriodTotals.transactionRatio}%`}}></div>
             </div>
           </div>
         </div>
