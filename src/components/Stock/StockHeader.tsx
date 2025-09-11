@@ -59,52 +59,42 @@ const StockHeader: React.FC<StockHeaderProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2 sm:space-x-3 flex-wrap sm:flex-nowrap gap-2">
+          <div className="flex space-x-3">
             {isMobile ? (
-              // Mobile view - show key buttons plus dropdown
-              <>
-                <Button 
-                  onClick={onOpenAddProduct}
-                  size="sm"
-                  className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
-                >
-                  <PlusIcon className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-                <Button 
-                  onClick={onOpenImportProduct} 
-                  size="sm"
-                  className="bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
-                >
-                  <ImportIcon className="h-4 w-4 mr-1" />
-                  Import
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="bg-white/95 text-[#0A2645] border-[#0A2645] shadow-lg hover:shadow-xl transition-all duration-200">
-                      <MoreVerticalIcon className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-sm border-white/20 shadow-2xl">
-                    <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")} className="hover:bg-[#FAA225]/10">
-                      <PackageIcon className="h-4 w-4 mr-2" />
-                      Global Stock Master
+              // Mobile view - show dropdown menu with enhanced styling
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="bg-gradient-to-r from-white to-gray-50 text-[#0A2645] border-[#0A2645] shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+                    <MoreVerticalIcon className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-sm border-white/20 shadow-2xl">
+                  <DropdownMenuItem onClick={() => console.log("Global Stock Master clicked")} className="hover:bg-[#FAA225]/10">
+                    <PackageIcon className="h-4 w-4 mr-2" />
+                    Global Stock Master
+                  </DropdownMenuItem>
+                  {showPurchaseOrder && (
+                    <DropdownMenuItem onClick={handlePurchaseOrder} className="hover:bg-[#FAA225]/10">
+                      <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                      Purchase Order
                     </DropdownMenuItem>
-                    {showPurchaseOrder && (
-                      <DropdownMenuItem onClick={handlePurchaseOrder} className="hover:bg-[#FAA225]/10">
-                        <ShoppingCartIcon className="h-4 w-4 mr-2" />
-                        Purchase Order
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+                  )}
+                  <DropdownMenuItem onClick={onOpenImportProduct} className="hover:bg-[#FAA225]/10">
+                    <ImportIcon className="h-4 w-4 mr-2" />
+                    Import Products
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onOpenAddProduct} className="hover:bg-[#FAA225]/10">
+                    <PlusIcon className="h-4 w-4 mr-2" />
+                    Add Product
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
-              // Desktop view - show all buttons
+              // Desktop view - show all buttons with enhanced styling
               <>
                 <Button 
                   variant="outline" 
-                  className="bg-white/95 text-[#0A2645] border-[#0A2645] shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                  className="bg-gradient-to-r from-white to-gray-50 text-[#0A2645] border-[#0A2645] shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                   onClick={() => console.log("Global Stock Master clicked")}
                 >
                   <PackageIcon className="h-4 w-4 mr-2" />
@@ -121,14 +111,14 @@ const StockHeader: React.FC<StockHeaderProps> = ({
                 )}
                 <Button 
                   onClick={onOpenImportProduct} 
-                  className="bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
+                  className="bg-gradient-to-r from-[#FAA225] to-[#e8940f] hover:from-[#e8940f] hover:to-[#FAA225] text-white font-semibold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                 >
                   <ImportIcon className="h-4 w-4 mr-2" />
                   Import Products
                 </Button>
                 <Button 
                   onClick={onOpenAddProduct}
-                  className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
+                  className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] hover:from-[#1a3a5f] hover:to-[#0A2645] text-[#FAA225] font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                 >
                   <PlusIcon className="h-4 w-4 mr-2" />
                   Add Product

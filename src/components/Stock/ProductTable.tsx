@@ -127,14 +127,14 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
         <Table>
           <TableHeader>
             <TableRow className="bg-gradient-to-r from-primary to-primary/80 border-none hover:bg-gradient-to-r hover:from-primary/80 hover:to-primary">
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">BarCode</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">StockCode</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">LinkCode</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg px-1 sm:px-2 md:px-3 lg:px-4">Description</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">Units</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">AvgCostIncl</TableHead>
-              <TableHead className="text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">Selling</TableHead>
-              <TableHead className="text-right text-secondary font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">Actions</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">BarCode</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">StockCode</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">LinkCode</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm">Description</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">Units</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">AvgCostIncl</TableHead>
+              <TableHead className="text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">Selling</TableHead>
+              <TableHead className="text-right text-secondary font-bold text-xs sm:text-sm whitespace-nowrap">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -145,20 +145,20 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                   index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
                 }`}
               >
-                <TableCell className="font-mono text-[10px] sm:text-xs md:text-sm lg:text-base text-primary group-hover:text-white whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">
+                <TableCell className="font-mono text-xs text-primary group-hover:text-white whitespace-nowrap">
                   {product.barcode || 'N/A'}
                 </TableCell>
-                <TableCell className="text-primary font-medium group-hover:text-white text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">
+                <TableCell className="text-primary font-medium group-hover:text-white text-xs sm:text-sm whitespace-nowrap">
                   {product.stockCode || 'N/A'}
                 </TableCell>
-                <TableCell className="text-primary group-hover:text-white text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">
+                <TableCell className="text-primary group-hover:text-white text-xs sm:text-sm whitespace-nowrap">
                   {product.linkCode || 'N/A'}
                 </TableCell>
-                <TableCell className="font-semibold max-w-[80px] sm:max-w-[120px] md:max-w-[180px] lg:max-w-xs xl:max-w-sm truncate text-primary group-hover:text-white text-[10px] sm:text-xs md:text-sm lg:text-base px-1 sm:px-2 md:px-3 lg:px-4" title={product.name}>
+                <TableCell className="font-semibold max-w-[150px] sm:max-w-xs truncate text-primary group-hover:text-white text-xs sm:text-sm" title={product.name}>
                   {product.name}
                 </TableCell>
-                <TableCell className="text-primary group-hover:text-white px-1 sm:px-2 md:px-3 lg:px-4">
-                  <span className={`px-1 sm:px-1.5 md:px-2 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-xs md:text-sm font-bold ${
+                <TableCell className="text-primary group-hover:text-white">
+                  <span className={`px-1.5 sm:px-2 py-1 rounded-full text-xs font-bold ${
                     (product.stock ?? 0) > 10 
                       ? 'bg-green-100 text-green-800 group-hover:bg-green-200 group-hover:text-green-900' 
                       : (product.stock ?? 0) > 0 
@@ -168,29 +168,29 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                     {product.stock !== undefined ? product.stock : 'N/A'}
                   </span>
                 </TableCell>
-                <TableCell className="text-primary font-semibold group-hover:text-white text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">
+                <TableCell className="text-primary font-semibold group-hover:text-white text-xs sm:text-sm whitespace-nowrap">
                   {product.avgCostIncl !== undefined ? formatCurrency(product.avgCostIncl) : 'N/A'}
                 </TableCell>
-                <TableCell className="font-bold text-green-600 text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg group-hover:text-green-300 whitespace-nowrap px-1 sm:px-2 md:px-3 lg:px-4">
+                <TableCell className="font-bold text-green-600 text-sm sm:text-lg group-hover:text-green-300 whitespace-nowrap">
                   {formatCurrency(product.price)}
                 </TableCell>
-                <TableCell className="text-right px-1 sm:px-2 md:px-3 lg:px-4">
-                  <div className="flex justify-end space-x-0.5 sm:space-x-1 md:space-x-2">
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-1 sm:space-x-2">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onEdit(product)}
-                      className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 transition-all duration-200 hover:scale-110 group-hover:text-blue-300 group-hover:hover:text-blue-100"
+                      className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 transition-all duration-200 hover:scale-110 group-hover:text-blue-300 group-hover:hover:text-blue-100"
                     >
-                      <EditIcon className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
+                      <EditIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onDelete(product)}
-                      className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-200 hover:scale-110 group-hover:text-red-300 group-hover:hover:text-red-100"
+                      className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-200 hover:scale-110 group-hover:text-red-300 group-hover:hover:text-red-100"
                     >
-                      <TrashIcon className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
+                      <TrashIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                 </TableCell>
