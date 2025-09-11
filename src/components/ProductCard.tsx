@@ -91,46 +91,64 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   return (
     <Card 
-      className="h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative"
+      className={`h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative ${
+        isMobile ? 'min-h-[100px]' : 'min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]'
+      }`}
       onClick={handleCardClick}
     >
-      {/* Small price button in top right corner */}
+      {/* Responsive price button */}
       {!isEditingPrice && (
         <Button 
           variant="outline" 
           size="sm" 
-          className="absolute top-2 right-2 z-10 h-6 w-12 text-xs p-1 bg-[#0A2645] text-[#FAA225] border-[#0A2645] hover:bg-[#0A2645]/90 font-bold uppercase"
+          className={`absolute top-1 right-1 sm:top-2 sm:right-2 z-10 ${
+            isMobile ? 'h-5 w-10 text-[10px]' : 'h-6 w-12 text-xs'
+          } p-1 bg-primary text-secondary border-primary hover:bg-primary/90 font-bold uppercase`}
           onClick={handlePriceButtonClick}
         >
-          Price
+          {isMobile ? 'PRIC' : 'PRICE'}
         </Button>
       )}
 
-      <CardContent className={`${isMobile ? 'pt-2 px-2 pb-2' : 'pt-4'} flex-1 flex flex-col`}>
+      <CardContent className={`${isMobile ? 'p-1.5' : 'p-2 sm:p-3 lg:p-4'} flex-1 flex flex-col`}>
         <div className="flex-1">
-          <div className="mb-1 pr-16">
-            <h3 className={`font-bold ${isMobile ? 'text-sm' : 'text-lg md:text-xl'} leading-tight`}>
+          <div className={`mb-1 ${isMobile ? 'pr-12' : 'pr-14 sm:pr-16'}`}>
+            <h3 className={`font-bold ${
+              isMobile 
+                ? 'text-xs leading-tight' 
+                : 'text-sm sm:text-base md:text-lg lg:text-xl leading-tight'
+            }`}>
               {firstWord}
             </h3>
             {restOfName && (
-              <p className={`font-medium ${isMobile ? 'text-xs' : 'text-sm md:text-base'} text-muted-foreground leading-tight`}>
+              <p className={`font-medium ${
+                isMobile 
+                  ? 'text-[10px] leading-tight' 
+                  : 'text-xs sm:text-sm md:text-base leading-tight'
+              } text-muted-foreground`}>
                 {restOfName}
               </p>
             )}
           </div>
           
           {product.stock !== undefined && (
-            <p className={`${isMobile ? 'text-xs' : 'text-xs'} ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+            <p className={`${
+              isMobile ? 'text-[9px]' : 'text-[10px] sm:text-xs'
+            } ${product.stock <= 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
               Stock: {product.stock}
             </p>
           )}
         </div>
         
-        <div className="mt-1">
+        <div className={isMobile ? 'mt-0.5' : 'mt-1'}>
           <div 
             ref={priceRef}
-            className={`${isMobile ? 'text-sm' : 'text-xl md:text-2xl'} font-bold mb-2 ${
-              isEditingPrice ? 'text-[#FAA225] outline-none' : 'text-primary'
+            className={`${
+              isMobile 
+                ? 'text-xs' 
+                : 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+            } font-bold ${
+              isEditingPrice ? 'text-secondary outline-none' : 'text-primary'
             } ${isEditingPrice ? 'cursor-text' : 'cursor-pointer'}`}
             contentEditable={isEditingPrice}
             suppressContentEditableWarning={true}

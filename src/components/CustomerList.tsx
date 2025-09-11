@@ -125,30 +125,100 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
           </div>
         </div>
         
-        {/* Enhanced Table Container */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-white/20 transition-all duration-300 hover:shadow-3xl">
+        {/* Mobile Card View */}
+        <div className="block sm:hidden space-y-3">
+          {filteredCustomers.length === 0 ? (
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-8 text-center">
+              <div className="flex flex-col items-center space-y-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
+                  <Users className="h-8 w-8 text-gray-500" />
+                </div>
+                <p className="text-gray-500 font-medium">No customers found</p>
+                <p className="text-gray-400 text-sm">Try adjusting your search terms</p>
+              </div>
+            </div>
+          ) : (
+            filteredCustomers.map((customer) => (
+              <div 
+                key={customer.id} 
+                className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20 transition-all duration-300 hover:shadow-xl cursor-pointer"
+                onClick={() => handleCustomerClick(customer.id)}
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-primary text-base truncate">
+                      {customer.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {customer.phone}
+                    </p>
+                  </div>
+                  <div className="ml-3">
+                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                      customer.isPaid 
+                        ? "bg-green-100 text-green-800" 
+                        : "bg-red-100 text-red-800"
+                    }`}>
+                      {customer.isPaid ? "Paid" : "Outstanding"}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="text-muted-foreground text-xs">Total Purchases:</span>
+                    <p className="font-semibold text-primary">
+                      {formatCurrency(getTotalPurchases(customer.id))}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground text-xs">Amount Owing:</span>
+                    <p className="font-bold text-red-600">
+                      {formatCurrency(getAmountOwed(customer.id))}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-3 pt-3 border-t">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="w-full bg-gradient-to-r from-secondary to-secondary/80 text-primary border-none font-bold shadow-sm hover:shadow-md transition-all duration-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCustomerClick(customer.id);
+                    }}
+                  >
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-white/20 transition-all duration-300 hover:shadow-3xl">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5f] border-none">
-                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                <TableRow className="bg-gradient-to-r from-primary to-primary/80 border-none">
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
                     Name
                   </TableHead>
-                  {!isMobile && (
-                    <TableHead className="text-[#FAA225] font-bold text-sm p-4">
-                      Phone
-                    </TableHead>
-                  )}
-                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
+                    Phone
+                  </TableHead>
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
                     Total Purchases
                   </TableHead>
-                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
                     Owing
                   </TableHead>
-                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
                     Status
                   </TableHead>
-                  <TableHead className={`text-[#FAA225] font-bold text-sm ${isMobile ? "text-xs p-3" : "p-4"}`}>
+                  <TableHead className="text-secondary font-bold text-sm whitespace-nowrap">
                     Actions
                   </TableHead>
                 </TableRow>
@@ -156,7 +226,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
               <TableBody>
                 {filteredCustomers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={isMobile ? 5 : 6} className="text-center py-12">
+                    <TableCell colSpan={6} className="text-center py-12">
                       <div className="flex flex-col items-center space-y-3">
                         <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
                           <Users className="h-8 w-8 text-gray-500" />
@@ -170,24 +240,22 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                   filteredCustomers.map((customer, index) => (
                     <TableRow 
                       key={customer.id} 
-                      className={`cursor-pointer hover:bg-gradient-to-r hover:from-[#FAA225]/5 hover:to-[#FAA225]/10 border-b border-gray-100 transition-all duration-200 hover:shadow-lg ${isMobile ? 'text-xs' : ''} ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                      className={`cursor-pointer hover:bg-gradient-to-r hover:from-secondary/5 hover:to-secondary/10 border-b border-gray-100 transition-all duration-200 hover:shadow-lg ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
                       onClick={() => handleCustomerClick(customer.id)}
                     >
-                      <TableCell className={`font-semibold text-[#0A2645] ${isMobile ? 'p-3' : 'p-4'}`}>
+                      <TableCell className="font-semibold text-primary">
                         {customer.name}
                       </TableCell>
-                      {!isMobile && (
-                        <TableCell className="text-[#0A2645]/80 p-4">
-                          {customer.phone}
-                        </TableCell>
-                      )}
-                      <TableCell className={`text-[#0A2645] font-semibold ${isMobile ? 'p-3' : 'p-4'}`}>
+                      <TableCell className="text-primary/80">
+                        {customer.phone}
+                      </TableCell>
+                      <TableCell className="text-primary font-semibold">
                         {formatCurrency(getTotalPurchases(customer.id))}
                       </TableCell>
-                      <TableCell className={`text-red-600 font-bold ${isMobile ? 'p-3' : 'p-4'}`}>
+                      <TableCell className="text-red-600 font-bold">
                         {formatCurrency(getAmountOwed(customer.id))}
                       </TableCell>
-                      <TableCell className={isMobile ? 'p-3' : 'p-4'}>
+                      <TableCell>
                         <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm transition-all duration-200 ${
                           customer.isPaid 
                             ? "bg-gradient-to-r from-green-100 to-green-200 text-green-800 border border-green-200" 
@@ -196,11 +264,11 @@ const CustomerList: React.FC<CustomerListProps> = ({ onBack, onSelectCustomer })
                           {customer.isPaid ? "Paid" : "Outstanding"}
                         </span>
                       </TableCell>
-                      <TableCell className={isMobile ? 'p-3' : 'p-4'}>
+                      <TableCell>
                         <Button 
                           variant="outline" 
                           size="sm"
-                          className={`bg-gradient-to-r from-[#FAA225] to-[#e8940f] text-white hover:from-[#e8940f] hover:to-[#FAA225] border-none font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl ${isMobile ? 'text-xs px-2 py-1' : ''}`}
+                          className="bg-gradient-to-r from-secondary to-secondary/80 text-primary hover:from-secondary/80 hover:to-secondary border-none font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCustomerClick(customer.id);

@@ -23,8 +23,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <div className={`grid ${isMobile ? 
-      (cartExpanded ? 'grid-cols-1 w-full px-0' : 'grid-cols-2 w-full px-0') : 
-      'grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 pr-96'} gap-3 pt-4`}>
+      (cartExpanded ? 'grid-cols-1 gap-2 px-2' : 'grid-cols-2 gap-2 px-2') : 
+      'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 pr-96'} gap-2 sm:gap-3 pt-2 sm:pt-4`}>
       {products.map(product => (
         <ProductCard 
           key={product.id} 
