@@ -105,43 +105,43 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ mode }) => {
   }
 
   return (
-    <Card className="mb-6">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-[#0A2645] flex items-center gap-2">
-          <Bell className="h-5 w-5" />
-          Notifications
-          <Badge variant="secondary" className="ml-2">
+    <Card className="mb-4 sm:mb-6">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 sm:p-4 lg:p-6">
+        <CardTitle className="text-[#0A2645] flex items-center gap-2 text-sm sm:text-base">
+          <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span>Notifications</span>
+          <Badge variant="secondary" className="ml-1 text-xs">
             {notifications.length}
           </Badge>
         </CardTitle>
-        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#0A2645]">
+        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#0A2645] text-xs sm:text-sm">
           Clear All
         </Button>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-40">
-          <div className="space-y-3">
+      <CardContent className="p-3 sm:p-4 lg:p-6 pt-0">
+        <ScrollArea className="h-32 sm:h-40">
+          <div className="space-y-2 sm:space-y-3">
             {notifications.map((notification) => {
               const IconComponent = notification.icon;
               return (
-                <div key={notification.id} className="flex items-start justify-between p-3 rounded-lg border hover:bg-gray-50">
-                  <div className="flex items-start space-x-3">
-                    <div className={`p-1 rounded-full ${getIconColor(notification.color)}`}>
-                      <IconComponent className="h-4 w-4" />
+                <div key={notification.id} className="flex items-start justify-between p-2 sm:p-3 rounded-lg border hover:bg-gray-50">
+                  <div className="flex items-start space-x-2 sm:space-x-3 min-w-0 flex-1">
+                    <div className={`p-1 rounded-full ${getIconColor(notification.color)} flex-shrink-0`}>
+                      <IconComponent className="h-3 w-3 sm:h-4 sm:w-4" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-medium text-[#0A2645]">{notification.title}</p>
-                        <Badge variant={getBadgeVariant(notification.type)} className="text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                        <p className="text-xs sm:text-sm font-medium text-[#0A2645] truncate">{notification.title}</p>
+                        <Badge variant={getBadgeVariant(notification.type)} className="text-xs self-start sm:self-auto">
                           {notification.type}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">{notification.message}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 mb-1 line-clamp-2">{notification.message}</p>
                       <p className="text-xs text-gray-400">{notification.time}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600 p-1">
-                    <X className="h-4 w-4" />
+                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600 p-1 flex-shrink-0">
+                    <X className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               );

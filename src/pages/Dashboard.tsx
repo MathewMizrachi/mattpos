@@ -127,8 +127,8 @@ const Dashboard = () => {
   }
   
   return (
-    <div className="min-h-screen bg-[#0A2645] p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#0A2645] p-2 sm:p-4 lg:p-6">
+      <div className="max-w-7xl mx-auto">
         <DashboardHeader 
           userName={currentUser?.name || ''} 
           onLogout={handleLogout}
@@ -140,9 +140,9 @@ const Dashboard = () => {
         {/* Quick Info & Weather */}
         <QuickInfo mode={currentMode} />
         
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Main Actions - Takes up 2 columns */}
-          <div className="lg:col-span-2">
+        <div className="grid gap-4 sm:gap-6 xl:grid-cols-3">
+          {/* Main Actions - Takes up 2 columns on xl screens, full width on smaller */}
+          <div className="xl:col-span-2">
             {currentMode === 'restaurant' ? (
               <RestaurantActions 
                 onTakeOrders={handleTakeOrders}
@@ -163,8 +163,8 @@ const Dashboard = () => {
             )}
           </div>
           
-          {/* Side Panel - Takes up 1 column */}
-          <div className="space-y-6">
+          {/* Side Panel - Takes up 1 column on xl screens, full width on smaller */}
+          <div className="space-y-4 sm:space-y-6">
             {/* Notifications */}
             <NotificationCenter mode={currentMode} />
             

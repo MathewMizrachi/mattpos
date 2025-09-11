@@ -40,47 +40,47 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ mode }) => {
 
   if (mode === 'till') {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4 mb-4 sm:mb-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-[#0A2645]">Today's Sales</CardTitle>
-            <DollarSign className="h-4 w-4 text-[#FAA225]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Today's Sales</CardTitle>
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-[#0A2645]">{formatCurrency(tillStats.todaySales)}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{formatCurrency(tillStats.todaySales)}</div>
             <p className="text-xs text-gray-600">+12% from yesterday</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-[#0A2645]">Transactions</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-[#FAA225]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Transactions</CardTitle>
+            <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-[#0A2645]">{tillStats.transactionCount}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{tillStats.transactionCount}</div>
             <p className="text-xs text-gray-600">This shift</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-[#0A2645]">Shift Time</CardTitle>
-            <Clock className="h-4 w-4 text-[#FAA225]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Shift Time</CardTitle>
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-[#0A2645]">{tillStats.shiftHours}h</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{tillStats.shiftHours}h</div>
             <p className="text-xs text-gray-600">Current shift</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-[#0A2645]">Low Stock</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Low Stock</CardTitle>
+            <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-orange-500 flex-shrink-0" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{tillStats.lowStockItems}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-orange-600">{tillStats.lowStockItems}</div>
             <p className="text-xs text-gray-600">Items need restocking</p>
           </CardContent>
         </Card>
@@ -89,25 +89,25 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ mode }) => {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+    <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4 mb-4 sm:mb-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-[#0A2645]">Active Orders</CardTitle>
-          <ChefHat className="h-4 w-4 text-[#FAA225]" />
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+          <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Active Orders</CardTitle>
+          <ChefHat className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-[#0A2645]">{restaurantStats.activeOrders}</div>
+        <CardContent className="p-3 sm:p-4 pt-0">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{restaurantStats.activeOrders}</div>
           <p className="text-xs text-gray-600">Kitchen & pending</p>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-[#0A2645]">Tables</CardTitle>
-          <Users className="h-4 w-4 text-[#FAA225]" />
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+          <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Tables</CardTitle>
+          <Users className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-[#0A2645]">
+        <CardContent className="p-3 sm:p-4 pt-0">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">
             {restaurantStats.tablesOccupied}/{restaurantStats.totalTables}
           </div>
           <p className="text-xs text-gray-600">Occupied tables</p>
@@ -115,23 +115,23 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ mode }) => {
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-[#0A2645]">Today's Revenue</CardTitle>
-          <TrendingUp className="h-4 w-4 text-[#FAA225]" />
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+          <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Today's Revenue</CardTitle>
+          <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-[#0A2645]">{formatCurrency(restaurantStats.todayRevenue)}</div>
+        <CardContent className="p-3 sm:p-4 pt-0">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{formatCurrency(restaurantStats.todayRevenue)}</div>
           <p className="text-xs text-gray-600">+8% from yesterday</p>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-[#0A2645]">Avg Order</CardTitle>
-          <DollarSign className="h-4 w-4 text-[#FAA225]" />
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+          <CardTitle className="text-xs sm:text-sm font-medium text-[#0A2645] leading-tight">Avg Order</CardTitle>
+          <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-[#FAA225] flex-shrink-0" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-[#0A2645]">{formatCurrency(restaurantStats.averageOrderValue)}</div>
+        <CardContent className="p-3 sm:p-4 pt-0">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0A2645]">{formatCurrency(restaurantStats.averageOrderValue)}</div>
           <p className="text-xs text-gray-600">Per order today</p>
         </CardContent>
       </Card>
