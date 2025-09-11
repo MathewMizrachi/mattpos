@@ -141,33 +141,33 @@ const Cashup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header with Gradient */}
-        <div className="bg-gradient-to-r from-white to-gray-50 p-6 rounded-2xl shadow-xl mb-8 border border-gray-200 backdrop-blur-sm">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
+        <div className="bg-gradient-to-r from-white to-gray-50 p-3 sm:p-4 lg:p-6 rounded-xl sm:rounded-2xl shadow-xl mb-4 sm:mb-6 lg:mb-8 border border-gray-200 backdrop-blur-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
+            <div className="flex items-start sm:items-center w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleBackToDashboard}
-                className="mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
+                className="mr-3 sm:mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
               >
-                <ArrowLeftIcon className="h-5 w-5" />
+                <ArrowLeftIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-              <div>
-                <div className="flex items-center mb-2">
-                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
-                    <Calculator className="h-8 w-8 text-white" />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center mb-2">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-2 sm:p-3 rounded-lg sm:rounded-xl mr-0 sm:mr-4 mb-2 sm:mb-0 self-start shadow-lg">
+                    <Calculator className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <div>
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent">
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent leading-tight">
                       💰 End of Day Cashup
                     </h1>
-                    <p className="text-lg text-gray-600 font-medium">Till2Day Restaurant System</p>
+                    <p className="text-sm sm:text-base lg:text-lg text-gray-600 font-medium">Till2Day Restaurant System</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm text-gray-500">
                   <span className="flex items-center">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     Live Till Status
@@ -176,35 +176,36 @@ const Cashup = () => {
                 </div>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
               <Button
                 onClick={handleEndOfDay}
-                className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] hover:from-[#1a3a5c] hover:to-[#0A2645] text-white font-semibold px-6 py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
+                className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] hover:from-[#1a3a5c] hover:to-[#0A2645] text-white font-semibold px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg sm:rounded-xl text-sm sm:text-base flex-1 sm:flex-none justify-center"
               >
-                <FileText className="h-5 w-5" />
-                📊 End of Day Report
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="hidden sm:inline">📊 End of Day Report</span>
+                <span className="sm:hidden">📊 End Report</span>
               </Button>
             </div>
           </div>
         </div>
 
         {/* Enhanced Summary Stats */}
-        <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mb-8">
-          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+        <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4 mb-4 sm:mb-6 lg:mb-8">
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-xl sm:rounded-2xl overflow-hidden">
             <div className="bg-gradient-to-r from-[#FAA225] to-[#ff9500] h-2"></div>
-            <CardHeader className="pb-2 p-6">
-              <CardTitle className="text-lg text-[#0A2645] flex items-center">
-                <div className="bg-gradient-to-r from-[#FAA225] to-[#ff9500] p-3 rounded-xl mr-3 shadow-lg">
-                  <Calculator className="h-5 w-5 text-white" />
+            <CardHeader className="pb-2 p-3 sm:p-4 lg:p-6">
+              <CardTitle className="text-sm sm:text-base lg:text-lg text-[#0A2645] flex items-center">
+                <div className="bg-gradient-to-r from-[#FAA225] to-[#ff9500] p-2 sm:p-3 rounded-lg sm:rounded-xl mr-2 sm:mr-3 shadow-lg">
+                  <Calculator className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-white" />
                 </div>
-                🔥 Active Tills
+                <span className="text-xs sm:text-sm lg:text-base">🔥 Active Tills</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6 pt-0">
-              <div className="text-4xl font-bold bg-gradient-to-r from-[#FAA225] to-[#ff9500] bg-clip-text text-transparent mb-2">
+            <CardContent className="p-3 sm:p-4 lg:p-6 pt-0">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#FAA225] to-[#ff9500] bg-clip-text text-transparent mb-1 sm:mb-2">
                 {getActiveTillsCount()}
               </div>
-              <div className="text-sm text-[#0A2645]/70 font-medium">
+              <div className="text-xs sm:text-sm text-[#0A2645]/70 font-medium">
                 out of {shifts.length} total tills
               </div>
             </CardContent>

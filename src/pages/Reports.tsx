@@ -103,33 +103,33 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2645] via-[#0A2645] to-[#1a3a5c] p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header with Gradient */}
-        <div className="bg-gradient-to-r from-white to-gray-50 p-6 rounded-2xl shadow-xl mb-8 border border-gray-200 backdrop-blur-sm">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
+        <div className="bg-gradient-to-r from-white to-gray-50 p-3 sm:p-4 lg:p-6 rounded-xl sm:rounded-2xl shadow-xl mb-4 sm:mb-6 lg:mb-8 border border-gray-200 backdrop-blur-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
+            <div className="flex items-start sm:items-center w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => navigate('/dashboard')}
-                className="mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
+                className="mr-3 sm:mr-4 bg-white border-2 border-[#0A2645] text-[#0A2645] hover:bg-[#0A2645] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-              <div>
-                <div className="flex items-center mb-2">
-                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-3 rounded-xl mr-4 shadow-lg">
-                    <ChartBarIcon className="h-8 w-8 text-white" />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center mb-2">
+                  <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-2 sm:p-3 rounded-lg sm:rounded-xl mr-0 sm:mr-4 mb-2 sm:mb-0 self-start shadow-lg">
+                    <ChartBarIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <div>
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent">
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] bg-clip-text text-transparent leading-tight">
                       Reports & Analytics
                     </h1>
-                    <p className="text-lg text-gray-600 font-medium">Business Intelligence Dashboard</p>
+                    <p className="text-sm sm:text-base lg:text-lg text-gray-600 font-medium">Business Intelligence Dashboard</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm text-gray-500">
                   <span className="flex items-center">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     Live Data
@@ -142,41 +142,45 @@ const Reports = () => {
         </div>
 
         {/* Enhanced Main Content Card */}
-        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 rounded-2xl overflow-hidden">
+        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 rounded-xl sm:rounded-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-[#0A2645] to-[#1a3a5c] p-1">
-            <div className="bg-white rounded-t-2xl">
-              <CardContent className="p-8">
+            <div className="bg-white rounded-t-xl sm:rounded-t-2xl">
+              <CardContent className="p-3 sm:p-4 lg:p-8">
                 {isMobile ? (
-                  <div className="mb-8">
+                  <div className="mb-4 sm:mb-6 lg:mb-8">
                     <ReportTypeSelector activeTab={activeTab} setActiveTab={setActiveTab} />
                   </div>
                 ) : (
                   <Tabs defaultValue="sales" onValueChange={setActiveTab} value={activeTab}>
-                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-2 rounded-2xl mb-8 shadow-inner">
-                      <TabsList className="grid w-full grid-cols-4 bg-transparent p-1 rounded-xl">
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-1 sm:p-2 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 lg:mb-8 shadow-inner">
+                      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 bg-transparent p-1 rounded-lg sm:rounded-xl gap-1">
                         <TabsTrigger 
                           value="sales" 
-                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-md sm:rounded-lg transition-all duration-200 hover:bg-white/50 text-xs sm:text-sm px-2 sm:px-3 py-2"
                         >
-                          📊 Sales Report
+                          <span className="hidden sm:inline">📊 Sales Report</span>
+                          <span className="sm:hidden">📊 Sales</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="inventory" 
-                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-md sm:rounded-lg transition-all duration-200 hover:bg-white/50 text-xs sm:text-sm px-2 sm:px-3 py-2"
                         >
-                          📦 Inventory Status
+                          <span className="hidden sm:inline">📦 Inventory Status</span>
+                          <span className="sm:hidden">📦 Stock</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="payment" 
-                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-md sm:rounded-lg transition-all duration-200 hover:bg-white/50 text-xs sm:text-sm px-2 sm:px-3 py-2"
                         >
-                          💳 Payment Methods
+                          <span className="hidden sm:inline">💳 Payment Methods</span>
+                          <span className="sm:hidden">💳 Payment</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="profitplus" 
-                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:bg-white/50"
+                          className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#0A2645] data-[state=active]:to-[#1a3a5c] data-[state=active]:text-white data-[state=active]:shadow-lg text-gray-700 font-semibold rounded-md sm:rounded-lg transition-all duration-200 hover:bg-white/50 text-xs sm:text-sm px-2 sm:px-3 py-2"
                         >
-                          💰 Profit+
+                          <span className="hidden sm:inline">💰 Profit+</span>
+                          <span className="sm:hidden">💰 P+</span>
                         </TabsTrigger>
                       </TabsList>
                     </div>
@@ -184,7 +188,7 @@ const Reports = () => {
                 )}
                 
                 {/* Content Area with Enhanced Styling */}
-                <div className="bg-gradient-to-br from-gray-50/50 to-white p-6 rounded-2xl shadow-inner border border-gray-100">
+                <div className="bg-gradient-to-br from-gray-50/50 to-white p-3 sm:p-4 lg:p-6 rounded-xl sm:rounded-2xl shadow-inner border border-gray-100">
                   {activeTab === 'sales' && (
                     <SalesReportTab 
                       fromDate={fromDate}

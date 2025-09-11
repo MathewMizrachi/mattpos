@@ -64,7 +64,7 @@ const POSLayout: React.FC<POSLayoutProps> = ({
   const { currentMode } = useApp();
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pt-20 pb-16">
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-16 sm:pt-20 pb-12 sm:pb-16">
       <POSHeader 
         currentUser={currentUser}
         currentShift={currentShift}
