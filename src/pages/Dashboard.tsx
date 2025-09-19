@@ -85,6 +85,10 @@ const Dashboard = () => {
   const handleViewReports = () => {
     navigate('/reports');
   };
+
+  const handleViewSpecials = () => {
+    navigate('/specials');
+  };
   
   const handleLogout = () => {
     logout();
@@ -150,6 +154,7 @@ const Dashboard = () => {
                 onManageStock={handleManageStock}
                 onManageCustomers={handleManageCustomers}
                 onViewReports={handleViewReports}
+                onViewSpecials={handleViewSpecials}
               />
             ) : (
               <DashboardActions 
@@ -159,6 +164,7 @@ const Dashboard = () => {
                 onManageStock={handleManageStock}
                 onManageCustomers={handleManageCustomers}
                 onViewReports={handleViewReports}
+                onViewSpecials={handleViewSpecials}
               />
             )}
           </div>

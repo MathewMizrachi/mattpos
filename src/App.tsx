@@ -14,6 +14,7 @@ import Customers from '@/pages/Customers';
 import Cashup from '@/pages/Cashup';
 import Recipes from '@/pages/Recipes';
 import PurchaseOrder from '@/pages/PurchaseOrder';
+import Specials from '@/pages/Specials';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/cashup" element={<Cashup />} />
             <Route path="/recipes" element={<Recipes />} />
+            <Route path="/specials" element={<Specials />} />
           </Routes>
         </div>
         <Toaster />

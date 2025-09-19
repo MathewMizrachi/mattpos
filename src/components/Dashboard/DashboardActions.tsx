@@ -9,7 +9,8 @@ import {
   Users, 
   Package, 
   DollarSign,
-  Play
+  Play,
+  Star
 } from 'lucide-react';
 
 interface DashboardActionsProps {
@@ -19,6 +20,7 @@ interface DashboardActionsProps {
   onManageStock: () => void;
   onManageCustomers: () => void;
   onViewReports: () => void;
+  onViewSpecials: () => void;
 }
 
 const DashboardActions: React.FC<DashboardActionsProps> = ({ 
@@ -27,7 +29,8 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
   onResumeShift,
   onManageStock,
   onManageCustomers,
-  onViewReports
+  onViewReports,
+  onViewSpecials
 }) => {
   const navigate = useNavigate();
 
@@ -103,6 +106,18 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({
           >
             <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8" />
             <span className="leading-tight">View Reports</span>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white border-2 border-[#FAA225] hover:shadow-lg transition-all">
+        <CardContent className="p-3 sm:p-4 lg:p-6">
+          <Button
+            onClick={onViewSpecials}
+            className="w-full h-16 sm:h-20 lg:h-24 bg-[#FAA225] hover:bg-[#FAA225]/90 text-[#0A2645] text-sm sm:text-base lg:text-lg font-semibold flex flex-col items-center justify-center gap-1 sm:gap-2"
+          >
+            <Star className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8" />
+            <span className="leading-tight">View Specials</span>
           </Button>
         </CardContent>
       </Card>
