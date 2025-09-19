@@ -71,7 +71,7 @@ const Specials = () => {
   const filteredSpecials = specials.filter(special => special.distance <= searchDistance[0]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-2 sm:p-4 lg:p-6">
+    <div className="min-h-screen bg-[#0A2645] p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Card - matching Reports page style */}
         <Card className="mb-6 bg-white rounded-2xl shadow-sm border-0">
